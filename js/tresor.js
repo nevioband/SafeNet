@@ -1,25 +1,25 @@
-import { supabase } from './supabase.js?v=5'
+import { supabase } from './supabase.js?v=6'
 
-// ===== KONSTANTEN =====
-const KEY_CHECK_LABEL = '__vault_key_check__'
-const KEY_CHECK_PLAIN = 'SAFENET_VAULT_V1'
 let vaultData = []
 let cachedVaultKey = null
 
 // ===== VERSCHLÜSSELUNG =====
+// Schlüssel wird automatisch aus E-Mail (unveränderlich) abgeleitet — kein Extra-Passwort nötig
 
-async function deriveKey(password, userId) {
+async function getVaultKey(email, userId) {
+    if (cachedVaultKey) return cachedVaultKey
     const enc = new TextEncoder()
     const keyMaterial = await crypto.subtle.importKey(
-        'raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']
+        'raw', enc.encode(email), 'PBKDF2', false, ['deriveKey']
     )
-    return crypto.subtle.deriveKey(
+    cachedVaultKey = await crypto.subtle.deriveKey(
         { name: 'PBKDF2', salt: enc.encode(userId), iterations: 100000, hash: 'SHA-256' },
         keyMaterial,
         { name: 'AES-GCM', length: 256 },
         false,
         ['encrypt', 'decrypt']
     )
+    return cachedVaultKey
 }
 
 async function encryptValue(plaintext, key) {
@@ -42,31 +42,6 @@ async function decryptValue(encString, key) {
     } catch {
         return null
     }
-}
-
-async function getVaultKey() {
-    if (cachedVaultKey) return cachedVaultKey
-    const pw = sessionStorage.getItem('vaultPassword')
-    const userId = sessionStorage.getItem('vaultUserId')
-    if (!pw || !userId) return null
-    cachedVaultKey = await deriveKey(pw, userId)
-    return cachedVaultKey
-}
-
-// ===== UI HELFER =====
-
-function showVaultContent() {
-    const overlay = document.getElementById('unlockOverlay')
-    const content = document.getElementById('vaultContent')
-    if (overlay) overlay.style.display = 'none'
-    if (content) content.style.display = 'block'
-}
-
-function showUnlockOverlay() {
-    const overlay = document.getElementById('unlockOverlay')
-    const content = document.getElementById('vaultContent')
-    if (overlay) overlay.style.display = 'flex'
-    if (content) content.style.display = 'none'
 }
 
 // ===== TRESOR LADEN =====
@@ -93,13 +68,12 @@ async function renderVault() {
         return
     }
 
-    // Key-Check-Eintrag herausfiltern
-    const entries = data.filter(pw => pw.label !== KEY_CHECK_LABEL)
+    // Key-Check-Eintrag herausfiltern (alte Daten)
+    const entries = data.filter(pw => pw.label !== '__vault_key_check__')
 
-    // Werte entschlüsseln
-    const key = await getVaultKey()
+    const key = await getVaultKey(session.user.email, session.user.id)
     const decryptedEntries = await Promise.all(entries.map(async pw => {
-        if (pw.value && pw.value.startsWith('ENC:') && key) {
+        if (pw.value && pw.value.startsWith('ENC:')) {
             const dec = await decryptValue(pw.value, key)
             return { ...pw, value: dec ?? '[Entschlüsselungsfehler]' }
         }
@@ -170,69 +144,6 @@ window.deletePassword = async function(id) {
     renderVault()
 }
 
-// ===== TRESOR ENTSPERREN =====
-
-window.unlockVault = async function() {
-    const input = document.getElementById('unlockPassword')
-    const errorEl = document.getElementById('unlockError')
-    const btn = document.getElementById('unlockBtn')
-    const password = input ? input.value.trim() : ''
-
-    if (!password) {
-        if (errorEl) errorEl.textContent = 'Bitte einen Tresor-Schlüssel eingeben.'
-        return
-    }
-
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session) {
-        if (errorEl) errorEl.textContent = 'Bitte zuerst einloggen.'
-        return
-    }
-
-    if (btn) { btn.disabled = true; btn.textContent = 'Wird geprüft…' }
-
-    const userId = session.user.id
-    const key = await deriveKey(password, userId)
-
-    const { data: checkRows } = await supabase
-        .from('passwords')
-        .select('value')
-        .eq('user_id', userId)
-        .eq('label', KEY_CHECK_LABEL)
-
-    if (!checkRows || checkRows.length === 0) {
-        // Erster Start: Schlüssel festlegen
-        const checkValue = await encryptValue(KEY_CHECK_PLAIN, key)
-        await supabase.from('passwords').insert({
-            user_id: userId,
-            label: KEY_CHECK_LABEL,
-            value: checkValue,
-            date: ''
-        })
-        sessionStorage.setItem('vaultPassword', password)
-        sessionStorage.setItem('vaultUserId', userId)
-        cachedVaultKey = key
-        showVaultContent()
-        renderVault()
-        return
-    }
-
-    const dec = await decryptValue(checkRows[0].value, key)
-    if (dec !== KEY_CHECK_PLAIN) {
-        if (errorEl) errorEl.textContent = 'Falscher Tresor-Schlüssel. Bitte nochmal versuchen.'
-        if (btn) { btn.disabled = false; btn.textContent = 'Entsperren' }
-        input.value = ''
-        input.focus()
-        return
-    }
-
-    sessionStorage.setItem('vaultPassword', password)
-    sessionStorage.setItem('vaultUserId', userId)
-    cachedVaultKey = key
-    showVaultContent()
-    renderVault()
-}
-
 // ===== PASSWORT SPEICHERN =====
 
 window.savePassword = async function(newPasswordValue, labelValue) {
@@ -241,8 +152,8 @@ window.savePassword = async function(newPasswordValue, labelValue) {
 
     const finalLabel = (labelValue && labelValue.trim() !== '') ? labelValue : 'Unbenanntes Passwort'
 
-    const key = await getVaultKey()
-    const valueToStore = key ? await encryptValue(newPasswordValue, key) : newPasswordValue
+    const key = await getVaultKey(session.user.email, session.user.id)
+    const valueToStore = await encryptValue(newPasswordValue, key)
 
     const { error: insertError } = await supabase.from('passwords').insert({
         user_id: session.user.id,
@@ -277,14 +188,6 @@ window.transferToVault = async function() {
         return
     }
 
-    // Falls kein Vault-Schlüssel in Session, zum Tresor leiten
-    const key = await getVaultKey()
-    if (!key) {
-        const go = confirm('Du musst deinen Tresor erst entsperren. Jetzt zum Tresor gehen?')
-        if (go) window.location.href = 'tresor.html'
-        return
-    }
-
     await window.savePassword(currentPassword, currentLabel)
     alert(`Passwort für "${currentLabel || 'Unbenannt'}" gespeichert!`)
     if (labelField) labelField.value = ''
@@ -296,12 +199,7 @@ window.clearVault = async function() {
     const { data: { session } } = await supabase.auth.getSession()
     if (!session) return
     if (!confirm('Möchtest du wirklich ALLE gespeicherten Passwörter löschen?')) return
-    // Key-Check-Eintrag behalten
-    const { data } = await supabase.from('passwords').select('id, label').eq('user_id', session.user.id)
-    const toDelete = data.filter(pw => pw.label !== KEY_CHECK_LABEL).map(pw => pw.id)
-    if (toDelete.length > 0) {
-        await supabase.from('passwords').delete().in('id', toDelete)
-    }
+    await supabase.from('passwords').delete().eq('user_id', session.user.id)
     renderVault()
 }
 
@@ -314,25 +212,8 @@ window.copyToClipboard = function(index) {
 // ===== START =====
 
 document.addEventListener('DOMContentLoaded', () => {
-    supabase.auth.onAuthStateChange(async (event, session) => {
-        if (!session) {
-            const listEl = document.getElementById('saved-passwords-list')
-            if (listEl) listEl.innerHTML = '<p style="text-align:center; color:rgba(255,255,255,0.5); padding: 20px;">Bitte <a href="login.html" style="color:#3399ff">einloggen</a> um deinen Tresor zu sehen.</p>'
-            const overlay = document.getElementById('unlockOverlay')
-            const content = document.getElementById('vaultContent')
-            if (overlay) overlay.style.display = 'none'
-            if (content) content.style.display = 'block'
-            return
-        }
-
-        const storedPw = sessionStorage.getItem('vaultPassword')
-        const storedId = sessionStorage.getItem('vaultUserId')
-        if (storedPw && storedId === session.user.id) {
-            cachedVaultKey = await deriveKey(storedPw, session.user.id)
-            showVaultContent()
-            renderVault()
-        } else {
-            showUnlockOverlay()
-        }
+    supabase.auth.onAuthStateChange((event, session) => {
+        cachedVaultKey = null // Key bei Session-Wechsel zurücksetzen
+        renderVault()
     })
 })
