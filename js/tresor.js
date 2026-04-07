@@ -341,6 +341,35 @@ window.copyToClipboard = function(index) {
         .catch(() => alert('Kopieren fehlgeschlagen \u2014 bitte manuell kopieren.'))
 }
 
+// ===== CSV EXPORT =====
+
+window.exportCSV = function() {
+    if (vaultData.length === 0) {
+        alert('Keine Passwörter zum Exportieren vorhanden.')
+        return
+    }
+    if (!confirm(`Achtung: Die exportierte Datei enthält alle ${vaultData.length} Passwörter im Klartext. Bewahre sie sicher auf!\n\nExport fortfahren?`)) return
+
+    const rows = [['Name', 'Passwort', 'Datum']]
+    vaultData.forEach(pw => {
+        const name = `"${(pw.label || '').replace(/"/g, '""')}"`
+        const password = `"${(pw.value || '').replace(/"/g, '""')}"`
+        const date = `"${(pw.date || '').replace(/"/g, '""')}"`
+        rows.push([name, password, date])
+    })
+
+    const csvContent = '\uFEFF' + rows.map(r => r.join(',')).join('\n') // BOM für Excel-Kompatibilität
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `safenet-export-${new Date().toLocaleDateString('de-CH').replace(/\./g, '-')}.csv`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+}
+
 // ===== CSV IMPORT =====
 
 window.importCSV = async function(input) {
