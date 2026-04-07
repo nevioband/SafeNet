@@ -40,14 +40,16 @@
 
             <!-- CSV Import -->
             <input type="file" id="csvFileInput" accept=".csv" style="display:none;" onchange="window.importCSV(this)">
-            <button class="main-btn" onclick="document.getElementById('csvFileInput').click()" style="width: 100%; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                <span class="material-symbols-outlined">upload_file</span> CSV importieren
-            </button>
 
-            <!-- CSV Export -->
-            <button class="main-btn" onclick="window.exportCSV()" style="width: 100%; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                <span class="material-symbols-outlined">download</span> CSV exportieren
-            </button>
+            <!-- Import / Export als kleine Nebenbuttons -->
+            <div style="display:flex;gap:8px;margin-top:10px;">
+                <button onclick="document.getElementById('csvFileInput').click()" style="flex:1;padding:8px 12px;background:transparent;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:#64748b;font-size:13px;font-family:Inter,sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:0.2s;" onmouseover="this.style.borderColor='rgba(59,130,246,0.5)';this.style.color='#94a3b8'" onmouseout="this.style.borderColor='rgba(59,130,246,0.25)';this.style.color='#64748b'">
+                    <span class="material-symbols-outlined" style="font-size:16px;">upload_file</span> Importieren
+                </button>
+                <button onclick="window.exportCSV()" style="flex:1;padding:8px 12px;background:transparent;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:#64748b;font-size:13px;font-family:Inter,sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:0.2s;" onmouseover="this.style.borderColor='rgba(59,130,246,0.5)';this.style.color='#94a3b8'" onmouseout="this.style.borderColor='rgba(59,130,246,0.25)';this.style.color='#64748b'">
+                    <span class="material-symbols-outlined" style="font-size:16px;">download</span> Exportieren
+                </button>
+            </div>
             
             <a href="generator.html" style="text-decoration: none; width: 100%; display: block;">
                 <button class="main-btn" style="width: 100%; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px;">
