@@ -37,6 +37,12 @@
             <button class="main-btn-delete" onclick="clearVault()" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 10px;">
                 <span class="material-symbols-outlined">delete_sweep</span> Alle löschen
             </button>
+
+            <!-- CSV Import -->
+            <input type="file" id="csvFileInput" accept=".csv" style="display:none;" onchange="window.importCSV(this)">
+            <button class="main-btn" onclick="document.getElementById('csvFileInput').click()" style="width: 100%; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <span class="material-symbols-outlined">upload_file</span> CSV importieren
+            </button>
             
             <a href="generator.html" style="text-decoration: none; width: 100%; display: block;">
                 <button class="main-btn" style="width: 100%; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px;">

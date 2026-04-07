@@ -341,6 +341,93 @@ window.copyToClipboard = function(index) {
         .catch(() => alert('Kopieren fehlgeschlagen \u2014 bitte manuell kopieren.'))
 }
 
+// ===== CSV IMPORT =====
+
+window.importCSV = async function(input) {
+    const file = input.files[0]
+    if (!file) return
+    input.value = '' // Reset damit man dieselbe Datei nochmal laden kann
+
+    if (isOffline()) { alert('Kein Internet — Import nicht möglich.'); return }
+
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) { alert('Bitte zuerst einloggen.'); return }
+
+    const text = await file.text()
+    const lines = text.split('\n').map(l => l.trim()).filter(l => l)
+
+    if (lines.length < 2) { alert('Die CSV-Datei ist leer oder hat kein gültiges Format.'); return }
+
+    // Header-Zeile erkennen (Chrome-Format: name,url,username,password)
+    const header = lines[0].toLowerCase()
+    const hasHeader = header.includes('name') || header.includes('password') || header.includes('url')
+    const dataLines = hasHeader ? lines.slice(1) : lines
+
+    if (dataLines.length === 0) { alert('Keine Einträge in der CSV gefunden.'); return }
+
+    const key = await getVaultKey(session.user.email, session.user.id)
+    const today = new Date().toLocaleDateString('de-CH')
+
+    let imported = 0
+    let skipped = 0
+    const batchSize = 50
+
+    for (let i = 0; i < dataLines.length; i += batchSize) {
+        const batch = dataLines.slice(i, i + batchSize)
+        const rows = []
+
+        for (const line of batch) {
+            // CSV parsen (einfaches Komma-Split, quoted fields unterstützt)
+            const cols = parseCSVLine(line)
+            if (cols.length < 2) { skipped++; continue }
+
+            // Chrome-Format: name, url, username, password
+            // Fallback: label, password
+            let label, password
+            if (cols.length >= 4) {
+                label = cols[0]?.trim() || cols[2]?.trim() || 'Importiert'
+                password = cols[3]?.trim()
+            } else {
+                label = cols[0]?.trim() || 'Importiert'
+                password = cols[1]?.trim()
+            }
+
+            if (!password) { skipped++; continue }
+
+            const encVal = await encryptValue(password, key)
+            rows.push({ user_id: session.user.id, label: label || 'Importiert', value: encVal, date: today })
+        }
+
+        if (rows.length > 0) {
+            const { error } = await supabase.from('passwords').insert(rows)
+            if (error) { alert('Fehler beim Importieren: ' + error.message); break }
+            imported += rows.length
+        }
+    }
+
+    alert(`Import abgeschlossen: ${imported} Passwörter importiert${skipped > 0 ? `, ${skipped} übersprungen` : ''}.`)
+    renderVault()
+}
+
+function parseCSVLine(line) {
+    const result = []
+    let current = ''
+    let inQuotes = false
+    for (let i = 0; i < line.length; i++) {
+        const ch = line[i]
+        if (ch === '"') {
+            inQuotes = !inQuotes
+        } else if (ch === ',' && !inQuotes) {
+            result.push(current)
+            current = ''
+        } else {
+            current += ch
+        }
+    }
+    result.push(current)
+    return result
+}
+
 // ===== SUCHE =====
 
 window.filterVault = function(query) {
