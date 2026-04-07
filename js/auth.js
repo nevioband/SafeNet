@@ -7,13 +7,17 @@ async function applyNavbarUser() {
     try {
         const { data: { session } } = await supabase.auth.getSession()
         const dropdown = userMenu.querySelector('.user-dropdown')
+        const userBtn  = userMenu.querySelector('.user-btn')
         if (!dropdown) return
 
         if (session && session.user) {
-            const email = session.user.email
+            const email   = session.user.email
+            const initial = email.charAt(0).toUpperCase()
+
+            // Dropdown: Einstellungen-Link statt einzelner 2FA-Link
             dropdown.innerHTML = `
                 <li class="user-dropdown-name">${email}</li>
-                <li><a href="/pages/2fa.html">Zwei-Faktor-Auth</a></li>
+                <li><a href="/pages/einstellungen.html">Einstellungen</a></li>
                 <li><a href="#" id="logoutBtn">Abmelden</a></li>
             `
             dropdown.querySelector('#logoutBtn').addEventListener('click', async (e) => {
@@ -21,6 +25,18 @@ async function applyNavbarUser() {
                 await supabase.auth.signOut()
                 window.location.reload()
             })
+
+            // Button: zuerst Initialbuchstabe, dann Profilbild nachladen
+            if (userBtn) {
+                userBtn.innerHTML = `<span class="user-initials">${initial}</span>`
+                const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(session.user.id)
+                const avatarUrl = urlData.publicUrl + '?t=' + Date.now()
+                const probe = new Image()
+                probe.onload = () => {
+                    userBtn.innerHTML = `<img class="user-avatar-img" src="${avatarUrl}" alt="${initial}">`
+                }
+                probe.src = avatarUrl
+            }
         }
         // Wenn nicht eingeloggt: Standard-HTML aus navbar.html bleibt
     } catch (e) {

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Einstellungen – SafeNet Security</title>
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="icon" type="image/png" href="../images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png">
+    <script type="module" src="../js/auth.js?v=4"></script>
+    <style>
+        .settings-wrap {
+            max-width: 620px;
+            margin: 50px auto;
+            padding: 0 20px 80px;
+        }
+        .settings-page-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0 0 6px;
+            color: #e2e8f0;
+        }
+        .settings-page-sub {
+            color: #94a3b8;
+            font-size: 14px;
+            margin: 0 0 36px;
+        }
+        .settings-section-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.3px;
+            text-transform: uppercase;
+            color: #3b82f6;
+            margin: 32px 0 10px;
+        }
+        .s-card {
+            background: #172441;
+            border: 1px solid rgba(59,130,246,0.2);
+            border-radius: 14px;
+            padding: 24px 28px;
+            margin-bottom: 12px;
+        }
+        .s-card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin: 0 0 4px;
+            color: #e2e8f0;
+        }
+        .s-card-desc {
+            color: #94a3b8;
+            font-size: 13px;
+            margin: 0 0 18px;
+        }
+
+        /* Avatar / Profile */
+        .profile-row {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            flex-wrap: wrap;
+        }
+        .s-avatar {
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3399ff, #66d9ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            font-weight: 700;
+            color: #0f172a;
+            flex-shrink: 0;
+            overflow: hidden;
+            position: relative;
+        }
+        .s-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0; left: 0;
+            border-radius: 50%;
+        }
+        .profile-meta .email-lbl { font-size: 12px; color: #64748b; margin-bottom: 2px; }
+        .profile-meta .email-val { font-size: 15px; color: #e2e8f0; font-weight: 600; margin-bottom: 12px; word-break: break-all; }
+
+        /* Buttons */
+        .btn { font-family: Inter, sans-serif; font-weight: 700; border-radius: 8px; cursor: pointer; border: none; transition: opacity 0.15s; }
+        .btn:hover { opacity: 0.88; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-primary  { padding: 11px 22px; font-size: 14px; background: linear-gradient(135deg, #3399ff, #66d9ff); color: #0f172a; }
+        .btn-secondary{ padding: 11px 22px; font-size: 14px; background: transparent; border: 1px solid rgba(59,130,246,0.3); color: #94a3b8; }
+        .btn-danger   { padding: 11px 22px; font-size: 14px; background: linear-gradient(135deg, #ff4d4d, #ff0000); color: #fff; }
+        .btn-full { width: 100%; box-sizing: border-box; }
+
+        /* Form */
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 13px; color: #94a3b8; margin-bottom: 6px; }
+        .form-input {
+            width: 100%; padding: 12px 14px; background: #0f172a;
+            border: 1px solid rgba(59,130,246,0.25); border-radius: 8px;
+            color: white; font-size: 15px; font-family: Inter, sans-serif;
+            box-sizing: border-box; outline: none;
+        }
+        .form-input:focus { border-color: #3b82f6; }
+
+        /* Messages */
+        .msg-box { padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 14px; display: none; }
+        .msg-error   { background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.4); color: #fca5a5; }
+        .msg-success { background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.4); color: #86efac; }
+        .msg-info    { background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.3); color: #93c5fd; }
+
+        /* 2FA */
+        .status-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 4px 12px; border-radius: 20px;
+            font-size: 12px; font-weight: 600; margin-bottom: 16px;
+        }
+        .status-on  { background: rgba(34,197,94,0.15); color: #86efac; border: 1px solid rgba(34,197,94,0.3); }
+        .status-off { background: rgba(100,116,139,0.15); color: #94a3b8; border: 1px solid rgba(100,116,139,0.3); }
+        #tfaQrSection { display: none; }
+        .qr-img { display: block; margin: 12px auto; border-radius: 10px; background: white; padding: 12px; }
+        .code-input {
+            width: 100%; padding: 14px; background: #0f172a;
+            border: 1px solid rgba(59,130,246,0.25); border-radius: 8px;
+            color: white; font-size: 22px; font-family: monospace;
+            letter-spacing: 6px; text-align: center;
+            box-sizing: border-box; outline: none; margin: 12px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar"></div>
+
+    <div class="settings-wrap">
+        <h1 class="settings-page-title">Einstellungen</h1>
+        <p class="settings-page-sub">Verwalte dein Profil und deine Sicherheitseinstellungen.</p>
+
+        <!-- ── PROFIL ──────────────────────────────── -->
+        <div class="settings-section-label">Profil</div>
+        <div class="s-card">
+            <h3>Profilbild &amp; Konto</h3>
+            <p class="s-card-desc">Dein Bild wird oben rechts in der Navigationsleiste angezeigt.</p>
+            <div class="profile-row">
+                <div class="s-avatar" id="avatarCircle">
+                    <span id="avatarInitial">?</span>
+                </div>
+                <div class="profile-meta">
+                    <div class="email-lbl">E-Mail-Adresse</div>
+                    <div class="email-val" id="profileEmail">–</div>
+                    <button class="btn btn-secondary" onclick="document.getElementById('avatarInput').click()">Bild hochladen / ändern</button>
+                    <input type="file" id="avatarInput" accept="image/*" style="display:none">
+                </div>
+            </div>
+            <div id="avatarMsg" class="msg-box" style="margin-top:16px;margin-bottom:0;"></div>
+        </div>
+
+        <!-- ── SICHERHEIT ──────────────────────────── -->
+        <div class="settings-section-label">Sicherheit</div>
+
+        <!-- 2FA -->
+        <div class="s-card">
+            <h3>Zwei-Faktor-Authentifizierung</h3>
+            <p class="s-card-desc">Schütze dein Konto mit einem einmaligen Code aus deiner Authenticator-App (z.&nbsp;B. Google Authenticator, Authy).</p>
+
+            <div id="tfaStatusBadge" class="status-badge status-off">
+                <span>●</span><span id="tfaStatusText">Wird geladen…</span>
+            </div>
+
+            <div id="tfaMsg" class="msg-box"></div>
+
+            <div id="tfaSectionOff">
+                <button class="btn btn-primary btn-full" id="enableBtn">2FA aktivieren</button>
+            </div>
+
+            <div id="tfaQrSection">
+                <p style="color:#cbd5e1;font-size:14px;margin:0 0 4px;">Scanne diesen QR-Code mit deiner Authenticator-App:</p>
+                <img id="qrImg" class="qr-img" width="180" height="180" alt="QR-Code">
+                <p style="color:#94a3b8;font-size:13px;margin:8px 0 0;text-align:center;">Oder gib diesen Code manuell ein:</p>
+                <p id="secretText" style="color:#66d9ff;font-size:13px;font-family:monospace;letter-spacing:3px;text-align:center;word-break:break-all;margin:6px 0 0;"></p>
+                <input type="text" inputmode="numeric" maxlength="6" class="code-input" id="verifyCode" placeholder="123456">
+                <button class="btn btn-primary btn-full" id="verifyBtn">Bestätigen &amp; aktivieren</button>
+                <button class="btn btn-secondary btn-full" id="cancelEnrollBtn" style="margin-top:8px;">Abbrechen</button>
+            </div>
+
+            <div id="tfaSectionOn" style="display:none;">
+                <button class="btn btn-danger btn-full" id="disableBtn">2FA deaktivieren</button>
+            </div>
+        </div>
+
+        <!-- Passwort ändern -->
+        <div class="s-card">
+            <h3>Passwort ändern</h3>
+            <p class="s-card-desc">Wähle ein starkes, einzigartiges Passwort für dein Konto.</p>
+            <div id="pwMsg" class="msg-box"></div>
+            <div class="form-group">
+                <label for="newPassword">Neues Passwort</label>
+                <input type="password" id="newPassword" class="form-input" placeholder="Mindestens 8 Zeichen">
+            </div>
+            <div class="form-group" style="margin-bottom:20px;">
+                <label for="confirmPassword">Passwort bestätigen</label>
+                <input type="password" id="confirmPassword" class="form-input" placeholder="Passwort wiederholen">
+            </div>
+            <button class="btn btn-primary" id="changePwBtn">Passwort ändern</button>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script>
+        fetch('../partials/navbar.html').then(r => r.text()).then(d => {
+            document.getElementById('navbar').innerHTML = d
+            const toggle = document.querySelector('.menu-toggle')
+            const navLinks = document.querySelector('.nav-links')
+            if (toggle) toggle.addEventListener('click', () => navLinks.classList.toggle('active'))
+        })
+        fetch('../partials/footer.html').then(r => r.text()).then(d => {
+            document.getElementById('footer').innerHTML = d
+        })
+    </script>
+
+    <script type="module">
+        import { supabase } from '../js/supabase.js?v=8'
+
+        let tfaEnrolledFactorId = null
+
+        // ── Auth check ─────────────────────────────────────────
+        const { data: { session } } = await supabase.auth.getSession()
+        if (!session) { window.location.href = 'login.html'; }
+
+        const userId = session.user.id
+        const email  = session.user.email
+        const initial = email.charAt(0).toUpperCase()
+
+        document.getElementById('profileEmail').textContent = email
+        document.getElementById('avatarInitial').textContent = initial
+
+        // ── Avatar: load current ───────────────────────────────
+        const { data: avatarUrlData } = supabase.storage.from('avatars').getPublicUrl(userId)
+        const baseAvatarUrl = avatarUrlData.publicUrl
+
+        function loadAvatarInCircle(circle, url) {
+            const img = new Image()
+            img.onload = () => {
+                const el = document.createElement('img')
+                el.src = url
+                el.alt = initial
+                circle.innerHTML = ''
+                circle.appendChild(el)
+            }
+            img.src = url
+        }
+        loadAvatarInCircle(document.getElementById('avatarCircle'), baseAvatarUrl + '?t=' + Date.now())
+
+        // ── Avatar: upload ─────────────────────────────────────
+        document.getElementById('avatarInput').addEventListener('change', async (e) => {
+            const file = e.target.files[0]
+            if (!file) return
+            if (file.size > 2 * 1024 * 1024) {
+                showMsg('avatarMsg', 'Bild darf maximal 2 MB groß sein.', 'error')
+                return
+            }
+            showMsg('avatarMsg', 'Wird hochgeladen…', 'info')
+
+            const { error } = await supabase.storage.from('avatars').upload(userId, file, {
+                upsert: true,
+                contentType: file.type
+            })
+            if (error) { showMsg('avatarMsg', 'Fehler: ' + error.message, 'error'); return }
+
+            const newUrl = baseAvatarUrl + '?t=' + Date.now()
+            loadAvatarInCircle(document.getElementById('avatarCircle'), newUrl)
+            showMsg('avatarMsg', 'Profilbild wurde erfolgreich aktualisiert.', 'success')
+            e.target.value = ''
+        })
+
+        // ── 2FA ────────────────────────────────────────────────
+        async function loadTfaStatus() {
+            const { data, error } = await supabase.auth.mfa.listFactors()
+            if (error) { showMsg('tfaMsg', 'Fehler beim Laden des 2FA-Status.', 'error'); return }
+
+            const verified = (data.totp || []).find(f => f.status === 'verified')
+            if (verified) {
+                tfaEnrolledFactorId = verified.id
+                document.getElementById('tfaStatusBadge').className = 'status-badge status-on'
+                document.getElementById('tfaStatusText').textContent = '2FA aktiviert'
+                document.getElementById('tfaSectionOff').style.display = 'none'
+                document.getElementById('tfaSectionOn').style.display = 'block'
+                document.getElementById('tfaQrSection').style.display = 'none'
+            } else {
+                document.getElementById('tfaStatusBadge').className = 'status-badge status-off'
+                document.getElementById('tfaStatusText').textContent = '2FA deaktiviert'
+                document.getElementById('tfaSectionOff').style.display = 'block'
+                document.getElementById('tfaSectionOn').style.display = 'none'
+                document.getElementById('tfaQrSection').style.display = 'none'
+            }
+        }
+        await loadTfaStatus()
+
+        document.getElementById('enableBtn').addEventListener('click', async () => {
+            showMsg('tfaMsg', '', 'hide')
+            const btn = document.getElementById('enableBtn')
+            btn.textContent = 'Wird vorbereitet…'; btn.disabled = true
+            const { data, error } = await supabase.auth.mfa.enroll({ factorType: 'totp', friendlyName: 'SafeNet Authenticator' })
+            btn.textContent = '2FA aktivieren'; btn.disabled = false
+            if (error) { showMsg('tfaMsg', 'Fehler: ' + error.message, 'error'); return }
+            tfaEnrolledFactorId = data.id
+            document.getElementById('qrImg').src = data.totp.qr_code
+            document.getElementById('secretText').textContent = data.totp.secret
+            document.getElementById('tfaSectionOff').style.display = 'none'
+            document.getElementById('tfaQrSection').style.display = 'block'
+        })
+
+        document.getElementById('verifyBtn').addEventListener('click', async () => {
+            showMsg('tfaMsg', '', 'hide')
+            const code = document.getElementById('verifyCode').value.trim()
+            if (!code || code.length !== 6) { showMsg('tfaMsg', 'Bitte einen 6-stelligen Code eingeben.', 'error'); return }
+            const btn = document.getElementById('verifyBtn')
+            btn.textContent = 'Wird überprüft…'; btn.disabled = true
+            const { data: ch, error: chErr } = await supabase.auth.mfa.challenge({ factorId: tfaEnrolledFactorId })
+            if (chErr) { showMsg('tfaMsg', 'Fehler: ' + chErr.message, 'error'); btn.textContent = 'Bestätigen & aktivieren'; btn.disabled = false; return }
+            const { error: vErr } = await supabase.auth.mfa.verify({ factorId: tfaEnrolledFactorId, challengeId: ch.id, code })
+            btn.textContent = 'Bestätigen & aktivieren'; btn.disabled = false
+            if (vErr) { showMsg('tfaMsg', 'Falscher Code. Bitte versuche es erneut.', 'error'); return }
+            showMsg('tfaMsg', '2FA wurde erfolgreich aktiviert!', 'success')
+            document.getElementById('verifyCode').value = ''
+            await loadTfaStatus()
+        })
+
+        document.getElementById('cancelEnrollBtn').addEventListener('click', async () => {
+            if (tfaEnrolledFactorId) {
+                await supabase.auth.mfa.unenroll({ factorId: tfaEnrolledFactorId })
+                tfaEnrolledFactorId = null
+            }
+            await loadTfaStatus()
+        })
+
+        document.getElementById('disableBtn').addEventListener('click', async () => {
+            if (!confirm('2FA wirklich deaktivieren? Dein Konto wird dadurch weniger sicher.')) return
+            showMsg('tfaMsg', '', 'hide')
+            const btn = document.getElementById('disableBtn')
+            btn.textContent = 'Wird deaktiviert…'; btn.disabled = true
+            const { error } = await supabase.auth.mfa.unenroll({ factorId: tfaEnrolledFactorId })
+            btn.textContent = '2FA deaktivieren'; btn.disabled = false
+            if (error) { showMsg('tfaMsg', 'Fehler: ' + error.message, 'error'); return }
+            showMsg('tfaMsg', '2FA wurde deaktiviert.', 'success')
+            await loadTfaStatus()
+        })
+
+        // ── Password change ────────────────────────────────────
+        document.getElementById('changePwBtn').addEventListener('click', async () => {
+            const newPw = document.getElementById('newPassword').value
+            const confirmPw = document.getElementById('confirmPassword').value
+            if (!newPw || newPw.length < 8) { showMsg('pwMsg', 'Das Passwort muss mindestens 8 Zeichen lang sein.', 'error'); return }
+            if (newPw !== confirmPw) { showMsg('pwMsg', 'Die Passwörter stimmen nicht überein.', 'error'); return }
+            const btn = document.getElementById('changePwBtn')
+            btn.textContent = 'Wird gespeichert…'; btn.disabled = true
+            const { error } = await supabase.auth.updateUser({ password: newPw })
+            btn.textContent = 'Passwort ändern'; btn.disabled = false
+            if (error) { showMsg('pwMsg', 'Fehler: ' + error.message, 'error'); return }
+            showMsg('pwMsg', 'Passwort wurde erfolgreich geändert.', 'success')
+            document.getElementById('newPassword').value = ''
+            document.getElementById('confirmPassword').value = ''
+        })
+
+        // ── Helper ─────────────────────────────────────────────
+        function showMsg(id, text, type) {
+            const box = document.getElementById(id)
+            if (type === 'hide') { box.style.display = 'none'; return }
+            box.textContent = text
+            box.className = 'msg-box ' + (type === 'success' ? 'msg-success' : type === 'info' ? 'msg-info' : 'msg-error')
+            box.style.display = 'block'
+        }
+    </script>
+</body>
+</html>
