@@ -13,6 +13,7 @@ async function applyNavbarUser() {
             const email = session.user.email
             dropdown.innerHTML = `
                 <li class="user-dropdown-name">${email}</li>
+                <li><a href="/pages/2fa.html">Zwei-Faktor-Auth</a></li>
                 <li><a href="#" id="logoutBtn">Abmelden</a></li>
             `
             dropdown.querySelector('#logoutBtn').addEventListener('click', async (e) => {

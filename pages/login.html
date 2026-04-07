@@ -16,7 +16,7 @@
 <body>
     <div id="navbar"></div>
 
-    <main class="login-wrapper">
+    <main class="login-wrapper" id="loginCard">
         <div class="login-card">
 
             <div class="login-icon">
@@ -103,7 +103,28 @@
         </div>
     </main>
 
-    <div id="footer"></div>
+    <!-- MFA Card -->
+    <main class="login-wrapper" id="mfaCard" style="display:none;">
+        <div class="login-card">
+            <h2>Bestätigung erforderlich</h2>
+            <p class="login-subtitle">Gib den 6-stelligen Code aus deiner Authenticator-App ein.</p>
+
+            <div id="mfaErrorBox" class="error-box hidden">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <span id="mfaErrorText">Falscher Code.</span>
+            </div>
+
+            <div class="form-group">
+                <label for="mfaCode">Authentifizierungscode</label>
+                <div class="input-wrapper">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    <input type="text" inputmode="numeric" maxlength="6" id="mfaCode" placeholder="123456" autocomplete="one-time-code" style="letter-spacing:4px;font-size:18px;">
+                </div>
+            </div>
+
+            <button class="login-btn" id="mfaBtn">Bestätigen</button>
+        </div>
+    </main>
 
     <script type="module">
         import { supabase } from '../js/supabase.js'
@@ -160,6 +181,17 @@
 
             if (error) {
                 showError(supabaseError(error.message))
+                btn.textContent = 'Einloggen'
+                btn.disabled = false
+                return
+            }
+
+            // MFA prüfen
+            const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+            if (aal?.nextLevel === 'aal2' && aal?.currentLevel !== 'aal2') {
+                // 2FA erforderlich — Code-Eingabe anzeigen
+                document.getElementById('loginCard').style.display = 'none'
+                document.getElementById('mfaCard').style.display = 'block'
                 btn.textContent = 'Einloggen'
                 btn.disabled = false
             } else {
@@ -222,6 +254,53 @@
                 successBox.style.display = 'block'
                 btn.textContent = 'Gesendet!'
             }
+        })
+
+        // MFA Bestätigung
+        document.getElementById('mfaBtn').addEventListener('click', async () => {
+            const code = document.getElementById('mfaCode').value.trim()
+            const errBox = document.getElementById('mfaErrorBox')
+            const errTxt = document.getElementById('mfaErrorText')
+            const btn = document.getElementById('mfaBtn')
+
+            errBox.classList.add('hidden')
+            if (!code || code.length !== 6) {
+                errTxt.textContent = 'Bitte einen 6-stelligen Code eingeben.'
+                errBox.classList.remove('hidden')
+                return
+            }
+
+            btn.textContent = 'Wird überprüft…'
+            btn.disabled = true
+
+            const { data: factors } = await supabase.auth.mfa.listFactors()
+            const totpFactor = factors?.totp?.find(f => f.status === 'verified')
+            if (!totpFactor) { window.location.href = '/'; return }
+
+            const { data: challenge, error: challengeErr } = await supabase.auth.mfa.challenge({ factorId: totpFactor.id })
+            if (challengeErr) {
+                errTxt.textContent = 'Fehler: ' + challengeErr.message
+                errBox.classList.remove('hidden')
+                btn.textContent = 'Bestätigen'
+                btn.disabled = false
+                return
+            }
+
+            const { error: verifyErr } = await supabase.auth.mfa.verify({
+                factorId: totpFactor.id,
+                challengeId: challenge.id,
+                code
+            })
+
+            if (verifyErr) {
+                errTxt.textContent = 'Falscher Code. Bitte versuche es erneut.'
+                errBox.classList.remove('hidden')
+                btn.textContent = 'Bestätigen'
+                btn.disabled = false
+                return
+            }
+
+            window.location.href = '/'
         })
 
         // Navbar & Footer laden
