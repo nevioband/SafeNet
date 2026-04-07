@@ -41,7 +41,7 @@
   justify-content: center;
   gap: 30px;
   flex-wrap: wrap;
-  padding: 40px 20px 80px;
+  padding: 60px 20px;
 }
 
 .feature-card {
@@ -65,10 +65,16 @@
   margin-bottom: 15px;
   font-size: 22px;
   color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .feature-card p {
   margin: 0;
+  margin-top: 12px;
   line-height: 1.7;
   color: #cbd5e1;
 }
