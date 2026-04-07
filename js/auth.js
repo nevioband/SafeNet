@@ -26,16 +26,14 @@ async function applyNavbarUser() {
                 window.location.reload()
             })
 
-            // Button: zuerst Initialbuchstabe, dann Profilbild nachladen
+            // Button: Initialbuchstabe oder gespeichertes Profilbild
             if (userBtn) {
-                userBtn.innerHTML = `<span class="user-initials">${initial}</span>`
-                const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(session.user.id)
-                const avatarUrl = urlData.publicUrl + '?t=' + Date.now()
-                const probe = new Image()
-                probe.onload = () => {
-                    userBtn.innerHTML = `<img class="user-avatar-img" src="${avatarUrl}" alt="${initial}">`
+                const avatarB64 = session.user.user_metadata?.avatar_b64
+                if (avatarB64) {
+                    userBtn.innerHTML = `<img class="user-avatar-img" src="${avatarB64}" alt="${initial}">`
+                } else {
+                    userBtn.innerHTML = `<span class="user-initials">${initial}</span>`
                 }
-                probe.src = avatarUrl
             }
         }
         // Wenn nicht eingeloggt: Standard-HTML aus navbar.html bleibt

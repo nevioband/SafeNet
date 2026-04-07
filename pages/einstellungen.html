@@ -242,43 +242,45 @@
         document.getElementById('avatarInitial').textContent = initial
 
         // ── Avatar: load current ───────────────────────────────
-        const { data: avatarUrlData } = supabase.storage.from('avatars').getPublicUrl(userId)
-        const baseAvatarUrl = avatarUrlData.publicUrl
-
-        function loadAvatarInCircle(circle, url) {
-            const img = new Image()
-            img.onload = () => {
-                const el = document.createElement('img')
-                el.src = url
-                el.alt = initial
-                circle.innerHTML = ''
-                circle.appendChild(el)
-            }
-            img.src = url
+        const avatarB64 = session.user.user_metadata?.avatar_b64
+        if (avatarB64) {
+            document.getElementById('avatarCircle').innerHTML = `<img src="${avatarB64}" alt="${initial}">`
         }
-        loadAvatarInCircle(document.getElementById('avatarCircle'), baseAvatarUrl + '?t=' + Date.now())
 
         // ── Avatar: upload ─────────────────────────────────────
         document.getElementById('avatarInput').addEventListener('change', async (e) => {
             const file = e.target.files[0]
             if (!file) return
-            if (file.size > 2 * 1024 * 1024) {
-                showMsg('avatarMsg', 'Bild darf maximal 2 MB groß sein.', 'error')
-                return
-            }
-            showMsg('avatarMsg', 'Wird hochgeladen…', 'info')
+            showMsg('avatarMsg', 'Wird verarbeitet…', 'info')
 
-            const { error } = await supabase.storage.from('avatars').upload(userId, file, {
-                upsert: true,
-                contentType: file.type
-            })
+            const b64 = await resizeToBase64(file, 200)
+            const { error } = await supabase.auth.updateUser({ data: { avatar_b64: b64 } })
             if (error) { showMsg('avatarMsg', 'Fehler: ' + error.message, 'error'); return }
 
-            const newUrl = baseAvatarUrl + '?t=' + Date.now()
-            loadAvatarInCircle(document.getElementById('avatarCircle'), newUrl)
+            document.getElementById('avatarCircle').innerHTML = `<img src="${b64}" alt="${initial}">`
             showMsg('avatarMsg', 'Profilbild wurde erfolgreich aktualisiert.', 'success')
             e.target.value = ''
         })
+
+        function resizeToBase64(file, maxPx) {
+            return new Promise(resolve => {
+                const reader = new FileReader()
+                reader.onload = ev => {
+                    const img = new Image()
+                    img.onload = () => {
+                        let w = img.width, h = img.height
+                        if (w > h && w > maxPx) { h = Math.round(h * maxPx / w); w = maxPx }
+                        else if (h >= w && h > maxPx) { w = Math.round(w * maxPx / h); h = maxPx }
+                        const c = document.createElement('canvas')
+                        c.width = w; c.height = h
+                        c.getContext('2d').drawImage(img, 0, 0, w, h)
+                        resolve(c.toDataURL('image/jpeg', 0.85))
+                    }
+                    img.src = ev.target.result
+                }
+                reader.readAsDataURL(file)
+            })
+        }
 
         // ── 2FA ────────────────────────────────────────────────
         async function loadTfaStatus() {
