@@ -18,6 +18,14 @@
 
     <div class="password-container">
         <h3>Dein Tresor</h3>
+
+        <!-- Suchfeld -->
+        <div style="position:relative;margin-bottom:16px;">
+            <span class="material-symbols-outlined" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#64748b;font-size:20px;pointer-events:none;">search</span>
+            <input type="text" id="vaultSearch" placeholder="Passwort suchen…"
+                oninput="window.filterVault(this.value)"
+                style="width:100%;padding:11px 14px 11px 40px;background:#0f172a;border:1px solid rgba(59,130,246,0.2);border-radius:10px;color:white;font-size:15px;font-family:Inter,sans-serif;box-sizing:border-box;outline:none;">
+        </div>
         
         <div id="saved-passwords-list" class="vault-list"></div>
 

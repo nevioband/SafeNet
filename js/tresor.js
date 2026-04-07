@@ -157,6 +157,12 @@ async function renderVault() {
             </div>
         </div>
     `).join('')
+
+    // Aktive Suche nach Reload beibehalten
+    const searchInput = document.getElementById('vaultSearch')
+    if (searchInput && searchInput.value.trim()) {
+        window.filterVault(searchInput.value)
+    }
 }
 
 // Namen bearbeiten
@@ -296,6 +302,30 @@ window.copyToClipboard = function(index) {
     navigator.clipboard.writeText(text)
         .then(() => alert('Passwort kopiert!'))
         .catch(() => alert('Kopieren fehlgeschlagen \u2014 bitte manuell kopieren.'))
+}
+
+// ===== SUCHE =====
+
+window.filterVault = function(query) {
+    const q = query.trim().toLowerCase()
+    const items = document.querySelectorAll('#saved-passwords-list .vault-item')
+    let visible = 0
+    items.forEach((item, index) => {
+        const label = vaultData[index]?.label?.toLowerCase() ?? ''
+        const match = !q || label.includes(q)
+        item.style.display = match ? '' : 'none'
+        if (match) visible++
+    })
+    // "Keine Treffer"-Hinweis
+    let noResult = document.getElementById('vaultNoResult')
+    if (!noResult) {
+        noResult = document.createElement('p')
+        noResult.id = 'vaultNoResult'
+        noResult.style.cssText = 'text-align:center;color:rgba(255,255,255,0.4);padding:16px;'
+        noResult.textContent = 'Keine Passwörter gefunden.'
+        document.getElementById('saved-passwords-list').after(noResult)
+    }
+    noResult.style.display = (q && visible === 0) ? 'block' : 'none'
 }
 
 // ===== START =====
