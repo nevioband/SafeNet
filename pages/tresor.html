@@ -20,7 +20,7 @@
         <h3>Dein Tresor</h3>
 
         <!-- Suchfeld -->
-        <div style="position:relative;margin-bottom:16px;">
+        <div id="vaultSearchContainer" style="position:relative;margin-bottom:16px;display:none;">
             <span class="material-symbols-outlined" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#64748b;font-size:20px;pointer-events:none;">search</span>
             <input type="text" id="vaultSearch" placeholder="Passwort suchen…"
                 oninput="window.filterVault(this.value)"
@@ -95,6 +95,6 @@
             document.getElementById("footer").innerHTML = data;
         });
     </script>
-    <script type="module" src="../js/tresor.js?v=7"></script>
+    <script type="module" src="../js/tresor.js?v=8"></script>
 </body>
 </html>

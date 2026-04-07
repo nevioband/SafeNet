@@ -1,4 +1,4 @@
-import { supabase } from './supabase.js?v=7'
+import { supabase } from './supabase.js?v=8'
 
 let vaultData = []
 let cachedVaultKey = null
@@ -96,6 +96,9 @@ async function renderVault() {
         return
     }
 
+    const searchContainer = document.getElementById('vaultSearchContainer')
+    if (searchContainer) searchContainer.style.display = 'block'
+
     listElement.innerHTML = '<p style="text-align:center; color:rgba(255,255,255,0.4); padding:20px;">Wird geladen…</p>'
 
     const { data, error } = await supabase
@@ -134,10 +137,44 @@ async function renderVault() {
         return
     }
 
-    listElement.innerHTML = decryptedEntries.map((pw, index) => `
-        <div class="vault-item">
+    // Duplikate erkennen: alle Passwort-Werte zählen
+    const valueCounts = {}
+    decryptedEntries.forEach(pw => {
+        if (pw.value && pw.value !== '[Entschlüsselungsfehler]') {
+            valueCounts[pw.value] = (valueCounts[pw.value] || 0) + 1
+        }
+    })
+    const duplicateIndices = new Set(
+        decryptedEntries
+            .map((pw, i) => valueCounts[pw.value] > 1 ? i : -1)
+            .filter(i => i !== -1)
+    )
+    const duplicateCount = duplicateIndices.size
+
+    // Warnbanner
+    let dupBanner = document.getElementById('vaultDupBanner')
+    if (!dupBanner) {
+        dupBanner = document.createElement('div')
+        dupBanner.id = 'vaultDupBanner'
+        listElement.before(dupBanner)
+    }
+    if (duplicateCount > 0) {
+        dupBanner.style.cssText = 'display:flex;align-items:center;gap:10px;background:rgba(251,146,60,0.12);border:1px solid rgba(251,146,60,0.4);border-radius:10px;padding:12px 16px;margin-bottom:16px;color:#fb923c;font-size:14px;font-family:Inter,sans-serif;'
+        dupBanner.innerHTML = `<span class="material-symbols-outlined" style="font-size:20px;color:#fb923c;">warning</span> <span><strong>${duplicateCount} Einträge</strong> verwenden dasselbe Passwort — das ist ein Sicherheitsrisiko!</span>`
+    } else {
+        dupBanner.style.display = 'none'
+    }
+
+    listElement.innerHTML = decryptedEntries.map((pw, index) => {
+        const isDup = duplicateIndices.has(index)
+        const dupBadge = isDup
+            ? `<span style="font-size:11px;background:rgba(251,146,60,0.2);border:1px solid rgba(251,146,60,0.5);color:#fb923c;border-radius:6px;padding:2px 7px;margin-left:6px;vertical-align:middle;">Duplikat</span>`
+            : ''
+        const borderStyle = isDup ? 'border-color:rgba(251,146,60,0.5);' : ''
+        return `
+        <div class="vault-item" style="${borderStyle}">
             <div style="display:flex;flex-direction:column;gap:2px;overflow:hidden;margin-right:10px;">
-                <strong style="color:#ffffff;font-size:1rem;margin-bottom:2px;display:block;">${pw.label}</strong>
+                <strong style="color:#ffffff;font-size:1rem;margin-bottom:2px;display:block;">${pw.label}${dupBadge}</strong>
                 <span class="password-display" id="pw-${index}" style="font-family:monospace;color:#66d9ff;font-size:1.1rem;letter-spacing:2px;">••••••••</span>
                 <small style="font-size:0.7rem;color:rgba(255,255,255,0.4);">${pw.date || '-'}</small>
             </div>
@@ -156,7 +193,7 @@ async function renderVault() {
                 </button>
             </div>
         </div>
-    `).join('')
+    `}).join('')
 
     // Aktive Suche nach Reload beibehalten
     const searchInput = document.getElementById('vaultSearch')
