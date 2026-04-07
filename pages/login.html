@@ -108,6 +108,25 @@
     <script type="module">
         import { supabase } from '../js/supabase.js'
 
+        function supabaseError(msg) {
+            if (!msg) return 'Ein unbekannter Fehler ist aufgetreten.'
+            const m = msg.toLowerCase()
+            if (m.includes('invalid login credentials') || m.includes('invalid email or password')) return 'E-Mail oder Passwort falsch.'
+            if (m.includes('email not confirmed')) return 'Bitte bestätige zuerst deine E-Mail-Adresse (Link in deinem Posteingang).'
+            if (m.includes('too many requests') || m.includes('rate limit')) return 'Zu viele Versuche. Bitte warte einen Moment.'
+            if (m.includes('network') || m.includes('fetch')) return 'Verbindungsfehler. Bitte prüfe deine Internetverbindung.'
+            if (m.includes('user not found')) return 'Kein Konto mit dieser E-Mail-Adresse gefunden.'
+            return 'Fehler: ' + msg
+        }
+
+        function showError(text) {
+            document.getElementById('errorText').textContent = text
+            document.getElementById('errorBox').classList.remove('hidden')
+        }
+        function hideError() {
+            document.getElementById('errorBox').classList.add('hidden')
+        }
+
         // Passwort Toggle
         document.getElementById('togglePass').addEventListener('click', function () {
             const input = document.getElementById('loginPass')
@@ -125,15 +144,12 @@
         document.getElementById('loginBtn').addEventListener('click', async () => {
             const email    = document.getElementById('loginEmail').value.trim()
             const password = document.getElementById('loginPass').value
-            const errorBox = document.getElementById('errorBox')
-            const errorTxt = document.getElementById('errorText')
             const btn      = document.getElementById('loginBtn')
 
-            errorBox.classList.add('hidden')
+            hideError()
 
             if (!email || !password) {
-                errorTxt.textContent = 'Bitte E-Mail und Passwort eingeben.'
-                errorBox.classList.remove('hidden')
+                showError('Bitte E-Mail und Passwort eingeben.')
                 return
             }
 
@@ -143,12 +159,18 @@
             const { error } = await supabase.auth.signInWithPassword({ email, password })
 
             if (error) {
-                errorTxt.textContent = 'Ungültige E-Mail oder Passwort.'
-                errorBox.classList.remove('hidden')
+                showError(supabaseError(error.message))
                 btn.textContent = 'Einloggen'
                 btn.disabled = false
             } else {
                 window.location.href = '/'
+            }
+        })
+
+        // Enter-Taste
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && document.getElementById('forgotModal').style.display !== 'flex') {
+                document.getElementById('loginBtn').click()
             }
         })
 
@@ -192,7 +214,7 @@
             })
 
             if (error) {
-                errTxt.textContent = error.message
+                errTxt.textContent = supabaseError(error.message)
                 errBox.classList.remove('hidden')
                 btn.textContent = 'Link senden'
                 btn.disabled = false

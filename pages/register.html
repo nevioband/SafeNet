@@ -99,6 +99,22 @@
     <script type="module">
         import { supabase } from '../js/supabase.js'
 
+        function supabaseError(msg) {
+            if (!msg) return 'Ein unbekannter Fehler ist aufgetreten.'
+            const m = msg.toLowerCase()
+            if (m.includes('user already registered') || m.includes('already been registered')) return 'Diese E-Mail-Adresse ist bereits registriert.'
+            if (m.includes('invalid email') || m.includes('unable to validate email')) return 'Bitte gib eine gültige E-Mail-Adresse ein.'
+            if (m.includes('password should be at least')) return 'Das Passwort muss mindestens 6 Zeichen lang sein.'
+            if (m.includes('too many requests') || m.includes('rate limit')) return 'Zu viele Versuche. Bitte warte einen Moment.'
+            if (m.includes('network') || m.includes('fetch')) return 'Verbindungsfehler. Bitte prüfe deine Internetverbindung.'
+            return 'Fehler: ' + msg
+        }
+
+        function showError(text) {
+            document.getElementById('errorText').textContent = text
+            document.getElementById('errorBox').classList.remove('hidden')
+        }
+
         // Passwort Toggle
         document.getElementById('togglePass').addEventListener('click', function () {
             const input = document.getElementById('regPass')
@@ -117,27 +133,26 @@
             const email    = document.getElementById('regEmail').value.trim()
             const password = document.getElementById('regPass').value
             const confirm  = document.getElementById('regPassConfirm').value
-            const errorBox = document.getElementById('errorBox')
-            const errorTxt = document.getElementById('errorText')
             const successBox = document.getElementById('successBox')
             const btn      = document.getElementById('registerBtn')
 
-            errorBox.classList.add('hidden')
+            document.getElementById('errorBox').classList.add('hidden')
             successBox.style.display = 'none'
 
             if (!email || !password || !confirm) {
-                errorTxt.textContent = 'Bitte alle Felder ausfüllen.'
-                errorBox.classList.remove('hidden')
+                showError('Bitte alle Felder ausfüllen.')
+                return
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showError('Bitte gib eine gültige E-Mail-Adresse ein.')
                 return
             }
             if (password.length < 6) {
-                errorTxt.textContent = 'Passwort muss mindestens 6 Zeichen lang sein.'
-                errorBox.classList.remove('hidden')
+                showError('Passwort muss mindestens 6 Zeichen lang sein.')
                 return
             }
             if (password !== confirm) {
-                errorTxt.textContent = 'Passwörter stimmen nicht überein.'
-                errorBox.classList.remove('hidden')
+                showError('Passwörter stimmen nicht überein.')
                 return
             }
 
@@ -147,8 +162,7 @@
             const { error } = await supabase.auth.signUp({ email, password })
 
             if (error) {
-                errorTxt.textContent = error.message
-                errorBox.classList.remove('hidden')
+                showError(supabaseError(error.message))
                 btn.textContent = 'Registrieren'
                 btn.disabled = false
             } else {
@@ -156,6 +170,11 @@
                 btn.textContent = 'Registriert!'
                 setTimeout(() => { window.location.href = 'login.html' }, 3000)
             }
+        })
+
+        // Enter-Taste
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') document.getElementById('registerBtn').click()
         })
 
         // Navbar & Footer laden
