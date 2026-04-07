@@ -105,6 +105,17 @@ window.savePassword = async function(newPasswordValue, labelValue) {
     if (document.getElementById('saved-passwords-list')) renderVault()
 }
 
+// Manuelles Speichern aus dem Modal
+window.saveManual = async function() {
+    const label = (document.getElementById('manualLabel')?.value || '').trim()
+    const password = (document.getElementById('manualPassword')?.value || '').trim()
+    if (!password) { alert('Bitte ein Passwort eingeben.'); return }
+    await window.savePassword(password, label || 'Manuell gespeichert')
+    document.getElementById('manualModal').style.display = 'none'
+    document.getElementById('manualLabel').value = ''
+    document.getElementById('manualPassword').value = ''
+}
+
 // Vom Generator zum Tresor übertragen
 window.transferToVault = async function() {
     const outputField = document.getElementById('password-output')
