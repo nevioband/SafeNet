@@ -71,12 +71,12 @@ h1, h2{
 }
 
 .btn-secondary {
-  border: 2px solid #3b82f6;
-  color: #3b82f6;
+  border: 2px solid #3399ff;
+  color: #3399ff;
   background: transparent;
 }
 
 .btn-secondary:hover {
-  background: #3b82f6;
+  background: #3399ff;
   color: white;
 }

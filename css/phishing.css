@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: 'Inter', sans-serif;
   background-color: #0f172a;
   color: #ffffff;
 }
@@ -54,18 +54,18 @@ button {
 }
 
 #realBtn {
-  background-color: #2563eb;
-  color: white;
+  background: linear-gradient(135deg, #3399ff, #66d9ff);
+  color: #0b1220;
 }
 
 #phishingBtn {
-  background-color: #dc2626;
+  background: linear-gradient(135deg, #ff4d4d, #ff0000);
   color: white;
 }
 
 #nextBtn {
-  background-color: #22c55e;
-  color: white;
+  background: linear-gradient(135deg, #3399ff, #66d9ff);
+  color: #0b1220;
   margin-top: 15px;
 }
 
