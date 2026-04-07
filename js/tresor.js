@@ -1,4 +1,4 @@
-import { supabase } from './supabase.js?v=4'
+import { supabase } from './supabase.js?v=5'
 
 // ===== KONSTANTEN =====
 const KEY_CHECK_LABEL = '__vault_key_check__'
@@ -124,10 +124,10 @@ async function renderVault() {
                 <button class="vault-view-btn" onclick="window.editLabel('${pw.id}', '${pw.label}')" title="Umbenennen" style="background:linear-gradient(135deg,#FFB347,#FFCC33);color:#0b1220 !important;">
                     <span class="material-symbols-outlined">edit</span>
                 </button>
-                <button class="vault-view-btn" onclick="window.toggleVisibility(${index}, ${JSON.stringify(pw.value)})" title="Anzeigen">
+                <button class="vault-view-btn" onclick="window.toggleVisibility(${index})" title="Anzeigen">
                     <span class="material-symbols-outlined" id="eye-${index}">visibility</span>
                 </button>
-                <button class="vault-copy-btn" onclick="window.copyToClipboard(${JSON.stringify(pw.value)})" title="Kopieren">
+                <button class="vault-copy-btn" onclick="window.copyToClipboard(${index})" title="Kopieren">
                     <span class="material-symbols-outlined">content_copy</span>
                 </button>
                 <button class="vault-delete-btn" onclick="window.deletePassword('${pw.id}')" title="Löschen">
@@ -148,9 +148,10 @@ window.editLabel = async function(id, currentLabel) {
 }
 
 // Sichtbarkeit umschalten
-window.toggleVisibility = function(index, realValue) {
+window.toggleVisibility = function(index) {
     const pwSpan = document.getElementById(`pw-${index}`)
     const eyeIcon = document.getElementById(`eye-${index}`)
+    const realValue = vaultData[index]?.value ?? ''
     if (pwSpan.innerText === '••••••••') {
         pwSpan.innerText = realValue
         pwSpan.style.letterSpacing = '1px'
@@ -305,7 +306,8 @@ window.clearVault = async function() {
 }
 
 // Kopieren
-window.copyToClipboard = function(text) {
+window.copyToClipboard = function(index) {
+    const text = vaultData[index]?.value ?? ''
     navigator.clipboard.writeText(text).then(() => alert('Passwort kopiert!'))
 }
 
