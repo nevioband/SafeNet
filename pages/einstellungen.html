@@ -206,10 +206,6 @@
             <h3>Zwei-Faktor-Authentifizierung</h3>
             <p class="s-card-desc">Schütze dein Konto mit einem einmaligen Code aus deiner Authenticator-App (z.&nbsp;B. Google Authenticator, Authy).</p>
 
-            <div id="tfaStatusBadge" class="status-badge status-off">
-                <span>●</span><span id="tfaStatusText">Wird geladen…</span>
-            </div>
-
             <div id="tfaMsg" class="msg-box"></div>
 
             <div id="tfaSectionOff">
@@ -384,14 +380,10 @@
             const verified = (data.totp || []).find(f => f.status === 'verified')
             if (verified) {
                 tfaEnrolledFactorId = verified.id
-                document.getElementById('tfaStatusBadge').className = 'status-badge status-on'
-                document.getElementById('tfaStatusText').textContent = '2FA aktiviert'
                 document.getElementById('tfaSectionOff').style.display = 'none'
                 document.getElementById('tfaSectionOn').style.display = 'block'
                 document.getElementById('tfaQrSection').style.display = 'none'
             } else {
-                document.getElementById('tfaStatusBadge').className = 'status-badge status-off'
-                document.getElementById('tfaStatusText').textContent = '2FA deaktiviert'
                 document.getElementById('tfaSectionOff').style.display = 'block'
                 document.getElementById('tfaSectionOn').style.display = 'none'
                 document.getElementById('tfaQrSection').style.display = 'none'
