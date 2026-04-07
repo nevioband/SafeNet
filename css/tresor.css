@@ -106,7 +106,7 @@
 /* --- RESPONSIVE DESIGN --- */
 
 /* Für Tablets und Handys */
-@media (max-width: 650px) {
+@media (max-width: 768px) {
     .vault-item {
         flex-direction: column; /* Text oben, Buttons unten */
         align-items: stretch;    /* Nutzt die volle Breite */
@@ -131,9 +131,9 @@
     }
 
     .password-container {
-        width: calc(100% - 32px);
-        margin: 40px auto;
-        padding: 24px 20px;
+        width: calc(100% - 32px) !important;
+        margin: 40px auto !important;
+        padding: 24px 20px !important;
     }
 }
 
