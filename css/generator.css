@@ -1,0 +1,193 @@
+.password-container {
+  max-width: 800px;
+  margin: 80px auto;
+  padding: 32px;
+  border-radius: 20px;
+  background: rgba(23, 36, 65, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(102, 179, 255, 0.18);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.35), 0 0 30px rgba(51, 153, 255, 0.08);
+  color: #ffffff;
+  font-family: "Inter", sans-serif;
+}
+
+.password-container h3 {
+  margin: 0 0 24px 0;
+  font-size: 2rem;
+  text-align: center;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.display-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(10, 18, 35, 0.9);
+  border: 1px solid rgba(102, 179, 255, 0.25);
+  border-radius: 14px;
+  padding: 10px;
+  margin-bottom: 16px;
+  box-shadow: inset 0 0 12px rgba(51, 153, 255, 0.08);
+}
+
+#password-output {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #66d9ff;
+  font-family: monospace;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  padding: 0 6px;
+}
+
+#password-output::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+#copy-btn {
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #3399ff, #66d9ff);
+  color: #0b1220;
+  cursor: pointer;
+  transition: 0.25s ease;
+  box-shadow: 0 0 15px rgba(102, 217, 255, 0.2);
+  padding: 0;
+}
+
+#copy-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 0 22px rgba(102, 217, 255, 0.35);
+}
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.settings label {
+  font-size: 1rem;
+  color: #e8f3ff;
+}
+
+#length-val {
+  color: #66d9ff;
+  font-weight: 700;
+}
+
+#length-slider {
+  width: 100%;
+  appearance: none;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  outline: none;
+  cursor: pointer;
+}
+
+#length-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #66d9ff;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 12px rgba(102, 217, 255, 0.45);
+}
+
+/* Neue Checkbox-Buttons Styles */
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.custom-check input {
+  display: none;
+}
+
+.check-label {
+  display: block;
+  padding: 10px 0;
+  text-align: center;
+  background: rgba(10, 18, 35, 0.6);
+  border: 1px solid rgba(102, 179, 255, 0.12);
+  border-radius: 12px;
+  color: #f2f7ff;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 0.85rem;
+}
+
+.custom-check input:checked + .check-label {
+  background: rgba(51, 153, 255, 0.2);
+  border-color: #66d9ff;
+  color: #66d9ff;
+  box-shadow: 0 0 10px rgba(102, 217, 255, 0.2);
+}
+
+/* Neue Sichern-Zeile Styles */
+.input-group-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+#password-label {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(102, 179, 255, 0.25);
+  background: rgba(10, 18, 35, 0.9);
+  color: white;
+  box-sizing: border-box;
+}
+
+.main-btn {
+  width: 100%;
+  margin-top: 16px;
+  padding: 14px 18px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #3399ff, #66d9ff);
+  color: #0b1220;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: 0.25s ease;
+  box-shadow: 0 0 18px rgba(102, 217, 255, 0.22);
+}
+
+.main-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 28px rgba(102, 217, 255, 0.4);
+}
+
+.main-btn:active, #copy-btn:active {
+  transform: scale(0.98);
+}
+
+@media (max-width: 768px) {
+  .password-container {
+    width: calc(100% - 32px);
+    margin: 40px auto;
+    padding: 24px 20px;
+  }
+  .password-container h3 { font-size: 1.6rem; }
+  #password-output { font-size: 1rem; }
+  .main-btn { font-size: 0.95rem; }
+  .checkbox-grid { grid-template-columns: repeat(2, 1fr); } /* Auf Handy 2x2 */
+}

@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Über SafeNet Security</title>
+    <link rel="stylesheet" href="../css/navbar.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/infobox.css" />
+    <link rel="stylesheet" href="../css/hero.css" />
+    <link rel="stylesheet" href="../css/footer.css" />
+    <link rel="stylesheet" href="../css/analyse.css" />
+    <link rel="stylesheet" href="../css/keylogger.css" />
+    <link rel="stylesheet" href="../css/phishing.css" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="../images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png"
+    />
+    <script type="module" src="../js/auth.js?v=3"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <h1>Über SafeNet Security</h1>
+    <section class="info-section">
+      <div class="info-box">
+        <p>
+          SafeNet Security ist eine interaktive Web-App, die grundlegende Themen
+          der IT-Sicherheit einfach und verständlich vermittelt. Ziel ist es,
+          Nutzern ein besseres Bewusstsein für digitale Gefahren zu geben und
+          ihnen konkrete Werkzeuge an die Hand zu bieten, um sich im Internet
+          sicherer zu bewegen. Die Anwendung kombiniert Theorie mit Praxis:
+          Neben verständlichen Erklärungen zu Angriffsmethoden wie Phishing oder
+          Brute-Force-Attacken gibt es auch nützliche Tools wie einen
+          Passwort-Generator und einen Passwort-Stärke-Checker. So können Nutzer
+          ihr Wissen direkt anwenden und ihre eigene Sicherheit verbessern. Der
+          Fokus liegt auf einem klaren, modernen Design und einer einfachen
+          Bedienung – sowohl auf dem Desktop als auch auf dem Smartphone.
+          SafeNet Security richtet sich besonders an Einsteiger, die sich ohne
+          komplizierte Fachbegriffe mit IT-Sicherheit auseinandersetzen möchten.
+        </p>
+      </div>
+    </section>
+
+    <img
+      class="titelimg"
+      src="../images/SafeNet-Security-Logo/Withoutbg/Shield.png"
+      alt="SafeNetSecurityShield"
+    />
+
+    <div id="footer"></div>
+    <script>
+      fetch("../partials/footer.html")
+        .then((res) => res.text())
+        .then((data) => {
+          document.getElementById("footer").innerHTML = data;
+        });
+    </script>
+
+    <script>
+      fetch("../partials/navbar.html")
+        .then((res) => res.text())
+        .then((data) => {
+          document.getElementById("navbar").innerHTML = data;
+
+          const toggle = document.querySelector(".menu-toggle");
+          const navLinks = document.querySelector(".nav-links");
+          const dropdown = document.querySelector(".dropdown");
+          const dropdownLink = document.querySelector(".dropdown-link");
+
+          toggle.addEventListener("click", () => {
+            navLinks.classList.toggle("active");
+
+            if (!navLinks.classList.contains("active")) {
+              dropdown.classList.remove("open");
+            }
+          });
+
+          dropdownLink.addEventListener("click", (e) => {
+            if (window.innerWidth <= 768) {
+              if (!dropdown.classList.contains("open")) {
+                e.preventDefault();
+                dropdown.classList.add("open");
+              }
+            }
+          });
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anmeldung erfolgreich – SafeNet Security</title>
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png">
+    <style>
+        .status-wrapper {
+            min-height: calc(100vh - 120px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+        }
+        .status-card {
+            background: #172441;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 16px;
+            padding: 48px 44px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+        .status-icon {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+        .status-icon svg {
+            width: 60px;
+            height: 60px;
+            filter: drop-shadow(0 0 14px rgba(51, 153, 255, 0.5));
+        }
+        .status-card h2 {
+            font-size: 26px;
+            margin: 0 0 10px 0;
+        }
+        .status-card p {
+            color: #94a3b8;
+            font-size: 15px;
+            margin: 0 0 32px 0;
+            line-height: 1.6;
+        }
+        .status-btn {
+            display: inline-block;
+            width: 100%;
+            padding: 13px 0;
+            background: linear-gradient(135deg, #3399ff, #66d9ff);
+            color: #0f172a;
+            font-weight: 700;
+            font-size: 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
+            transition: opacity 0.2s;
+        }
+        .status-btn:hover {
+            opacity: 0.88;
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar"></div>
+
+    <main class="status-wrapper">
+        <div class="status-card">
+            <div class="status-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="successGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#3399ff"/>
+                            <stop offset="100%" style="stop-color:#66d9ff"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="12" cy="12" r="10" fill="url(#successGrad)" opacity="0.15" stroke="url(#successGrad)" stroke-width="1.5"/>
+                    <polyline points="7 12.5 10.5 16 17 9" stroke="url(#successGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+
+            <h2>Anmeldung erfolgreich!</h2>
+            <p>Du bist jetzt angemeldet. Willkommen bei SafeNet Security.</p>
+
+            <a href="/" class="status-btn">Zur Startseite</a>
+        </div>
+    </main>
+
+    <div id="footer"></div>
+
+    <script>
+        fetch("partials/navbar.html")
+            .then(res => res.text())
+            .then(data => {
+                document.getElementById("navbar").innerHTML = data;
+
+                const toggle = document.querySelector(".menu-toggle");
+                const navLinks = document.querySelector(".nav-links");
+                const dropdown = document.querySelector(".dropdown");
+                const dropdownLink = document.querySelector(".dropdown-link");
+
+                toggle.addEventListener("click", () => {
+                    navLinks.classList.toggle("active");
+                    if (!navLinks.classList.contains("active")) {
+                        dropdown.classList.remove("open");
+                    }
+                });
+
+                dropdownLink.addEventListener("click", (e) => {
+                    if (window.innerWidth <= 768) {
+                        const isOpen = dropdown.classList.contains("open");
+                        if (!isOpen) {
+                            e.preventDefault();
+                            dropdown.classList.add("open");
+                        }
+                    }
+                });
+            });
+
+        fetch("partials/footer.html")
+            .then(res => res.text())
+            .then(data => { document.getElementById("footer").innerHTML = data; });
+    </script>
+</body>
+</html>

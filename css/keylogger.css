@@ -1,0 +1,39 @@
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#0f172a;
+    color:white;
+    text-align:center;
+}
+
+h1{
+    margin-top:80px;
+    font-size:40px;
+}
+
+p{
+    font-size:18px;
+}
+
+#eingabe{
+    margin-top:30px;
+    padding:12px 18px;
+    font-size:16px;
+    border-radius:8px;
+    border:2px solid #3b82f6;
+    outline:none;
+    width:250px;
+    transition:0.2s;
+}
+
+#eingabe:focus{
+    border-color:#60a5fa;
+    box-shadow:0 0 10px #3b82f6;
+}
+
+#ausgabe{
+    margin-top:25px;
+    font-size:20px;
+    font-weight:bold;
+    color:#3b82f6;
+}

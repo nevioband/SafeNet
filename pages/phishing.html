@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Phishing</title>
+    <link rel="stylesheet" href="../css/navbar.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/infobox.css" />
+    <link rel="stylesheet" href="../css/hero.css" />
+    <link rel="stylesheet" href="../css/footer.css" />
+    <link rel="stylesheet" href="../css/analyse.css" />
+    <link rel="stylesheet" href="../css/keylogger.css" />
+    <link rel="stylesheet" href="../css/phishing.css" />
+    <link rel="icon" type="image/png" href="../images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png">
+    <style>
+      .info-section {
+        padding: 30px 20px 40px;
+      }
+    </style>
+    <script type="module" src="../js/auth.js?v=3"></script>
+  </head>
+  <body>
+<div id="navbar"></div>
+
+
+
+    <h1>Phishing-Angriffe - Erklärung</h1>
+    
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Was ist Phishing?</h2>
+        <p>
+          Phishing ist eine Cyberangriffstechnik, bei der Angreifer betrügerische E-Mails, Nachrichten oder gefälschte Websites erstellen, 
+          die legitime Organisationen nachahmen. Das Ziel ist, Menschen dazu zu bringen, vertrauliche Informationen wie Passwörter, Kreditkartennummern 
+          oder Bankdaten preiszugeben. Der Angreifer gibt sich als vertrauenswürdige Quelle aus (z.B. Bank, Online-Shop, Social Media Plattform), 
+          um das Opfer zu täuschen.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Wie funktioniert es?</h2>
+        <p>
+          Der Angreifer verschickt eine scheinbar legitime E-Mail oder Nachricht mit einem dringenden Grund. 
+          Die Nachricht enthält einen Link zu einer gefälschten Website, die der echten Website sehr ähnlich sieht. 
+          Das Opfer wird aufgefordert, sich anzumelden oder Daten einzugeben. Wenn das Opfer seine Informationen eingibt, 
+          können diese vom Angreifer gestohlen werden. 
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Risiken und Folgen</h2>
+        <p>
+          Wenn du auf einen Phishing-Angriff hereinfällst, können Angreifer: 
+          deine Konten übernehmen und alle deine Daten stehlen, 
+          Geld von deinen Bank- oder Kreditkartenkonten abheben, 
+          deine Identität missbrauchen und sich in deinem Namen anmelden oder Verträge eingehen, 
+          Malware oder Ransomware auf deinen Computer herunterladen, 
+          oder deine Kontakte für weitere Angriffe missbrauchen.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>So schützt du dich</h2>
+        <p>
+          <strong>1. Überprüfe die Absenderadresse:</strong> Achte genau auf die E-Mail-Adresse des Absenders. 
+          Betrüger nutzen oft Adressen, die der echten Adresse sehr ähnlich sehen. Schwebt mit der Maus über dem Absender, um die vollständige Adresse zu sehen.<br><br>
+          
+          <strong>2. Überprüfe Links vor dem Klicken:</strong> Fahre mit der Maus über Links, um die echte URL zu sehen. 
+          Auch wenn der Link-Text z.B. "www.amazon.de" sagt, kann die echte URL völlig unterschiedlich sein.<br><br>
+          
+          <strong>3. Sei skeptisch bei dringenden Anfragen:</strong> Betrüger erzeugen oft Druck durch dringende Anfragen. 
+          Echte Banken oder Unternehmen werden dich niemals per E-Mail nach Passwörtern oder PINs fragen.<br><br>
+          
+          <strong>4. Überprüfe auf Rechtschreibfehler:</strong> Viele Phishing-E-Mails enthalten Grammatik- oder Rechtschreibfehler. 
+          Echte Unternehmen prüfen ihre E-Mails normalerweise auf Fehler.<br><br>
+          
+          <strong>5. Nutze Zwei-Faktor-Authentifizierung:</strong> Aktiviere 2FA auf deinen Konten. 
+          Selbst wenn Angreifer dein Passwort haben, können sie ohne den zweiten Faktor nicht eindringen.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Beispiele von Phishing-Angriffen</h2>
+        <p>
+          <strong>Beispiel 1 - Bank Phishing:</strong> Du erhältst eine E-Mail angeblich von deiner Bank. 
+          Die E-Mail sagt, dass du dein Konto überprüfen musst und klickst auf einen Link. 
+          Der Link führt zu einer gefälschten Website, die deiner Bank-Website gleicht. 
+          Du gibst deine Anmeldedaten ein und der Angreifer stiehlt sie.<br><br>
+          
+          <strong>Beispiel 2 - PayPal Phishing:</strong> Du bekommst eine E-Mail von PayPal mit der Aufforderung, dein Konto zu bestätigen. 
+          Der Link in der E-Mail führt zu einer nachgeahmten PayPal-Login-Seite. 
+          Du loggst dich ein und der Angreifer hat Zugriff auf dein Konto.<br><br>
+          
+          <strong>Beispiel 3 - Amazon Phishing:</strong> Eine E-Mail verspricht dir einen Gutschein, wenn du auf einen Link klickst. 
+          Der Link führt zu einer gefälschten Amazon-Website, die deine Kreditkartendaten stiehlt.
+        </p>
+      </div>
+    </section>
+
+      <main class="quiz-container">
+      <h1>Phishing erkennen</h1>
+      <p class="intro">
+        Entscheide, ob die folgende E-Mail echt oder ein Phishing-Versuch ist.
+      </p>
+
+      <section class="mail-box">
+        <div class="mail-header">
+          <p><strong>Von:</strong> <span id="mailSender"></span></p>
+          <p><strong>Betreff:</strong> <span id="mailSubject"></span></p>
+        </div>
+
+        <div class="mail-body" id="mailBody"></div>
+      </section>
+
+      <div class="button-group">
+        <button id="realBtn">Echt</button>
+        <button id="phishingBtn">Phishing</button>
+      </div>
+
+      <section class="result-box hidden" id="resultBox">
+        <h2 id="resultTitle"></h2>
+        <p id="resultExplanation"></p>
+
+        <div id="warningSignsBox">
+          <h3>Warnzeichen:</h3>
+          <ul id="warningSigns"></ul>
+        </div>
+
+        <button id="nextBtn">Nächste E-Mail</button>
+      </section>
+    </main>
+
+  <script src="../js/phishing.js"></script>
+
+
+
+
+    <div id="footer"></div>
+    <script>
+  fetch("../partials/footer.html")
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("footer").innerHTML = data;
+    });
+</script>
+
+        <script>
+  fetch("../partials/navbar.html")
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("navbar").innerHTML = data;
+
+      const toggle = document.querySelector(".menu-toggle");
+      const navLinks = document.querySelector(".nav-links");
+      const dropdown = document.querySelector(".dropdown");
+      const dropdownLink = document.querySelector(".dropdown-link");
+
+      toggle.addEventListener("click", () => {
+        navLinks.classList.toggle("active");
+
+        if (!navLinks.classList.contains("active")) {
+          dropdown.classList.remove("open");
+        }
+      });
+
+      dropdownLink.addEventListener("click", (e) => {
+        if (window.innerWidth <= 768) {
+          if (!dropdown.classList.contains("open")) {
+            e.preventDefault();
+            dropdown.classList.add("open");
+          }
+        }
+      });
+    });
+</script>
+</body>
+</html>

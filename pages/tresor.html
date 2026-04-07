@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Passwort-Tresor | SafeNet</title>
+    <link rel="stylesheet" href="../css/navbar.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/footer.css" />
+    <link rel="stylesheet" href="../css/generator.css" />
+    <link rel="stylesheet" href="../css/tresor.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="icon" type="image/png" href="../images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png">
+    <script type="module" src="../js/auth.js?v=3"></script>
+</head>
+<body>
+    <div id="navbar"></div>
+
+    <div class="password-container">
+        <h3>Dein Tresor</h3>
+        
+        <div id="saved-passwords-list" class="vault-list"></div>
+
+        <div class="settings" style="margin-top: 20px; gap: 10px;">
+            <button class="main-btn-delete" onclick="clearVault()" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <span class="material-symbols-outlined">delete_sweep</span> Alle löschen
+            </button>
+            
+            <a href="generator.html" style="text-decoration: none; width: 100%; display: block;">
+                <button class="main-btn" style="width: 100%; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <span class="material-symbols-outlined">add</span> Neues Passwort
+                </button>
+            </a>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script>
+        // Navbar & Footer laden
+        fetch("../partials/navbar.html").then(res => res.text()).then(data => {
+            document.getElementById("navbar").innerHTML = data;
+            const toggle = document.querySelector(".menu-toggle");
+            const navLinks = document.querySelector(".nav-links");
+            if(toggle) toggle.addEventListener("click", () => { navLinks.classList.toggle("active"); });
+        });
+        fetch("../partials/footer.html").then(res => res.text()).then(data => {
+            document.getElementById("footer").innerHTML = data;
+        });
+    </script>
+    <script type="module" src="../js/tresor.js?v=3"></script>
+</body>
+</html>

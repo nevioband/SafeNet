@@ -1,0 +1,150 @@
+.info-section {
+  display: flex;
+  justify-content: center;
+  padding: 50px 20px 110px;
+}
+
+.info-box {
+  width: 100%;
+  max-width: 950px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 60px 55px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.info-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.4);
+}
+
+.info-box h2 {
+  margin-top: 0;
+  margin-bottom: 25px;
+  font-size: 38px;
+  color: #ffffff;
+}
+
+.info-box p {
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.8;
+  color: #cbd5e1;
+}
+
+
+.features {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  padding: 40px 20px 80px;
+}
+
+.feature-card {
+  width: 280px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+}
+
+.feature-card h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 22px;
+  color: #ffffff;
+}
+
+.feature-card p {
+  margin: 0;
+  line-height: 1.7;
+  color: #cbd5e1;
+}
+
+
+
+@media (max-width: 768px) {
+  .info-box {
+    padding: 35px 25px;
+  }
+
+  .info-box h2 {
+    font-size: 30px;
+  }
+
+  .info-box p {
+    font-size: 17px;
+    line-height: 1.6;
+  }
+}
+
+@media (max-width: 768px) {
+  .feature-card {
+    width: 100%;
+    max-width: 400px;
+    padding: 25px 20px;
+  }
+
+  .feature-card h3 {
+    font-size: 20px;
+  }
+
+  .feature-card p {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+}
+
+@media (max-width: 768px) {
+  .info-section {
+    padding: 30px 15px 70px;
+  }
+
+  .features {
+    padding: 30px 15px 60px;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .info-box {
+    padding: 25px 18px;
+  }
+
+  .info-box h2 {
+    font-size: 26px;
+  }
+
+  .info-box p {
+    font-size: 16px;
+  }
+
+  .feature-card {
+    padding: 22px 18px;
+  }
+
+  .feature-card h3 {
+    font-size: 18px;
+  }
+
+  .feature-card p {
+    font-size: 15px;
+  }
+}
+
+
+@media (max-width: 768px) {
+
+}

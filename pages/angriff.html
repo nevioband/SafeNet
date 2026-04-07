@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Angriffsmethoden</title>
+    <link rel="stylesheet" href="../css/navbar.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/infobox.css" />
+    <link rel="stylesheet" href="../css/hero.css" />
+    <link rel="stylesheet" href="../css/footer.css" />
+    <link rel="stylesheet" href="../css/analyse.css" />
+    <link rel="stylesheet" href="../css/keylogger.css" />
+    <link rel="stylesheet" href="../css/phishing.css" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="../images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+    <style>
+      .info-section {
+        padding: 30px 20px 40px;
+      }
+
+      .section-title {
+        text-align: center;
+      }
+
+      .section-title .material-symbols-outlined {
+        font-size: 30px;
+        vertical-align: middle;
+        margin-left: 8px;
+        color: #172441;
+      }
+
+      .inline-icon {
+        font-family: "Material Symbols Outlined";
+        font-weight: normal;
+        font-style: normal;
+        font-size: 20px;
+        line-height: 1;
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 6px;
+        transform: translateY(-1px);
+        color: #172441;
+      }
+
+      .icon-line {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        margin: 6px 0;
+      }
+
+      .icon-line .material-symbols-outlined {
+        font-size: 20px;
+        color: #172441;
+        margin-top: 2px;
+        flex-shrink: 0;
+      }
+
+      .section-title span {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+    </style>
+    <script type="module" src="../js/auth.js?v=3"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <h1>Häufige Angriffsmethoden auf Passwörter</h1>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Überblick</h2>
+        <p>
+          Cyber-Angreifer nutzen verschiedene Taktiken, um an deine Passwörter
+          und persönlichen Daten zu gelangen. Auf dieser Seite erfährst du, wie
+          diese Angriffe funktionieren, an welchen Warnzeichen du sie erkennst,
+          und vor allem: wie du dich davor schützen kannst. Wissen ist die beste
+          Verteidigung!
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2 class="section-title">
+          Allgemeine Schutzmaßnahmen
+          <span class="material-symbols-outlined">verified_user</span>
+        </h2>
+        <p>
+          <strong>1. Starke Passwörter:</strong> Mindestens 12 Zeichen mit
+          Groß-, Kleinbuchstaben, Zahlen und Sonderzeichen<br /><br />
+
+          <strong>2. Zwei-Faktor-Authentifizierung (2FA):</strong> Aktiviere
+          diesen extra Schutz auf E-Mail, Banking, Social Media. Selbst wenn
+          dein Passwort gehackt wird, bleibt dein Konto sicher.<br /><br />
+
+          <strong>3. Passwort-Manager:</strong> Nutze Bitwarden, 1Password oder
+          LastPass. Er speichert sichere Passwörter und erkennt auch
+          Phishing!<br /><br />
+
+          <strong>4. Aktuelle Software:</strong> Halte dein Betriebssystem,
+          Browser und Antivirus immer aktuell.<br /><br />
+
+          <strong>5. Sei skeptisch:</strong> Wenn etwas verdächtig wirkt, ist es
+          wahrscheinlich ein Angriff. Zögere nicht, Anfragen zu hinterfragen.<br /><br />
+
+          <strong>6. Einzigartige Passwörter:</strong> Nutze nicht das gleiche
+          Passwort überall. Falls eins gehackt wird, sind die anderen sicher.<br /><br />
+
+          <strong>7. Überprüfe deine Konten regelmäßig:</strong>
+          Schau in die Aktivitätsprotokolle. Gibt es verdächtige Logins?
+        </p>
+      </div>
+    </section>
+
+    <!-- PHISHING -->
+    <section class="info-section">
+      <div class="info-box">
+        <h2 class="section-title">
+          Phishing-Angriffe
+          <span class="material-symbols-outlined">phishing</span>
+        </h2>
+        <p>
+          <strong>Was ist Phishing?</strong><br />
+          Phishing ist eine Betrugsmethode, bei der Angreifer sich als
+          vertrauenswürdige Organisation ausgeben, um Benutzer dazu zu
+          verleiten, sensible Informationen wie Passwörter, Kreditkartendaten
+          oder persönliche Daten preiszugeben.
+        </p>
+        <p>
+          <strong>Wie funktioniert es?</strong><br />
+          Der Angreifer versendet gefälschte E-Mails, die so aussehen, als
+          würden sie von PayPal, deiner Bank oder Amazon stammen. Diese E-Mails
+          enthalten einen dringenden Grund (z.B. „Aktualisiere dein Passwort
+          sofort") oder locken mit Versprechungen. Ein Link führt zu einer
+          gefälschten Website, die das Original täuschend echt nachahmt. Wenn du
+          deine Daten eingibst, landen sie beim Angreifer.
+        </p>
+        <p>
+          <strong>Beispiele:</strong><br />
+          • <strong>Bank-Phishing:</strong> „Lieber Kunde, wir haben verdächtige
+          Aktivitäten in deinem Konto festgestellt. Bitte bestätige deine
+          Identität unter diesem Link: [gefälschter Link]"<br />
+          • <strong>PayPal-Phishing:</strong> „Dein PayPal-Konto wird in 24
+          Stunden gesperrt, wenn du nicht dein Passwort überprüfst."<br />
+          • <strong>Amazon-Phishing:</strong> „Es gibt ein Problem mit deiner
+          Zahlungsmethode. Bitte aktualisiere deine Kreditkartendaten sofort."
+        </p>
+        <p>
+          <strong>Warnzeichen:</strong><br />
+          ✗ Verdächtige E-Mail-Adressen (z.B. paypal.com-security.fake.de)<br />
+          ✗ Generische Anrede („Lieber Kunde" statt deinem Namen)<br />
+          ✗ Dringende Handlungsaufforderung („Sofort handeln!", „Konto wird
+          gesperrt")<br />
+          ✗ Verdächtige Links (fahre mit der Maus drüber – URL sieht anders
+          aus)<br />
+          ✗ Schlechte Grammatik/Rechtschreibung<br />
+          ✗ Nach Passwort oder PIN fragen (seriöse Unternehmen tun das nie!)<br />
+        </p>
+        <p>
+          <strong>Schutz:</strong><br />
+          → Überprüfe die Absender-E-Mail-Adresse genau<br />
+          → Gib die Website direkt in den Browser ein (nicht über
+          E-Mail-Links)<br />
+          → Überprüfe, ob die URL mit „https://" beginnt und ein Schloss-Symbol
+          anzeigt<br />
+          → Nutze einen Passwort-Manager – er erkennt gefälschte Websites!<br />
+          → Aktiviere Zwei-Faktor-Authentifizierung (2FA)
+        </p>
+      </div>
+    </section>
+
+    <!-- BRUTEFORCE -->
+    <section class="info-section">
+      <div class="info-box">
+        <h2 class="section-title">
+          Bruteforce-Angriffe
+          <span class="material-symbols-outlined">bolt</span>
+        </h2>
+        <p>
+          <strong>Was ist ein Bruteforce-Angriff?</strong><br />
+          Ein Bruteforce-Angriff ist eine Methode, um Passwörter durch
+          systematisches Durchprobieren zu erraten. Der Angreifer versucht
+          automatisch, alle möglichen Passwort-Kombinationen einzugeben, bis das
+          richtige gefunden wird.
+        </p>
+        <p>
+          <strong>Wie funktioniert es?</strong><br />
+          Eine Software oder ein Skript generiert automatisch
+          Passwort-Kombinationen und versucht, sich damit anzumelden. Bei
+          Online-Angriffen wird ein bekannter Benutzername (z.B. E-Mail-Adresse)
+          verwendet. Der Computer versucht dann, sich mit verschiedenen
+          Passwörtern anzumelden, bis der Zugang gewährt wird. Bei
+          Offline-Attacken (auf verschlüsselte Daten) läuft dieser Prozess ohne
+          Verzögerungen ab und ist viel schneller.
+        </p>
+        <p>
+          <strong>Beispiele:</strong><br />
+          • Ein Angreifer kennt deine E-Mail. Er nutzt ein Bruteforce-Tool, um
+          sich bei Gmail anzumelden. Das Programm versucht: a, b, c, ..., aa,
+          ab, ac, ... und so weiter. Nach Millionen Versuchen findet es
+          schließlich dein Passwort.<br />
+          • Ein Hacker erhält die verschlüsselten Passwörter von 1 Million
+          Nutzern. Mit Bruteforce versucht er, diese zu entschlüsseln. Dies
+          dauert lang, aber mit mehreren Computern funktioniert es.<br />
+          • Bei schwachen 4-stelligen PINs (0000-9999) sind nur 10.000
+          Kombinationen möglich – leicht zu knacken!
+        </p>
+        <p>
+          <strong>Wie lange dauert es?</strong><br />
+          • Passwort „1234": < 1 Sekunde<br />
+          • Passwort „abcd1234": ~ 1 Minute<br />
+          • Passwort „aB1!xY9$": ~ 1 Stunde<br />
+          • Passwort „aBcDeF1!2@3#xYz9": ~ Millionen Jahre
+        </p>
+        <p>
+          <strong>Schutz:</strong><br />
+          → Verwende lange Passwörter (mindestens 12 Zeichen)<br />
+          → Je komplexer (Groß-, Kleinbuchstaben, Zahlen, Sonderzeichen), desto
+          schwächer gegen Bruteforce<br />
+          → Aktiviere Zwei-Faktor-Authentifizierung – das stoppt
+          Bruteforce-Angriffe<br />
+          → Rate-Limiting: Gute Websites verhindern zu viele Anmeldeversuche<br />
+          → Nutze einen Passwort-Manager für komplexe Passwörter
+        </p>
+      </div>
+    </section>
+
+    <!-- WÖRTERBUCHANGRIFF -->
+    <section class="info-section">
+      <div class="info-box">
+        <h2 class="section-title">
+          Wörterbuchangriffe (Dictionary Attacks)
+          <span class="material-symbols-outlined">menu_book</span>
+        </h2>
+        <p>
+          <strong>Was ist ein Wörterbuchangriff?</strong><br />
+          Ein Wörterbuchangriff ist eine Methode, um Passwörter zu knacken,
+          indem der Angreifer eine Liste mit häufigen oder bekannten Wörtern
+          nutzt. Anstatt zufällige Kombinationen zu probieren, versucht der
+          Angreifer Passwörter aus einer „Wörterbuch-Datenbank". Dies ist viel
+          schneller als Bruteforce.
+        </p>
+        <p>
+          <strong>Wie funktioniert es?</strong><br />
+          Der Angreifer sammelt eine Liste häufig genutzter Passwörter:<br />
+          • Einfache Wörter (Passwort, Hallo, Schatz, 123456)<br />
+          • Monatsnamen, Wochentage, Jahreszeiten<br />
+          • Häufige Eigennamen<br />
+          • Früher gehackte und veröffentlichte Passwörter<br /><br />
+          Das Programm modifiziert die Wörter dann: Passwort → PASSWORD,
+          Passwort1, Passwort123, P@sswort!, etc.
+        </p>
+        <p>
+          <strong>Die 20 häufigsten Passwörter sind:</strong><br />
+          123456 · password · passwort · 123456789 · 12345678 · 12345 · 1234567
+          · password123 · 123123 · 1234567890 · admin · qwerty · abc123 · ...
+        </p>
+        <p>
+          <strong>Beispiele:</strong><br />
+          • Ein Angreifer hat die gehackten Passwörter von Twitter. Er nutzt ein
+          Wörterbuchangriff-Tool. Viele Passwörter wie „password123", „123456",
+          „letmein" werden sofort identifiziert.<br />
+          • Du nutzt das Passwort „Schatz1234". Ein Hacker probiert alle
+          Kombinationen aus einer Wörterbuch-Liste. Nach hundert Versuchen
+          funktioniert es!<br />
+          • Eine Datenbank mit 1 Million gehackten Passwörtern wird mit einem
+          Wörterbuch verglichen. 80% der Passwörter werden in Sekunden
+          identifiziert.
+        </p>
+        <p>
+          <strong>Unterschied zwischen Wörterbuch und Bruteforce:</strong><br />
+          • <strong>Wörterbuchangriff:</strong> Schnell (realistisch), aber nur
+          gegen schwache Passwörter erfolgreich<br />
+          • <strong>Bruteforce:</strong> Langsam, aber funktioniert gegen jedes
+          Passwort (nur Zeitfrage)
+        </p>
+        <p>
+          <strong>Schutz:</strong><br />
+          → Verwende KEINE einfachen Wörter (Passwort123, Schatz2024 sind
+          unsicher!)<br />
+          → Nutze zufällige Passwörter mit Groß-, Kleinbuchstaben, Zahlen und
+          Sonderzeichen<br />
+          → Mindestens 12-16 Zeichen<br />
+          → Nutze einen Passwort-Generator<br />
+          → Überprüfe auf haveibeenpwned.com, ob dein Passwort gehackt wurde<br />
+          → Aktiviere 2FA – auch wenn das Passwort geknackt wird, bist du
+          geschützt
+        </p>
+      </div>
+    </section>
+
+    <!-- SOCIAL ENGINEERING -->
+    <section class="info-section">
+      <div class="info-box">
+        <h2 class="section-title">
+          Social Engineering
+          <span class="material-symbols-outlined">psychology</span>
+        </h2>
+        <p>
+          <strong>Was ist Social Engineering?</strong><br />
+          Social Engineering ist eine Methode, um Menschen durch psychologische
+          Manipulation zu betrügen und vertrauliche Informationen preiszugeben.
+          Angreifer nutzen menschliche Gefühle wie Angst, Vertrauen, Neugier
+          oder Hilfsbereitschaft aus. Es zielt auf den „schwächsten Link" ab –
+          den Menschen.
+        </p>
+        <p>
+          <strong>Häufige Methoden:</strong><br />
+          • <strong>Pretexting:</strong> Ein Angreifer gibt sich als IT-Support
+          aus: „Ich führe eine Sicherheitsüberprüfung durch. Gib mir dein
+          Passwort."<br />
+          • <strong>Baiting:</strong> Ein USB-Stick mit dem Label
+          „Gehalt_2024.xlsx" wird im Parkplatz gefunden. Du öffnest ihn –
+          Malware installiert sich!<br />
+          • <strong>Tailgating:</strong> Ein Unbefugter folgt dir durch eine
+          verschlossene Tür ins Bürogebäude, indem er so tut, als gehöre er
+          dazu.<br />
+          • <strong>Authority (Autoritätsprinzip):</strong> Ein Angreifer gibt
+          sich als dein Chef aus: „Überweis sofort 5.000 Euro auf dieses
+          Konto."<br />
+          • <strong>Scarcity (Knappheit):</strong> Künstliche Dringlichkeit:
+          „Diese Aktion gilt nur heute! Bestelle schnell!"
+        </p>
+        <p>
+          <strong>Beispiele:</strong><br />
+          • <strong>CEO-Betrug:</strong> Eine E-Mail kommt angeblich vom CEO:
+          „Ich bin in einem Meeting. Kannst du schnell 50.000 Euro überweisen?"
+          Die E-Mail-Adresse ähnelt der echten, ist aber eine Fälschung.<br />
+          • <strong>Telefon-Betrug (Vishing):</strong> Ein Angreifer ruft an:
+          „Ich bin von deiner Bank. Wir haben verdächtige Transaktionen
+          festgestellt. Gib mir deine PIN zur Überprüfung." Echte Banken fragen
+          das NIEMALS!<br />
+          • <strong>Fake Support Chat:</strong> „Ihr Microsoft-Computer hat ein
+          kritisches Update. Ein Techniker wird Sie kontaktieren." Der Link
+          führt zu Malware.<br />
+          • <strong>USB-Baiting im Firmenparkplatz:</strong> Du findest einen
+          USB-Stick mit dem Label „CONFIDENTIAL_2024". Du steckst ihn in deinen
+          Computer – Malware infiziert dein System!
+        </p>
+        <p>
+          <strong>Schutz:</strong><br />
+          → Überprüfe die Identität von Anfragen – ruf die Person direkt an
+          (verwende eine bekannte Nummer)<br />
+          → Seriöse Organisationen fragen NIEMALS Passwörter oder PINs per
+          E-Mail/Telefon<br />
+          → Nimm keine USB-Sticks von unbekannten Quellen an<br />
+          → Wenn etwas zu gut klingt, um wahr zu sein, ist es wahrscheinlich ein
+          Betrug<br />
+          → Denk vor du handeln – Social Engineer nutzen Druck und
+          Dringlichkeit<br />
+          → Aktiviere 2FA – Angreifer können auch mit deinem Passwort nicht
+          eindringen
+        </p>
+      </div>
+    </section>
+
+    <!-- KEYLOGGER -->
+    <section class="info-section">
+      <div class="info-box">
+        <h2 class="section-title">
+          Keylogger-Angriffe
+          <span class="material-symbols-outlined">keyboard</span>
+        </h2>
+        <p>
+          <strong>Was ist ein Keylogger?</strong><br />
+          Ein Keylogger ist ein Programm oder Gerät, das alle Tastenanschläge
+          aufzeichnet, die du an deiner Tastatur machst. Das umfasst alles –
+          Passwörter, E-Mails, Chat-Nachrichten, Suchverlauf und persönliche
+          Daten.
+        </p>
+        <p>
+          <strong>Typen von Keyloggern:</strong><br />
+          • <strong>Software-Keylogger:</strong> Ein Programm auf deinem
+          Computer (durch Malware oder gefälschte Downloads installiert). Es
+          läuft unsichtbar im Hintergrund.<br />
+          • <strong>Hardware-Keylogger:</strong> Ein physisches Gerät zwischen
+          Tastatur und Computer. Der Angreifer muss es später abholen oder die
+          Daten abholen.<br />
+          • <strong>Wireless-Keylogger:</strong> Ein USB-Gerät, das kabellos
+          Tastenanschläge übermittelt.
+        </p>
+        <p>
+          <strong>Beispiele:</strong><br />
+          • <strong>Internet-Café-Szenario:</strong> Du loggerst dich beim
+          Banking an. Unbekannt dir ist, dass zwischen Tastatur und Computer ein
+          Hardware-Keylogger installiert wurde. Dein Passwort wird aufgezeichnet
+          – der Angreifer stiehlt später Geld von deinem Konto.<br />
+          • <strong>Software-Keylogger durch Virus:</strong> Du downloadest eine
+          kostenlose App. Sie installiert heimlich einen Keylogger. Nun werden
+          deine Passwörter für alle Konten aufgezeichnet.<br />
+          • <strong>Keylogger auf dem Smartphone:</strong> Eine bösartige App
+          gibt vor, ein Spiel zu sein. Der Keylogger erfasst deine PIN und
+          Passwörter bei der Eingabe.<br />
+          • <strong>Betriebliche Überwachung:</strong> Ein Arbeitgeber
+          installiert einen Keylogger auf den Unternehmenscomputern (verstößt
+          gegen Datenschutz, tritt aber auf).
+        </p>
+        <p>
+          <strong>Anzeichen eines Keyloggers:</strong><br />
+          ⚠️ Unerklärliche Verlangsamung des Computers<br />
+          ⚠️ Neue Tastatur-Kabel oder USB-Geräte zwischen Tastatur und
+          Computer<br />
+          ⚠️ Dein Passwort funktioniert nicht oder dein Konto wurde
+          missbraucht<br />
+          ⚠️ Unerkannte Anmeldungen in deinen Konten von fremden Orten<br />
+          ⚠️ Antivirus-Warnungen bei Malware-Verdacht
+        </p>
+        <p>
+          <strong>Schutz:</strong><br />
+          → Halte dein Betriebssystem und Antivirus-Software immer aktuell<br />
+          → Lade nur von vertrauenswürdigen Quellen herunter<br />
+          → Überprüfe deine Tastatur regelmäßig auf verdächtige Geräte<br />
+          → Verwende die On-Screen-Tastatur (mit der Maus) für sensible
+          Passwörter – Keylogger erfassen die nicht!<br />
+          → Nutze einen Passwort-Manager – dieser gibt Passwörter direkt ein,
+          ohne dass du sie tippst<br />
+          → Vermeide öffentliche Computer für sensible Transaktionen<br />
+          → Aktiviere 2FA
+        </p>
+      </div>
+    </section>
+
+    <div id="footer"></div>
+    <script>
+      fetch("../partials/footer.html")
+        .then((res) => res.text())
+        .then((data) => {
+          document.getElementById("footer").innerHTML = data;
+        });
+    </script>
+
+    <script>
+      fetch("../partials/navbar.html")
+        .then((res) => res.text())
+        .then((data) => {
+          document.getElementById("navbar").innerHTML = data;
+
+          const toggle = document.querySelector(".menu-toggle");
+          const navLinks = document.querySelector(".nav-links");
+          const dropdown = document.querySelector(".dropdown");
+          const dropdownLink = document.querySelector(".dropdown-link");
+
+          toggle.addEventListener("click", () => {
+            navLinks.classList.toggle("active");
+
+            if (!navLinks.classList.contains("active")) {
+              dropdown.classList.remove("open");
+            }
+          });
+
+          dropdownLink.addEventListener("click", (e) => {
+            if (window.innerWidth <= 768) {
+              if (!dropdown.classList.contains("open")) {
+                e.preventDefault();
+                dropdown.classList.add("open");
+              }
+            }
+          });
+        });
+    </script>
+  </body>
+</html>

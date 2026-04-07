@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Keylogger-Demo</title>
+    <link rel="stylesheet" href="../css/navbar.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/infobox.css" />
+    <link rel="stylesheet" href="../css/hero.css" />
+    <link rel="stylesheet" href="../css/footer.css" />
+    <link rel="stylesheet" href="../css/analyse.css" />
+    <link rel="stylesheet" href="../css/keylogger.css" />
+    <link rel="stylesheet" href="../css/phishing.css" />
+    <link rel="stylesheet" href="../css/generator.css" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="../images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png"
+    />
+    <style>
+      #eingabe {
+        width: 100%;
+        background: transparent;
+        border: none;
+        outline: none;
+        color: #66d9ff;
+        font-family: monospace;
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+        padding: 0 6px;
+      }
+      #eingabe::placeholder {
+        color: rgba(255, 255, 255, 0.45);
+      }
+
+      .info-section {
+        padding: 30px 20px 40px;
+      }
+    </style>
+    <script type="module" src="../js/auth.js?v=3"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <h1>Keylogger</h1>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Was ist ein Keylogger?</h2>
+        <p>
+          Ein Keylogger ist ein Programm oder eine Hardware-Vorrichtung, die
+          alle Tastenanschläge aufzeichnet, die du auf deiner Tastatur machst.
+          Wenn ein Angreifer einen Keylogger auf deinen Computer installiert,
+          kann er deine Passwörter, Nachrichten, E-Mails und andere sensible
+          Informationen ausspionieren, bevor diese verschlüsselt werden.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Wie funktioniert es?</h2>
+        <p>
+          Ein Keylogger wird entweder als Softwareprogramm auf deinen Computer
+          installiert oder als physisches Gerät zwischen deiner Tastatur und
+          deinem Computer angebracht. Das Programm läuft im Hintergrund und
+          zeichnet jede Taste auf, die du drückst. Diese Daten werden dann an
+          den Angreifer übermittelt, der sie analysieren kann, um Passwörter und
+          andere wichtige Informationen zu extrahieren.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Risiken und Folgen</h2>
+        <p>
+          Mit einem Keylogger können Angreifer deine Passwörter stehlen, deine
+          persönlichen Daten ausspionieren, Online-Banking-Informationen
+          abfangen, oder deine Identität missbrauchen. Da der Keylogger alles
+          aufzeichnet, bevor es verschlüsselt wird, sind selbst "sichere"
+          Webseiten vor dieser Bedrohung nicht geschützt. Die Folgen können von
+          Datenverlust bis zu finanziellem Schaden reichen.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>So schützt du dich</h2>
+        <p>
+          <strong>1. Antivirus-Software:</strong> Installiere eine zuverlässige
+          Antivirus- und Anti-Malware-Software und halte sie aktuell. Diese kann
+          Keylogger erkennen und entfernen.<br /><br />
+
+          <strong>2. Regelmäßige Updates:</strong> Halte dein Betriebssystem und
+          alle installierten Programme regelmäßig aktuell. Sicherheitslücken
+          werden oft durch Updates geschlossen.<br /><br />
+
+          <strong>3. Sicheres Surfen:</strong> Lade Dateien nur aus
+          vertrauenswürdigen Quellen herunter und sei vorsichtig mit
+          E-Mail-Anhängen. Viele Keylogger werden durch Phishing-Mails
+          verbreitet.<br /><br />
+
+          <strong>4. Firewall und sichere Verbindungen:</strong> Verwende eine
+          Firewall und sichere HTTPS-Verbindungen. Überprüfe auch deine Tastatur
+          auf unbekannte Hardware-Geräte.
+        </p>
+      </div>
+    </section>
+
+    <div class="password-container">
+      <h3>Keylogger Demo</h3>
+      <p style="text-align: center; color: #a0c4ff; margin-bottom: 24px">
+        Klicke ins Eingabefeld und drücke Tasten - erkenne wie ein Keylogger
+        funktioniert.
+      </p>
+
+      <div class="display-box">
+        <input
+          id="eingabe"
+          type="text"
+          placeholder="Hier tippen..."
+          style="
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #66d9ff;
+            font-family: monospace;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            padding: 6px 0;
+            margin: 0;
+            height: auto;
+            line-height: 1.5;
+          "
+        />
+      </div>
+
+      <div
+        id="ausgabe"
+        style="
+          padding: 16px;
+          background: rgba(10, 18, 35, 0.6);
+          border: 1px solid rgba(102, 179, 255, 0.25);
+          border-radius: 12px;
+          text-align: center;
+          color: #66d9ff;
+          font-family: monospace;
+          font-size: 1rem;
+          margin-top: 16px;
+        "
+      >
+        Noch keine Taste erkannt.
+      </div>
+    </div>
+
+    <script>
+      const eingabe = document.getElementById("eingabe");
+      const ausgabe = document.getElementById("ausgabe");
+
+      eingabe.addEventListener("keydown", (event) => {
+        ausgabe.textContent = `Gedrückte Taste: ${event.key}`;
+      });
+    </script>
+
+    <div id="footer"></div>
+    <script>
+      fetch("../partials/footer.html")
+        .then((res) => res.text())
+        .then((data) => {
+          document.getElementById("footer").innerHTML = data;
+        });
+    </script>
+
+    <script>
+      fetch("../partials/navbar.html")
+        .then((res) => res.text())
+        .then((data) => {
+          document.getElementById("navbar").innerHTML = data;
+
+          const toggle = document.querySelector(".menu-toggle");
+          const navLinks = document.querySelector(".nav-links");
+          const dropdown = document.querySelector(".dropdown");
+          const dropdownLink = document.querySelector(".dropdown-link");
+
+          if (toggle) {
+            toggle.addEventListener("click", () => {
+              navLinks.classList.toggle("active");
+              if (!navLinks.classList.contains("active")) {
+                dropdown.classList.remove("open");
+              }
+            });
+          }
+
+          if (dropdownLink) {
+            dropdownLink.addEventListener("click", (e) => {
+              if (window.innerWidth <= 768) {
+                if (!dropdown.classList.contains("open")) {
+                  e.preventDefault();
+                  dropdown.classList.add("open");
+                }
+              }
+            });
+          }
+        });
+    </script>
+
+    <h1>Keylogger - Erklärung</h1>
+
+    <section class="info-section" style="padding: 30px 20px 40px">
+      <div class="info-box">
+        <h2>Was ist ein Keylogger?</h2>
+        <p>
+          Ein Keylogger ist eine Software oder Hardware, die jeden
+          Tastenanschlag aufzeichnet, den du auf deiner Tastatur machst.
+          Keylogger werden von Angreifern verwendet, um Passwörter, E-Mails,
+          Nachrichten und andere vertrauliche Informationen zu stehlen. Es gibt
+          zwei Arten: Software-Keylogger (Programme auf deinem Computer) und
+          Hardware-Keylogger (physische Geräte zwischen Tastatur und Computer).
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section" style="padding: 30px 20px 40px">
+      <div class="info-box">
+        <h2>Wie funktioniert es?</h2>
+        <p>
+          Ein Software-Keylogger wird als versteckte Datei auf deinem Computer
+          installiert. Er läuft im Hintergrund und zeichnet jeden Tastenanschlag
+          auf, einschließlich Passwörter, E-Mails und Chatmeldungen. Der
+          Angreifer sendet die aufgezeichneten Daten an seine Server. Bei
+          Hardware-Keyloggern wird ein kleines Gerät zwischen die Tastatur und
+          den Computer gesteckt, das alle Tastenanschläge aufzeichnet und
+          speichert.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section" style="padding: 30px 20px 40px">
+      <div class="info-box">
+        <h2>Risiken und Folgen</h2>
+        <p>
+          Mit einem Keylogger können Angreifer: deine Passwörter stehlen und auf
+          alle deine Konten zugreifen, vertrauliche Geschäftsinformationen
+          ausspionieren, deine Online-Banking-Informationen und
+          Kreditkartendaten stiehlen, deine privaten Nachrichten und E-Mails
+          lesen, Erpressung oder Identitätsdiebstahl durchführen.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section" style="padding: 30px 20px 40px">
+      <div class="info-box">
+        <h2>So schützt du dich</h2>
+        <p>
+          <strong>1. Nutze einen Antivirus:</strong> Halte dein
+          Antivirus-Programm immer aktuell und scanne regelmäßig deinen Computer
+          auf Malware.<br /><br />
+
+          <strong>2. Sichere dein System:</strong> Installiere alle Windows-
+          oder macOS-Updates sofort. Diese beheben oft Sicherheitslücken, die
+          Angreifer ausnutzen.<br /><br />
+
+          <strong>3. Vorsicht bei Downloads:</strong> Lade Programme nur von
+          vertrauenswürdigen Quellen herunter. Keylogger werden oft als legitime
+          Software getarnt.<br /><br />
+
+          <strong>4. Nutze eine virtuelle Tastatur:</strong> Bei der Eingabe
+          sicherer Daten wie Passwörter oder PIN-Nummern kannst du eine
+          On-Screen-Tastatur nutzen, um Keylogger zu umgehen.<br /><br />
+
+          <strong>5. Zwei-Faktor-Authentifizierung:</strong> Selbst wenn dein
+          Passwort gestohlen wird, schützt 2FA dein Konto.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section" style="padding: 30px 20px 40px">
+      <div class="info-box">
+        <h2>Beispiele von Keylogger-Angriffen</h2>
+        <p>
+          <strong>Beispiel 1 - Software Keylogger:</strong> Du lädst ein
+          vermeintlich kostenloses Spiel herunter. Zusammen mit dem Spiel wird
+          heimlich ein Keylogger installiert. Der Keylogger zeichnet auf, dass
+          du dein Bank-Passwort eingibst, und der Angreifer stiehlt dein
+          Geld.<br /><br />
+
+          <strong>Beispiel 2 - Hardware Keylogger:</strong> Ein Angreifer
+          platziert einen kleinen USB-ähnlichen Keylogger zwischen deine
+          Tastatur und deinen Computer. Der Keylogger zeichnet alle deine
+          Tastenanschläge auf und speichert sie. Mit einem USB-Stick können die
+          Daten extrahiert werden.<br /><br />
+
+          <strong>Beispiel 3 - Virus-Keylogger:</strong> Du erhältst eine E-Mail
+          mit einem verdächtigen Anhang. Du öffnest ihn und ein Virus wird auf
+          deinem Computer installiert, der als Keylogger fungiert. Dieser
+          stiehlt deine Benutzernamen und Passwörter.
+        </p>
+      </div>
+    </section>
+
+    <div id="footer"></div>
+    <script>
+      fetch("../partials/footer.html")
+        .then((res) => res.text())
+        .then((data) => {
+          document.getElementById("footer").innerHTML = data;
+        });
+    </script>
+
+    <script>
+      fetch("../partials/navbar.html")
+        .then((res) => res.text())
+        .then((data) => {
+          document.getElementById("navbar").innerHTML = data;
+
+          const toggle = document.querySelector(".menu-toggle");
+          const navLinks = document.querySelector(".nav-links");
+          const dropdown = document.querySelector(".dropdown");
+          const dropdownLink = document.querySelector(".dropdown-link");
+
+          if (toggle) {
+            toggle.addEventListener("click", () => {
+              navLinks.classList.toggle("active");
+              if (!navLinks.classList.contains("active")) {
+                dropdown.classList.remove("open");
+              }
+            });
+          }
+
+          if (dropdownLink) {
+            dropdownLink.addEventListener("click", (e) => {
+              if (window.innerWidth <= 768) {
+                if (!dropdown.classList.contains("open")) {
+                  e.preventDefault();
+                  dropdown.classList.add("open");
+                }
+              }
+            });
+          }
+        });
+    </script>
+  </body>
+</html>

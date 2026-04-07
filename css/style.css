@@ -1,0 +1,47 @@
+body{
+    margin:0;
+    background-color: #0f172a;
+    color: white;
+}
+h1, h2, h3, h4{
+  background: linear-gradient(135deg, #3399ff, #66d9ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.T1 {
+    text-align: center;
+    font-size: 32px;
+    padding-top: 0px;
+    background: linear-gradient(135deg, #3399ff, #66d9ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.3px;
+}
+.links {
+    color: white;
+    text-decoration: none;
+}
+.titelimg {
+    height: 300px;
+    max-width: 100%;
+    width: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .titelimg {
+        height: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .titelimg {
+        height: 150px;
+    }
+}
+* {
+      font-family: 'Inter', sans-serif;
+}

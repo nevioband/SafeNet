@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bruteforce</title>
+    <link rel="stylesheet" href="../css/navbar.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/infobox.css" />
+    <link rel="stylesheet" href="../css/hero.css" />
+    <link rel="stylesheet" href="../css/footer.css" />
+    <link rel="stylesheet" href="../css/analyse.css" />
+    <link rel="stylesheet" href="../css/keylogger.css" />
+    <link rel="stylesheet" href="../css/phishing.css" />
+    <link rel="icon" type="image/png" href="../images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png">
+    <style>
+      .info-section {
+        padding: 30px 20px 40px;
+      }
+    </style>
+    <script type="module" src="../js/auth.js?v=3"></script>
+  </head>
+  <body>
+<div id="navbar"></div>
+
+    <h1>Bruteforce-Angriffe</h1>
+    
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Was ist ein Bruteforce-Angriff?</h2>
+        <p>
+          Ein Bruteforce-Angriff ist eine Methode, um Passwörter durch systematisches Durchprobieren zu erraten. 
+          Der Angreifer versucht automatisch, alle möglichen Passwort-Kombinationen einzugeben, bis das richtige gefunden wird. 
+          Dies ist besonders effektiv bei schwachen oder kurzen Passwörtern, da diese schnell geknackt werden können.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Wie funktioniert es?</h2>
+        <p>
+          Eine Software oder ein Skript generiert automatisch Passwort-Kombinationen und versucht, sich damit anzumelden. 
+          Bei Online-Angriffen wird zunächst ein bekannter Benutzername (z.B. E-Mail-Adresse) verwendet. 
+          Der Computer versucht dann, sich mit verschiedenen Passwörtern anzumelden, bis der Zugang gewährt wird. 
+          Bei Offline-Attacken auf verschlüsselte Daten läuft dieser Prozess ohne Verzögerungen ab und ist daher noch schneller.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Risiken und Folgen</h2>
+        <p>
+          Wurde dein Passwort durch einen Bruteforce-Angriff geknackt, können Angreifer auf dein Konto zugreifen und:
+          persönliche Daten stehlen, deine Identität missbrauchen, finanzielle Transaktionen durchführen, 
+          oder dein Konto für weitere Angriffe nutzen. Die Folgen können von Datenverlust bis zu finanziellem Schaden reichen.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>So schützt du dich</h2>
+        <p>
+          <strong>1. Starke Passwörter:</strong> Verwende Passwörter mit mindestens 12 Zeichen, die Großbuchstaben, Kleinbuchstaben, Zahlen und Sonderzeichen enthalten. 
+          Je länger und komplexer ein Passwort ist, desto länger dauert ein Bruteforce-Angriff.<br><br>
+          
+          <strong>2. Zwei-Faktor-Authentifizierung:</strong> Aktiviere die Zwei-Faktor-Authentifizierung (2FA) auf deinen wichtigen Konten. 
+          Selbst wenn ein Passwort geknackt wird, braucht der Angreifer einen zweiten Faktor zum Zugang.<br><br>
+          
+          <strong>3. Einzigartige Passwörter:</strong> Verwende für jeden Account ein unterschiedliches Passwort. 
+          So kann ein Angreifer nicht auf mehrere Konten zugreifen, auch wenn ein Passwort kompromittiert wird.<br><br>
+          
+          <strong>4. Passwort-Manager:</strong> Nutze einen Passwort-Manager, um komplexe Passwörter zu speichern und zu verwalten.
+        </p>
+      </div>
+    </section>
+
+    <div id="footer"></div>
+    <script>
+  fetch("../partials/footer.html")
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("footer").innerHTML = data;
+    });
+</script>
+
+        <script>
+  fetch("../partials/navbar.html")
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("navbar").innerHTML = data;
+
+      const toggle = document.querySelector(".menu-toggle");
+      const navLinks = document.querySelector(".nav-links");
+      const dropdown = document.querySelector(".dropdown");
+      const dropdownLink = document.querySelector(".dropdown-link");
+
+      toggle.addEventListener("click", () => {
+        navLinks.classList.toggle("active");
+
+        if (!navLinks.classList.contains("active")) {
+          dropdown.classList.remove("open");
+        }
+      });
+
+      dropdownLink.addEventListener("click", (e) => {
+        if (window.innerWidth <= 768) {
+          if (!dropdown.classList.contains("open")) {
+            e.preventDefault();
+            dropdown.classList.add("open");
+          }
+        }
+      });
+    });
+</script>
+  </body>
+</html>

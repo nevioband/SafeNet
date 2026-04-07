@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Social Engineering</title>
+    <link rel="stylesheet" href="../css/navbar.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/infobox.css" />
+    <link rel="stylesheet" href="../css/hero.css" />
+    <link rel="stylesheet" href="../css/footer.css" />
+    <link rel="stylesheet" href="../css/analyse.css" />
+    <link rel="stylesheet" href="../css/keylogger.css" />
+    <link rel="stylesheet" href="../css/phishing.css" />
+    <link rel="icon" type="image/png" href="../images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png">
+    <style>
+      .info-section {
+        padding: 30px 20px 40px;
+      }
+    </style>
+    <script type="module" src="../js/auth.js?v=3"></script>
+  </head>
+  <body>
+<div id="navbar"></div>
+
+    <h1>Social Engineering-Angriffe</h1>
+    
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Was ist Social Engineering?</h2>
+        <p>
+          Social Engineering ist eine Manipulationstechnik, bei der Angreifer psychologische Taktiken nutzen, 
+          um Menschen dazu zu bringen, vertrauliche Informationen preiszugeben oder unsichere Handlungen durchzuführen. 
+          Im Gegensatz zu technischen Angriffen zielt Social Engineering nicht auf Systeme ab, 
+          sondern auf die Schwachstelle des menschlichen Verhaltens. 
+          Angreifer nutzen Vertrauen, Autorität, Dringlichkeit oder emotionale Manipulation, um ihre Opfer zu beeinflussen.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Wie funktioniert es?</h2>
+        <p>
+          Social Engineering basiert auf psychologischer Manipulation. Der Angreifer recherchiert zunächst Informationen über sein Opfer 
+          (über Social Media, öffentliche Datenbanken, etc.). Anschließend baut der Angreifer Vertrauen auf oder erzeugt Druck durch 
+          fingierte Autorität oder Dringlichkeit. Der Angreifer gibt sich beispielsweise als IT-Support, Polizist, Banker oder Vorgesetzter aus. 
+          Das Opfer wird dann manipuliert, vertrauliche Informationen preiszugeben oder auf verdächtige Links zu klicken.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Beispiele von Social Engineering-Angriffen</h2>
+        <p>
+          <strong>Beispiel 1 - Pretexting:</strong> Ein Angreifer ruft dich an und gibt sich als dein IT-Support aus. 
+          Er behauptet, dass es ein Sicherheitsproblem mit deinem Konto gibt und fordert dich auf, 
+          dein Passwort durchzugeben, um das System zu "überprüfen".<br><br>
+          
+          <strong>Beispiel 2 - Baiting:</strong> Ein USB-Stick oder eine externe Festplatte mit der Bezeichnung "Gehaltslisten" 
+          wird an öffentlichen Orten hinterlassen. Ein Opfer findet den Stick und steckt ihn in seinen Computer, 
+          wodurch Malware auf dem System installiert wird.<br><br>
+          
+          <strong>Beispiel 3 - Tailgating/Piggybacking:</strong> Ein Angreifer folgt einem Mitarbeiter durch die Sicherheitstür eines Unternehmens, 
+          indem er vorgibt, dieser zu sein oder eine Lieferung zu tragen. So erhält er Zugang zu geschützten Bereichen.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Risiken und Folgen</h2>
+        <p>
+          Social Engineering kann zu schwerwiegenden Konsequenzen führen:
+          Diebstahl von Zugangsdaten und vertraulichen Informationen, 
+          Installation von Malware oder Ransomware auf Unternehmensgeräten, 
+          Unbefugter Zugriff auf sensible Daten und Systeme, 
+          Finanzielle Verluste durch betrügerische Transaktionen, 
+          Beschädigung des Unternehmensrufs und Verlust von Kundenvertrauen.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>So schützt du dich</h2>
+        <p>
+          <strong>1. Sei skeptisch bei unerwarteten Kontakten:</strong> Hinterfrage immer Anrufe oder E-Mails, 
+          die nach persönlichen Informationen oder Zugangsdaten fragen. Selbst wenn der Absender seriös wirkt.<br><br>
+          
+          <strong>2. Verifiziere die Identität:</strong> Bei verdächtigen Anrufen, hänge auf und rufe die Nummer direkt an 
+          (nachschauen in offiziellen Verzeichnissen), um die Identität zu bestätigen.<br><br>
+          
+          <strong>3. Gib niemals Passwörter oder PINs weiter:</strong> Kein legitimes Unternehmen wird dich je nach deinem Passwort oder 
+          einer PIN fragen. Diese sind streng vertraulich.<br><br>
+          
+          <strong>4. Schule dich weiterhin:</strong> Bleibe auf dem Laufenden über neue Social Engineering Taktiken und Trends. 
+          Viele Unternehmen bieten Sicherheitsschulungen an.<br><br>
+          
+          <strong>5. Schütze deine Informationen:</strong> Teile persönliche Informationen nicht leichtfertig in sozialen Medien. 
+          Begrenzte Privatsphäre-Einstellungen können helfen, deine Daten zu schützen.
+        </p>
+      </div>
+    </section>
+
+    <div id="footer"></div>
+    <script>
+  fetch("../partials/footer.html")
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("footer").innerHTML = data;
+    });
+</script>
+
+        <script>
+  fetch("../partials/navbar.html")
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("navbar").innerHTML = data;
+
+      const toggle = document.querySelector(".menu-toggle");
+      const navLinks = document.querySelector(".nav-links");
+      const dropdown = document.querySelector(".dropdown");
+      const dropdownLink = document.querySelector(".dropdown-link");
+
+      toggle.addEventListener("click", () => {
+        navLinks.classList.toggle("active");
+
+        if (!navLinks.classList.contains("active")) {
+          dropdown.classList.remove("open");
+        }
+      });
+
+      dropdownLink.addEventListener("click", (e) => {
+        if (window.innerWidth <= 768) {
+          if (!dropdown.classList.contains("open")) {
+            e.preventDefault();
+            dropdown.classList.add("open");
+          }
+        }
+      });
+    });
+</script>
+  </body>
+</html>

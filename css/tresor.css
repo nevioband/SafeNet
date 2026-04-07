@@ -1,0 +1,149 @@
+.vault-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Zentriert die Buttons vertikal zum Textblock */
+    background: rgba(10, 18, 35, 0.9);
+    border: 1px solid rgba(102, 179, 255, 0.25);
+    border-radius: 14px;
+    padding: 15px; /* Etwas mehr Platz */
+    margin-bottom: 16px;
+    box-shadow: inset 0 0 12px rgba(51, 153, 255, 0.08);
+}
+
+.vault-copy-btn, 
+.vault-view-btn {
+    flex-shrink: 0;
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #3399ff, #66d9ff);
+    color: #0b1220 !important;
+    cursor: pointer;
+    transition: 0.25s ease;
+    box-shadow: 0 0 15px rgba(102, 217, 255, 0.2);
+    padding: 0;
+    line-height: 0;
+}
+
+.vault-delete-btn {
+    flex-shrink: 0;
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ff4d4d, #ff0000);
+    color: #ffffff !important;
+    cursor: pointer;
+    transition: 0.25s ease;
+    box-shadow: 0 0 15px rgba(255, 77, 77, 0.2);
+    padding: 0;
+    line-height: 0;
+}
+
+.vault-copy-btn:hover, 
+.vault-view-btn:hover, 
+.vault-delete-btn:hover {
+    transform: translateY(-2px) scale(1.03);
+}
+
+.vault-copy-btn:hover, 
+.vault-view-btn:hover {
+    box-shadow: 0 0 22px rgba(102, 217, 255, 0.35);
+}
+
+.vault-delete-btn:hover {
+    box-shadow: 0 0 22px rgba(255, 0, 0, 0.35);
+}
+
+.vault-copy-btn:active, 
+.vault-view-btn:active, 
+.vault-delete-btn:active {
+    transform: scale(0.97);
+}
+
+.material-symbols-outlined {
+    font-size: 22px;
+    line-height: 1;
+    display: block;
+    font-family: 'Material Symbols Outlined' !important;
+}
+
+.vault-copy-btn .material-symbols-outlined,
+.vault-view-btn .material-symbols-outlined {
+    color: #0b1220 !important;
+}
+
+.vault-delete-btn .material-symbols-outlined {
+    color: #ffffff !important;
+}
+
+.main-btn-delete {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 1rem;
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #ff4d4d, #ff0000);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.25s ease;
+    box-shadow: 0 0 15px rgba(255, 77, 77, 0.2);
+    margin-top: 12px;
+    text-decoration: none;
+}
+
+.main-btn-delete:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 0 22px rgba(255, 102, 102, 0.35);
+}
+/* --- RESPONSIVE DESIGN --- */
+
+/* Für Tablets und Handys */
+@media (max-width: 650px) {
+    .vault-item {
+        flex-direction: column; /* Text oben, Buttons unten */
+        align-items: stretch;    /* Nutzt die volle Breite */
+        gap: 15px;
+    }
+
+    /* Der Container für die Buttons */
+    .vault-actions {
+        display: flex;
+        justify-content: space-between; /* Verteilt Buttons gleichmäßig */
+        gap: 8px;
+        width: 100%;
+    }
+
+    /* Buttons werden auf kleinen Screens etwas schmaler, um nebeneinander zu passen */
+    .vault-copy-btn, 
+    .vault-view-btn, 
+    .vault-delete-btn {
+        flex: 1; /* Alle Buttons sind gleich groß */
+        max-width: none; 
+        height: 48px; /* Bessere Touch-Größe */
+    }
+
+    .password-container {
+        width: 95%;
+        margin: 10px auto;
+        padding: 15px;
+    }
+}
+
+/* Für extrem schmale Handys */
+@media (max-width: 360px) {
+    .vault-actions {
+        gap: 5px;
+    }
+    
+    .vault-item strong {
+        font-size: 0.9rem;
+    }
+}

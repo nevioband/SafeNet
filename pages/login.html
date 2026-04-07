@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login – SafeNet Security</title>
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png">
+</head>
+<body>
+    <div id="navbar"></div>
+
+    <main class="login-wrapper">
+        <div class="login-card">
+
+            <div class="login-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#3399ff"/>
+                            <stop offset="100%" style="stop-color:#66d9ff"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M12 2L3 6v6c0 5.25 3.75 10.15 9 11.25C17.25 22.15 21 17.25 21 12V6L12 2z" fill="url(#shieldGrad)" opacity="0.2"/>
+                    <path d="M12 2L3 6v6c0 5.25 3.75 10.15 9 11.25C17.25 22.15 21 17.25 21 12V6L12 2z" stroke="url(#shieldGrad)" stroke-width="1.5" stroke-linejoin="round"/>
+                    <rect x="9" y="11" width="6" height="5" rx="1" fill="url(#shieldGrad)"/>
+                    <path d="M10 11V9a2 2 0 0 1 4 0v2" stroke="url(#shieldGrad)" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+
+            <h2>Willkommen zurück</h2>
+            <p class="login-subtitle">Melde dich bei SafeNet Security an</p>
+
+            <div id="errorBox" class="error-box hidden">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <span id="errorText">Ungültige E-Mail oder Passwort.</span>
+            </div>
+
+            <div class="form-group">
+                <label for="loginEmail">E-Mail-Adresse</label>
+                <div class="input-wrapper">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/>
+                    </svg>
+                    <input type="email" id="loginEmail" placeholder="E-Mail eingeben" autocomplete="email">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="loginPass">Passwort</label>
+                <div class="input-wrapper">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                    <input type="password" id="loginPass" placeholder="Passwort eingeben" autocomplete="current-password">
+                    <button class="password-toggle" type="button" id="togglePass" aria-label="Passwort anzeigen">
+                        <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <button class="login-btn" id="loginBtn">Einloggen</button>
+
+            <div class="login-footer" style="margin-top:16px">
+                <a href="#" id="forgotLink" style="color:#64748b;font-size:13px;text-decoration:none;">Passwort vergessen?</a>
+            </div>
+
+            <!-- Passwort vergessen Modal -->
+            <div id="forgotModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center;">
+                <div style="background:#172441;border:1px solid rgba(59,130,246,0.2);border-radius:16px;padding:36px 32px;width:100%;max-width:380px;margin:20px;">
+                    <h3 style="margin:0 0 8px;font-size:18px;">Passwort zurücksetzen</h3>
+                    <p style="color:#94a3b8;font-size:14px;margin:0 0 20px;">Gib deine E-Mail ein. Du erhältst einen Reset-Link.</p>
+                    <div class="form-group">
+                        <label for="forgotEmail">E-Mail-Adresse</label>
+                        <div class="input-wrapper">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
+                            <input type="email" id="forgotEmail" placeholder="deine@email.com" autocomplete="email">
+                        </div>
+                    </div>
+                    <div id="forgotError" class="error-box hidden" style="margin-bottom:14px">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        <span id="forgotErrorText">Bitte E-Mail eingeben.</span>
+                    </div>
+                    <div id="forgotSuccess" style="display:none;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.4);border-radius:8px;color:#86efac;font-size:13px;padding:10px 14px;margin-bottom:14px;">E-Mail gesendet! Prüfe deinen Posteingang.</div>
+                    <button class="login-btn" id="forgotBtn" style="margin-bottom:10px">Link senden</button>
+                    <button id="forgotClose" style="width:100%;padding:10px;background:transparent;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:#94a3b8;cursor:pointer;font-family:Inter,sans-serif;font-size:14px;">Schliessen</button>
+                </div>
+            </div>
+
+            <div class="login-footer">
+                Noch kein Konto? <a href="register.html">Jetzt registrieren</a>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer"></div>
+
+    <script type="module">
+        import { supabase } from '../js/supabase.js'
+
+        // Passwort Toggle
+        document.getElementById('togglePass').addEventListener('click', function () {
+            const input = document.getElementById('loginPass')
+            const icon = document.getElementById('eyeIcon')
+            if (input.type === 'password') {
+                input.type = 'text'
+                icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>'
+            } else {
+                input.type = 'password'
+                icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>'
+            }
+        })
+
+        // Login
+        document.getElementById('loginBtn').addEventListener('click', async () => {
+            const email    = document.getElementById('loginEmail').value.trim()
+            const password = document.getElementById('loginPass').value
+            const errorBox = document.getElementById('errorBox')
+            const errorTxt = document.getElementById('errorText')
+            const btn      = document.getElementById('loginBtn')
+
+            errorBox.classList.add('hidden')
+
+            if (!email || !password) {
+                errorTxt.textContent = 'Bitte E-Mail und Passwort eingeben.'
+                errorBox.classList.remove('hidden')
+                return
+            }
+
+            btn.textContent = 'Wird eingeloggt…'
+            btn.disabled = true
+
+            const { error } = await supabase.auth.signInWithPassword({ email, password })
+
+            if (error) {
+                errorTxt.textContent = 'Ungültige E-Mail oder Passwort.'
+                errorBox.classList.remove('hidden')
+                btn.textContent = 'Einloggen'
+                btn.disabled = false
+            } else {
+                window.location.href = '/'
+            }
+        })
+
+        // Passwort vergessen
+        const forgotModal = document.getElementById('forgotModal')
+        document.getElementById('forgotLink').addEventListener('click', (e) => {
+            e.preventDefault()
+            forgotModal.style.display = 'flex'
+        })
+        document.getElementById('forgotClose').addEventListener('click', () => {
+            forgotModal.style.display = 'none'
+            document.getElementById('forgotSuccess').style.display = 'none'
+            document.getElementById('forgotError').classList.add('hidden')
+            document.getElementById('forgotEmail').value = ''
+            document.getElementById('forgotBtn').textContent = 'Link senden'
+            document.getElementById('forgotBtn').disabled = false
+        })
+        forgotModal.addEventListener('click', (e) => { if (e.target === forgotModal) document.getElementById('forgotClose').click() })
+
+        document.getElementById('forgotBtn').addEventListener('click', async () => {
+            const email = document.getElementById('forgotEmail').value.trim()
+            const errBox = document.getElementById('forgotError')
+            const errTxt = document.getElementById('forgotErrorText')
+            const successBox = document.getElementById('forgotSuccess')
+            const btn = document.getElementById('forgotBtn')
+
+            errBox.classList.add('hidden')
+            successBox.style.display = 'none'
+
+            if (!email) {
+                errTxt.textContent = 'Bitte E-Mail eingeben.'
+                errBox.classList.remove('hidden')
+                return
+            }
+
+            btn.textContent = 'Wird gesendet…'
+            btn.disabled = true
+
+            const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                redirectTo: 'https://safe-net-umber.vercel.app/pages/reset-password.html'
+            })
+
+            if (error) {
+                errTxt.textContent = error.message
+                errBox.classList.remove('hidden')
+                btn.textContent = 'Link senden'
+                btn.disabled = false
+            } else {
+                successBox.style.display = 'block'
+                btn.textContent = 'Gesendet!'
+            }
+        })
+
+        // Navbar & Footer laden
+        fetch('../partials/navbar.html').then(r => r.text()).then(d => {
+            document.getElementById('navbar').innerHTML = d
+            const toggle = document.querySelector('.menu-toggle')
+            const navLinks = document.querySelector('.nav-links')
+            const dropdown = document.querySelector('.dropdown')
+            const dropdownLink = document.querySelector('.dropdown-link')
+            toggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active')
+                if (!navLinks.classList.contains('active')) dropdown.classList.remove('open')
+            })
+            dropdownLink.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768) {
+                    if (!dropdown.classList.contains('open')) { e.preventDefault(); dropdown.classList.add('open') }
+                }
+            })
+        })
+        fetch('../partials/footer.html').then(r => r.text()).then(d => { document.getElementById('footer').innerHTML = d })
+    </script>
+</body>
+</html>
