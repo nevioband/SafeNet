@@ -173,21 +173,6 @@
 .user-menu {
   position: relative;
   margin-left: 10px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.user-name-label {
-  font-size: 14px;
-  font-weight: 600;
-  color: #e2e8f0;
-  white-space: nowrap;
-  max-width: 160px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  pointer-events: none;
-}
 }
 
 .user-btn {
@@ -266,10 +251,6 @@
   .user-btn {
     width: 36px;
     height: 36px;
-  }
-
-  .user-name-label {
-    display: none;
   }
 
   .user-dropdown {

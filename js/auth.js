@@ -37,15 +37,6 @@ async function applyNavbarUser() {
                     userBtn.innerHTML = `<span class="user-initials">${initial}</span>`
                 }
             }
-
-            // Anzeigename neben dem Button
-            let nameLabel = userMenu.querySelector('.user-name-label')
-            if (!nameLabel) {
-                nameLabel = document.createElement('span')
-                nameLabel.className = 'user-name-label'
-                userMenu.insertBefore(nameLabel, userBtn)
-            }
-            nameLabel.textContent = displayName || ''
         }
         // Wenn nicht eingeloggt: Standard-HTML aus navbar.html bleibt
     } catch (e) {
