@@ -131,9 +131,9 @@
     }
 
     .password-container {
-        width: calc(100% - 32px) !important;
-        margin: 40px auto !important;
-        padding: 24px 20px !important;
+        width: calc(100% - 32px);
+        margin: 40px auto;
+        padding: 24px 20px;
     }
 }
 
