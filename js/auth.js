@@ -11,12 +11,14 @@ async function applyNavbarUser() {
         if (!dropdown) return
 
         if (session && session.user) {
-            const email   = session.user.email
-            const initial = email.charAt(0).toUpperCase()
+            const email       = session.user.email
+            const displayName = session.user.user_metadata?.display_name
+            const initial     = (displayName || email).charAt(0).toUpperCase()
+            const shownName   = displayName || email
 
-            // Dropdown: Einstellungen-Link statt einzelner 2FA-Link
+            // Dropdown: Anzeigename oder E-Mail + Einstellungen-Link
             dropdown.innerHTML = `
-                <li class="user-dropdown-name">${email}</li>
+                <li class="user-dropdown-name">${shownName}</li>
                 <li><a href="/pages/einstellungen.html">Einstellungen</a></li>
                 <li><a href="#" id="logoutBtn">Abmelden</a></li>
             `
