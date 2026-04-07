@@ -85,6 +85,7 @@
         }
         .profile-meta .email-lbl { font-size: 12px; color: #64748b; margin-bottom: 2px; }
         .profile-meta .email-val { font-size: 15px; color: #e2e8f0; font-weight: 600; margin-bottom: 12px; word-break: break-all; }
+        .profile-meta .name-val { font-size: 19px; font-weight: 800; color: #e2e8f0; margin-bottom: 2px; }
 
         /* Buttons */
         .btn { font-family: Inter, sans-serif; font-weight: 700; border-radius: 8px; cursor: pointer; border: none; transition: opacity 0.15s; }
@@ -177,6 +178,7 @@
                     <span id="avatarInitial">?</span>
                 </div>
                 <div class="profile-meta">
+                    <div class="name-val" id="profileDisplayName" style="display:none;"></div>
                     <div class="email-lbl">E-Mail-Adresse</div>
                     <div class="email-val" id="profileEmail">–</div>
                     <button class="btn btn-secondary" onclick="document.getElementById('avatarInput').click()">Bild hochladen / ändern</button>
@@ -327,6 +329,11 @@
         document.getElementById('profileEmail').textContent = email
         document.getElementById('avatarInitial').textContent = displayName ? displayName.charAt(0).toUpperCase() : initial
         document.getElementById('displayName').value = displayName
+        if (displayName) {
+            const el = document.getElementById('profileDisplayName')
+            el.textContent = displayName
+            el.style.display = 'block'
+        }
 
         // ── Avatar: load current ───────────────────────────────
         const avatarB64 = session.user.user_metadata?.avatar_b64
@@ -451,8 +458,10 @@
             btn.textContent = 'Speichern'; btn.disabled = false
             if (error) { showMsg('nameMsg', 'Fehler: ' + error.message, 'error'); return }
             showMsg('nameMsg', 'Anzeigename wurde gespeichert.', 'success')
-            const shownName = name || initial
             document.getElementById('avatarInitial').textContent = name ? name.charAt(0).toUpperCase() : initial
+            const nameEl = document.getElementById('profileDisplayName')
+            if (name) { nameEl.textContent = name; nameEl.style.display = 'block' }
+            else { nameEl.style.display = 'none' }
         })
 
         // ── E-Mail ändern ──────────────────────────────────────
