@@ -328,32 +328,6 @@ window.filterVault = function(query) {
     noResult.style.display = (q && visible === 0) ? 'block' : 'none'
 }
 
-// ===== TEMPORÄR: BULK FILL (nur zum Test) =====
-const SERVICES = ['Gmail','Instagram','Facebook','GitHub','Netflix','Spotify','Amazon','Twitter','LinkedIn','Discord','PayPal','Dropbox','Slack','Reddit','YouTube','Twitch','Pinterest','Apple','Microsoft','Steam']
-window.bulkFill = async function(n = 1000) {
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session) { alert('Nicht eingeloggt!'); return }
-    const key = await getVaultKey(session.user.email, session.user.id)
-    const batchSize = 50
-    let done = 0
-    console.log(`Starte bulkFill(${n})…`)
-    for (let i = 0; i < n; i += batchSize) {
-        const rows = []
-        for (let j = i; j < Math.min(i + batchSize, n); j++) {
-            const label = `${SERVICES[j % SERVICES.length]} ${j + 1}`
-            const pw = Math.random().toString(36).slice(-12)
-            const encVal = await encryptValue(pw, key)
-            rows.push({ user_id: session.user.id, label, value: encVal, date: new Date().toLocaleDateString('de-CH') })
-        }
-        const { error } = await supabase.from('passwords').insert(rows)
-        if (error) { console.error('Fehler bei Batch', i, error); break }
-        done += rows.length
-        console.log(`${done}/${n} gespeichert…`)
-    }
-    console.log('✅ fertig!')
-    renderVault()
-}
-
 // ===== START =====
 
 document.addEventListener('DOMContentLoaded', () => {
