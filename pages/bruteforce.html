@@ -76,17 +76,17 @@
 
     <div class="password-container">
       <h3>Bruteforce Demo</h3>
-      <p class="demo-desc">Gib ein Passwort aus 1–4 Kleinbuchstaben oder Ziffern ein und sieh, wie schnell ein Bruteforce-Angriff es findet.</p>
+      <p class="demo-desc">Gib ein beliebiges Passwort ein – die Demo erkennt den Zeichensatz und berechnet, wie lange ein Bruteforce-Angriff dauern würde.</p>
 
-      <label style="font-size:0.95rem; color:#e8f3ff; margin-bottom:8px; display:block;">Zielpasswort (max. 4 Zeichen, a–z und 0–9):</label>
+      <label style="font-size:0.95rem; color:#e8f3ff; margin-bottom:8px; display:block;">Zielpasswort (max. 20 Zeichen):</label>
       <div class="display-box">
-        <input id="bf-target" type="text" maxlength="4" placeholder="z.B. ab12" autocomplete="off"
+        <input id="bf-target" type="text" maxlength="20" placeholder="z.B. Mein$Passwort3" autocomplete="off"
           style="width:100%; background:transparent; border:none; outline:none; color:#66d9ff; font-family:monospace; font-size:1.1rem; letter-spacing:1px; padding:6px 0;">
       </div>
 
       <div class="bf-info-row">
         <span>Aktueller Versuch: <code id="bf-current">—</code></span>
-        <span>Anzahl Versuche: <code id="bf-attempts">0</code></span>
+        <span>Erkannter Zeichensatz: <code id="bf-charset-size">—</code></span>
       </div>
 
       <div class="bf-progress-wrap">
@@ -102,16 +102,44 @@
 
     <script>
     (function () {
-      const CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
+      const CS_LOWER   = 'abcdefghijklmnopqrstuvwxyz';
+      const CS_UPPER   = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const CS_DIGITS  = '0123456789';
+      const CS_SPECIAL = '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~';
 
-      function indexToStr(index, length) {
-        let result = '';
-        let n = index;
-        for (let i = 0; i < length; i++) {
-          result = CHARS[n % CHARS.length] + result;
-          n = Math.floor(n / CHARS.length);
-        }
-        return result;
+      const RATE = 1_000_000_000n; // 1 Mrd. Versuche/Sek. (moderner Angreifer)
+      const ANIM_MS = 2500;
+
+      function detectCharset(pw) {
+        let chars = '';
+        let size = 0;
+        const parts = [];
+        if (/[a-z]/.test(pw)) { chars += CS_LOWER;   size += 26; parts.push('Kleinbuchstaben (26)'); }
+        if (/[A-Z]/.test(pw)) { chars += CS_UPPER;   size += 26; parts.push('Grossbuchstaben (26)'); }
+        if (/[0-9]/.test(pw)) { chars += CS_DIGITS;  size += 10; parts.push('Ziffern (10)'); }
+        if (/[^a-zA-Z0-9]/.test(pw)) { chars += CS_SPECIAL; size += 32; parts.push('Sonderzeichen (32)'); }
+        if (!chars) { chars = CS_LOWER; size = 26; parts.push('Kleinbuchstaben (26)'); }
+        return { chars, size, parts };
+      }
+
+      function formatZeit(sek) {
+        // sek ist BigInt
+        if (sek <= 0n) return 'sofort';
+        if (sek < 60n) return sek + ' Sekunden';
+        if (sek < 3600n) return (sek / 60n) + ' Minuten';
+        if (sek < 86400n) return (sek / 3600n) + ' Stunden';
+        const tage = sek / 86400n;
+        if (tage < 365n) return tage + ' Tage';
+        const jahre = tage / 365n;
+        if (jahre < 1_000_000n) return jahre.toLocaleString('de-CH') + ' Jahre';
+        if (jahre < 1_000_000_000n) return (jahre / 1_000_000n).toLocaleString('de-CH') + ' Millionen Jahre';
+        return (jahre / 1_000_000_000n).toLocaleString('de-CH') + ' Milliarden Jahre';
+      }
+
+      function randomCandidate(chars, len) {
+        let r = '';
+        for (let i = 0; i < len; i++) r += chars[Math.floor(Math.random() * chars.length)];
+        return r;
       }
 
       let running = false;
@@ -123,66 +151,58 @@
       document.getElementById('bf-start').addEventListener('click', () => {
         if (running) return;
 
-        const raw = document.getElementById('bf-target').value;
-        const target = raw.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 4);
-
+        const target = document.getElementById('bf-target').value;
         if (!target) {
           document.getElementById('bf-status').textContent = 'Bitte ein Passwort eingeben.';
           return;
         }
 
         const len = target.length;
-        const total = Math.pow(CHARS.length, len);
-        const BATCH = len <= 2 ? 20 : len === 3 ? 800 : 8000;
+        const { chars, size, parts } = detectCharset(target);
+        const total = BigInt(size) ** BigInt(len);
+        const zeitSek = total / RATE;
 
         running = true;
         document.getElementById('bf-start').disabled = true;
         document.getElementById('bf-result').textContent = '';
         document.getElementById('bf-result').className = 'bf-result';
         document.getElementById('bf-progress-bar').style.width = '0%';
+        document.getElementById('bf-charset-size').textContent = size + ' Zeichen';
 
-        let attempt = 0;
         const startTime = performance.now();
 
-        function frame() {
-          const end = Math.min(attempt + BATCH, total);
-          let foundAt = -1;
+        function animFrame() {
+          const elapsed = performance.now() - startTime;
+          const pct = Math.min((elapsed / ANIM_MS) * 100, 99.9);
+          document.getElementById('bf-current').textContent = randomCandidate(chars, len);
+          document.getElementById('bf-progress-bar').style.width = pct.toFixed(1) + '%';
+          document.getElementById('bf-status').textContent = 'Angriff läuft… (' + parts.join(', ') + ')';
 
-          for (let i = attempt; i < end; i++) {
-            if (indexToStr(i, len) === target) {
-              foundAt = i;
-              break;
-            }
-          }
-
-          attempt = foundAt >= 0 ? foundAt + 1 : end;
-          const pct = (attempt / total * 100).toFixed(1);
-          const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
-
-          document.getElementById('bf-current').textContent = indexToStr(attempt - 1, len);
-          document.getElementById('bf-attempts').textContent = attempt.toLocaleString('de-CH');
-          document.getElementById('bf-progress-bar').style.width = pct + '%';
-
-          if (foundAt >= 0 || attempt >= total) {
+          if (elapsed < ANIM_MS) {
+            requestAnimationFrame(animFrame);
+          } else {
             running = false;
             document.getElementById('bf-start').disabled = false;
-            document.getElementById('bf-status').textContent =
-              '\u2713 Geknackt! "' + target + '" nach ' + attempt.toLocaleString('de-CH') + ' Versuchen in ' + elapsed + 's.';
+            document.getElementById('bf-progress-bar').style.width = '100%';
+            document.getElementById('bf-current').textContent = target;
 
-            const complexCombos = Math.pow(94, len);
-            const factor = Math.round(complexCombos / total);
+            const zeitStr = formatZeit(zeitSek);
+            const istSicher = zeitSek > 31536000n * 100n; // > 100 Jahre
+
+            document.getElementById('bf-status').textContent = istSicher
+              ? '✓ Sehr sicher – dieser Angriff würde extrem lange dauern.'
+              : '⚠ Unsicher – dieser Angriff ist in überschaubarer Zeit möglich.';
+
             const resultEl = document.getElementById('bf-result');
+            resultEl.className = 'bf-result ' + (istSicher ? 'bf-safe' : 'bf-danger');
             resultEl.innerHTML =
-              '<strong>Schutzempfehlung:</strong> Mit Gross-/Kleinbuchstaben, Zahlen <em>und</em> Sonderzeichen g\u00e4be es <strong>' +
-              complexCombos.toLocaleString('de-CH') + '</strong> Kombinationen \u2013 <strong>' +
-              factor.toLocaleString('de-CH') + '\u00d7 schwieriger</strong> zu knacken.';
-          } else {
-            requestAnimationFrame(frame);
+              '<strong>Zeichensatz:</strong> ' + parts.join(' + ') + ' = ' + size + ' mögliche Zeichen<br>' +
+              '<strong>Kombinationen:</strong> ' + size + '<sup>' + len + '</sup> = ' + total.toLocaleString('de-CH') + '<br>' +
+              '<strong>Geschätzte Knackzeit</strong> (10<sup>9</sup> Versuche/Sek.): <strong>' + zeitStr + '</strong>';
           }
         }
 
-        document.getElementById('bf-status').textContent = 'Angriff l\u00e4uft\u2026';
-        requestAnimationFrame(frame);
+        requestAnimationFrame(animFrame);
       });
     })();
     </script>
