@@ -1,1 +1,82 @@
+/* ── Szenario-Quiz ─────────────────────────────── */
+.se-nr {
+  font-size: 0.85rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  margin-bottom: 10px;
+}
+
+.se-szenario {
+  background: rgba(10,18,35,.55);
+  border: 1px solid rgba(102,179,255,.18);
+  border-radius: 10px;
+  padding: 16px 18px;
+  color: #e2e8f0;
+  font-size: .97rem;
+  line-height: 1.65;
+  margin-bottom: 16px;
+}
+
+.se-optionen {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.se-option {
+  background: rgba(23,36,65,.7);
+  border: 1px solid rgba(102,179,255,.2);
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-size: .92rem;
+  padding: 12px 16px;
+  text-align: left;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+  line-height: 1.45;
+}
+.se-option:hover:not(:disabled) { background: rgba(51,153,255,.12); border-color: #3399ff; }
+.se-option:disabled { cursor: default; }
+.se-option.se-richtig { background: rgba(34,197,94,.12); border-color: #22c55e; color: #86efac; }
+.se-option.se-falsch  { background: rgba(239,68,68,.12);  border-color: #ef4444; color: #fca5a5; }
+
+.se-feedback {
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: .9rem;
+  line-height: 1.55;
+  margin-bottom: 12px;
+}
+.se-hidden  { display: none; }
+.se-fb-gut  { background: rgba(34,197,94,.1); border: 1px solid #22c55e; color: #86efac; }
+.se-fb-schlecht { background: rgba(239,68,68,.1); border: 1px solid #ef4444; color: #fca5a5; }
+
+.se-btn {
+  background: linear-gradient(135deg,#3399ff,#66d9ff);
+  color: #0b1220;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  cursor: pointer;
+  font-size: .95rem;
+  transition: opacity .15s;
+}
+.se-btn:hover { opacity: .85; }
+
+.se-ende {
+  text-align: center;
+  padding: 20px 0 4px;
+  font-size: 1.05rem;
+  color: #e2e8f0;
+  line-height: 1.7;
+}
+
+@media (max-width: 768px) {
+  .se-szenario { font-size: .9rem; }
+  .se-option   { font-size: .88rem; padding: 10px 12px; }
+  .se-btn      { width: 100%; text-align: center; }
+}
 

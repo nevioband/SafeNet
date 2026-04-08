@@ -3,40 +3,67 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SafeNet Security | Passwort-Analysator</title>
+    <title>Passwort-Analysator – SafeNet Security</title>
+
+    <!-- Globale Styles (Navbar, Basis, Infoboxen, Hero, Footer) -->
     <link rel="stylesheet" href="../css/navbar.css" />
     <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="../css/infobox.css" />
     <link rel="stylesheet" href="../css/hero.css" />
     <link rel="stylesheet" href="../css/footer.css" />
+
+    <!-- Seitenspezifische Styles -->
     <link rel="stylesheet" href="../css/analyse.css" />
     <link rel="stylesheet" href="../css/keylogger.css" />
     <link rel="stylesheet" href="../css/phishing.css" />
+
+    <!-- Favicon -->
     <link rel="icon" type="image/png" href="../images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png">
+
+    <!-- Auth: Navbar-Zustand & Session-Handling -->
     <script type="module" src="../js/auth.js?v=5"></script>
   </head>
   <body>
+    <!-- Navbar (wird per JS aus partials/navbar.html geladen) -->
     <div id="navbar"></div>
 
+    <!-- ─── Passwort-Analysator ─────────────────────────────────────── -->
     <section class="analyser-section">
       <div class="analyser-box">
         <h2>Passwort Analyse</h2>
         <p>Gib ein Passwort ein und überprüfe seine Sicherheit in Echtzeit.</p>
 
-        <input type="password" id="passwordInput" placeholder="Passwort eingeben" />
-        <!--<button id="analyzeBtn">Jetzt Analysieren</button>-->
+        <div class="pw-input-wrap">
+          <input type="password" id="passwordInput" placeholder="Passwort eingeben" autocomplete="off" />
+          <button id="pw-toggle" class="pw-eye" aria-label="Passwort anzeigen" type="button">
+            <svg id="pw-eye-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </div>
 
+        <div class="pw-bar-wrap">
+          <div id="pw-bar" class="pw-bar"></div>
+        </div>
         <div id="result"></div>
+
+        <div id="pw-badges" class="pw-badges"></div>
+        <div id="pw-cracktime" class="pw-cracktime"></div>
+
         <ul id="suggestions"></ul>
       </div>
     </section>
 
+    <!-- Footer (wird per JS aus partials/footer.html geladen) -->
     <div id="footer"></div>
 
+    <!-- Analyse-Logik: Stärkeberechnung, Badges, Knackzeit -->
     <script src="../js/analyse.js"></script>
 
     <script>
-      // Navbar Loader & Logic
+      // ─── Navbar laden & Mobile-Menü initialisieren ───
       fetch("../partials/navbar.html")
         .then((res) => res.text())
         .then((data) => {
@@ -68,7 +95,7 @@
           }
         });
 
-      // Footer Loader
+      // ─── Footer laden ───
       fetch("../partials/footer.html")
         .then(res => res.text())
         .then(data => {

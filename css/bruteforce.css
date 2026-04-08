@@ -79,3 +79,15 @@
   color: #86efac !important;
 }
 
+@media (max-width: 768px) {
+  .bf-info-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .bf-info-row span {
+    font-size: 0.88rem;
+    width: 100%;
+  }
+}
+

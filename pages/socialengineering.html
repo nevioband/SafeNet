@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Social Engineering</title>
+    <title>Social Engineering – SafeNet Security</title>
     <link rel="stylesheet" href="../css/navbar.css" />
     <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="../css/infobox.css" />
@@ -99,6 +99,154 @@
         </p>
       </div>
     </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Szenario-Test: Wie reagierst du?</h2>
+        <p style="color:#cbd5e1; margin-bottom:20px;">Wähle in jedem Szenario die richtige Reaktion – teste dein Bewusstsein gegen Social Engineering.</p>
+
+        <div id="se-quiz">
+          <div id="se-nr" class="se-nr"></div>
+          <div id="se-text" class="se-szenario"></div>
+          <div id="se-optionen" class="se-optionen"></div>
+          <div id="se-feedback" class="se-feedback se-hidden"></div>
+          <button id="se-weiter" class="se-btn se-hidden">Weiter →</button>
+        </div>
+        <div id="se-ende" class="se-ende se-hidden">
+          <div id="se-score"></div>
+          <button id="se-neustart" class="se-btn" style="margin-top:16px;">Nochmal starten</button>
+        </div>
+      </div>
+    </section>
+
+    <script>
+    (function () {
+      const SZENARIEN = [
+        {
+          text: 'Ein Anrufer sagt: "Guten Tag, ich bin Marco Huber von der IT-Abteilung. Ich sehe gerade in unserem System, dass dein Laptop letzte Nacht mehrfach unerreichbar war. Ich muss kurz deine Zugangsdaten prüfen, sonst wird dein Account heute Abend automatisch gesperrt." Was tust du?',
+          optionen: [
+            { text: 'Ich gebe die Daten durch – er kennt meinen Laptop-Status, das klingt echt.', richtig: false },
+            { text: 'Ich frage ihn nach seiner Durchwahl, lege auf und rufe die IT-Hotline aus dem Intranet an.', richtig: true },
+            { text: 'Ich gebe nur meinen Benutzernamen, aber nicht das Passwort.', richtig: false },
+            { text: 'Ich bitte ihn, mir eine offizielle E-Mail zu schicken, und warte dann.', richtig: false },
+          ],
+          erklaerung: 'Angreifer recherchieren vorab Details (z. B. Systemstatus, Firmennamen) um glaubwürdig zu klingen. Die Drohung einer Kontosperrung erzeugt künstlichen Druck. Richtig: Auflegen, selbst zurückrufen über die bekannte offizielle Nummer. Eine E-Mail vom Angreifer wäre genauso gefälscht.'
+        },
+        {
+          text: 'Du bekommst eine LinkedIn-Nachricht von einem Recruiter mit 600+ Kontakten und echtem Profilbild: "Ich habe ein interessantes Angebot für dich – hier die Details als PDF." Der Link führt zu einem Google-Drive-Dokument. Was tust du?',
+          optionen: [
+            { text: 'Ich öffne es – Google Drive ist sicher und das Profil wirkt echt.', richtig: false },
+            { text: 'Ich lade die PDF herunter und öffne sie in einem Online-Viewer statt lokal.', richtig: false },
+            { text: 'Ich verifiziere den Recruiter zuerst unabhängig (z. B. Firmenwebsite, direkter Anruf) bevor ich irgendetwas öffne.', richtig: true },
+            { text: 'Ich schicke den Link an einen Kollegen zum Testen.', richtig: false },
+          ],
+          erklaerung: 'Spear-Phishing über LinkedIn ist real. Gefälschte Profile können viele Verbindungen haben. Google Drive schützt nicht vor bösartigem Inhalt in PDFs (z. B. eingebettete Links, Makros). Ein Kollege wäre genauso gefährdet.'
+        },
+        {
+          text: 'Dein bekannter Lieferant schreibt per E-Mail – von seiner gewohnten Adresse: "Unsere Bankverbindung hat sich geändert. Bitte nutze für die nächste Zahlung folgende neue IBAN." Was tust du?',
+          optionen: [
+            { text: 'Ich aktualisiere die IBAN – die Absenderadresse ist die bekannte.', richtig: false },
+            { text: 'Ich antworte auf die E-Mail und bitte um Bestätigung.', richtig: false },
+            { text: 'Ich rufe den Lieferanten über die Nummer an, die ich bereits kenne – nicht die in der E-Mail.', richtig: true },
+            { text: 'Ich warte auf die nächste Rechnung und schaue ob sie die neue IBAN enthält.', richtig: false },
+          ],
+          erklaerung: 'IBAN-Betrug: Angreifer fälschen oder kompromittieren echte E-Mail-Adressen. Eine Antwort geht wieder zum Angreifer. Die nächste Rechnung könnte auch manipuliert sein. Einzige sichere Option: Telefonische Bestätigung über eine bereits bekannte Nummer.'
+        },
+        {
+          text: 'Du hast selbst die IT-Helpline angerufen weil dein VPN nicht funktioniert. Der Techniker löst das Problem. Zum Abschluss sagt er: "Ich brauche kurz dein aktuelles Passwort zur Dokumentation im Ticket-System." Was tust du?',
+          optionen: [
+            { text: 'Ich gebe es an – ich habe selbst angerufen, also ist die Verbindung sicher.', richtig: false },
+            { text: 'Ich gebe es an und ändere es danach sofort.', richtig: false },
+            { text: 'Ich verweigere es – kein Ticketsystem benötigt dein Klartext-Passwort.', richtig: true },
+            { text: 'Ich gebe eine Variante meines Passworts an, nicht das echte.', richtig: false },
+          ],
+          erklaerung: 'Selbst wenn du angerufen hast, kann ein Angreifer die Linie kompromittiert oder eine Fake-Nummer betrieben haben. Kein legitimes System speichert Klartext-Passwörter. IT-Mitarbeitende können Passwörter zurücksetzen – sie brauchen sie nicht zu kennen.'
+        },
+        {
+          text: 'Du postest auf LinkedIn: "Erster Tag bei meiner neuen Stelle – bin jetzt im IT-Security-Team der Kantonalbank!" Zwei Tage später ruft jemand an: "Hallo, hier ist Serkan Yilmaz aus dem Procurement. Ich habe deinen Post gesehen – herzlich willkommen! Ich brauche kurz deine Mitarbeiter-ID für den Vendor-Portal-Zugang, das ist beim Onboarding normal." Was tust du?',
+          optionen: [
+            { text: 'Ich gebe die ID durch – er kannte meinen Post, das wirkt legitim.', richtig: false },
+            { text: 'Ich frage nach seinem Nachnamen und google ob er existiert.', richtig: false },
+            { text: 'Ich gebe nichts weiter und verifiziere die Anfrage über meinen Vorgesetzten oder die interne Kontaktliste.', richtig: true },
+            { text: 'Ich gebe die ID, aber kein Passwort – die ID allein ist nicht kritisch.', richtig: false },
+          ],
+          erklaerung: 'Pretexting mit öffentlichen Infos: Dein Post lieferte dem Angreifer genügend Kontext für eine glaubwürdige Geschichte. Mitarbeiter-IDs ermöglichen oft Passwort-Resets oder Zugangserweiterungen. Einen Namen zu googeln ist unzureichend – Fake-Profile sind einfach zu erstellen.'
+        },
+        {
+          text: 'Eine E-Mail von der verifizierten Adresse deiner Kollegin Anna schreibt: "Hey, ich sitze im Kundentermin ohne Laptop. Kannst du mir kurz das Passwort für unser gemeinsames Tool rüberschicken? Dringend!" Was tust du?',
+          optionen: [
+            { text: 'Ich schicke es – die E-Mail kommt von ihrer echten Adresse.', richtig: false },
+            { text: 'Ich schicke nur den Benutzernamen, nicht das Passwort.', richtig: false },
+            { text: 'Ich rufe Anna direkt auf ihrer Handynummer an, bevor ich irgendwas sende.', richtig: true },
+            { text: 'Ich antworte per E-Mail und frage: "Bist du das wirklich?"', richtig: false },
+          ],
+          erklaerung: 'Wenn Annas E-Mail-Konto kompromittiert wurde, landet alles beim Angreifer. Per E-Mail zu fragen ob jemand "wirklich er selbst" ist, ist nutzlos – der Angreifer antwortet einfach mit Ja. Einzige sichere Verification: Anruf auf die bekannte Mobilnummer.'
+        },
+      ];
+
+      let aktuell = 0, punkte = 0;
+
+      function ladeSzenario() {
+        const s = SZENARIEN[aktuell];
+        document.getElementById('se-nr').textContent = 'Szenario ' + (aktuell + 1) + ' von ' + SZENARIEN.length;
+        document.getElementById('se-text').textContent = s.text;
+        document.getElementById('se-feedback').className = 'se-feedback se-hidden';
+        document.getElementById('se-weiter').className = 'se-btn se-hidden';
+
+        const optDiv = document.getElementById('se-optionen');
+        optDiv.innerHTML = '';
+        s.optionen.forEach((opt, i) => {
+          const btn = document.createElement('button');
+          btn.className = 'se-option';
+          btn.textContent = opt.text;
+          btn.addEventListener('click', () => waehlOption(i));
+          optDiv.appendChild(btn);
+        });
+      }
+
+      function waehlOption(i) {
+        const s = SZENARIEN[aktuell];
+        const richtig = s.optionen[i].richtig;
+        if (richtig) punkte++;
+
+        document.querySelectorAll('.se-option').forEach((btn, j) => {
+          btn.disabled = true;
+          if (s.optionen[j].richtig) btn.classList.add('se-richtig');
+          else if (j === i && !richtig) btn.classList.add('se-falsch');
+        });
+
+        const fb = document.getElementById('se-feedback');
+        fb.className = 'se-feedback ' + (richtig ? 'se-fb-gut' : 'se-fb-schlecht');
+        fb.textContent = (richtig ? '✓ Richtig! ' : '✗ Falsch. ') + s.erklaerung;
+
+        document.getElementById('se-weiter').className = 'se-btn';
+      }
+
+      document.getElementById('se-weiter').addEventListener('click', () => {
+        aktuell++;
+        if (aktuell >= SZENARIEN.length) {
+          document.getElementById('se-quiz').style.display = 'none';
+          const ende = document.getElementById('se-ende');
+          ende.className = 'se-ende';
+          const pct = Math.round(punkte / SZENARIEN.length * 100);
+          const bewertung = punkte === SZENARIEN.length ? '🏆 Perfekt!' : punkte >= 3 ? '👍 Gut gemacht!' : '⚠ Noch Luft nach oben.';
+          document.getElementById('se-score').innerHTML =
+            '<strong>' + bewertung + '</strong><br>' + punkte + ' von ' + SZENARIEN.length + ' richtig (' + pct + '%)';
+        } else {
+          ladeSzenario();
+        }
+      });
+
+      document.getElementById('se-neustart').addEventListener('click', () => {
+        aktuell = 0; punkte = 0;
+        document.getElementById('se-ende').className = 'se-ende se-hidden';
+        document.getElementById('se-quiz').style.display = '';
+        ladeSzenario();
+      });
+
+      ladeSzenario();
+    })();
+    </script>
 
     <div id="footer"></div>
     <script>

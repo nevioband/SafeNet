@@ -18,7 +18,7 @@
   color: #ffffff;
   font-family: "Inter", sans-serif;
   text-align: center;
-  box-sizing: border-box; /* Neu: Verhindert, dass die Box selbst ausbricht */
+  box-sizing: border-box;
 }
 
 .analyser-box h2 {
@@ -34,59 +34,124 @@
   font-size: 0.95rem;
 }
 
-.analyser-box input {
+/* Input mit Toggle-Button */
+.pw-input-wrap {
+  position: relative;
+  margin-bottom: 14px;
+}
+
+.pw-input-wrap input {
   width: 100%;
-  box-sizing: border-box; /* FIX: Padding wird jetzt nach innen berechnet */
-  padding: 14px;
+  box-sizing: border-box;
+  padding: 14px 48px 14px 14px;
   font-size: 1.1rem;
   background: rgba(10, 18, 35, 0.9);
   border: 1px solid rgba(102, 179, 255, 0.25);
   border-radius: 14px;
   color: #66d9ff;
   font-family: monospace;
-  margin-bottom: 20px;
   outline: none;
-  display: block; /* Neu: Sorgt für sauberes Layout */
+  display: block;
   box-shadow: inset 0 0 12px rgba(51, 153, 255, 0.08);
   transition: border-color 0.3s ease;
 }
 
-.analyser-box input:focus {
+.pw-input-wrap input:focus {
   border-color: #66d9ff;
   box-shadow: 0 0 15px rgba(102, 217, 255, 0.2);
 }
 
+.pw-eye {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(102, 179, 255, 0.55);
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  transition: color .2s;
+}
+.pw-eye:hover { color: #66d9ff; }
+
+/* Stärke-Balken */
+.pw-bar-wrap {
+  width: 100%;
+  background: rgba(255,255,255,.08);
+  border-radius: 99px;
+  height: 7px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.pw-bar {
+  height: 100%;
+  width: 0%;
+  border-radius: 99px;
+  transition: width .4s ease, background .4s ease;
+}
+
 #result {
-  margin-top: 24px;
-  font-size: 1.2rem;
+  margin-bottom: 14px;
+  font-size: 1.1rem;
   font-weight: 700;
-  color: #66d9ff;
   text-shadow: 0 0 10px rgba(102, 217, 255, 0.3);
 }
 
+/* Zeichenklassen-Badges */
+.pw-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.pw-badge {
+  font-size: .8rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 99px;
+  border: 1px solid;
+}
+
+.pw-badge-on  { background: rgba(34,197,94,.12); border-color: #22c55e; color: #86efac; }
+.pw-badge-off { background: rgba(100,116,139,.1); border-color: #475569; color: #64748b; }
+
+/* Knackzeit */
+.pw-cracktime {
+  font-size: .88rem;
+  font-weight: 600;
+  margin-bottom: 14px;
+  opacity: .9;
+}
+
 #suggestions {
-  display: none; /* Initial versteckt */
-  margin-top: 20px;
+  display: none;
+  margin-top: 6px;
   text-align: left;
-  padding: 18px;
+  padding: 16px 18px;
   background: rgba(10, 18, 35, 0.6);
   border: 1px solid rgba(102, 179, 255, 0.12);
   border-radius: 14px;
   color: #f2f7ff;
   font-size: 0.9rem;
   line-height: 1.6;
-  list-style-position: inside; /* Punkte rücken nach innen */
+  list-style-position: inside;
 }
 
 @media (max-width: 768px) {
   .analyser-box {
     padding: 24px 20px;
-    width: 100%; /* Nutzt verfügbaren Platz */
+    width: 100%;
   }
   .analyser-box h2 {
     font-size: 1.6rem;
   }
   .analyser-section {
-    padding: 60px 15px; /* Weniger Padding oben auf Mobile */
+    padding: 60px 15px;
   }
 }

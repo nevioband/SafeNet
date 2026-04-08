@@ -1,73 +1,162 @@
-const commonPasswords = ["123456", "password", "12345678", "qwerty", "12345", "123456789", "letmein", "admin", "welcome", "123123", "passw0rd"];
+// ─── Konfiguration & Konstanten ──────────────────────────────────────────────
 
-function analyzePassword() {
-    const password = document.getElementById("passwordInput").value;
-    const result = document.getElementById("result");
-    const suggestions = document.getElementById("suggestions");
+// Blacklist: häufig genutzte Passwörter → führt zu Score-Abzug
+const HAEUFIGE = ["123456","password","12345678","qwerty","12345","123456789",
+  "letmein","admin","welcome","123123","passw0rd","iloveyou","1234","hallo",
+  "hallo123","passwort","test","abc123","000000","111111","monkey","dragon"];
 
-    // Liste leeren
-    suggestions.innerHTML = "";
-    
-    if (password.length === 0) {
-        result.innerText = "";
-        suggestions.style.display = "none"; // Verstecken wenn leer
-        return;
-    }
+// Annahme: 10^9 Versuche pro Sekunde (modernes GPU-Cracking)
+const RATE = 1_000_000_000n;
 
-    let tips = [];
-    let score = 0;
-    const lowerPassword = password.toLowerCase();
-
-    // 1. Länge prüfen
-    if (password.length >= 12) {
-        score += 2; 
-    } else {
-        tips.push("Verwende mindestens 12 Zeichen.");
-    }
-
-    // 2. Komplexität prüfen
-    if (/[A-Z]/.test(password)) score++;
-    else tips.push("Füge mindestens einen Großbuchstaben hinzu.");
-
-    if (/[a-z]/.test(password)) score++;
-    else tips.push("Füge mindestens einen Kleinbuchstaben hinzu.");
-
-    if (/[0-9]/.test(password)) score++;
-    else tips.push("Füge mindestens eine Zahl hinzu.");
-
-    if (/[^A-Za-z0-9]/.test(password)) score++;
-    else tips.push("Verwende mindestens ein Sonderzeichen.");
-
-    // 3. Blacklist Check
-    const isCommon = commonPasswords.some(word => lowerPassword.includes(word));
-    if (isCommon) {
-        score = Math.max(0, score - 2);
-        tips.push("Vermeide einfache Muster oder häufige Wörter.");
-    }
-
-    // 4. Ergebnis & Farben
-    if (score <= 3) {
-        result.innerText = "Status: Schwach";
-        result.style.color = "#ff4d4d";
-    } else if (score <= 5) {
-        result.innerText = "Status: Mittel";
-        result.style.color = "#ffcc00";
-    } else {
-        result.innerText = "Status: Sicher";
-        result.style.color = "#00ff99";
-    }
-
-    // 5. Tipps anzeigen, nur wenn welche da sind
-    if (tips.length > 0) {
-        suggestions.style.display = "block"; // Einblenden
-        tips.forEach(tip => {
-            let li = document.createElement("li");
-            li.innerText = tip;
-            suggestions.appendChild(li);
-        });
-    } else {
-        suggestions.style.display = "none"; // Ausblenden wenn alles okay
-    }
+// ─── Hilfsfunktion: BigInt-Sekunden → lesbare Zeitangabe (de-CH) ─────────────
+function formatKnackzeit(sek) {
+  if (sek <= 0n) return 'sofort';
+  if (sek < 60n) return sek + ' Sekunden';
+  if (sek < 3600n) return (sek / 60n) + ' Minuten';
+  if (sek < 86400n) return (sek / 3600n) + ' Stunden';
+  const tage = sek / 86400n;
+  if (tage < 365n) return tage + ' Tage';
+  const jahre = tage / 365n;
+  if (jahre < 1_000_000n) return jahre.toLocaleString('de-CH') + ' Jahre';
+  if (jahre < 1_000_000_000n) return (jahre / 1_000_000n).toLocaleString('de-CH') + ' Millionen Jahre';
+  return (jahre / 1_000_000_000n).toLocaleString('de-CH') + ' Milliarden Jahre';
 }
 
-document.getElementById("passwordInput").addEventListener("input", analyzePassword);
+// ─── Hauptfunktion: Passwort analysieren & Ergebnis darstellen ───────────────
+function analyzePassword() {
+
+  // --- DOM-Elemente ---
+  const pw = document.getElementById('passwordInput').value;
+  const result = document.getElementById('result');
+  const suggestions = document.getElementById('suggestions');
+  const bar = document.getElementById('pw-bar');
+  const badgeWrap = document.getElementById('pw-badges');
+  const crackDiv = document.getElementById('pw-cracktime');
+
+  // --- Ausgabe zurücksetzen ---
+  suggestions.innerHTML = '';
+  badgeWrap.innerHTML = '';
+  crackDiv.textContent = '';
+
+  // --- Frühzeitig abbrechen wenn Eingabe leer ---
+  if (!pw.length) {
+    result.textContent = '';
+    result.style.color = '';
+    bar.style.width = '0%';
+    bar.style.background = '';
+    suggestions.style.display = 'none';
+    return;
+  }
+
+  // --- Zeichenklassen prüfen ---
+  const hasLower   = /[a-z]/.test(pw);
+  const hasUpper   = /[A-Z]/.test(pw);
+  const hasDigit   = /[0-9]/.test(pw);
+  const hasSpecial = /[^A-Za-z0-9]/.test(pw);
+  const len = pw.length;
+  const isCommon = HAEUFIGE.some(w => pw.toLowerCase().includes(w));
+
+  // --- Zeichensatz-Größe → Anzahl möglicher Kombinationen (BigInt) ---
+  let charsetSize = 0;
+  if (hasLower)   charsetSize += 26;
+  if (hasUpper)   charsetSize += 26;
+  if (hasDigit)   charsetSize += 10;
+  if (hasSpecial) charsetSize += 32;
+  if (!charsetSize) charsetSize = 26;
+
+  // --- Knackzeit: charsetSize^Länge / Angriffsrate ---
+  const total  = BigInt(charsetSize) ** BigInt(len);
+  const zeitSek = total / RATE;
+
+  // --- Score 0–100 berechnen ---
+  let score = 0;
+  if (len >= 8)  score += 15;
+  if (len >= 12) score += 20;
+  if (len >= 16) score += 15;
+  if (hasLower)   score += 10;
+  if (hasUpper)   score += 10;
+  if (hasDigit)   score += 10;
+  if (hasSpecial) score += 20;
+  if (isCommon)   score = Math.max(0, score - 35);
+
+  score = Math.min(100, score);
+
+  // --- Verbesserungstipps sammeln ---
+  const tips = [];
+  if (len < 12)     tips.push('Verwende mindestens 12 Zeichen.');
+  if (!hasUpper)    tips.push('Füge mindestens einen Großbuchstaben hinzu.');
+  if (!hasLower)    tips.push('Füge mindestens einen Kleinbuchstaben hinzu.');
+  if (!hasDigit)    tips.push('Füge mindestens eine Zahl hinzu.');
+  if (!hasSpecial)  tips.push('Verwende mindestens ein Sonderzeichen (z. B. ! # $ %).');
+  if (isCommon)     tips.push('Dieses Passwort ähnelt häufig genutzten Passwörtern – wähle etwas Einzigartiges.');
+
+  // --- Stärke-Label, Textfarbe & Balkenfarbe bestimmen ---
+  let label, color, barColor;
+  if (score < 30) {
+    label = 'Sehr schwach'; color = '#ef4444';
+    barColor = 'linear-gradient(90deg,#ef4444,#f87171)';
+  } else if (score < 50) {
+    label = 'Schwach'; color = '#f97316';
+    barColor = 'linear-gradient(90deg,#f97316,#fbbf24)';
+  } else if (score < 70) {
+    label = 'Mittel'; color = '#eab308';
+    barColor = 'linear-gradient(90deg,#eab308,#fde047)';
+  } else if (score < 87) {
+    label = 'Stark'; color = '#22c55e';
+    barColor = 'linear-gradient(90deg,#22c55e,#4ade80)';
+  } else {
+    label = 'Sehr stark'; color = '#3399ff';
+    barColor = 'linear-gradient(90deg,#3399ff,#66d9ff)';
+  }
+
+  // --- Stärkebalken & Label aktualisieren ---
+  bar.style.width = score + '%';
+  bar.style.background = barColor;
+  result.textContent = 'Stärke: ' + label;
+  result.style.color = color;
+
+  // --- Zeichenklassen-Badges rendern (grün = vorhanden, grau = fehlt) ---
+  const badgeDefs = [
+    { label: 'A–Z', active: hasUpper },
+    { label: 'a–z', active: hasLower },
+    { label: '0–9', active: hasDigit },
+    { label: '!#$', active: hasSpecial },
+    { label: '≥ 12 Zeichen', active: len >= 12 },
+  ];
+  badgeDefs.forEach(b => {
+    const span = document.createElement('span');
+    span.className = 'pw-badge ' + (b.active ? 'pw-badge-on' : 'pw-badge-off');
+    span.textContent = b.label;
+    badgeWrap.appendChild(span);
+  });
+
+  // --- Geschätzte Knackzeit anzeigen ---
+  crackDiv.textContent = 'Geschätzte Knackzeit: ' + formatKnackzeit(zeitSek);
+  crackDiv.style.color = color;
+
+  // --- Verbesserungstipps anzeigen (oder verstecken wenn keine vorhanden) ---
+  if (tips.length > 0) {
+    suggestions.style.display = 'block';
+    tips.forEach(tip => {
+      const li = document.createElement('li');
+      li.textContent = tip;
+      suggestions.appendChild(li);
+    });
+  } else {
+    suggestions.style.display = 'none';
+  }
+}
+
+// ─── Event-Listener: Analyse bei jeder Eingabe auslösen ─────────────────────
+document.getElementById('passwordInput').addEventListener('input', analyzePassword);
+
+// ─── Passwort anzeigen / verbergen (Auge-Button) ──────────────────────────────
+document.getElementById('pw-toggle').addEventListener('click', () => {
+  const input = document.getElementById('passwordInput');
+  const icon  = document.getElementById('pw-eye-icon');
+  const show  = input.type === 'password';
+  input.type  = show ? 'text' : 'password';
+  icon.innerHTML = show
+    ? '<line x1="2" y1="2" x2="22" y2="22"/><path d="M6.71 6.71C4.01 8.36 2 12 2 12s4 8 10 8a9.9 9.9 0 0 0 5.29-1.53"/><path d="M10.58 5.11A9.9 9.9 0 0 1 12 5c6 0 10 7 10 7a18.5 18.5 0 0 1-2.16 3.19"/><circle cx="12" cy="12" r="3"/>'
+    : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+});

@@ -67,6 +67,12 @@
   font-style: italic;
 }
 
+@media (max-width: 768px) {
+  .ph-checker-wrap { flex-direction: column; }
+  #ph-btn { width: 100%; }
+  .ph-badge { font-size: .88rem; }
+}
+
 /* ────────────────────────────────────────────── */
 .quiz-container {
   max-width: 800px;
