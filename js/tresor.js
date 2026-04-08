@@ -1,7 +1,11 @@
 import { supabase } from './supabase.js?v=8'
 
 let vaultData = []
-let cachedVaultKey = null
+let masterKey = null
+
+const VERIFY_LABEL = '__vault_verify__'
+const VERIFY_PLAINTEXT = '__safenet_vault_verified__'
+
 // ===== NETZWERK-STATUS =====
 
 function isOffline() {
@@ -28,23 +32,21 @@ function hideOfflineBanner() {
 
 window.addEventListener('online',  () => { hideOfflineBanner(); renderVault() })
 window.addEventListener('offline', () => showOfflineBanner())
-// ===== VERSCHLÜSSELUNG =====
-// Schlüssel wird automatisch aus E-Mail (unveränderlich) abgeleitet — kein Extra-Passwort nötig
 
-async function getVaultKey(email, userId) {
-    if (cachedVaultKey) return cachedVaultKey
+// ===== VERSCHLÜSSELUNG =====
+
+async function deriveKey(password, salt) {
     const enc = new TextEncoder()
     const keyMaterial = await crypto.subtle.importKey(
-        'raw', enc.encode(email), 'PBKDF2', false, ['deriveKey']
+        'raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']
     )
-    cachedVaultKey = await crypto.subtle.deriveKey(
-        { name: 'PBKDF2', salt: enc.encode(userId), iterations: 100000, hash: 'SHA-256' },
+    return await crypto.subtle.deriveKey(
+        { name: 'PBKDF2', salt: enc.encode(salt), iterations: 100000, hash: 'SHA-256' },
         keyMaterial,
         { name: 'AES-GCM', length: 256 },
         false,
         ['encrypt', 'decrypt']
     )
-    return cachedVaultKey
 }
 
 async function encryptValue(plaintext, key) {
@@ -67,6 +69,190 @@ async function decryptValue(encString, key) {
     } catch {
         return null
     }
+}
+
+// ===== MASTER-PASSWORT MODAL =====
+
+function buildMasterModal(isSetup, errorMsg) {
+    document.getElementById('masterModal')?.remove()
+
+    const overlay = document.createElement('div')
+    overlay.id = 'masterModal'
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;display:flex;align-items:center;justify-content:center;font-family:Inter,sans-serif;'
+
+    const title   = isSetup ? 'Master-Passwort erstellen' : 'Tresor entsperren'
+    const btnText = isSetup ? 'Tresor einrichten' : 'Entsperren'
+
+    const setupInfo = isSetup
+        ? `<p style="font-size:13px;color:#94a3b8;margin:0 0 20px;line-height:1.6;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:12px;display:flex;gap:10px;align-items:flex-start;"><span class="material-symbols-outlined" style="font-size:20px;color:#ef4444;flex-shrink:0;margin-top:1px;">warning</span><span><strong style="color:#ef4444;">Achtung:</strong> Wenn du dieses Master-Passwort vergisst, sind alle gespeicherten Passwörter unwiederbringlich verloren. Es gibt keinen Zurück.</span></p>`
+        : `<p style="font-size:13px;color:#94a3b8;margin:0 0 20px;">Gib dein Master-Passwort ein, um den Tresor zu entsperren.</p>`
+
+    const errorHtml = errorMsg
+        ? `<p style="font-size:13px;color:#ef4444;margin:0 0 16px;padding:10px 12px;background:rgba(239,68,68,0.1);border-radius:8px;border:1px solid rgba(239,68,68,0.3);">${errorMsg}</p>`
+        : ''
+
+    const confirmHtml = isSetup
+        ? `<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:24px;">
+               <label style="font-size:14px;color:#cbd5e1;font-weight:500;">Master-Passwort bestätigen</label>
+               <input type="password" id="masterPwConfirm" autocomplete="new-password"
+                   style="width:100%;padding:12px 14px;background:#0f172a;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:white;font-size:15px;font-family:Inter,sans-serif;box-sizing:border-box;outline:none;">
+           </div>`
+        : ''
+
+    overlay.innerHTML = `
+        <div style="background:#172441;border:1px solid rgba(59,130,246,0.25);border-radius:16px;padding:36px 32px;width:100%;max-width:440px;margin:20px;box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+                <span class="material-symbols-outlined" style="font-size:26px;color:#3399ff;">lock</span>
+                <h3 style="margin:0;font-size:18px;background:linear-gradient(135deg,#3399ff,#66d9ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${title}</h3>
+            </div>
+            ${setupInfo}
+            ${errorHtml}
+            <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px;">
+                <label style="font-size:14px;color:#cbd5e1;font-weight:500;">Master-Passwort</label>
+                <input type="password" id="masterPwInput" autocomplete="${isSetup ? 'new-password' : 'current-password'}"
+                    style="width:100%;padding:12px 14px;background:#0f172a;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:white;font-size:15px;font-family:Inter,sans-serif;box-sizing:border-box;outline:none;">
+            </div>
+            ${confirmHtml}
+            <button id="masterPwBtn" style="width:100%;padding:13px;background:linear-gradient(135deg,#3399ff,#66d9ff);color:#0f172a;border:none;border-radius:8px;font-size:15px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;">${btnText}</button>
+        </div>
+    `
+    document.body.appendChild(overlay)
+    setTimeout(() => document.getElementById('masterPwInput')?.focus(), 50)
+}
+
+async function askMasterPassword(session) {
+    if (masterKey) return masterKey
+
+    // Master-Passwort aus sessionStorage laden (bleibt im Tab nach Reload erhalten)
+    const storedPw = sessionStorage.getItem('vaultMasterPw_' + session.user.id)
+    if (storedPw) {
+        const { data: verifyEntry } = await supabase
+            .from('passwords')
+            .select('value')
+            .eq('user_id', session.user.id)
+            .eq('label', VERIFY_LABEL)
+            .maybeSingle()
+        if (verifyEntry) {
+            const key = await deriveKey(storedPw, session.user.id)
+            const decrypted = await decryptValue(verifyEntry.value, key)
+            if (decrypted === VERIFY_PLAINTEXT) {
+                masterKey = key
+                return masterKey
+            }
+        }
+        // Gespeichertes Passwort ungültig → löschen und neu fragen
+        sessionStorage.removeItem('vaultMasterPw_' + session.user.id)
+    }
+
+    const { data: verifyEntry } = await supabase
+        .from('passwords')
+        .select('id, value')
+        .eq('user_id', session.user.id)
+        .eq('label', VERIFY_LABEL)
+        .maybeSingle()
+
+    const isSetup = !verifyEntry
+
+    return new Promise((resolve) => {
+        let errorMsg = ''
+
+        function render() {
+            buildMasterModal(isSetup, errorMsg)
+
+            const btn          = document.getElementById('masterPwBtn')
+            const pwInput      = document.getElementById('masterPwInput')
+            const confirmInput = document.getElementById('masterPwConfirm')
+
+            async function handleSubmit() {
+                const pw = pwInput.value
+                if (!pw) { errorMsg = 'Bitte ein Master-Passwort eingeben.'; render(); return }
+
+                if (isSetup) {
+                    const confirm = confirmInput?.value ?? ''
+                    if (pw.length < 8) { errorMsg = 'Das Master-Passwort muss mindestens 8 Zeichen lang sein.'; render(); return }
+                    if (pw !== confirm) { errorMsg = 'Die Passwörter stimmen nicht überein.'; render(); return }
+
+                    btn.disabled    = true
+                    btn.textContent = 'Wird eingerichtet\u2026'
+
+                    try {
+                        const newKey = await deriveKey(pw, session.user.id)
+
+                        // Bestehende Einträge mit altem Key (E-Mail + UserID) migrieren
+                        const { data: allEntries } = await supabase
+                            .from('passwords')
+                            .select('id, value')
+                            .eq('user_id', session.user.id)
+                            .neq('label', VERIFY_LABEL)
+
+                        if (allEntries?.length > 0) {
+                            btn.textContent = 'Bestehende Daten werden migriert\u2026'
+                            const legacyKey = await deriveKey(session.user.email, session.user.id)
+                            for (const entry of allEntries) {
+                                if (!entry.value?.startsWith('ENC:')) continue
+                                const plain = await decryptValue(entry.value, legacyKey)
+                                if (plain === null) continue
+                                const newEnc = await encryptValue(plain, newKey)
+                                await supabase.from('passwords').update({ value: newEnc }).eq('id', entry.id)
+                            }
+                        }
+
+                        // Verify-Eintrag speichern
+                        const verifyEnc = await encryptValue(VERIFY_PLAINTEXT, newKey)
+                        await supabase.from('passwords').insert({
+                            user_id: session.user.id,
+                            label:   VERIFY_LABEL,
+                            value:   verifyEnc,
+                            date:    new Date().toLocaleDateString('de-CH')
+                        })
+
+                        masterKey = newKey
+                        sessionStorage.setItem('vaultMasterPw_' + session.user.id, pw)
+                        document.getElementById('masterModal')?.remove()
+                        resolve(masterKey)
+                    } catch {
+                        errorMsg = 'Fehler beim Einrichten. Bitte versuche es erneut.'
+                        render()
+                    }
+
+                } else {
+                    btn.disabled    = true
+                    btn.textContent = 'Wird geprüft\u2026'
+
+                    try {
+                        const key       = await deriveKey(pw, session.user.id)
+                        const decrypted = await decryptValue(verifyEntry.value, key)
+
+                        if (decrypted !== VERIFY_PLAINTEXT) {
+                            errorMsg = 'Falsches Master-Passwort. Bitte versuche es erneut.'
+                            render(); return
+                        }
+
+                        masterKey = key
+                        sessionStorage.setItem('vaultMasterPw_' + session.user.id, pw)
+                        document.getElementById('masterModal')?.remove()
+                        resolve(masterKey)
+                    } catch {
+                        errorMsg = 'Fehler beim Prüfen. Bitte versuche es erneut.'
+                        render()
+                    }
+                }
+            }
+
+            btn.addEventListener('click', handleSubmit)
+            pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') handleSubmit() })
+            if (confirmInput) confirmInput.addEventListener('keydown', e => { if (e.key === 'Enter') handleSubmit() })
+        }
+
+        render()
+    })
+}
+
+async function ensureUnlocked() {
+    if (masterKey) return masterKey
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) return null
+    return await askMasterPassword(session)
 }
 
 // ===== TRESOR LADEN =====
@@ -96,10 +282,16 @@ async function renderVault() {
         return
     }
 
+    // Master-Passwort abfragen falls noch nicht entsperrt
+    if (!masterKey) {
+        listElement.innerHTML = '<p style="text-align:center; color:rgba(255,255,255,0.4); padding:20px;">Tresor wird entsperrt\u2026</p>'
+        await askMasterPassword(session)
+    }
+
     const searchContainer = document.getElementById('vaultSearchContainer')
     if (searchContainer) searchContainer.style.display = 'block'
 
-    listElement.innerHTML = '<p style="text-align:center; color:rgba(255,255,255,0.4); padding:20px;">Wird geladen…</p>'
+    listElement.innerHTML = '<p style="text-align:center; color:rgba(255,255,255,0.4); padding:20px;">Wird geladen\u2026</p>'
 
     const { data, error } = await supabase
         .from('passwords')
@@ -118,13 +310,12 @@ async function renderVault() {
         return
     }
 
-    // Key-Check-Eintrag herausfiltern (alte Daten)
-    const entries = data.filter(pw => pw.label !== '__vault_key_check__')
+    // Systemeinträge herausfiltern
+    const entries = data.filter(pw => !pw.label?.startsWith('__'))
 
-    const key = await getVaultKey(session.user.email, session.user.id)
     const decryptedEntries = await Promise.all(entries.map(async pw => {
         if (pw.value && pw.value.startsWith('ENC:')) {
-            const dec = await decryptValue(pw.value, key)
+            const dec = await decryptValue(pw.value, masterKey)
             return { ...pw, value: dec ?? '[Entschlüsselungsfehler]' }
         }
         return pw
@@ -256,7 +447,8 @@ window.savePassword = async function(newPasswordValue, labelValue) {
 
     let valueToStore
     try {
-        const key = await getVaultKey(session.user.email, session.user.id)
+        const key = await ensureUnlocked()
+        if (!key) { alert('Tresor ist gesperrt. Bitte Seite neu laden.'); return }
         valueToStore = await encryptValue(newPasswordValue, key)
     } catch {
         alert('Verschl\u00fcsselungsfehler. Passwort konnte nicht gespeichert werden.')
@@ -382,6 +574,9 @@ window.importCSV = async function(input) {
     const { data: { session } } = await supabase.auth.getSession()
     if (!session) { alert('Bitte zuerst einloggen.'); return }
 
+    const key = await ensureUnlocked()
+    if (!key) { alert('Tresor ist gesperrt. Bitte Seite neu laden.'); return }
+
     const text = await file.text()
     const lines = text.split('\n').map(l => l.trim()).filter(l => l)
 
@@ -394,7 +589,6 @@ window.importCSV = async function(input) {
 
     if (dataLines.length === 0) { alert('Keine Einträge in der CSV gefunden.'); return }
 
-    const key = await getVaultKey(session.user.email, session.user.id)
     const today = new Date().toLocaleDateString('de-CH')
 
     let imported = 0
@@ -485,7 +679,13 @@ window.filterVault = function(query) {
 
 document.addEventListener('DOMContentLoaded', () => {
     supabase.auth.onAuthStateChange((event, session) => {
-        cachedVaultKey = null // Key bei Session-Wechsel zurücksetzen
+        if (event === 'SIGNED_OUT' || !session) {
+            // Master-Passwort aus sessionStorage entfernen
+            Object.keys(sessionStorage)
+                .filter(k => k.startsWith('vaultMasterPw_'))
+                .forEach(k => sessionStorage.removeItem(k))
+        }
+        masterKey = null
         renderVault()
     })
 })

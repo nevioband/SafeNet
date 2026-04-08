@@ -416,6 +416,13 @@
             document.getElementById('confirmPassword').value = ''
         })
 
+        // ── Enter-Tasten ───────────────────────────────────────
+        document.getElementById('displayName').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('saveNameBtn').click() })
+        document.getElementById('verifyCode').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('verifyBtn').click() })
+        document.getElementById('newEmail').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('changeEmailBtn').click() })
+        document.getElementById('confirmPassword').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('changePwBtn').click() })
+        document.getElementById('deleteConfirmInput').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('confirmDeleteBtn').click() })
+
         // ── Helper ─────────────────────────────────────────────
         function showMsg(id, text, type) {
             const box = document.getElementById(id)

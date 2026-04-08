@@ -191,7 +191,7 @@
             if (aal?.nextLevel === 'aal2' && aal?.currentLevel !== 'aal2') {
                 // 2FA erforderlich — Code-Eingabe anzeigen
                 document.getElementById('loginCard').style.display = 'none'
-                document.getElementById('mfaCard').style.display = 'block'
+                document.getElementById('mfaCard').style.display = 'flex'
                 btn.textContent = 'Einloggen'
                 btn.disabled = false
             } else {
@@ -201,7 +201,12 @@
 
         // Enter-Taste
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && document.getElementById('forgotModal').style.display !== 'flex') {
+            if (e.key !== 'Enter') return
+            if (document.getElementById('mfaCard').style.display === 'flex') {
+                document.getElementById('mfaBtn').click()
+            } else if (document.getElementById('forgotModal').style.display === 'flex') {
+                document.getElementById('forgotBtn').click()
+            } else {
                 document.getElementById('loginBtn').click()
             }
         })
