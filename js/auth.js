@@ -11,6 +11,17 @@ async function applyNavbarUser() {
         if (!dropdown) return
 
         if (session && session.user) {
+            // 2FA-Bypass verhindern: Wenn 2FA aktiviert aber noch nicht abgeschlossen, abmelden
+            const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+            if (aal?.nextLevel === 'aal2' && aal?.currentLevel !== 'aal2') {
+                await supabase.auth.signOut()
+                const isLoginPage = window.location.pathname.includes('login.html')
+                if (!isLoginPage) {
+                    window.location.href = '/pages/login.html'
+                }
+                return
+            }
+
             const email       = session.user.email
             const displayName = session.user.user_metadata?.display_name
             const initial     = (displayName || email).charAt(0).toUpperCase()
