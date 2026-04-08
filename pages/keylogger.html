@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Keylogger-Demo</title>
+    <title>Keylogger – SafeNet Security</title>
     <link rel="stylesheet" href="../css/navbar.css" />
     <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="../css/infobox.css" />
@@ -93,8 +93,7 @@
     <div class="password-container">
       <h3>Keylogger Demo</h3>
       <p style="text-align: center; color: #a0c4ff; margin-bottom: 24px">
-        Klicke ins Eingabefeld und drücke Tasten - erkenne wie ein Keylogger
-        funktioniert.
+        Klicke ins Eingabefeld und tippe – alles wird aufgezeichnet, genau wie bei einem echten Keylogger.
       </p>
 
       <div class="display-box">
@@ -126,23 +125,57 @@
           background: rgba(10, 18, 35, 0.6);
           border: 1px solid rgba(102, 179, 255, 0.25);
           border-radius: 12px;
-          text-align: center;
+          text-align: left;
           color: #66d9ff;
           font-family: monospace;
           font-size: 1rem;
           margin-top: 16px;
+          word-break: break-all;
+          min-height: 54px;
+          max-height: 140px;
+          overflow-y: auto;
         "
       >
         Noch keine Taste erkannt.
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; padding:0 4px;">
+        <span id="key-count" style="color:rgba(255,255,255,0.5); font-size:0.88rem;"></span>
+        <button id="key-clear" class="main-btn" style="width:auto; padding:8px 18px; font-size:0.9rem; margin-top:0;">
+          Aufzeichnung löschen
+        </button>
       </div>
     </div>
 
     <script>
       const eingabe = document.getElementById("eingabe");
       const ausgabe = document.getElementById("ausgabe");
+      const keyCount = document.getElementById("key-count");
+      const clearBtn = document.getElementById("key-clear");
+
+      const tasteLog = [];
 
       eingabe.addEventListener("keydown", (event) => {
-        ausgabe.textContent = `Gedrückte Taste: ${event.key}`;
+        let anzeige;
+        if (event.key === ' ') anzeige = '[\u2423]';
+        else if (event.key === 'Backspace') anzeige = '[\u2190]';
+        else if (event.key === 'Enter') anzeige = '[Enter]';
+        else if (event.key === 'Tab') { event.preventDefault(); anzeige = '[Tab]'; }
+        else if (event.key.length === 1) anzeige = event.key;
+        else anzeige = '[' + event.key + ']';
+
+        tasteLog.push(anzeige);
+        ausgabe.textContent = tasteLog.join(' ');
+        ausgabe.scrollTop = ausgabe.scrollHeight;
+        keyCount.textContent = tasteLog.length + ' Tasten aufgezeichnet';
+      });
+
+      clearBtn.addEventListener("click", () => {
+        tasteLog.length = 0;
+        ausgabe.textContent = 'Noch keine Taste erkannt.';
+        keyCount.textContent = '';
+        eingabe.value = '';
+        eingabe.focus();
       });
     </script>
 

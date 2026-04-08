@@ -135,7 +135,7 @@
           Sekunden.
         </p>
         <div class="hero-buttons">
-          <a href="pages/generator.html" class="btn-primary"
+          <a href="pages/analysator.html" class="btn-primary"
             >Zur Passwort-Analyse</a
           >
         </div>
@@ -145,30 +145,6 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
       lucide.createIcons();
-    </script>
-
-    <script>
-      const toggle = document.querySelector(".menu-toggle");
-      const navLinks = document.querySelector(".nav-links");
-      const dropdown = document.querySelector(".dropdown");
-      const dropdownLink = document.querySelector(".dropdown-link");
-
-      toggle.addEventListener("click", () => {
-        navLinks.classList.toggle("active");
-
-        if (!navLinks.classList.contains("active")) {
-          dropdown.classList.remove("open");
-        }
-      });
-
-      dropdownLink.addEventListener("click", (e) => {
-        if (window.innerWidth <= 768) {
-          if (!dropdown.classList.contains("open")) {
-            e.preventDefault();
-            dropdown.classList.add("open");
-          }
-        }
-      });
     </script>
 
     <script>

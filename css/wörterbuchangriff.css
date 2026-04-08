@@ -1,1 +1,81 @@
+.demo-desc {
+  text-align: center;
+  color: #a0c4ff;
+  margin-bottom: 24px;
+  font-size: 0.97rem;
+  line-height: 1.6;
+}
+
+.bf-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: rgba(10, 18, 35, 0.6);
+  border: 1px solid rgba(102, 179, 255, 0.18);
+  border-radius: 12px;
+  margin-bottom: 14px;
+  font-size: 0.95rem;
+  color: #e8f3ff;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.bf-info-row code {
+  color: #66d9ff;
+  font-family: monospace;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.bf-progress-wrap {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+#wb-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #3399ff, #66d9ff);
+  border-radius: 999px;
+  transition: width 0.12s linear;
+}
+
+.bf-status {
+  text-align: center;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.7);
+  min-height: 1.4em;
+}
+
+.bf-result {
+  display: none;
+  margin-top: 18px;
+  padding: 16px;
+  background: rgba(10, 18, 35, 0.6);
+  border: 1px solid rgba(102, 179, 255, 0.18);
+  border-radius: 12px;
+  font-size: 0.93rem;
+  line-height: 1.6;
+  color: #e8f3ff;
+}
+
+.bf-result:not(:empty) {
+  display: block;
+}
+
+.bf-danger {
+  border-color: rgba(239, 68, 68, 0.35) !important;
+  background: rgba(239, 68, 68, 0.08) !important;
+  color: #fca5a5 !important;
+}
+
+.bf-safe {
+  border-color: rgba(34, 197, 94, 0.35) !important;
+  background: rgba(34, 197, 94, 0.08) !important;
+  color: #86efac !important;
+}
 
