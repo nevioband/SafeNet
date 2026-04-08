@@ -25,13 +25,6 @@
   letter-spacing: -0.5px;
 }
 
-h1, h2{
-  background: linear-gradient(135deg, #3399ff, #66d9ff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
 .hero p {
   font-size: 20px;
   line-height: 1.7;

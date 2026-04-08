@@ -103,6 +103,29 @@
     transform: translateY(-2px) scale(1.03);
     box-shadow: 0 0 22px rgba(255, 102, 102, 0.35);
 }
+
+/* Tresor button layout overrides */
+.settings.vault-buttons { margin-top: 20px; gap: 10px; }
+.main-btn.vault-action-btn { margin-top: 0; display: flex; align-items: center; justify-content: center; gap: 10px; }
+.main-btn-delete.vault-action-btn { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 0; }
+.vault-import-export { display: flex; gap: 8px; margin-top: 16px; justify-content: center; }
+.vault-icon-btn {
+    padding: 7px 14px;
+    background: transparent;
+    border: 1px solid rgba(59,130,246,0.25);
+    border-radius: 8px;
+    color: #3399ff;
+    font-size: 13px;
+    font-family: Inter, sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: 0.2s;
+}
+.vault-icon-btn:hover { border-color: #3399ff; }
+.vault-icon-btn .material-symbols-outlined { font-size: 16px; }
+
 /* --- RESPONSIVE DESIGN --- */
 
 /* Für Tablets und Handys */

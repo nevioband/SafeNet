@@ -29,12 +29,12 @@
         
         <div id="saved-passwords-list" class="vault-list"></div>
 
-        <div class="settings" style="margin-top: 20px; gap: 10px;">
-            <button class="main-btn" onclick="document.getElementById('manualModal').style.display='flex'" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px;">
+        <div class="settings vault-buttons">
+            <button class="main-btn vault-action-btn" onclick="document.getElementById('manualModal').style.display='flex'">
                 <span class="material-symbols-outlined">lock</span> Passwort manuell speichern
             </button>
 
-            <button class="main-btn-delete" onclick="clearVault()" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 10px;">
+            <button class="main-btn-delete vault-action-btn" onclick="clearVault()">
                 <span class="material-symbols-outlined">delete_sweep</span> Alle löschen
             </button>
 
@@ -42,18 +42,17 @@
             <input type="file" id="csvFileInput" accept=".csv" style="display:none;" onchange="window.importCSV(this)">
 
             <a href="generator.html" style="text-decoration: none; width: 100%; display: block;">
-                <button class="main-btn" style="width: 100%; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <button class="main-btn vault-action-btn" style="margin-top: 10px;">
                     <span class="material-symbols-outlined">add</span> Neues Passwort generieren
                 </button>
             </a>
 
-            <!-- Import / Export als kleine Nebenbuttons -->
-            <div style="display:flex;gap:8px;margin-top:16px;justify-content:center;">
-                <button onclick="document.getElementById('csvFileInput').click()" style="padding:7px 14px;background:transparent;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:#3399ff;font-size:13px;font-family:Inter,sans-serif;cursor:pointer;display:flex;align-items:center;gap:5px;transition:0.2s;" onmouseover="this.style.borderColor='#3399ff'" onmouseout="this.style.borderColor='rgba(59,130,246,0.25)'">
-                    <span class="material-symbols-outlined" style="font-size:16px;">upload_file</span> Importieren
+            <div class="vault-import-export">
+                <button class="vault-icon-btn" onclick="document.getElementById('csvFileInput').click()">
+                    <span class="material-symbols-outlined">upload_file</span> Importieren
                 </button>
-                <button onclick="window.exportCSV()" style="padding:7px 14px;background:transparent;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:#3399ff;font-size:13px;font-family:Inter,sans-serif;cursor:pointer;display:flex;align-items:center;gap:5px;transition:0.2s;" onmouseover="this.style.borderColor='#3399ff'" onmouseout="this.style.borderColor='rgba(59,130,246,0.25)'">
-                    <span class="material-symbols-outlined" style="font-size:16px;">download</span> Exportieren
+                <button class="vault-icon-btn" onclick="window.exportCSV()">
+                    <span class="material-symbols-outlined">download</span> Exportieren
                 </button>
             </div>
         </div>

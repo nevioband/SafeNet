@@ -92,7 +92,3 @@ button {
   color: #ef4444;
 }
 
-/* Override for pages that use this file */
-.info-section {
-    padding: 30px 20px 40px;
-}

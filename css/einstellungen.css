@@ -95,12 +95,6 @@
 }
 .form-input:focus { border-color: #3b82f6; }
 
-/* Messages */
-.msg-box { padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 14px; display: none; }
-.msg-error   { background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.4); color: #fca5a5; }
-.msg-success { background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.4); color: #86efac; }
-.msg-info    { background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.3); color: #93c5fd; }
-
 /* Vault stats */
 .stat-grid {
     display: grid;
@@ -140,7 +134,7 @@
 .code-input {
     width: 100%; padding: 14px; background: #0f172a;
     border: 1px solid rgba(59,130,246,0.25); border-radius: 8px;
-    color: white; font-size: 22px; font-family: monospace;
-    letter-spacing: 6px; text-align: center;
-    box-sizing: border-box; outline: none; margin: 12px 0;
 }
+
+.settings-section-label.label-danger { color: #f87171; }
+.form-group.form-group-last { margin-bottom: 20px; }
