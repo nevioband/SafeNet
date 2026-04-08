@@ -93,15 +93,15 @@
     border: none;
     border-radius: 12px;
     cursor: pointer;
-    transition: 0.25s ease;
-    box-shadow: 0 0 15px rgba(255, 77, 77, 0.2);
+    transition: 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 0 0 16px rgba(255, 77, 77, 0.45), 0 0 32px rgba(255, 0, 0, 0.2);
     margin-top: 12px;
     text-decoration: none;
 }
 
 .main-btn-delete:hover {
     transform: translateY(-2px) scale(1.03);
-    box-shadow: 0 0 22px rgba(255, 102, 102, 0.35);
+    box-shadow: 0 0 26px rgba(255, 77, 77, 0.65), 0 0 48px rgba(255, 0, 0, 0.3);
 }
 
 /* Tresor button layout overrides */

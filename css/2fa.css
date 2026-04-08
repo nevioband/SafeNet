@@ -78,10 +78,22 @@
 .tfa-btn-primary {
     background: linear-gradient(135deg, #3399ff, #66d9ff);
     color: #0f172a;
+    box-shadow: 0 0 16px rgba(51, 153, 255, 0.45), 0 0 32px rgba(102, 217, 255, 0.2);
+    transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+.tfa-btn-primary:hover {
+    box-shadow: 0 0 26px rgba(51, 153, 255, 0.65), 0 0 48px rgba(102, 217, 255, 0.35);
+    transform: translateY(-1px);
 }
 .tfa-btn-danger {
     background: linear-gradient(135deg, #ff4d4d, #ff0000);
     color: white;
+    box-shadow: 0 0 16px rgba(255, 77, 77, 0.45), 0 0 32px rgba(255, 0, 0, 0.2);
+    transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+.tfa-btn-danger:hover {
+    box-shadow: 0 0 26px rgba(255, 77, 77, 0.65), 0 0 48px rgba(255, 0, 0, 0.3);
+    transform: translateY(-1px);
 }
 .tfa-btn-secondary {
     background: transparent;
