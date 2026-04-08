@@ -1,91 +1,169 @@
 <!doctype html>
-<html lang="en">
+<html lang="de">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Über SafeNet Security</title>
+    <title>Über uns – SafeNet Security</title>
     <link rel="stylesheet" href="../css/navbar.css" />
     <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="../css/infobox.css" />
-    <link rel="stylesheet" href="../css/hero.css" />
     <link rel="stylesheet" href="../css/footer.css" />
-    <link rel="stylesheet" href="../css/analyse.css" />
-    <link rel="stylesheet" href="../css/keylogger.css" />
-    <link rel="stylesheet" href="../css/phishing.css" />
-    <link
-      rel="icon"
-      type="image/png"
-      href="../images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png"
-    />
+    <link rel="stylesheet" href="../css/shared.css" />
+    <link rel="icon" type="image/png" href="../images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png" />
     <script type="module" src="../js/auth.js?v=5"></script>
+    <style>
+      .about-hero {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 70px 20px 20px;
+      }
+      .about-hero img {
+        width: 130px;
+        height: auto;
+        margin-bottom: 28px;
+        filter: drop-shadow(0 0 24px rgba(51,153,255,0.4));
+      }
+      .about-hero h1 {
+        font-size: 42px;
+        margin: 0 0 16px;
+      }
+      .about-hero p {
+        font-size: 18px;
+        color: #94a3b8;
+        max-width: 620px;
+        line-height: 1.7;
+        margin: 0;
+      }
+      .about-divider {
+        width: 190px;
+        height: 3px;
+        background: linear-gradient(135deg, #3399ff, #66d9ff);
+        border-radius: 2px;
+        margin: 28px auto 0;
+      }
+      .founder-section {
+        max-width: 720px;
+        margin: 0 auto 60px;
+        padding: 0 20px;
+      }
+      .founder-card {
+        background: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 16px;
+        padding: 40px;
+        display: flex;
+        gap: 36px;
+        align-items: flex-start;
+      }
+      .founder-avatar {
+        flex-shrink: 0;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        object-position: center 40%;
+        border: 2px solid #334155;
+      }
+      .founder-info h2 {
+        font-size: 26px;
+        margin: 0 0 4px;
+      }
+      .founder-role {
+        font-size: 14px;
+        color: #3399ff;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        margin: 0 0 16px;
+        text-transform: uppercase;
+      }
+      .founder-info p {
+        font-size: 16px;
+        color: #94a3b8;
+        line-height: 1.75;
+        margin: 0;
+      }
+      @media (max-width: 768px) {
+        .about-hero h1 { font-size: 30px; }
+        .about-hero p  { font-size: 16px; }
+        .founder-card  { flex-direction: column; gap: 24px; padding: 28px; }
+        .founder-info h2 { font-size: 22px; }
+      }
+    </style>
   </head>
   <body>
     <div id="navbar"></div>
 
-    <h1>Über SafeNet Security</h1>
+    <!-- Hero -->
+    <div class="about-hero">
+      <img src="../images/SafeNet-Security-Logo/Withoutbg/Shield.png" alt="SafeNet Security Logo" />
+      <h1>Über SafeNet Security</h1>
+      <p>Eine interaktive Lernplattform, die IT-Sicherheit einfach, verständlich und praxisnah vermittelt.</p>
+      <div class="about-divider"></div>
+    </div>
+
+    <!-- Mission -->
     <section class="info-section">
       <div class="info-box">
+        <h2>Unsere Mission</h2>
         <p>
-          SafeNet Security ist eine interaktive Web-App, die grundlegende Themen
-          der IT-Sicherheit einfach und verständlich vermittelt. Ziel ist es,
-          Nutzern ein besseres Bewusstsein für digitale Gefahren zu geben und
-          ihnen konkrete Werkzeuge an die Hand zu bieten, um sich im Internet
-          sicherer zu bewegen. Die Anwendung kombiniert Theorie mit Praxis:
-          Neben verständlichen Erklärungen zu Angriffsmethoden wie Phishing oder
-          Brute-Force-Attacken gibt es auch nützliche Tools wie einen
-          Passwort-Generator und einen Passwort-Stärke-Checker. So können Nutzer
-          ihr Wissen direkt anwenden und ihre eigene Sicherheit verbessern. Der
-          Fokus liegt auf einem klaren, modernen Design und einer einfachen
-          Bedienung – sowohl auf dem Desktop als auch auf dem Smartphone.
-          SafeNet Security richtet sich besonders an Einsteiger, die sich ohne
-          komplizierte Fachbegriffe mit IT-Sicherheit auseinandersetzen möchten.
+          SafeNet Security wurde entwickelt, um Menschen ohne Vorkenntnisse einen einfachen Einstieg in die Welt der IT-Sicherheit zu ermöglichen.
+          Digitale Bedrohungen werden immer alltäglicher – doch viele wissen nicht, wie sie sich schützen sollen. <br><br>
+          Wir möchten das ändern - verständlich, ohne Fachjargon und direkt anwendbar.
         </p>
       </div>
     </section>
 
-    <img
-      class="titelimg"
-      src="../images/SafeNet-Security-Logo/Withoutbg/Shield.png"
-      alt="SafeNetSecurityShield"
-    />
+    <!-- Werte -->
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Unsere Grundsätze</h2>
+        <p>
+          <strong style="color:#ffffff;">Privatsphäre zuerst</strong> – Deine Passwörter werden clientseitig verschlüsselt, bevor sie gespeichert werden. Kein Server kennt deine Klartextdaten.<br><br>
+          <strong style="color:#ffffff;">Keine Tracking-Tools</strong> – Wir nutzen keine Werbetrackers, keine Analytics-Dienste von Drittanbietern.<br><br>
+          <strong style="color:#ffffff;">Bildung statt Angst</strong> – Statt mit Panikmache arbeiten wir mit klaren Erklärungen und praktischen Tipps, die wirklich helfen.
+        </p>
+      </div>
+    </section>
+
+    <!-- Gründer -->
+    <section class="founder-section">
+      <div class="founder-card">
+        <img class="founder-avatar" src="/images/nevio/nevio.jpg" alt="Nevio" />
+        <div class="founder-info">
+          <h2>Nevio</h2>
+          <p class="founder-role">Gründer &amp; Entwickler</p>
+          <p>
+            Ich bin mit Informatik aufgewachsen und habe schon früh eine Leidenschaft für IT und Cybersecurity entwickelt.
+            Zurzeit befinde ich mich in der Ausbildung zum ICT-Fachmann und habe SafeNet Security als mein Langzeitprojekt gewählt.<br><br>
+            Mein Ziel ist es, Menschen verständlich über digitale Bedrohungen aufzuklären und zu zeigen, wie man sich wirksam schützen kann – ohne Vorkenntnisse, ohne Fachjargon, einfach erklärt.
+          </p>
+        </div>
+      </div>
+    </section>
 
     <div id="footer"></div>
     <script>
-      fetch("../partials/footer.html")
-        .then((res) => res.text())
-        .then((data) => {
-          document.getElementById("footer").innerHTML = data;
+      fetch("../partials/navbar.html").then(r => r.text()).then(d => {
+        document.getElementById("navbar").innerHTML = d;
+        const toggle = document.querySelector(".menu-toggle");
+        const navLinks = document.querySelector(".nav-links");
+        const dropdown = document.querySelector(".dropdown");
+        const dropdownLink = document.querySelector(".dropdown-link");
+        if (toggle) toggle.addEventListener("click", () => {
+          navLinks.classList.toggle("active");
+          if (!navLinks.classList.contains("active")) dropdown.classList.remove("open");
         });
-    </script>
-
-    <script>
-      fetch("../partials/navbar.html")
-        .then((res) => res.text())
-        .then((data) => {
-          document.getElementById("navbar").innerHTML = data;
-
-          const toggle = document.querySelector(".menu-toggle");
-          const navLinks = document.querySelector(".nav-links");
-          const dropdown = document.querySelector(".dropdown");
-          const dropdownLink = document.querySelector(".dropdown-link");
-
-          toggle.addEventListener("click", () => {
-            navLinks.classList.toggle("active");
-
-            if (!navLinks.classList.contains("active")) {
-              dropdown.classList.remove("open");
-            }
-          });
-
-          dropdownLink.addEventListener("click", (e) => {
-            if (window.innerWidth <= 768) {
-              if (!dropdown.classList.contains("open")) {
-                e.preventDefault();
-                dropdown.classList.add("open");
-              }
-            }
-          });
+        if (dropdownLink) dropdownLink.addEventListener("click", (e) => {
+          if (window.innerWidth <= 768) {
+            if (!dropdown.classList.contains("open")) { e.preventDefault(); dropdown.classList.add("open"); }
+          }
         });
+      });
+      fetch("../partials/footer.html").then(r => r.text()).then(d => {
+        document.getElementById("footer").innerHTML = d;
+      });
     </script>
   </body>
 </html>
