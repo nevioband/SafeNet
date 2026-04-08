@@ -1,0 +1,146 @@
+.settings-wrap {
+    max-width: 620px;
+    margin: 50px auto;
+    padding: 0 20px 80px;
+}
+.settings-page-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 6px;
+    color: #e2e8f0;
+}
+.settings-page-sub {
+    color: #94a3b8;
+    font-size: 14px;
+    margin: 0 0 36px;
+}
+.settings-section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.3px;
+    text-transform: uppercase;
+    color: #3b82f6;
+    margin: 32px 0 10px;
+}
+.s-card {
+    background: #172441;
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 12px;
+}
+.s-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 4px;
+    color: #e2e8f0;
+}
+.s-card-desc {
+    color: #94a3b8;
+    font-size: 13px;
+    margin: 0 0 18px;
+}
+
+/* Avatar / Profile */
+.profile-row {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+}
+.s-avatar {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3399ff, #66d9ff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    font-weight: 700;
+    color: #0f172a;
+    flex-shrink: 0;
+    overflow: hidden;
+    position: relative;
+}
+.s-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0; left: 0;
+    border-radius: 50%;
+}
+.profile-meta .email-lbl { font-size: 12px; color: #64748b; margin-bottom: 2px; }
+.profile-meta .email-val { font-size: 15px; color: #e2e8f0; font-weight: 600; margin-bottom: 12px; word-break: break-all; }
+.profile-meta .name-val { font-size: 19px; font-weight: 800; color: #e2e8f0; margin-bottom: 2px; }
+
+/* Buttons */
+.btn { font-family: Inter, sans-serif; font-weight: 700; border-radius: 8px; cursor: pointer; border: none; transition: opacity 0.15s; }
+.btn:hover { opacity: 0.88; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary   { padding: 11px 22px; font-size: 14px; background: linear-gradient(135deg, #3399ff, #66d9ff); color: #0f172a; }
+.btn-secondary { padding: 11px 22px; font-size: 14px; background: transparent; border: 1px solid rgba(59,130,246,0.3); color: #94a3b8; }
+.btn-danger    { padding: 11px 22px; font-size: 14px; background: linear-gradient(135deg, #ff4d4d, #ff0000); color: #fff; }
+.btn-full { width: 100%; box-sizing: border-box; }
+
+/* Form */
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 13px; color: #94a3b8; margin-bottom: 6px; }
+.form-input {
+    width: 100%; padding: 12px 14px; background: #0f172a;
+    border: 1px solid rgba(59,130,246,0.25); border-radius: 8px;
+    color: white; font-size: 15px; font-family: Inter, sans-serif;
+    box-sizing: border-box; outline: none;
+}
+.form-input:focus { border-color: #3b82f6; }
+
+/* Messages */
+.msg-box { padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 14px; display: none; }
+.msg-error   { background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.4); color: #fca5a5; }
+.msg-success { background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.4); color: #86efac; }
+.msg-info    { background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.3); color: #93c5fd; }
+
+/* Vault stats */
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+    margin-bottom: 4px;
+}
+.stat-tile {
+    background: #0f172a;
+    border: 1px solid rgba(59,130,246,0.18);
+    border-radius: 10px;
+    padding: 16px 12px;
+    text-align: center;
+}
+.stat-tile .stat-num {
+    font-size: 28px;
+    font-weight: 800;
+    color: #60a5fa;
+    line-height: 1;
+    margin-bottom: 5px;
+}
+.stat-tile .stat-num.warn { color: #fb923c; }
+.stat-tile .stat-num.danger { color: #f87171; }
+.stat-tile .stat-lbl {
+    font-size: 12px;
+    color: #64748b;
+}
+
+/* Danger zone */
+.s-card.danger-card {
+    border-color: rgba(239,68,68,0.3);
+}
+
+/* 2FA QR */
+#tfaQrSection { display: none; }
+.qr-img { display: block; margin: 12px auto; border-radius: 10px; background: white; padding: 12px; }
+.code-input {
+    width: 100%; padding: 14px; background: #0f172a;
+    border: 1px solid rgba(59,130,246,0.25); border-radius: 8px;
+    color: white; font-size: 22px; font-family: monospace;
+    letter-spacing: 6px; text-align: center;
+    box-sizing: border-box; outline: none; margin: 12px 0;
+}
