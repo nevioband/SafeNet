@@ -1,3 +1,73 @@
+/* ── Phishing-Checker ─────────────────────────── */
+.ph-checker-wrap {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.ph-input {
+  flex: 1;
+  min-width: 220px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-family: monospace;
+  font-size: 0.95rem;
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.ph-input:focus { border-color: #3399ff; }
+
+#ph-btn {
+  background: linear-gradient(135deg, #3399ff, #66d9ff);
+  color: #0b1220;
+  font-weight: 600;
+  padding: 10px 22px;
+  white-space: nowrap;
+}
+#ph-btn:hover { opacity: 0.88; }
+
+.ph-result {
+  margin-top: 18px;
+  background: #1a2740;
+  border-radius: 10px;
+  padding: 16px 20px;
+  border: 1px solid #334155;
+}
+
+.ph-badge {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 1rem;
+  border-radius: 6px;
+  padding: 6px 14px;
+  margin-bottom: 12px;
+}
+
+.ph-safe       { background: #14532d; color: #86efac; border: 1px solid #22c55e; }
+.ph-warn       { background: #713f12; color: #fde68a; border: 1px solid #f59e0b; }
+.ph-suspicious { background: #7c2d12; color: #fdba74; border: 1px solid #f97316; }
+.ph-danger     { background: #450a0a; color: #fca5a5; border: 1px solid #ef4444; }
+
+.ph-flags {
+  padding-left: 18px;
+  margin: 0 0 10px 0;
+  color: #cbd5e1;
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+
+.ph-tip {
+  margin: 0;
+  font-size: 0.88rem;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+/* ────────────────────────────────────────────── */
 .quiz-container {
   max-width: 800px;
   margin: 50px auto;

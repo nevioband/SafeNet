@@ -101,6 +101,322 @@
       </div>
     </section>
 
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Link oder E-Mail auf Phishing prüfen</h2>
+        <p>Füge eine URL oder E-Mail-Adresse ein. Die Analyse läuft vollständig im Browser – nichts wird an Server übermittelt.</p>
+
+        <div class="ph-checker-wrap">
+          <input id="ph-input" type="text" class="ph-input"
+            placeholder="https://beispiel.com  oder  name@domain.com"
+            maxlength="500" autocomplete="off" spellcheck="false">
+          <button id="ph-btn">Prüfen</button>
+        </div>
+
+        <div id="ph-result" class="ph-result hidden">
+          <div id="ph-badge" class="ph-badge"></div>
+          <ul id="ph-flags" class="ph-flags"></ul>
+          <p id="ph-tip" class="ph-tip"></p>
+        </div>
+      </div>
+    </section>
+
+    <script>
+    (function () {
+      const MARKEN = ['paypal','amazon','google','microsoft','apple','netflix','spotify',
+        'facebook','instagram','twitter','linkedin','dropbox','onedrive','icloud',
+        'ebay','dhl','fedex','ups','postfinance','ubs','raiffeisen','zkb','swisscom',
+        'twint','sbb','migros','coop','galaxus'];
+
+      const URL_VERKUERZER = ['bit.ly','tinyurl.com','t.co','goo.gl','ow.ly','is.gd',
+        'buff.ly','adf.ly','tiny.cc','rb.gy','cutt.ly','shorte.st'];
+
+      const VERDAECHTIGE_TLD = ['.tk','.ml','.ga','.cf','.gq','.xyz','.top','.click',
+        '.work','.loan','.download','.win','.racing','.date','.review','.stream','.zip'];
+
+      function levenshtein(a, b) {
+        if (Math.abs(a.length - b.length) > 3) return 99;
+        const m = a.length, n = b.length;
+        const dp = Array.from({length: m + 1}, (_, i) =>
+          Array.from({length: n + 1}, (_, j) => i === 0 ? j : j === 0 ? i : 0));
+        for (let i = 1; i <= m; i++)
+          for (let j = 1; j <= n; j++)
+            dp[i][j] = a[i-1] === b[j-1]
+              ? dp[i-1][j-1]
+              : 1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]);
+        return dp[m][n];
+      }
+
+      function analysiere(eingabe) {
+        const warnungen = [];
+        let punkte = 0;
+        const text = eingabe.trim();
+        if (!text) return null;
+
+        const istEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(text);
+        let domain = '';
+
+        if (istEmail) {
+          const teile = text.split('@');
+          if (teile.length !== 2) {
+            warnungen.push({ text: 'Ungültiges E-Mail-Format (mehrere @-Zeichen)', punkte: 3 });
+            return { punkte: 3, warnungen, typ: 'email' };
+          }
+          domain = teile[1].toLowerCase();
+
+        } else {
+          if (/^data:/i.test(text)) {
+            warnungen.push({ text: 'Data-URI – kann versteckten Schadinhalt enthalten', punkte: 3 });
+            return { punkte: 3, warnungen, typ: 'url' };
+          }
+
+          const urlStr = /^https?:\/\//i.test(text) ? text : 'https://' + text;
+
+          try {
+            const url = new URL(urlStr);
+            domain = url.hostname.toLowerCase();
+
+            // Prüfen ob Hauptdomain eine bekannte legitime Marke ist → weniger strenge Pfad-Prüfung
+            const urlTeile = domain.split('.');
+            const basisDomainFrüh = urlTeile.slice(-2)[0];
+            const istBekannteMarke = MARKEN.includes(basisDomainFrüh);
+
+            if (url.protocol === 'http:') {
+              warnungen.push({ text: 'Kein HTTPS – Verbindung ist unverschlüsselt', punkte: 1 });
+              punkte += 1;
+            }
+            if (url.username || url.password) {
+              warnungen.push({ text: 'Zugangsdaten in der URL (user:passwort@host) – klassische Verschleierungstechnik', punkte: 3 });
+              punkte += 3;
+            }
+            if (url.port && url.port !== '80' && url.port !== '443') {
+              warnungen.push({ text: 'Ungewöhnlicher Port ' + url.port + ' in der URL', punkte: 1 });
+              punkte += 1;
+            }
+            if (text.length > 250) {
+              warnungen.push({ text: 'Sehr lange URL (' + text.length + ' Zeichen) – Phishing-URLs sind oft länger als nötig', punkte: 1 });
+              punkte += 1;
+            }
+
+            const pfad = (url.pathname + url.search).toLowerCase();
+            const weiterleitungKw = ['redirect=', 'url=http', 'goto=', 'return=http', 'next=http', 'continue=http'];
+            if (weiterleitungKw.some(k => pfad.includes(k))) {
+              warnungen.push({ text: 'Weiterleitungsparameter in der URL – mögliche Umleitung auf Phishing-Seite', punkte: 2 });
+              punkte += 2;
+            }
+
+            // Pfad-Keywords nur für unbekannte Domains prüfen – bekannte Marken (z. B. paypal.com) haben legitim /signin, /account, etc.
+            if (!istBekannteMarke) {
+              const phishingKw = ['login','signin','verify','account','update','confirm','secure',
+                'password','credential','banking','webscr','session','locked','suspended'];
+              const gefunden = phishingKw.filter(k => pfad.includes(k));
+              if (gefunden.length >= 2) {
+                warnungen.push({ text: 'Mehrere verdächtige Schlüsselwörter im URL-Pfad: ' + gefunden.slice(0, 3).join(', '), punkte: 2 });
+                punkte += 2;
+              }
+            }
+          } catch {
+            warnungen.push({ text: 'URL konnte nicht analysiert werden – ungültiges Format', punkte: 1 });
+            punkte += 1;
+            return { punkte, warnungen, typ: 'url' };
+          }
+        }
+
+        // Domain-Checks (für URL und E-Mail)
+        if (domain) {
+          if (/^\d{1,3}(\.\d{1,3}){3}$/.test(domain)) {
+            warnungen.push({ text: 'IP-Adresse statt Domainname – legitime Dienste nutzen immer einen echten Namen', punkte: 3 });
+            punkte += 3;
+          }
+          if (domain.includes('xn--')) {
+            warnungen.push({ text: 'Internationalisierter Domainname (Punycode) – möglicher Homograph-Angriff mit täuschend ähnlichen Zeichen', punkte: 2 });
+            punkte += 2;
+          }
+
+          const tldTreffer = VERDAECHTIGE_TLD.find(t => domain.endsWith(t));
+          if (tldTreffer) {
+            warnungen.push({ text: 'Verdächtige Top-Level-Domain (' + tldTreffer + ') – von Phishern häufig genutzt', punkte: 2 });
+            punkte += 2;
+          }
+
+          if (URL_VERKUERZER.some(s => domain === s)) {
+            warnungen.push({ text: 'URL-Verkürzungsdienst (' + domain + ') – das echte Ziel ist versteckt', punkte: 2 });
+            punkte += 2;
+          }
+
+          const teile = domain.split('.');
+          const registrierbar = teile.slice(-2).join('.');
+          const subdomain = teile.slice(0, -2).join('.').toLowerCase();
+
+          if (teile.length > 4) {
+            warnungen.push({ text: teile.length - 2 + ' Subdomains in der URL – typisches Phishing-Muster', punkte: 1 });
+            punkte += 1;
+          }
+
+          const markeInSub = MARKEN.find(m => subdomain.includes(m) && !registrierbar.includes(m));
+          if (markeInSub) {
+            warnungen.push({ text: 'Markenname "' + markeInSub + '" in der Subdomain, echte Domain ist fremd – klassische Phishing-Technik (z. B. paypal.fake-site.com)', punkte: 3 });
+            punkte += 3;
+          }
+
+          // Subdomain-Teile mit Zeichenersetzung prüfen (z. B. paypa1 → paypal)
+          if (!markeInSub && subdomain) {
+            for (const teil of subdomain.split('.')) {
+              const teilNorm = teil.replace(/0/g,'o').replace(/1/g,'l').replace(/3/g,'e')
+                .replace(/4/g,'a').replace(/5/g,'s').replace(/8/g,'b').replace(/-/g,'');
+              const exakt = MARKEN.find(m => teilNorm === m.replace(/-/g,''));
+              if (exakt) {
+                warnungen.push({ text: 'Subdomain "' + teil + '" imitiert Marke "' + exakt + '" mit Zeichenersetzung (z. B. 1→l, 0→o) – Phishing-Technik', punkte: 3 });
+                punkte += 3;
+                break;
+              }
+              const aehnlich = MARKEN.find(m => {
+                const norm = m.replace(/-/g,'');
+                return teilNorm !== norm && levenshtein(teilNorm, norm) <= 1;
+              });
+              if (aehnlich) {
+                warnungen.push({ text: 'Subdomain "' + teil + '" ähnelt Marke "' + aehnlich + '" stark – mögliche Phishing-Technik', punkte: 3 });
+                punkte += 3;
+                break;
+              }
+            }
+          }
+
+          const domainBasis = registrierbar.split('.')[0]
+            .replace(/0/g,'o').replace(/1/g,'l').replace(/3/g,'e')
+            .replace(/4/g,'a').replace(/5/g,'s').replace(/8/g,'b').replace(/-/g,'');
+
+          const lookalike = MARKEN.find(m => {
+            const norm = m.replace(/-/g, '');
+            return domainBasis !== norm && levenshtein(domainBasis, norm) <= 1;
+          });
+          if (lookalike && !markeInSub) {
+            warnungen.push({ text: 'Domain ähnelt bekannter Marke "' + lookalike + '" stark – mögliche Tippfehler-Domain', punkte: 3 });
+            punkte += 3;
+          }
+
+          // Markenname mit Zeichenersetzung (0→o, 1→l usw.) in der Domain – z. B. micr0soft-login.com
+          if (!markeInSub && !lookalike) {
+            const rawBasis = registrierbar.split('.')[0].toLowerCase().replace(/-/g, '');
+            if (rawBasis !== domainBasis) {
+              // Fall 1: Markenname selbst ist obfuskiert (micr0soft → microsoft)
+              const markeObfuskiert = MARKEN.find(m => domainBasis.includes(m) && !rawBasis.includes(m));
+              if (markeObfuskiert) {
+                warnungen.push({ text: 'Domain enthält Markenname "' + markeObfuskiert + '" mit Zeichenersetzung (z. B. 0→o, 1→l) – klassische Täuschungstechnik', punkte: 3 });
+                punkte += 3;
+              }
+
+              // Fall 2: Markenname steht wörtlich drin, aber andere Teile haben Ersetzungen (microsoft-supp0rt.com)
+              if (!markeObfuskiert) {
+                const markeLiteral = MARKEN.find(m => rawBasis.includes(m) && rawBasis !== m);
+                if (markeLiteral) {
+                  warnungen.push({ text: 'Domain enthält Markenname "' + markeLiteral + '" mit manipulierten Zusatzwörtern (Zeichenersetzung) – klassische Täuschungstechnik', punkte: 3 });
+                  punkte += 3;
+                }
+              }
+            }
+          }
+
+          const hauptdomain = registrierbar.split('.')[0];
+          if ((hauptdomain.match(/-/g) || []).length >= 2) {
+            warnungen.push({ text: 'Viele Bindestriche im Domainnamen – häufiges Muster bei Phishing-Domains', punkte: 1 });
+            punkte += 1;
+          }
+
+          // Hyphen-Teile der Domain einzeln auf Ähnlichkeit mit Markennamen prüfen
+          // (z. B. meicroschoft-support.com → "meicroschoft" ähnelt "microsoft")
+          const schonMarkiert = markeInSub || lookalike;
+          if (!schonMarkiert) {
+            const ALLGEMEIN = new Set(['support','service','help','login','secure','online',
+              'mail','web','portal','account','info','news','shop','store','center','centre',
+              'update','verify','auth','team','group','official','admin']);
+            const hauptteile = hauptdomain.split('-').filter(t => t.length >= 5 && !ALLGEMEIN.has(t));
+
+            for (const teil of hauptteile) {
+              const teilNorm = teil.replace(/0/g,'o').replace(/1/g,'l').replace(/3/g,'e')
+                .replace(/4/g,'a').replace(/5/g,'s').replace(/8/g,'b');
+
+              let gefunden = null;
+              for (const marke of MARKEN) {
+                const norm = marke.replace(/-/g,'');
+                if (teilNorm === norm) break; // exakter Match → anderer Check zuständig
+                const dist = levenshtein(teilNorm, norm);
+                // Proportionale Schwelle: 30 % der längeren Zeichenkette, min. 1
+                const schwelle = Math.max(1, Math.floor(Math.max(teilNorm.length, norm.length) * 0.3));
+                if (dist > 0 && dist <= schwelle) { gefunden = { teil, marke }; break; }
+              }
+              if (gefunden) {
+                warnungen.push({ text: '"' + gefunden.teil + '" ähnelt Markenname "' + gefunden.marke + '" – mögliche Tippfehler-Domain', punkte: 3 });
+                punkte += 3;
+                break;
+              }
+            }
+          }
+        }
+
+        return { punkte, warnungen, typ: istEmail ? 'email' : 'url' };
+      }
+
+      function zeigeErgebnis(ergebnis) {
+        const resultDiv = document.getElementById('ph-result');
+        const badge = document.getElementById('ph-badge');
+        const flagList = document.getElementById('ph-flags');
+        const tip = document.getElementById('ph-tip');
+
+        resultDiv.classList.remove('hidden');
+        while (flagList.firstChild) flagList.removeChild(flagList.firstChild);
+
+        let stufe, klasse, tipp;
+        if (ergebnis.punkte === 0) {
+          stufe = '✓ Keine Warnsignale gefunden';
+          klasse = 'ph-safe';
+          tipp = 'Es wurden keine bekannten Phishing-Merkmale erkannt. Bleib trotzdem wachsam – kein automatischer Check ist zu 100 % zuverlässig.';
+        } else if (ergebnis.punkte <= 2) {
+          stufe = '⚠ Leicht auffällig';
+          klasse = 'ph-warn';
+          tipp = 'Schwache Warnsignale erkannt. Prüfe URL oder Absender manuell, bevor du klickst oder Daten eingibst.';
+        } else if (ergebnis.punkte <= 4) {
+          stufe = '⚠ Verdächtig';
+          klasse = 'ph-suspicious';
+          tipp = 'Typische Phishing-Merkmale erkannt. Sei sehr vorsichtig und gib keine persönlichen Daten ein.';
+        } else {
+          stufe = '✗ Wahrscheinlich Phishing';
+          klasse = 'ph-danger';
+          tipp = 'Starke Phishing-Indikatoren erkannt. Öffne diesen Link nicht und gib keine Daten ein!';
+        }
+
+        badge.textContent = stufe;
+        badge.className = 'ph-badge ' + klasse;
+
+        if (ergebnis.warnungen.length === 0) {
+          const li = document.createElement('li');
+          li.textContent = 'Kein auffälliges Merkmal gefunden.';
+          flagList.appendChild(li);
+        } else {
+          ergebnis.warnungen.forEach(w => {
+            const li = document.createElement('li');
+            li.textContent = w.text;
+            flagList.appendChild(li);
+          });
+        }
+
+        tip.textContent = tipp;
+      }
+
+      function pruefen() {
+        const eingabe = document.getElementById('ph-input').value;
+        if (!eingabe.trim()) return;
+        const ergebnis = analysiere(eingabe);
+        if (ergebnis) zeigeErgebnis(ergebnis);
+      }
+
+      document.getElementById('ph-btn').addEventListener('click', pruefen);
+      document.getElementById('ph-input').addEventListener('keydown', e => {
+        if (e.key === 'Enter') pruefen();
+      });
+    })();
+    </script>
+
       <main class="quiz-container">
       <h1>Phishing erkennen</h1>
       <p class="intro">
