@@ -179,141 +179,114 @@
       });
     </script>
 
-    <div id="footer"></div>
+    <!-- ═══ Demo 2: Angreifer-Perspektive ═══ -->
+    <style>
+      .kl2-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+      @media (max-width: 768px) { .kl2-grid { grid-template-columns: 1fr; } }
+      #kl2-live-dot { display: inline-block; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; transition: opacity 0.15s; }
+    </style>
+
+    <div class="password-container">
+      <h3>Demo 2: Angreifer-Perspektive</h3>
+      <p style="text-align:center;color:#a0c4ff;margin-bottom:24px;">
+        Melde dich auf der &laquo;sicheren&raquo; Login-Seite an – und sieh gleichzeitig, was ein Keylogger im Hintergrund an den Angreifer sendet. Das Passwort erscheint für dich als Punkte, der Angreifer liest jeden Buchstaben im Klartext.
+      </p>
+
+      <div class="kl2-grid">
+
+        <!-- Linke Seite: gefälschte Login-Seite (Nutzer-Perspektive) -->
+        <div>
+          <div style="font-size:0.75rem;color:#64748b;text-align:center;margin-bottom:10px;letter-spacing:1px;text-transform:uppercase;">Deine Sicht</div>
+          <div style="background:#172441;border:1px solid rgba(59,130,246,0.2);border-radius:12px;padding:24px;">
+            <div style="font-size:0.95rem;font-weight:700;color:white;margin-bottom:18px;">🔒 Sicher einloggen</div>
+
+            <label style="font-size:13px;color:#94a3b8;display:block;margin-bottom:5px;">Benutzername</label>
+            <input type="text" id="kl2-user" placeholder="benutzername@email.ch" autocomplete="off"
+              style="width:100%;padding:10px 12px;background:#0f172a;border:1px solid rgba(59,130,246,0.2);border-radius:8px;color:white;font-size:14px;font-family:Inter,sans-serif;box-sizing:border-box;outline:none;margin-bottom:14px;">
+
+            <label style="font-size:13px;color:#94a3b8;display:block;margin-bottom:5px;">Passwort</label>
+            <input type="password" id="kl2-pass" placeholder="••••••••" autocomplete="off"
+              style="width:100%;padding:10px 12px;background:#0f172a;border:1px solid rgba(59,130,246,0.2);border-radius:8px;color:white;font-size:14px;font-family:Inter,sans-serif;box-sizing:border-box;outline:none;margin-bottom:20px;">
+
+            <button style="width:100%;padding:11px;background:linear-gradient(135deg,#3399ff,#66d9ff);color:#0f172a;border:none;border-radius:8px;font-size:14px;font-weight:700;font-family:Inter,sans-serif;cursor:default;">
+              Einloggen
+            </button>
+          </div>
+        </div>
+
+        <!-- Rechte Seite: Angreifer-Panel -->
+        <div>
+          <div style="font-size:0.75rem;color:#ef4444;text-align:center;margin-bottom:10px;letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:7px;">
+            <span id="kl2-live-dot"></span> Angreifer-Panel
+          </div>
+          <div style="background:#130a0a;border:1px solid rgba(239,68,68,0.35);border-radius:12px;padding:16px;min-height:210px;display:flex;flex-direction:column;">
+            <div style="color:#ef4444;font-family:monospace;font-size:0.72rem;margin-bottom:10px;">[KEYLOGGER v2.3 — Verbindung aktiv — Ziel: 192.168.1.42]</div>
+            <div id="kl2-log"
+              style="color:#fca5a5;font-family:monospace;font-size:0.82rem;line-height:1.8;word-break:break-all;flex:1;overflow-y:auto;max-height:160px;white-space:pre-wrap;">Warte auf Eingabe…</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding:0 4px;">
+        <span id="kl2-count" style="color:rgba(255,255,255,0.45);font-size:0.88rem;"></span>
+        <button id="kl2-clear" class="main-btn" style="width:auto;padding:8px 18px;font-size:0.9rem;margin-top:0;">
+          Zurücksetzen
+        </button>
+      </div>
+    </div>
+
     <script>
-      fetch("../partials/footer.html")
-        .then((res) => res.text())
-        .then((data) => {
-          document.getElementById("footer").innerHTML = data;
+      // Demo 2: Angreifer-Perspektive — Keylogger-Simulation
+      (function () {
+        const userInput = document.getElementById('kl2-user');
+        const passInput = document.getElementById('kl2-pass');
+        const log       = document.getElementById('kl2-log');
+        const liveDot   = document.getElementById('kl2-live-dot');
+        const counter   = document.getElementById('kl2-count');
+        const clearBtn2 = document.getElementById('kl2-clear');
+
+        const ereignisse = [];
+
+        function keyAnzeige(taste) {
+          if (taste === ' ')         return '[LEERTASTE]';
+          if (taste === 'Backspace') return '[LÖSCHEN]';
+          if (taste === 'Enter')     return '[ENTER]';
+          if (taste === 'Tab')       return '[TAB]';
+          if (taste.length === 1)    return taste;
+          return null;
+        }
+
+        function eintrag(feld, taste) {
+          const anzeige = keyAnzeige(taste);
+          if (anzeige === null) return;
+
+          const jetzt       = new Date();
+          const zeitstempel = jetzt.toLocaleTimeString('de-CH', { hour12: false });
+          const feldName    = feld === 'user' ? 'Benutzer' : 'Passwort';
+
+          if (ereignisse.length === 0) log.textContent = '';
+          ereignisse.push('[' + zeitstempel + '] ' + feldName + ' \u2192 ' + anzeige);
+          log.textContent = ereignisse.join('\n');
+          log.scrollTop   = log.scrollHeight;
+          counter.textContent = ereignisse.length + ' Ereignisse übermittelt';
+
+          liveDot.style.opacity = '0.15';
+          setTimeout(() => { liveDot.style.opacity = '1'; }, 150);
+        }
+
+        userInput.addEventListener('keydown', e => eintrag('user', e.key));
+        passInput.addEventListener('keydown', e => eintrag('pass', e.key));
+
+        clearBtn2.addEventListener('click', () => {
+          ereignisse.length   = 0;
+          log.textContent     = 'Warte auf Eingabe…';
+          counter.textContent = '';
+          userInput.value     = '';
+          passInput.value     = '';
         });
+      })();
     </script>
-
-    <script>
-      fetch("../partials/navbar.html")
-        .then((res) => res.text())
-        .then((data) => {
-          document.getElementById("navbar").innerHTML = data;
-
-          const toggle = document.querySelector(".menu-toggle");
-          const navLinks = document.querySelector(".nav-links");
-          const dropdown = document.querySelector(".dropdown");
-          const dropdownLink = document.querySelector(".dropdown-link");
-
-          if (toggle) {
-            toggle.addEventListener("click", () => {
-              navLinks.classList.toggle("active");
-              if (!navLinks.classList.contains("active")) {
-                dropdown.classList.remove("open");
-              }
-            });
-          }
-
-          if (dropdownLink) {
-            dropdownLink.addEventListener("click", (e) => {
-              if (window.innerWidth <= 768) {
-                if (!dropdown.classList.contains("open")) {
-                  e.preventDefault();
-                  dropdown.classList.add("open");
-                }
-              }
-            });
-          }
-        });
-    </script>
-
-    <h1>Keylogger - Erklärung</h1>
-
-    <section class="info-section" style="padding: 30px 20px 40px">
-      <div class="info-box">
-        <h2>Was ist ein Keylogger?</h2>
-        <p>
-          Ein Keylogger ist eine Software oder Hardware, die jeden
-          Tastenanschlag aufzeichnet, den du auf deiner Tastatur machst.
-          Keylogger werden von Angreifern verwendet, um Passwörter, E-Mails,
-          Nachrichten und andere vertrauliche Informationen zu stehlen. Es gibt
-          zwei Arten: Software-Keylogger (Programme auf deinem Computer) und
-          Hardware-Keylogger (physische Geräte zwischen Tastatur und Computer).
-        </p>
-      </div>
-    </section>
-
-    <section class="info-section" style="padding: 30px 20px 40px">
-      <div class="info-box">
-        <h2>Wie funktioniert es?</h2>
-        <p>
-          Ein Software-Keylogger wird als versteckte Datei auf deinem Computer
-          installiert. Er läuft im Hintergrund und zeichnet jeden Tastenanschlag
-          auf, einschließlich Passwörter, E-Mails und Chatmeldungen. Der
-          Angreifer sendet die aufgezeichneten Daten an seine Server. Bei
-          Hardware-Keyloggern wird ein kleines Gerät zwischen die Tastatur und
-          den Computer gesteckt, das alle Tastenanschläge aufzeichnet und
-          speichert.
-        </p>
-      </div>
-    </section>
-
-    <section class="info-section" style="padding: 30px 20px 40px">
-      <div class="info-box">
-        <h2>Risiken und Folgen</h2>
-        <p>
-          Mit einem Keylogger können Angreifer: deine Passwörter stehlen und auf
-          alle deine Konten zugreifen, vertrauliche Geschäftsinformationen
-          ausspionieren, deine Online-Banking-Informationen und
-          Kreditkartendaten stiehlen, deine privaten Nachrichten und E-Mails
-          lesen, Erpressung oder Identitätsdiebstahl durchführen.
-        </p>
-      </div>
-    </section>
-
-    <section class="info-section" style="padding: 30px 20px 40px">
-      <div class="info-box">
-        <h2>So schützt du dich</h2>
-        <p>
-          <strong>1. Nutze einen Antivirus:</strong> Halte dein
-          Antivirus-Programm immer aktuell und scanne regelmäßig deinen Computer
-          auf Malware.<br /><br />
-
-          <strong>2. Sichere dein System:</strong> Installiere alle Windows-
-          oder macOS-Updates sofort. Diese beheben oft Sicherheitslücken, die
-          Angreifer ausnutzen.<br /><br />
-
-          <strong>3. Vorsicht bei Downloads:</strong> Lade Programme nur von
-          vertrauenswürdigen Quellen herunter. Keylogger werden oft als legitime
-          Software getarnt.<br /><br />
-
-          <strong>4. Nutze eine virtuelle Tastatur:</strong> Bei der Eingabe
-          sicherer Daten wie Passwörter oder PIN-Nummern kannst du eine
-          On-Screen-Tastatur nutzen, um Keylogger zu umgehen.<br /><br />
-
-          <strong>5. Zwei-Faktor-Authentifizierung:</strong> Selbst wenn dein
-          Passwort gestohlen wird, schützt 2FA dein Konto.
-        </p>
-      </div>
-    </section>
-
-    <section class="info-section" style="padding: 30px 20px 40px">
-      <div class="info-box">
-        <h2>Beispiele von Keylogger-Angriffen</h2>
-        <p>
-          <strong>Beispiel 1 - Software Keylogger:</strong> Du lädst ein
-          vermeintlich kostenloses Spiel herunter. Zusammen mit dem Spiel wird
-          heimlich ein Keylogger installiert. Der Keylogger zeichnet auf, dass
-          du dein Bank-Passwort eingibst, und der Angreifer stiehlt dein
-          Geld.<br /><br />
-
-          <strong>Beispiel 2 - Hardware Keylogger:</strong> Ein Angreifer
-          platziert einen kleinen USB-ähnlichen Keylogger zwischen deine
-          Tastatur und deinen Computer. Der Keylogger zeichnet alle deine
-          Tastenanschläge auf und speichert sie. Mit einem USB-Stick können die
-          Daten extrahiert werden.<br /><br />
-
-          <strong>Beispiel 3 - Virus-Keylogger:</strong> Du erhältst eine E-Mail
-          mit einem verdächtigen Anhang. Du öffnest ihn und ein Virus wird auf
-          deinem Computer installiert, der als Keylogger fungiert. Dieser
-          stiehlt deine Benutzernamen und Passwörter.
-        </p>
-      </div>
-    </section>
 
     <div id="footer"></div>
     <script>
