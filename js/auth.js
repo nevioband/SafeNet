@@ -14,10 +14,14 @@ function setupMobileNavbarEvents() {
     dropdowns.forEach(drop => {
         const link = drop.querySelector('.dropdown-link');
         if (link) {
-            link.addEventListener('click', (e) => {
+            link.addEventListener('click', function(e) {
                 if (window.innerWidth <= 768) {
-                    e.preventDefault();
-                    drop.classList.toggle('open');
+                    // Wenn Dropdown noch nicht offen: Öffnen und Klick verhindern
+                    if (!drop.classList.contains('open')) {
+                        e.preventDefault();
+                        drop.classList.add('open');
+                    }
+                    // Wenn schon offen: Standardverhalten (Seite wird geladen)
                 }
             });
         }
