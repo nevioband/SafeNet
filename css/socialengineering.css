@@ -1,3 +1,8 @@
+/* ── Seitentitel ───────────────────────────────── */
+h1 {
+    text-align: center;
+}
+
 /* ── Szenario-Quiz ─────────────────────────────── */
 .se-nr {
   font-size: 0.85rem;

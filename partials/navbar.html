@@ -31,9 +31,34 @@
   </ul>
 
   <div class="user-menu">
-    <button class="user-btn" aria-label="Konto" onclick="var m=this.closest('.user-menu');if(m.classList.contains('open')){m.classList.remove('open');}else{m.classList.add('open');setTimeout(function(){document.addEventListener('click',function close(){m.classList.remove('open');document.removeEventListener('click',close);});},0);}">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+    <button
+      class="user-btn"
+      aria-label="Konto"
+      onclick="
+        var m = this.closest('.user-menu');
+        if (m.classList.contains('open')) {
+          m.classList.remove('open');
+        } else {
+          m.classList.add('open');
+          setTimeout(function () {
+            document.addEventListener('click', function close() {
+              m.classList.remove('open');
+              document.removeEventListener('click', close);
+            });
+          }, 0);
+        }
+      "
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
       </svg>
     </button>
     <ul class="user-dropdown">
