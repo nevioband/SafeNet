@@ -1,3 +1,28 @@
+// --- Mobile Navbar Dropdown- und Menü-Handling ---
+document.addEventListener('DOMContentLoaded', () => {
+    // Menü-Icon für mobile Ansicht
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    if (menuToggle && navLinks) {
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+    }
+
+    // Dropdown-Menü für mobile Ansicht
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(drop => {
+        const link = drop.querySelector('.dropdown-link');
+        if (link) {
+            link.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768) {
+                    e.preventDefault();
+                    drop.classList.toggle('open');
+                }
+            });
+        }
+    });
+});
 import { supabase } from './supabase.js?v=3'
 
 async function applyNavbarUser() {

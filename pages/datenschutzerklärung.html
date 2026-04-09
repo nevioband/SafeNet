@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Datenschutzerklärung – SafeNet Security</title>
+    <link rel="stylesheet" href="../css/navbar.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/shared.css" />
+    <link rel="stylesheet" href="../css/infobox.css" />
+    <link rel="stylesheet" href="../css/hero.css" />
+    <link rel="stylesheet" href="../css/footer.css" />
+    <link rel="stylesheet" href="../css/generator.css" />
+    <link rel="stylesheet" href="../css/übersns.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      href="../images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png"
+    />
+    <script type="module" src="../js/auth.js?v=5"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <div class="about-hero">
+      <h1>Datenschutzerklärung</h1>
+    </div>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Verantwortung</h2>
+        <p>
+          Verantwortlich für die Datenverarbeitung ist der Betreiber dieser
+          Plattform.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Verarbeitung personenbezogener Daten</h2>
+        <p>
+          Personenbezogene Daten werden
+          nur erhoben, wenn Sie diese freiwillig angeben. Die Daten werden
+          ausschließlich zur Bereitstellung und Verbesserung der Plattform
+          verwendet.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Weitergabe an Dritte</h2>
+        <p>
+          Eine Weitergabe Ihrer Daten an Dritte erfolgt nicht, es sei denn, dies
+          ist gesetzlich vorgeschrieben oder zur Erfüllung des
+          Nutzungsverhältnisses erforderlich.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Datensicherheit</h2>
+        <p>
+          Ihre Daten werden durch technische und organisatorische Maßnahmen vor
+          unbefugtem Zugriff geschützt.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Auskunftsrecht</h2>
+        <p>
+          Sie haben das Recht auf Auskunft über Ihre gespeicherten Daten sowie
+          auf Berichtigung oder Löschung. Kontaktieren Sie uns dazu bitte über
+          die im Impressum angegebenen Kontaktdaten.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Änderungen der Datenschutzerklärung</h2>
+        <p>
+          Wir behalten uns vor, diese Datenschutzerklärung bei Bedarf
+          anzupassen.
+        </p>
+      </div>
+    </section>
+
+    <div id="footer"></div>
+    <script>
+      fetch("../partials/footer.html")
+        .then((res) => res.text())
+        .then((data) => {
+          document.getElementById("footer").innerHTML = data;
+        });
+      fetch("../partials/navbar.html")
+        .then((res) => res.text())
+        .then((data) => {
+          document.getElementById("navbar").innerHTML = data;
+          const toggle = document.querySelector(".menu-toggle");
+          const navLinks = document.querySelector(".nav-links");
+          const dropdownLink = document.querySelector(".dropdown-link");
+          const dropdown = document.querySelector(".dropdown");
+          toggle.addEventListener("click", () => {
+            navLinks.classList.toggle("active");
+          });
+          dropdownLink.addEventListener("click", (e) => {
+            if (window.innerWidth <= 768) {
+              e.preventDefault();
+              dropdown.classList.toggle("open");
+            }
+          });
+        });
+    </script>
+  </body>
+</html>
