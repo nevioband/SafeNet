@@ -71,7 +71,7 @@ async function decryptValue(encString, key) {
     }
 }
 
-// ===== MASTER-PASSWORT MODAL =====
+// ===== MASTER-PASSWORT =====
 
 function buildMasterModal(isSetup, errorMsg) {
     document.getElementById('masterModal')?.remove()
