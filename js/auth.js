@@ -55,17 +55,43 @@ async function applyNavbarUser() {
     }
 }
 
+function setActiveNavLink() {
+    const path = window.location.pathname
+    const links = document.querySelectorAll('.nav-links a')
+    links.forEach(a => a.classList.remove('active'))
+
+    // Exakter Match oder Präfix-Match für Unterseiten
+    let best = null
+    let bestLen = 0
+    links.forEach(a => {
+        const href = new URL(a.href).pathname
+        if (path === href || (href !== '/' && path.startsWith(href))) {
+            if (href.length > bestLen) {
+                best = a
+                bestLen = href.length
+            }
+        }
+    })
+    // Fallback: Startseite aktiv wenn kein Match
+    if (!best && path === '/') {
+        best = document.querySelector('.nav-links a[href="/"]')
+    }
+    if (best) best.classList.add('active')
+}
+
 // Automatisch ausführen sobald die Navbar in den DOM injiziert wird
 const observer = new MutationObserver(() => {
     if (document.querySelector('.user-menu')) {
         observer.disconnect()
         applyNavbarUser()
+        setActiveNavLink()
     }
 })
 observer.observe(document.documentElement, { childList: true, subtree: true })
 
 // Auch direkt versuchen falls Navbar schon da ist
 applyNavbarUser()
+setActiveNavLink()
 
 // Für rückwärts-kompatibilität (alte Seiten die updateNavbarUser() aufrufen)
 window.updateNavbarUser = applyNavbarUser
