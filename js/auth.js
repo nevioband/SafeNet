@@ -1,32 +1,5 @@
 // --- Mobile Navbar Dropdown- und Menü-Handling ---
-function setupMobileNavbarEvents() {
-    // Menü-Icon für mobile Ansicht
-    const menuToggle = document.querySelector('.menu-toggle');
-    const navLinks = document.querySelector('.nav-links');
-    if (menuToggle && navLinks) {
-        menuToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
-    }
-
-    // Dropdown-Menü für mobile Ansicht
-    const dropdowns = document.querySelectorAll('.dropdown');
-    dropdowns.forEach(drop => {
-        const link = drop.querySelector('.dropdown-link');
-        if (link) {
-            link.addEventListener('click', function(e) {
-                if (window.innerWidth <= 768) {
-                    // Wenn Dropdown noch nicht offen: Öffnen und Klick verhindern
-                    if (!drop.classList.contains('open')) {
-                        e.preventDefault();
-                        drop.classList.add('open');
-                    }
-                    // Wenn schon offen: Standardverhalten (Seite wird geladen)
-                }
-            });
-        }
-    });
-}
+// (wird wieder im jeweiligen Seiten-Script nach dem Laden der Navbar gesetzt)
 import { supabase } from './supabase.js?v=3'
 
 async function applyNavbarUser() {

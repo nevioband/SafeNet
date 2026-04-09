@@ -94,6 +94,27 @@
         .then((r) => r.text())
         .then((d) => {
           document.getElementById("navbar").innerHTML = d;
+
+          const toggle = document.querySelector(".menu-toggle");
+          const navLinks = document.querySelector(".nav-links");
+          const dropdown = document.querySelector(".dropdown");
+          const dropdownLink = document.querySelector(".dropdown-link");
+
+          if (toggle)
+            toggle.addEventListener("click", () => {
+              navLinks.classList.toggle("active");
+              if (!navLinks.classList.contains("active"))
+                dropdown.classList.remove("open");
+            });
+          if (dropdownLink)
+            dropdownLink.addEventListener("click", (e) => {
+              if (window.innerWidth <= 768) {
+                if (!dropdown.classList.contains("open")) {
+                  e.preventDefault();
+                  dropdown.classList.add("open");
+                }
+              }
+            });
         });
       fetch("../partials/footer.html")
         .then((r) => r.text())
