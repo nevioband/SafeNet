@@ -1,5 +1,5 @@
 // --- Mobile Navbar Dropdown- und Menü-Handling ---
-document.addEventListener('DOMContentLoaded', () => {
+function setupMobileNavbarEvents() {
     // Menü-Icon für mobile Ansicht
     const menuToggle = document.querySelector('.menu-toggle');
     const navLinks = document.querySelector('.nav-links');
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
-});
+}
 import { supabase } from './supabase.js?v=3'
 
 async function applyNavbarUser() {
@@ -110,6 +110,7 @@ const observer = new MutationObserver(() => {
         observer.disconnect()
         applyNavbarUser()
         setActiveNavLink()
+        setupMobileNavbarEvents()
     }
 })
 observer.observe(document.documentElement, { childList: true, subtree: true })
@@ -117,6 +118,7 @@ observer.observe(document.documentElement, { childList: true, subtree: true })
 // Auch direkt versuchen falls Navbar schon da ist
 applyNavbarUser()
 setActiveNavLink()
+setupMobileNavbarEvents()
 
 // Für rückwärts-kompatibilität (alte Seiten die updateNavbarUser() aufrufen)
 window.updateNavbarUser = applyNavbarUser

@@ -149,30 +149,6 @@
         .then((res) => res.text())
         .then((data) => {
           document.getElementById("navbar").innerHTML = data;
-
-          const toggle = document.querySelector(".menu-toggle");
-          const navLinks = document.querySelector(".nav-links");
-          const dropdown = document.querySelector(".dropdown");
-          const dropdownLink = document.querySelector(".dropdown-link");
-
-          toggle.addEventListener("click", () => {
-            navLinks.classList.toggle("active");
-
-            if (!navLinks.classList.contains("active")) {
-              dropdown.classList.remove("open");
-            }
-          });
-
-          dropdownLink.addEventListener("click", (e) => {
-            if (window.innerWidth <= 768) {
-              const isOpen = dropdown.classList.contains("open");
-
-              if (!isOpen) {
-                e.preventDefault();
-                dropdown.classList.add("open");
-              }
-            }
-          });
         });
     </script>
     <div id="footer"></div>
