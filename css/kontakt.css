@@ -76,7 +76,7 @@ body {
 }
 @media (max-width: 768px) {
   .kontakt-section {
-    padding: 22px 8px 18px 8px;
+    padding: 22px 18px 18px 18px;
     max-width: 98vw;
   }
   .kontakt-main {
