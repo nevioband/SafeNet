@@ -1,31 +1,20 @@
-    <script>
-      fetch("../partials/navbar.html")
-        .then((res) => res.text())
-        .then((data) => {
-          document.getElementById("navbar").innerHTML = data;
-
-          const toggle = document.querySelector(".menu-toggle");
-          const navLinks = document.querySelector(".nav-links");
-          const dropdown = document.querySelector(".dropdown");
-          const dropdownLink = document.querySelector(".dropdown-link");
-
-          toggle.addEventListener("click", () => {
-            navLinks.classList.toggle("active");
-            if (!navLinks.classList.contains("active")) {
-              dropdown.classList.remove("open");
-            }
-          });
-
-          dropdownLink.addEventListener("click", (e) => {
-            if (window.innerWidth <= 768) {
-              if (!dropdown.classList.contains("open")) {
-                e.preventDefault();
-                dropdown.classList.add("open");
-              }
-            }
-          });
-        });
-    </script>
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Angriffsmethoden – SafeNet Security</title>
+      <link rel="stylesheet" href="../css/navbar.css">
+      <link rel="stylesheet" href="../css/angriff.css">
+      <link rel="stylesheet" href="../css/style.css">
+      <link rel="stylesheet" href="../css/shared.css">
+      <link rel="stylesheet" href="../css/hero.css">
+      <link rel="stylesheet" href="../css/infobox.css">
+      <link rel="stylesheet" href="../css/footer.css">
+    </head>
+    <body>
+    <div id="navbar"></div>
+     
 
     <section class="info-section">
       <div class="info-box">
@@ -495,16 +484,7 @@
     })();
     </script>
 
-    <div id="footer"></div>
-    <script>
-      fetch("../partials/footer.html")
-        .then((res) => res.text())
-        .then((data) => {
-          document.getElementById("footer").innerHTML = data;
-        });
-    </script>
-
-    <script>
+        <script>
       fetch("../partials/navbar.html")
         .then((res) => res.text())
         .then((data) => {
@@ -533,5 +513,14 @@
           });
         });
     </script>
-  </body>
-</html>
+
+    <div id="footer"></div>
+    <script>
+      fetch("../partials/footer.html")
+        .then((res) => res.text())
+        .then((data) => {
+          document.getElementById("footer").innerHTML = data;
+        });
+    </script>
+    </body>
+    </html>
