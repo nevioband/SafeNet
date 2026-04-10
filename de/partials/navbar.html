@@ -1,0 +1,86 @@
+<nav class="navbar">
+  <div class="logo">
+    <a href="/">
+      <img
+        src="/images/SafeNet-Security-Logo/Withoutbg/ShieldWhiteName.png"
+        alt="SafeNet Security Logo"
+      />
+    </a>
+  </div>
+
+  <button class="menu-toggle" aria-label="Menü öffnen">☰</button>
+
+  <ul class="nav-links">
+    <li><a href="/de/index.html">Startseite</a></li>
+    <li><a href="/de/pages/generator.html">Passwort-Generator</a></li>
+    <li><a href="/de/pages/analysator.html">Passwort-Analyse</a></li>
+    <li><a href="/de/pages/tresor.html">Tresor</a></li>
+
+    <li class="dropdown">
+      <a href="/de/pages/angriff.html" class="dropdown-link">Angriffsmethoden</a>
+      <ul class="dropdown-menu">
+        <li><a href="/de/pages/angriff.html">Allgemein</a></li>
+        <li><a href="/de/pages/phishing.html">Phishing</a></li>
+        <li><a href="/de/pages/bruteforce.html">Bruteforce</a></li>
+        <li><a href="/de/pages/socialengineering.html">Social Engineering</a></li>
+        <li><a href="/de/pages/keylogger.html">Keylogger</a></li>
+        <li><a href="/de/pages/wörterbuchangriff.html">Wörterbuchangriff</a></li>
+      </ul>
+    </li>
+    <li class="dropdown">
+      <a href="/de/pages/übersns.html" class="dropdown-link">Über SafeNet Security</a>
+      <ul class="dropdown-menu">
+        <li><a href="/de/pages/übersns.html">Allgemein</a></li>
+        <li><a href="/de/pages/haftungsausschluss.html">Haftungsausschluss</a></li>
+        <li><a href="/de/pages/datenschutzerklärung.html">Datenschutzerklärung</a></li>
+        <li><a href="/de/pages/impressum.html">Impressum</a></li>
+        <li><a href="/de/pages/kontakt.html">Kontakt</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="language-switcher" style="margin-right: 18px;">
+      <a href="/index.html" title="Deutsch">
+        <img src="/images/Germany.svg" alt="Deutsch" style="height:20px; margin-right: 3px;">
+      </a>
+      <a href="/en/index.html" title="English">
+        <img src="/images/USA.webp" alt="English" style="height:20px;">
+      </a>
+  </div>
+  <div class="user-menu">
+    <button
+      class="user-btn"
+      aria-label="Konto"
+      onclick="
+        var m = this.closest('.user-menu');
+        if (m.classList.contains('open')) {
+          m.classList.remove('open');
+        } else {
+          m.classList.add('open');
+          setTimeout(function () {
+            document.addEventListener('click', function close() {
+              m.classList.remove('open');
+              document.removeEventListener('click', close);
+            });
+          }, 0);
+        }
+      "
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
+      </svg>
+    </button>
+    <ul class="user-dropdown">
+      <li><a href="/pages/login.html">Anmelden</a></li>
+      <li><a href="/pages/register.html">Registrieren</a></li>
+    </ul>
+  </div>
+</nav>
