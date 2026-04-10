@@ -13,7 +13,7 @@
     <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png">
     <link rel="stylesheet" href="/css/generator.css" />
     <link rel="stylesheet" href="/css/wörterbuchangriff.css" />
-    <script type="module" src="/js/auth.js?v=5"></script>
+    <script type="module" src="../js/auth.js?v=5"></script>
 </head>
 <body>
 <div id="navbar"></div>
@@ -196,7 +196,7 @@
             resultEl.innerHTML =
               '<strong>Gefunden an Position ' + (foundIdx + 1) + ' von ' + total + '!</strong> ' +
               'Dieses Passwort steht in jeder Angriffsliste. ' +
-              'Ändere es sofort mit dem <a href="generator.html" style="color:#66d9ff">Passwort-Generator</a>.';
+              'Ändere es sofort mit dem <a href="/de/pages/generator.html" style="color:#66d9ff">Passwort-Generator</a>.';
           } else if (i >= total) {
             running = false;
             document.getElementById('wb-start').disabled = false;

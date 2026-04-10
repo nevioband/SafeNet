@@ -1,4 +1,4 @@
-import { supabase } from "./supabase.js?v=8";
+import { supabase } from "./supabase.js";
 
 let vaultData = [];
 let masterKey = null;
@@ -612,6 +612,7 @@ window.saveManual = async function () {
 
 // Vom Generator zum Tresor übertragen
 window.transferToVault = async function () {
+  alert('transferToVault aufgerufen');
   const outputField = document.getElementById("password-output");
   const labelField = document.getElementById("password-label");
   const currentPassword = outputField ? outputField.value : "";

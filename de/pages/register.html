@@ -179,7 +179,7 @@
         })
 
         // Navbar & Footer laden
-        fetch('../partials/navbar.html').then(r => r.text()).then(d => {
+        fetch('/partials/navbar.html').then(r => r.text()).then(d => {
             document.getElementById('navbar').innerHTML = d
             const toggle = document.querySelector('.menu-toggle')
             const navLinks = document.querySelector('.nav-links')
@@ -195,7 +195,7 @@
                 }
             })
         })
-        fetch('../partials/footer.html').then(r => r.text()).then(d => { document.getElementById('footer').innerHTML = d })
+        fetch('/partials/footer.html').then(r => r.text()).then(d => { document.getElementById('footer').innerHTML = d })
     </script>
 </body>
 </html>

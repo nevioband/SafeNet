@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="/css/shared.css">
     <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png">
     <link rel="stylesheet" href="/css/einstellungen.css">
-    <script type="module" src="/js/auth.js?v=5"></script>
+    <script type="module" src="../js/auth.js?v=5"></script>
 </head>
 <body>
     <div id="navbar"></div>
@@ -160,26 +160,45 @@
     </script>
 
     <script type="module">
-        import { supabase } from '/js/supabase.js?v=8'
 
+        import { supabase } from '../js/supabase.js?v=8'
         let tfaEnrolledFactorId = null
-
-        // ── Auth check ─────────────────────────────────────────
-        const { data: { session } } = await supabase.auth.getSession()
-        if (!session) { window.location.href = '/de/login.html'; }
-
-        const userId = session.user.id
-        const email  = session.user.email
-        const initial = email.charAt(0).toUpperCase()
-
-        const displayName = session.user.user_metadata?.display_name || ''
-        document.getElementById('profileEmail').textContent = email
-        document.getElementById('avatarInitial').textContent = displayName ? displayName.charAt(0).toUpperCase() : initial
-        document.getElementById('displayName').value = displayName
-        if (displayName) {
-            const el = document.getElementById('profileDisplayName')
-            el.textContent = displayName
-            el.style.display = 'block'
+        // Debug: Start Auth-Check
+        console.log('[Einstellungen] Starte Auth-Check...')
+        let session = null
+        let userId = null
+        let email = null
+        let initial = null
+        let displayName = ''
+        try {
+            const { data, error } = await supabase.auth.getSession()
+            session = data.session
+            if (error) {
+                console.error('[Einstellungen] Fehler beim Laden der Session:', error)
+                alert('Fehler beim Laden der Session: ' + error.message)
+            }
+            console.log('[Einstellungen] Session:', session)
+            if (!session) {
+                alert('Keine gültige Session gefunden. Weiterleitung zur Login-Seite.')
+                window.location.href = '/de/login.html';
+                return;
+            }
+            userId = session.user.id
+            email  = session.user.email
+            initial = email.charAt(0).toUpperCase()
+            displayName = session.user.user_metadata?.display_name || ''
+            document.getElementById('profileEmail').textContent = email
+            document.getElementById('avatarInitial').textContent = displayName ? displayName.charAt(0).toUpperCase() : initial
+            document.getElementById('displayName').value = displayName
+            if (displayName) {
+                const el = document.getElementById('profileDisplayName')
+                el.textContent = displayName
+                el.style.display = 'block'
+            }
+            // ...restlicher Code bleibt unverändert...
+        } catch (e) {
+            console.error('[Einstellungen] Unerwarteter Fehler im Auth-Check:', e)
+            alert('Fehler beim Laden der Einstellungen: ' + e.message)
         }
 
         // ── Avatar: load current ───────────────────────────────

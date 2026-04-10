@@ -1,6 +1,6 @@
 // --- Mobile Navbar Dropdown- und Menü-Handling ---
 // (wird wieder im jeweiligen Seiten-Script nach dem Laden der Navbar gesetzt)
-import { supabase } from './supabase.js?v=3'
+import { supabase } from './supabase.js'
 
 async function applyNavbarUser() {
     const userMenu = document.querySelector('.user-menu')
@@ -14,8 +14,10 @@ async function applyNavbarUser() {
 
         if (session && session.user) {
             // 2FA-Bypass verhindern: Wenn 2FA aktiviert aber noch nicht abgeschlossen, abmelden
+            // Ausnahme: Einstellungen-Seite, damit User 2FA aktivieren kann
             const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
-            if (aal?.nextLevel === 'aal2' && aal?.currentLevel !== 'aal2') {
+            const isEinstellungen = window.location.pathname.includes('/de/pages/einstellungen.html') || window.location.pathname.includes('/en/pages/einstellungen.html')
+            if (aal?.nextLevel === 'aal2' && aal?.currentLevel !== 'aal2' && !isEinstellungen) {
                 await supabase.auth.signOut()
                 const isLoginPage = window.location.pathname.includes('login.html')
                 if (!isLoginPage) {
@@ -29,10 +31,10 @@ async function applyNavbarUser() {
             const initial     = (displayName || email).charAt(0).toUpperCase()
             const shownName   = displayName || email
 
-            // Dropdown: Anzeigename oder E-Mail + Einstellungen-Link
+            // Dropdown: Anzeigename oder E-Mail + Einstellungen-Link (korrekter Pfad für Deutsch)
             dropdown.innerHTML = `
                 <li class="user-dropdown-name">${shownName}</li>
-                <li><a href="/pages/einstellungen.html">Einstellungen</a></li>
+                <li><a href="/de/pages/einstellungen.html">Einstellungen</a></li>
                 <li><a href="#" id="logoutBtn">Abmelden</a></li>
             `
             dropdown.querySelector('#logoutBtn').addEventListener('click', async (e) => {

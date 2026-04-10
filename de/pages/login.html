@@ -128,7 +128,7 @@
     </main>
 
     <script type="module">
-        import { supabase } from '../js/supabase.js'
+        import { supabase } from "../../js/supabase.js";
 
         function supabaseError(msg) {
             if (!msg) return 'Ein unbekannter Fehler ist aufgetreten.'
@@ -196,7 +196,7 @@
                 btn.textContent = 'Einloggen'
                 btn.disabled = false
             } else {
-                window.location.href = '/'
+                window.location.href = '/de/index.html'
             }
         })
 
@@ -306,11 +306,11 @@
                 return
             }
 
-            window.location.href = '/'
+            window.location.href = '/de/index.html'
         })
 
         // Navbar & Footer laden
-        fetch('../partials/navbar.html').then(r => r.text()).then(d => {
+        fetch('../../partials/navbar.html').then(r => r.text()).then(d => {
             document.getElementById('navbar').innerHTML = d
             const toggle = document.querySelector('.menu-toggle')
             const navLinks = document.querySelector('.nav-links')
@@ -326,7 +326,7 @@
                 }
             })
         })
-        fetch('../partials/footer.html').then(r => r.text()).then(d => { document.getElementById('footer').innerHTML = d })
+        fetch('../../partials/footer.html').then(r => r.text()).then(d => { document.getElementById('footer').innerHTML = d })
     </script>
 </body>
 </html>

@@ -13,7 +13,8 @@
     <link rel="stylesheet" href="/css/generator.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png">
-    <script type="module" src="/js/auth.js?v=5"></script>
+    <script type="module" src="../../js/auth.js?v=5"></script>
+    <script type="module" src="../../js/tresor.js?v=9"></script>
   </head>
   <body>
     <div id="navbar"></div>
@@ -56,7 +57,7 @@
             <label for="password-label">Name für das Passwort:</label>
             <div class="input-group-row">
                 <input type="text" id="password-label" placeholder="z.B. Instagram, Google, Bank">
-                <button class="main-btn" onclick="transferToVault()" style="width: auto; margin-top: 0; white-space: nowrap; display: flex; align-items: center; gap: 5px; padding: 0 15px;">
+                <button class="main-btn" id="vault-save-btn" style="width: auto; margin-top: 0; white-space: nowrap; display: flex; align-items: center; gap: 5px; padding: 0 15px;">
                     <span class="material-symbols-outlined" style="font-size: 20px;">shield</span> Sichern
                 </button>
             </div>
@@ -167,6 +168,9 @@
           });
       });
     </script>
-    <script type="module" src="../js/tresor.js?v=9"></script>
+    <script type="module">
+      import '../../js/tresor.js?v=9';
+      document.getElementById('vault-save-btn').addEventListener('click', window.transferToVault);
+    </script>
   </body>
 </html>

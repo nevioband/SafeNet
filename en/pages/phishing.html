@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Phishing – SafeNet Security</title>
+    <link rel="stylesheet" href="../../css/navbar.css" />
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/shared.css" />
+    <link rel="stylesheet" href="../../css/infobox.css" />
+    <link rel="stylesheet" href="../../css/hero.css" />
+    <link rel="stylesheet" href="../../css/footer.css" />
+    <link rel="stylesheet" href="../../css/phishing.css" />
+    <link rel="icon" type="image/png" href="../../images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png">
+    <script type="module" src="../../js/auth.js"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+    <main class="quiz-container">
+      <h1>Phishing</h1>
+      <section class="info-section">
+        <div class="info-box">
+          <h2>What is Phishing?</h2>
+          <p>
+            Phishing is a cyberattack technique where attackers create fraudulent emails, messages, or fake websites that mimic legitimate organizations. The goal is to trick people into revealing confidential information such as passwords, credit card numbers, or bank details.
+          </p>
+        </div>
+      </section>
+      <section class="info-section">
+        <div class="info-box">
+          <h2>How does it work?</h2>
+          <p>
+            The attacker sends a seemingly legitimate email or message with an urgent reason. The message contains a link to a fake website that looks very similar to the real one. The victim is asked to log in or enter data. If the victim enters their information, it can be stolen by the attacker.
+          </p>
+        </div>
+      </section>
+      <section class="info-section">
+        <div class="info-box">
+          <h2>Risks and Consequences</h2>
+          <p>
+            If you fall for a phishing attack, attackers can: take over your accounts and steal all your data, withdraw money from your bank or credit card accounts, misuse your identity, install malware or ransomware on your computer, or use your contacts for further attacks.
+          </p>
+        </div>
+      </section>
+      <section class="info-section">
+        <div class="info-box">
+          <h2>How to protect yourself</h2>
+          <p>
+            <strong>1. Check the sender's address:</strong> Look closely at the sender's email address. Scammers often use addresses that look very similar to the real ones.<br><br>
+            <strong>2. Check links before clicking:</strong> Hover over links to see the real URL. Even if the link text says "www.amazon.com", the real URL can be completely different.<br><br>
+            <strong>3. Be skeptical of urgent requests:</strong> Scammers often create pressure with urgent requests. Real banks or companies will never ask for passwords or PINs via email.<br><br>
+            <strong>4. Check for spelling mistakes:</strong> Many phishing emails contain grammar or spelling mistakes. Real companies usually check their emails for errors.<br><br>
+            <strong>5. Use two-factor authentication:</strong> Enable 2FA on your accounts. Even if attackers have your password, they cannot get in without the second factor.
+          </p>
+        </div>
+      </section>
+      <h2>Recognize Phishing</h2>
+      <p class="intro">
+        Decide whether the following email is real or a phishing attempt.
+      </p>
+      <section class="mail-box">
+        <div class="mail-header">
+          <p><strong>From:</strong> <span id="mailSender"></span></p>
+          <p><strong>Subject:</strong> <span id="mailSubject"></span></p>
+        </div>
+        <div class="mail-body" id="mailBody"></div>
+      </section>
+      <div class="button-group">
+        <button id="realBtn">Real</button>
+        <button id="phishingBtn">Phishing</button>
+      </div>
+      <section class="result-box hidden" id="resultBox">
+        <h2 id="resultTitle"></h2>
+        <p id="resultExplanation"></p>
+        <div id="warningSignsBox">
+          <h3>Warning signs:</h3>
+          <ul id="warningSigns"></ul>
+        </div>
+        <button id="nextBtn">Next email</button>
+      </section>
+    </main>
+    <div id="footer"></div>
+    <script src="../../js/phishing-en.js"></script>
+    <script>
+      fetch("../partials/navbar.html").then(res => res.text()).then(data => {
+        document.getElementById("navbar").innerHTML = data;
+      });
+      fetch("../partials/footer.html").then(res => res.text()).then(data => {
+        document.getElementById("footer").innerHTML = data;
+      });
+    </script>
+  </body>
+</html>

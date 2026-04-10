@@ -2,8 +2,11 @@
 // Validierung und Speicherung in Supabase (Tabelle: kontaktanfragen)
 import { supabase } from './supabase.js';
 
+
 const formular = document.getElementById('kontakt-form');
 const feedback = document.getElementById('kontakt-feedback');
+
+
 
 if (formular) {
   formular.addEventListener('submit', async (e) => {
