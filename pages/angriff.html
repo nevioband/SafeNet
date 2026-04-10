@@ -1,20 +1,35 @@
-    <!DOCTYPE html>
-    <html lang="de">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Angriffsmethoden – SafeNet Security</title>
-      <link rel="stylesheet" href="../css/navbar.css">
-      <link rel="stylesheet" href="../css/angriff.css">
-      <link rel="stylesheet" href="../css/style.css">
-      <link rel="stylesheet" href="../css/shared.css">
-      <link rel="stylesheet" href="../css/hero.css">
-      <link rel="stylesheet" href="../css/infobox.css">
-      <link rel="stylesheet" href="../css/footer.css">
-    </head>
-    <body>
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Angriffsmethoden – SafeNet Security</title>
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/angriff.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/shared.css">
+    <link rel="stylesheet" href="../css/hero.css">
+    <link rel="stylesheet" href="../css/infobox.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/socialengineering.css">
+
+    
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      href="../images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png"
+    />
+    <script type="module" src="../js/auth.js?v=5"></script>
+  </head>
+  <body>
     <div id="navbar"></div>
-     
 
     <section class="info-section">
       <div class="info-box">
@@ -43,7 +58,8 @@
           diesen extra Schutz auf E-Mail, Banking, Social Media. Selbst wenn
           dein Passwort gehackt wird, bleibt dein Konto sicher.<br /><br />
 
-          <strong>3. Passwort-Manager:</strong> Nutze Dienste wie diese Webseite. Sie speichert sichere Passwörter und erkennt auch
+          <strong>3. Passwort-Manager:</strong> Nutze Dienste wie diese
+          Webseite. Sie speichert sichere Passwörter und erkennt auch
           Phishing!<br /><br />
 
           <strong>4. Aktuelle Software:</strong> Halte dein Betriebssystem,
@@ -372,7 +388,9 @@
     <section class="info-section">
       <div class="info-box">
         <h2>Angriffsmethoden erkennen – Quiz</h2>
-        <p style="color:#cbd5e1; margin-bottom:20px;">Welche Angriffsmethode wird in jedem Szenario beschrieben?</p>
+        <p style="color: #cbd5e1; margin-bottom: 20px">
+          Welche Angriffsmethode wird in jedem Szenario beschrieben?
+        </p>
 
         <div id="aq-quiz">
           <div id="aq-nr" class="se-nr"></div>
@@ -383,108 +401,168 @@
         </div>
         <div id="aq-ende" class="se-ende se-hidden">
           <div id="aq-score"></div>
-          <button id="aq-neustart" class="se-btn" style="margin-top:16px;">Nochmal starten</button>
+          <button id="aq-neustart" class="se-btn" style="margin-top: 16px">
+            Nochmal starten
+          </button>
         </div>
       </div>
     </section>
 
     <script>
-    (function () {
-      const FRAGEN = [
-        {
-          text: 'Ein Angreifer hat sich offline Zugriff auf eine verschlüsselte Passwortdatenbank verschafft. Mit 5 leistungsstarken GPUs probiert er systematisch jede erdenkliche Zeichenkombination – auch völlig zufällige wie "Kj#2!xZq". Welche Methode nutzt er?',
-          optionen: ['Phishing', 'Bruteforce-Angriff', 'Wörterbuchangriff', 'Keylogger', 'Social Engineering',],
-          richtig: 1,
-          erklaerung: 'Bruteforce: Alle möglichen Kombinationen werden durchprobiert – keine Wortliste, keine Tricks. Bei zufälligen Passwörtern ist das die einzige Option. Schutz: lange Passwörter (jedes Zeichen mehr multipliziert die Zeit exponentiell).'
-        },
-        {
-          text: 'Dein Kollege nutzt für mehrere Dienste dasselbe Passwort "Sommer2021". Ein kleinerer Online-Shop wird gehackt und die Passwortliste veröffentlicht. Wenig später wird auch sein E-Mail-Konto übernommen – ohne dass dort ein Angriff stattfand. Welche Methode?',
-          optionen: ['Phishing', 'Bruteforce-Angriff', 'Wörterbuchangriff', 'Keylogger', 'Social Engineering'],
-          richtig: 2,
-          erklaerung: 'Credential Stuffing – eine Form des Wörterbuchangriffs: Angreifer testen geleakte Passwortlisten automatisch bei hunderten anderen Plattformen. Das Passwort muss nicht erraten werden – es ist bereits bekannt. Schutz: einzigartiges Passwort pro Dienst.'
-        },
-        {
-          text: 'Du bekommst eine E-Mail von "service@paypal-sicherheit.com": "Ungewöhnliche Aktivität festgestellt – Konto temporär eingeschränkt." Der Link führt zu einer Seite, die exakt wie PayPal aussieht, dort wirst du nach Login und Kreditkarte gefragt. Welcher Angriff?',
-          optionen: ['Phishing', 'Bruteforce-Angriff', 'Wörterbuchangriff', 'Keylogger', 'Social Engineering'],
-          richtig: 0,
-          erklaerung: 'Phishing: Gefälschte Domain (paypal-sicherheit.com statt paypal.com), künstliche Dringlichkeit und täuschend echtes Design. Social Engineering ist der Oberbegriff – Phishing ist die spezifische technische Umsetzung per E-Mail/Link.'
-        },
-        {
-          text: 'Dein Antivirusprogramm meldet: Eine installierte Software hat im Hintergrund alle Tastenanschläge der letzten 30 Tage protokolliert und an einen externen Server gesendet – inklusive deiner Passwörter, die du niemals in einem Browser gespeichert hattest. Welche Angriffsmethode wurde eingesetzt?',
-          optionen: ['Phishing', 'Bruteforce-Angriff', 'Wörterbuchangriff', 'Keylogger', 'Social Engineering'],
-          richtig: 3,
-          erklaerung: 'Keylogger: Die Software zeichnete direkt jeden Tastendruck auf – unabhängig davon, ob Passwörter im Browser gespeichert sind oder ob du auf Links klickst. Das ist das typische Merkmal eines Keyloggers. Phishing würde eine gefälschte Seite erfordern; hier wurden die Daten lokal abgegriffen.'
-        },
-        {
-          text: 'Ein Anrufer nennt den Namen deines Vorgesetzten, erwähnt euer aktuelles Projekt und behauptet, vom externen IT-Dienstleister zu sein. Er bittet dich, kurz eine Remote-Desktop-Verbindung zu erlauben, "um ein dringendes Sicherheitsproblem zu beheben". Welcher Angriff?',
-          optionen: ['Phishing', 'Bruteforce-Angriff', 'Wörterbuchangriff', 'Keylogger', 'Social Engineering'],
-          richtig: 4,
-          erklaerung: 'Social Engineering: Der Angreifer nutzt vorab recherchierte Details (Namen, Projekttitel) um Vertrauen aufzubauen – kein technischer Passwortangriff. Remote-Zugang würde vollständigen Systemzugriff geben. Schutz: Identität immer über offizielle Kanäle verifizieren.'
-        },
-      ];
+      (function () {
+        const FRAGEN = [
+          {
+            text: 'Ein Angreifer hat sich offline Zugriff auf eine verschlüsselte Passwortdatenbank verschafft. Mit 5 leistungsstarken GPUs probiert er systematisch jede erdenkliche Zeichenkombination – auch völlig zufällige wie "Kj#2!xZq". Welche Methode nutzt er?',
+            optionen: [
+              "Phishing",
+              "Bruteforce-Angriff",
+              "Wörterbuchangriff",
+              "Keylogger",
+              "Social Engineering",
+            ],
+            richtig: 1,
+            erklaerung:
+              "Bruteforce: Alle möglichen Kombinationen werden durchprobiert – keine Wortliste, keine Tricks. Bei zufälligen Passwörtern ist das die einzige Option. Schutz: lange Passwörter (jedes Zeichen mehr multipliziert die Zeit exponentiell).",
+          },
+          {
+            text: 'Dein Kollege nutzt für mehrere Dienste dasselbe Passwort "Sommer2021". Ein kleinerer Online-Shop wird gehackt und die Passwortliste veröffentlicht. Wenig später wird auch sein E-Mail-Konto übernommen – ohne dass dort ein Angriff stattfand. Welche Methode?',
+            optionen: [
+              "Phishing",
+              "Bruteforce-Angriff",
+              "Wörterbuchangriff",
+              "Keylogger",
+              "Social Engineering",
+            ],
+            richtig: 2,
+            erklaerung:
+              "Credential Stuffing – eine Form des Wörterbuchangriffs: Angreifer testen geleakte Passwortlisten automatisch bei hunderten anderen Plattformen. Das Passwort muss nicht erraten werden – es ist bereits bekannt. Schutz: einzigartiges Passwort pro Dienst.",
+          },
+          {
+            text: 'Du bekommst eine E-Mail von "service@paypal-sicherheit.com": "Ungewöhnliche Aktivität festgestellt – Konto temporär eingeschränkt." Der Link führt zu einer Seite, die exakt wie PayPal aussieht, dort wirst du nach Login und Kreditkarte gefragt. Welcher Angriff?',
+            optionen: [
+              "Phishing",
+              "Bruteforce-Angriff",
+              "Wörterbuchangriff",
+              "Keylogger",
+              "Social Engineering",
+            ],
+            richtig: 0,
+            erklaerung:
+              "Phishing: Gefälschte Domain (paypal-sicherheit.com statt paypal.com), künstliche Dringlichkeit und täuschend echtes Design. Social Engineering ist der Oberbegriff – Phishing ist die spezifische technische Umsetzung per E-Mail/Link.",
+          },
+          {
+            text: "Dein Antivirusprogramm meldet: Eine installierte Software hat im Hintergrund alle Tastenanschläge der letzten 30 Tage protokolliert und an einen externen Server gesendet – inklusive deiner Passwörter, die du niemals in einem Browser gespeichert hattest. Welche Angriffsmethode wurde eingesetzt?",
+            optionen: [
+              "Phishing",
+              "Bruteforce-Angriff",
+              "Wörterbuchangriff",
+              "Keylogger",
+              "Social Engineering",
+            ],
+            richtig: 3,
+            erklaerung:
+              "Keylogger: Die Software zeichnete direkt jeden Tastendruck auf – unabhängig davon, ob Passwörter im Browser gespeichert sind oder ob du auf Links klickst. Das ist das typische Merkmal eines Keyloggers. Phishing würde eine gefälschte Seite erfordern; hier wurden die Daten lokal abgegriffen.",
+          },
+          {
+            text: 'Ein Anrufer nennt den Namen deines Vorgesetzten, erwähnt euer aktuelles Projekt und behauptet, vom externen IT-Dienstleister zu sein. Er bittet dich, kurz eine Remote-Desktop-Verbindung zu erlauben, "um ein dringendes Sicherheitsproblem zu beheben". Welcher Angriff?',
+            optionen: [
+              "Phishing",
+              "Bruteforce-Angriff",
+              "Wörterbuchangriff",
+              "Keylogger",
+              "Social Engineering",
+            ],
+            richtig: 4,
+            erklaerung:
+              "Social Engineering: Der Angreifer nutzt vorab recherchierte Details (Namen, Projekttitel) um Vertrauen aufzubauen – kein technischer Passwortangriff. Remote-Zugang würde vollständigen Systemzugriff geben. Schutz: Identität immer über offizielle Kanäle verifizieren.",
+          },
+        ];
 
-      let aktuell = 0, punkte = 0;
+        let aktuell = 0,
+          punkte = 0;
 
-      function ladeFrage() {
-        const f = FRAGEN[aktuell];
-        document.getElementById('aq-nr').textContent = 'Frage ' + (aktuell + 1) + ' von ' + FRAGEN.length;
-        document.getElementById('aq-text').textContent = f.text;
-        document.getElementById('aq-feedback').className = 'se-feedback se-hidden';
-        document.getElementById('aq-weiter').className = 'se-btn se-hidden';
+        function ladeFrage() {
+          const f = FRAGEN[aktuell];
+          document.getElementById("aq-nr").textContent =
+            "Frage " + (aktuell + 1) + " von " + FRAGEN.length;
+          document.getElementById("aq-text").textContent = f.text;
+          document.getElementById("aq-feedback").className =
+            "se-feedback se-hidden";
+          document.getElementById("aq-weiter").className = "se-btn se-hidden";
 
-        const optDiv = document.getElementById('aq-optionen');
-        optDiv.innerHTML = '';
-        f.optionen.forEach((opt, i) => {
-          const btn = document.createElement('button');
-          btn.className = 'se-option';
-          btn.textContent = opt;
-          btn.addEventListener('click', () => waehlAntwort(i));
-          optDiv.appendChild(btn);
+          const optDiv = document.getElementById("aq-optionen");
+          optDiv.innerHTML = "";
+          f.optionen.forEach((opt, i) => {
+            const btn = document.createElement("button");
+            btn.className = "se-option";
+            btn.textContent = opt;
+            btn.addEventListener("click", () => waehlAntwort(i));
+            optDiv.appendChild(btn);
+          });
+        }
+
+        function waehlAntwort(i) {
+          const f = FRAGEN[aktuell];
+          const richtig = i === f.richtig;
+          if (richtig) punkte++;
+
+          document
+            .querySelectorAll("#aq-optionen .se-option")
+            .forEach((btn, j) => {
+              btn.disabled = true;
+              if (j === f.richtig) btn.classList.add("se-richtig");
+              else if (j === i && !richtig) btn.classList.add("se-falsch");
+            });
+
+          const fb = document.getElementById("aq-feedback");
+          fb.className =
+            "se-feedback " + (richtig ? "se-fb-gut" : "se-fb-schlecht");
+          fb.textContent =
+            (richtig ? "\u2713 Richtig! " : "\u2717 Falsch. ") + f.erklaerung;
+          document.getElementById("aq-weiter").className = "se-btn";
+        }
+
+        document.getElementById("aq-weiter").addEventListener("click", () => {
+          aktuell++;
+          if (aktuell >= FRAGEN.length) {
+            document.getElementById("aq-quiz").style.display = "none";
+            const ende = document.getElementById("aq-ende");
+            ende.className = "se-ende";
+            const pct = Math.round((punkte / FRAGEN.length) * 100);
+            const bew =
+              punkte === FRAGEN.length
+                ? "\uD83C\uDFC6 Perfekt!"
+                : punkte >= 3
+                  ? "\uD83D\uDC4D Gut!"
+                  : "\u26A0 Noch Luft nach oben.";
+            document.getElementById("aq-score").innerHTML =
+              "<strong>" +
+              bew +
+              "</strong><br>" +
+              punkte +
+              " von " +
+              FRAGEN.length +
+              " richtig (" +
+              pct +
+              "%)";
+          } else {
+            ladeFrage();
+          }
         });
-      }
 
-      function waehlAntwort(i) {
-        const f = FRAGEN[aktuell];
-        const richtig = i === f.richtig;
-        if (richtig) punkte++;
-
-        document.querySelectorAll('#aq-optionen .se-option').forEach((btn, j) => {
-          btn.disabled = true;
-          if (j === f.richtig) btn.classList.add('se-richtig');
-          else if (j === i && !richtig) btn.classList.add('se-falsch');
+        document.getElementById("aq-neustart").addEventListener("click", () => {
+          aktuell = 0;
+          punkte = 0;
+          document.getElementById("aq-ende").className = "se-ende se-hidden";
+          document.getElementById("aq-quiz").style.display = "";
+          ladeFrage();
         });
 
-        const fb = document.getElementById('aq-feedback');
-        fb.className = 'se-feedback ' + (richtig ? 'se-fb-gut' : 'se-fb-schlecht');
-        fb.textContent = (richtig ? '\u2713 Richtig! ' : '\u2717 Falsch. ') + f.erklaerung;
-        document.getElementById('aq-weiter').className = 'se-btn';
-      }
-
-      document.getElementById('aq-weiter').addEventListener('click', () => {
-        aktuell++;
-        if (aktuell >= FRAGEN.length) {
-          document.getElementById('aq-quiz').style.display = 'none';
-          const ende = document.getElementById('aq-ende');
-          ende.className = 'se-ende';
-          const pct = Math.round(punkte / FRAGEN.length * 100);
-          const bew = punkte === FRAGEN.length ? '\uD83C\uDFC6 Perfekt!' : punkte >= 3 ? '\uD83D\uDC4D Gut!' : '\u26A0 Noch Luft nach oben.';
-          document.getElementById('aq-score').innerHTML =
-            '<strong>' + bew + '</strong><br>' + punkte + ' von ' + FRAGEN.length + ' richtig (' + pct + '%)';
-        } else { ladeFrage(); }
-      });
-
-      document.getElementById('aq-neustart').addEventListener('click', () => {
-        aktuell = 0; punkte = 0;
-        document.getElementById('aq-ende').className = 'se-ende se-hidden';
-        document.getElementById('aq-quiz').style.display = '';
         ladeFrage();
-      });
-
-      ladeFrage();
-    })();
+      })();
     </script>
 
-        <script>
+    <script>
       fetch("../partials/navbar.html")
         .then((res) => res.text())
         .then((data) => {
@@ -522,5 +600,5 @@
           document.getElementById("footer").innerHTML = data;
         });
     </script>
-    </body>
-    </html>
+  </body>
+</html>
