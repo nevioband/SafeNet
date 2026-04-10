@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zwei-Faktor-Authentifizierung – SafeNet Security</title>
-    <link rel="stylesheet" href="../css/navbar.css">
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/footer.css">
-    <link rel="stylesheet" href="../css/shared.css">
-    <link rel="stylesheet" href="../css/login.css">
-    <link rel="icon" type="image/png" href="../images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png">
-    <link rel="stylesheet" href="../css/2fa.css">
-    <script type="module" src="../js/auth.js?v=5"></script>
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/shared.css">
+    <link rel="stylesheet" href="/css/login.css">
+    <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png">
+    <link rel="stylesheet" href="/css/2fa.css">
+    <script type="module" src="/js/auth.js?v=5"></script>
 </head>
 <body>
     <div id="navbar"></div>
@@ -57,19 +57,19 @@
     <div id="footer"></div>
 
     <script>
-        fetch('../partials/navbar.html').then(r => r.text()).then(d => {
+        fetch('/de/partials/navbar.html').then(r => r.text()).then(d => {
             document.getElementById('navbar').innerHTML = d
             const toggle = document.querySelector('.menu-toggle')
             const navLinks = document.querySelector('.nav-links')
             if (toggle) toggle.addEventListener('click', () => navLinks.classList.toggle('active'))
         })
-        fetch('../partials/footer.html').then(r => r.text()).then(d => {
+        fetch('/de/partials/footer.html').then(r => r.text()).then(d => {
             document.getElementById('footer').innerHTML = d
         })
     </script>
 
     <script type="module">
-        import { supabase } from '../js/supabase.js?v=8'
+        import { supabase } from '/js/supabase.js?v=8'
 
         let enrolledFactorId = null
 

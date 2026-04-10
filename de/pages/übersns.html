@@ -4,19 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Über uns – SafeNet Security</title>
-    <link rel="stylesheet" href="../css/navbar.css" />
-    <link rel="stylesheet" href="../css/style.css" />
-    <link rel="stylesheet" href="../css/shared.css" />
-    <link rel="stylesheet" href="../css/infobox.css" />
-    <link rel="stylesheet" href="../css/hero.css" />
-    <link rel="stylesheet" href="../css/footer.css" />
-    <link rel="stylesheet" href="../css/übersns.css" />
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/shared.css" />
+    <link rel="stylesheet" href="/css/infobox.css" />
+    <link rel="stylesheet" href="/css/hero.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/übersns.css" />
     <link
       rel="icon"
       type="image/png"
-      href="../images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png"
+      href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png"
     />
-    <script type="module" src="../js/auth.js?v=5"></script>
+    <script type="module" src="/js/auth.js?v=5"></script>
   </head>
   <body>
     <div id="navbar"></div>
@@ -24,7 +24,7 @@
     <!-- Hero -->
     <div class="about-hero">
       <img
-        src="../images/SafeNet-Security-Logo/Withoutbg/Shield.png"
+        src="/images/SafeNet-Security-Logo/Withoutbg/Shield.png"
         alt="SafeNet Security Logo"
       />
       <h1>Über SafeNet Security</h1>
@@ -90,7 +90,7 @@
 
     <div id="footer"></div>
     <script>
-      fetch("../partials/navbar.html")
+      fetch("/partials/navbar.html")
         .then((r) => r.text())
         .then((d) => {
           document.getElementById("navbar").innerHTML = d;
