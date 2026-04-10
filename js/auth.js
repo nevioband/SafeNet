@@ -92,8 +92,10 @@ function setupMobileNavbarEvents() {
                 const parent = toggle.closest('.dropdown');
                 if (!parent) return;
                 const isOpen = parent.classList.contains('open');
-                // Alle anderen Dropdowns schließen
-                document.querySelectorAll('.dropdown.open').forEach(d => d.classList.remove('open'));
+                // Nur andere Dropdowns schließen
+                document.querySelectorAll('.dropdown.open').forEach(d => {
+                    if (d !== parent) d.classList.remove('open');
+                });
                 if (!isOpen) {
                     e.preventDefault();
                     parent.classList.add('open');
