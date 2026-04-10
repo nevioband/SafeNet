@@ -1,0 +1,85 @@
+body {
+  background: #0f172a;
+  color: #fff;
+}
+.kontakt-main {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 70vh;
+  padding: 40px 0 60px;
+}
+.kontakt-section {
+  background: #172441;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  padding: 36px 32px 32px 32px;
+  max-width: 420px;
+  width: 100%;
+}
+.kontakt-section h1 {
+  margin-bottom: 24px;
+  font-size: 2.1rem;
+  text-align: center;
+  background: linear-gradient(135deg, #3399ff, #66d9ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.kontakt-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.kontakt-form label {
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+.kontakt-form input,
+.kontakt-form textarea {
+  background: #22345c;
+  border: 1px solid #334366;
+  color: #fff;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 1rem;
+  resize: none;
+}
+.kontakt-form input:focus,
+.kontakt-form textarea:focus {
+  outline: 2px solid #3399ff;
+  border-color: #3399ff;
+}
+.kontakt-form .btn-primary {
+  background: linear-gradient(135deg, #3399ff, #66d9ff);
+  color: #172441;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s;
+}
+.kontakt-form .btn-primary:hover {
+  background: linear-gradient(135deg, #66d9ff, #3399ff);
+}
+.kontakt-feedback {
+  margin-top: 10px;
+  min-height: 22px;
+  font-size: 1rem;
+  text-align: center;
+}
+.pflicht {
+  color: #ffb300;
+  margin-left: 2px;
+}
+@media (max-width: 768px) {
+  .kontakt-section {
+    padding: 22px 8px 18px 8px;
+    max-width: 98vw;
+  }
+  .kontakt-main {
+    padding: 18px 0 30px;
+  }
+}
