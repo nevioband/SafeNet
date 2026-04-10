@@ -90,15 +90,14 @@ function setupMobileNavbarEvents() {
         const handler = function (e) {
             if (window.innerWidth <= 768) {
                 const parent = toggle.closest('.dropdown');
-                const menu = parent && parent.querySelector('.dropdown-menu');
-                if (menu && !menu.classList.contains('open')) {
+                if (!parent) return;
+                const isOpen = parent.classList.contains('open');
+                // Alle anderen Dropdowns schließen
+                document.querySelectorAll('.dropdown.open').forEach(d => d.classList.remove('open'));
+                if (!isOpen) {
                     e.preventDefault();
-                    // Alle anderen Dropdowns schließen
-                    document.querySelectorAll('.dropdown-menu.open').forEach(m => m.classList.remove('open'));
-                    menu.classList.add('open');
-                } else if (menu && menu.classList.contains('open')) {
-                    menu.classList.remove('open');
-                }
+                    parent.classList.add('open');
+                } // else: einfach schließen durch oben
             }
         };
         toggle.addEventListener('click', handler);
@@ -107,7 +106,7 @@ function setupMobileNavbarEvents() {
     // Schließe Dropdowns beim Klick außerhalb
     document.addEventListener('click', function (e) {
         if (!e.target.closest('.dropdown')) {
-            document.querySelectorAll('.dropdown-menu.open').forEach(m => m.classList.remove('open'));
+            document.querySelectorAll('.dropdown.open').forEach(d => d.classList.remove('open'));
         }
     });
 }
