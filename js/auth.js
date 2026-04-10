@@ -81,21 +81,52 @@ function setActiveNavLink() {
     if (best) best.classList.add('active')
 }
 
+
+// Dropdown-Handling für alle .dropdown-link (Mobile)
+function setupMobileNavbarEvents() {
+    const toggles = document.querySelectorAll('.dropdown-link');
+    toggles.forEach((toggle) => {
+        toggle.removeEventListener('click', toggle._dropdownHandler || (() => {}));
+        const handler = function (e) {
+            if (window.innerWidth <= 768) {
+                const parent = toggle.closest('.dropdown');
+                const menu = parent && parent.querySelector('.dropdown-menu');
+                if (menu && !menu.classList.contains('open')) {
+                    e.preventDefault();
+                    // Alle anderen Dropdowns schließen
+                    document.querySelectorAll('.dropdown-menu.open').forEach(m => m.classList.remove('open'));
+                    menu.classList.add('open');
+                } else if (menu && menu.classList.contains('open')) {
+                    menu.classList.remove('open');
+                }
+            }
+        };
+        toggle.addEventListener('click', handler);
+        toggle._dropdownHandler = handler;
+    });
+    // Schließe Dropdowns beim Klick außerhalb
+    document.addEventListener('click', function (e) {
+        if (!e.target.closest('.dropdown')) {
+            document.querySelectorAll('.dropdown-menu.open').forEach(m => m.classList.remove('open'));
+        }
+    });
+}
+
 // Automatisch ausführen sobald die Navbar in den DOM injiziert wird
 const observer = new MutationObserver(() => {
     if (document.querySelector('.user-menu')) {
-        observer.disconnect()
-        applyNavbarUser()
-        setActiveNavLink()
-        setupMobileNavbarEvents()
+        observer.disconnect();
+        applyNavbarUser();
+        setActiveNavLink();
+        setupMobileNavbarEvents();
     }
-})
-observer.observe(document.documentElement, { childList: true, subtree: true })
+});
+observer.observe(document.documentElement, { childList: true, subtree: true });
 
 // Auch direkt versuchen falls Navbar schon da ist
-applyNavbarUser()
-setActiveNavLink()
-setupMobileNavbarEvents()
+applyNavbarUser();
+setActiveNavLink();
+setupMobileNavbarEvents();
 
 // Für rückwärts-kompatibilität (alte Seiten die updateNavbarUser() aufrufen)
-window.updateNavbarUser = applyNavbarUser
+window.updateNavbarUser = applyNavbarUser;
