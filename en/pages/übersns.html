@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Über uns – SafeNet Security</title>
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/shared.css" />
+    <link rel="stylesheet" href="/css/infobox.css" />
+    <link rel="stylesheet" href="/css/hero.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/übersns.css" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png"
+    />
+    <script type="module" src="/js/auth.js?v=5"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <!-- Hero -->
+    <div class="about-hero">
+      <img
+        src="/images/SafeNet-Security-Logo/Withoutbg/Shield.png"
+        alt="SafeNet Security Logo"
+      />
+      <h1>About SafeNet Security</h1>
+      <p>
+        An interactive learning platform that makes IT security simple, understandable,
+        and practical.
+      </p>
+      <div class="about-divider"></div>
+    </div>
+
+    <!-- Mission -->
+    <section class="info-section">
+      <div class="info-box">
+        <h2>My Mission</h2>
+        <p>
+          SafeNet Security was developed to provide people without prior knowledge
+
+          with an easy entry into the world of IT security.
+          Digital threats are becoming more and more common – but many people
+          don't know how to protect themselves. <br /><br />
+          I want to change that - understandable, without jargon, and directly
+          applicable.
+        </p>
+      </div>
+    </section>
+
+    <!-- Values -->
+    <section class="info-section">
+      <div class="info-box">
+        <h2>My Values</h2>
+        <p>
+          <strong style="color: #ffffff">Privacy First</strong> – Your
+          passwords are encrypted client-side before being stored. No server
+          knows your plaintext data.<br /><br />
+          <strong style="color: #ffffff">No Tracking Tools</strong> – I
+          don't use any ad trackers or third-party analytics services.<br /><br />
+          <strong style="color: #ffffff">Education Instead of Fear</strong> – Instead
+          of using scare tactics, I work with clear explanations and practical
+          tips that really help.
+        </p>
+      </div>
+    </section>
+
+    <!-- Founder -->
+    <section class="founder-section">
+      <div class="founder-card">
+        <img class="founder-avatar" src="/images/nevio/nevio.jpg" alt="Nevio" />
+        <div class="founder-info">
+          <h2>Nevio</h2>
+          <p class="founder-role">Founder &amp; Developer</p>
+          <p>
+            I grew up with computer science and developed a passion for IT and cybersecurity early on. Currently, I am training to become an ICT specialist and have chosen SafeNet Security as my long-term project.<br /><br />
+            My goal is to educate people about digital threats in an understandable way and show them how to protect themselves effectively – without prior knowledge, without jargon, simply explained.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div id="footer"></div>
+    <script>
+      fetch("../partials/navbar.html")
+        .then((r) => r.text())
+        .then((d) => {
+          document.getElementById("navbar").innerHTML = d;
+
+          const toggle = document.querySelector(".menu-toggle");
+          const navLinks = document.querySelector(".nav-links");
+          const dropdown = document.querySelector(".dropdown");
+          const dropdownLink = document.querySelector(".dropdown-link");
+
+          if (toggle)
+            toggle.addEventListener("click", () => {
+              navLinks.classList.toggle("active");
+              if (!navLinks.classList.contains("active"))
+                dropdown.classList.remove("open");
+            });
+          if (dropdownLink)
+            dropdownLink.addEventListener("click", (e) => {
+              if (window.innerWidth <= 768) {
+                if (!dropdown.classList.contains("open")) {
+                  e.preventDefault();
+                  dropdown.classList.add("open");
+                }
+              }
+            });
+        });
+      fetch("../partials/footer.html")
+        .then((r) => r.text())
+        .then((d) => {
+          document.getElementById("footer").innerHTML = d;
+        });
+    </script>
+  </body>
+</html>

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="/css/infobox.css" />
     <link rel="stylesheet" href="/css/hero.css" />
     <link rel="stylesheet" href="/css/footer.css" />
-    <link rel="stylesheet" href="/css/icon.css" />
+    <link rel="stylesheet" href="css/icon.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -21,7 +21,7 @@
     <link
       rel="icon"
       type="image/png"
-      href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png"
+      href="images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png"
     />
     <script type="module" src="js/auth.js?v=5"></script>
   </head>
@@ -32,31 +32,31 @@
       <div class="hero-content">
         <h1>SafeNet Security</h1>
         <p>
-          Teste die Sicherheit deines Passworts und schütze deinen Account vor
-          Cyberangriffen.
+          Test the security of your password and protect your account from
+          cyber attacks.
         </p>
 
         <div class="hero-buttons">
-          <!--<a href="pages/generator.html" class="btn-primary">Passwort-Generator</a> -->
+          <!--<a href="pages/generator.html" class="btn-primary">Password Generator</a> -->
           <a href="pages/analysator.html" class="btn-primary"
-            >Passwort jetzt analysieren</a
+            >Analyze your password now</a
           >
         </div>
       </div>
     </section>
 
-    <h2 class="T1">Funktionen der Webseite</h2>
+    <h2 class="T1">Website Features</h2>
 
     <section class="features">
       <div class="feature-card">
         <a class="links" href="pages/generator.html">
           <h3>
-            Passwort-Generator
+            Password Generator
             <i data-lucide="key" class="icongenerator icon"></i>
           </h3>
           <p>
-            Erstelle starke und zufällige Passwörter, um deine Konten besser vor
-            Angriffen zu schützen.
+            Create strong and random passwords to better protect your accounts from
+            attacks.
           </p>
         </a>
       </div>
@@ -64,12 +64,11 @@
       <div class="feature-card">
         <a class="links" href="pages/analysator.html">
           <h3>
-            Passwort-Analyse
+            Password Analysis
             <i data-lucide="search" class="iconanalyse icon"></i>
           </h3>
           <p>
-            Überprüfe, wie sicher dein Passwort ist und erkenne mögliche
-            Schwächen sofort.
+            Check how secure your password is and identify potential weaknesses immediately.
           </p>
         </a>
       </div>
@@ -77,63 +76,61 @@
       <div class="feature-card">
         <a class="links" href="pages/angriff.html">
           <h3>
-            Angriffsmethoden
+            Attack Methods
             <i
               data-lucide="triangle-alert"
               class="iconangriffsmethoden icon"
             ></i>
           </h3>
           <p>
-            Informiere dich über Phishing, Bruteforce, Social Engineering und
-            Keylogger.
+            Learn about phishing, brute force, social engineering, and keyloggers.
           </p>
         </a>
       </div>
     </section>
 
-    <h2 class="T1">Warum ist Passwortsicherheit wichtig?</h2>
+    <h2 class="T1">Why is password security important?</h2>
 
     <section class="features">
       <div class="feature-card">
         <a class="links" href="pages/generator.html">
           <h3>
-            Schwache Passwörter
-            <i data-lucide="lock-open" class="iconschwachepasswörter"></i>
+            Weak Passwords
+            <i data-lucide="lock-open" class="iconweakpasswords"></i>
           </h3>
-          <p>Die meisten Hacks passieren wegen zu schwachen Passwörter</p>
+          <p>Most hacks occur due to weak passwords</p>
         </a>
       </div>
       <div class="feature-card">
         <a class="links" href="pages/wörterbuchangriff.html">
           <h3>
-            Häufige Passwörter
-            <i data-lucide="list" class="iconhäufigepasswörter"></i>
+            Common Passwords
+            <i data-lucide="list" class="iconcommonpasswords"></i>
           </h3>
-          <p>Viele Menschen benutzen Passwörter aus dem Wörterbuchangriff</p></a
+          <p>Many people use passwords from the dictionary attack</p></a
         >
       </div>
 
       <div class="feature-card">
         <a class="links" href="pages/angriff.html">
           <h3>
-            Passwort-Wiederverwendung
-            <i data-lucide="repeat" class="iconpasswort-wiederverwendung"></i>
+            Password Reuse
+            <i data-lucide="repeat" class="iconpassword-reuse"></i>
           </h3>
-          <p>Einige nutzen dasselbe Passwort für mehrere Konten</p>
+          <p>Some people use the same password for multiple accounts</p>
         </a>
       </div>
     </section>
 
     <section class="hero">
       <div class="hero-content">
-        <h2 class="T1">Teste jetzt deine Passwortsicherheit</h2>
+        <h2 class="T1">Test your password security now</h2>
         <p>
-          Finde heraus, wie sicher dein Passwort ist und verbessere es in
-          Sekunden.
+          Find out how secure your password is and improve it in seconds.
         </p>
         <div class="hero-buttons">
           <a href="pages/analysator.html" class="btn-primary"
-            >Zur Passwort-Analyse</a
+            >To Password Analysis</a
           >
         </div>
       </div>
@@ -145,7 +142,7 @@
     </script>
 
     <script>
-      fetch("partials/navbar.html")
+      fetch("/en/partials/navbar.html")
         .then((res) => res.text())
         .then((data) => {
           document.getElementById("navbar").innerHTML = data;
@@ -177,7 +174,7 @@
     </script>
     <div id="footer"></div>
     <script>
-      fetch("partials/footer.html")
+      fetch("/partials/footer.html")
         .then((res) => res.text())
         .then((data) => {
           document.getElementById("footer").innerHTML = data;

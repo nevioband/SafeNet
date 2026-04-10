@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Password Analyzer – SafeNet Security</title>
+
+    <!-- Global Styles (Navbar, Base, Infoboxes, Hero, Footer) -->
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/infobox.css" />
+    <link rel="stylesheet" href="/css/hero.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+
+    <!-- Page-specific Styles -->
+    <link rel="stylesheet" href="/css/shared.css" />
+    <link rel="stylesheet" href="/css/analyse.css" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png">
+
+    <!-- Auth: Navbar-Zustand & Session-Handling -->
+    <script type="module" src="/js/auth.js?v=5"></script>
+  </head>
+  <body>
+    <!-- Navbar (loaded via JS from partials/navbar.html) -->
+    <div id="navbar"></div>
+
+    <!-- ─── Password Analyzer ─────────────────────────────────────── -->
+    <section class="analyser-section">
+      <div class="analyser-box">
+        <h1>Password Analyzer</h1>
+        <p>Enter a password and check its strength in real-time.</p>
+
+        <div class="pw-input-wrap">
+          <input type="password" id="passwordInput" placeholder="Enter password" autocomplete="off" />
+          <button id="pw-toggle" class="pw-eye" aria-label="Show password" type="button">
+            <svg id="pw-eye-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="pw-bar-wrap">
+          <div id="pw-bar" class="pw-bar"></div>
+        </div>
+        <div id="result"></div>
+
+        <div id="pw-badges" class="pw-badges"></div>
+        <div id="pw-cracktime" class="pw-cracktime"></div>
+
+        <ul id="suggestions"></ul>
+      </div>
+    </section>
+
+    <!-- Footer (loaded via JS from partials/footer.html) -->
+    <div id="footer"></div>
+
+    <!-- Analyse Logic: Strength Calculation, Badges, Crack Time -->
+    <script src="../js/analyse.js"></script>
+
+    <script>
+      // ─── Load Navbar & Initialize Mobile Menu ───
+      fetch("../partials/navbar.html")
+        .then((res) => res.text())
+        .then((data) => {
+          document.getElementById("navbar").innerHTML = data;
+
+          const toggle = document.querySelector(".menu-toggle");
+          const navLinks = document.querySelector(".nav-links");
+          const dropdown = document.querySelector(".dropdown");
+          const dropdownLink = document.querySelector(".dropdown-link");
+
+          if (toggle) {
+            toggle.addEventListener("click", () => {
+              navLinks.classList.toggle("active");
+              if (!navLinks.classList.contains("active")) {
+                dropdown.classList.remove("open");
+              }
+            });
+          }
+
+          if (dropdownLink) {
+            dropdownLink.addEventListener("click", (e) => {
+              if (window.innerWidth <= 768) {
+                if (!dropdown.classList.contains("open")) {
+                  e.preventDefault();
+                  dropdown.classList.add("open");
+                }
+              }
+            });
+          }
+        });
+
+      // ─── Load Footer ───
+      fetch("../partials/footer.html")
+        .then(res => res.text())
+        .then(data => {
+          document.getElementById("footer").innerHTML = data;
+        });
+    </script>
+  </body>
+</html>
