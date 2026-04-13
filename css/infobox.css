@@ -66,10 +66,10 @@
   font-size: 22px;
   color: #ffffff;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  flex-wrap: wrap;
 }
 
 .feature-card p {
