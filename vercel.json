@@ -1,11 +1,6 @@
 {
   "redirects": [
     {
-      "source": "/",
-      "destination": "/de/index.html",
-      "permanent": false
-    },
-    {
       "source": "/pages/:path*",
       "destination": "/de/pages/:path*",
       "permanent": false
