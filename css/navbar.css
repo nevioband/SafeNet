@@ -4,6 +4,17 @@
   z-index: 1000;
 }
 
+.language-switcher {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 18px;
+}
+
+.lang-item {
+  display: none !important;
+}
+
 .navbar {
   display: flex;
   align-items: center;
@@ -101,6 +112,17 @@
 }
 
 @media (max-width: 768px) {
+  .language-switcher {
+    display: none;
+  }
+
+  .lang-item {
+    display: flex !important;
+    justify-content: center;
+    gap: 12px;
+    padding: 8px 0;
+  }
+
   .navbar {
     padding: 10px 15px;
     gap: 10px;
