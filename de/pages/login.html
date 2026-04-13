@@ -248,7 +248,7 @@
             btn.disabled = true
 
             const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: 'https://safe-net-umber.vercel.app/pages/reset-password.html'
+                redirectTo: 'https://safe-net-umber.vercel.app/de/pages/reset-password.html'
             })
 
             if (error) {
@@ -310,7 +310,7 @@
         })
 
         // Navbar & Footer laden
-        fetch('../../partials/navbar.html').then(r => r.text()).then(d => {
+        fetch('../partials/navbar.html').then(r => r.text()).then(d => {
             document.getElementById('navbar').innerHTML = d
             const toggle = document.querySelector('.menu-toggle')
             const navLinks = document.querySelector('.nav-links')
@@ -326,7 +326,7 @@
                 }
             })
         })
-        fetch('../../partials/footer.html').then(r => r.text()).then(d => { document.getElementById('footer').innerHTML = d })
+        fetch('../partials/footer.html').then(r => r.text()).then(d => { document.getElementById('footer').innerHTML = d })
     </script>
 </body>
 </html>

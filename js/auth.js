@@ -21,7 +21,7 @@ async function applyNavbarUser() {
                 await supabase.auth.signOut()
                 const isLoginPage = window.location.pathname.includes('login.html')
                 if (!isLoginPage) {
-                    window.location.href = '/pages/login.html'
+                    window.location.href = '/de/pages/login.html'
                 }
                 return
             }

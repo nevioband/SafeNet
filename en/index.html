@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="/css/infobox.css" />
     <link rel="stylesheet" href="/css/hero.css" />
     <link rel="stylesheet" href="/css/footer.css" />
-    <link rel="stylesheet" href="css/icon.css" />
+    <link rel="stylesheet" href="/css/icon.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -21,9 +21,9 @@
     <link
       rel="icon"
       type="image/png"
-      href="images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png"
+      href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png"
     />
-    <script type="module" src="js/auth.js?v=5"></script>
+    <script type="module" src="/js/auth.js?v=5"></script>
   </head>
   <body>
     <div id="navbar"></div>
@@ -174,7 +174,7 @@
     </script>
     <div id="footer"></div>
     <script>
-      fetch("/partials/footer.html")
+      fetch("/en/partials/footer.html")
         .then((res) => res.text())
         .then((data) => {
           document.getElementById("footer").innerHTML = data;

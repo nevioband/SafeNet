@@ -342,8 +342,9 @@ async function renderVault() {
   }
 
   if (!session) {
+    const loginUrl = window.location.pathname.includes('/en/') ? '/en/pages/login.html' : '/de/pages/login.html';
     listElement.innerHTML =
-      '<p style="text-align:center; color:rgba(255,255,255,0.5); padding: 20px;">Bitte <a href="login.html" style="color:#3399ff">einloggen</a> um deinen Tresor zu sehen.</p>';
+      `<p style="text-align:center; color:rgba(255,255,255,0.5); padding: 20px;">Bitte <a href="${loginUrl}" style="color:#3399ff">einloggen</a> um deinen Tresor zu sehen.</p>`;
     return;
   }
 
@@ -385,8 +386,9 @@ async function renderVault() {
       error.message?.includes("session") ||
       error.message?.includes("token")
     ) {
+      const loginUrl = window.location.pathname.includes('/en/') ? '/en/pages/login.html' : '/de/pages/login.html';
       showVaultError(
-        'Deine Sitzung ist abgelaufen. Bitte <a href="login.html" style="color:#3399ff">neu einloggen</a>.',
+        `Deine Sitzung ist abgelaufen. Bitte <a href="${loginUrl}" style="color:#3399ff">neu einloggen</a>.`,
       );
     } else if (isOffline()) {
       showOfflineBanner();
@@ -549,7 +551,7 @@ window.savePassword = async function (newPasswordValue, labelValue) {
   }
   if (!session) {
     alert("Deine Sitzung ist abgelaufen. Bitte neu einloggen.");
-    window.location.href = "login.html";
+    window.location.href = window.location.pathname.includes('/en/') ? '/en/pages/login.html' : '/de/pages/login.html';
     return;
   }
 
@@ -585,7 +587,7 @@ window.savePassword = async function (newPasswordValue, labelValue) {
       insertError.message?.includes("token")
     ) {
       alert("Deine Sitzung ist abgelaufen. Bitte neu einloggen.");
-      window.location.href = "login.html";
+      window.location.href = window.location.pathname.includes('/en/') ? '/en/pages/login.html' : '/de/pages/login.html';
     } else {
       alert("Fehler beim Speichern: " + insertError.message);
     }
@@ -612,7 +614,6 @@ window.saveManual = async function () {
 
 // Vom Generator zum Tresor übertragen
 window.transferToVault = async function () {
-  alert('transferToVault aufgerufen');
   const outputField = document.getElementById("password-output");
   const labelField = document.getElementById("password-label");
   const currentPassword = outputField ? outputField.value : "";
