@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Keylogger – SafeNet Security</title>
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/shared.css" />
+    <link rel="stylesheet" href="/css/infobox.css" />
+    <link rel="stylesheet" href="/css/hero.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/generator.css" />
+    <link rel="stylesheet" href="/css/keylogger.css" />
+    <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png" />
+    <script type="module" src="/js/auth.js?v=5"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <h1>Keylogger</h1>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>What is a Keylogger?</h2>
+        <p>
+          A keylogger is a program or hardware device that records every
+          keystroke you make on your keyboard. If an attacker installs a
+          keylogger on your computer, they can spy on your passwords, messages,
+          emails and other sensitive information before it is encrypted.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>How Does It Work?</h2>
+        <p>
+          A keylogger is either installed as a software program on your computer
+          or attached as a physical device between your keyboard and your
+          computer. The program runs in the background and records every key you
+          press. This data is then transmitted to the attacker, who can analyse
+          it to extract passwords and other important information.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Risks and Consequences</h2>
+        <p>
+          With a keylogger, attackers can steal your passwords, spy on your
+          personal data, intercept online banking information, or misuse your
+          identity. Because the keylogger records everything before it is
+          encrypted, even "secure" websites are not protected against this
+          threat. The consequences can range from data loss to financial damage.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>How to Protect Yourself</h2>
+        <p>
+          <strong>1. Antivirus software:</strong> Install reliable antivirus and
+          anti-malware software and keep it up to date. It can detect and remove
+          keyloggers.<br /><br />
+
+          <strong>2. Regular updates:</strong> Keep your operating system and all
+          installed programs regularly updated. Security vulnerabilities are
+          often fixed by updates.<br /><br />
+
+          <strong>3. Safe browsing:</strong> Only download files from trusted
+          sources and be careful with email attachments. Many keyloggers are
+          spread via phishing emails.<br /><br />
+
+          <strong>4. Firewall and secure connections:</strong> Use a firewall and
+          secure HTTPS connections. Also check your keyboard for unknown hardware
+          devices.
+        </p>
+      </div>
+    </section>
+
+    <div class="password-container">
+      <h3>Keylogger Demo</h3>
+      <p style="text-align: center; color: #a0c4ff; margin-bottom: 24px">
+        Click into the input field and type – everything is recorded, just like a real keylogger.
+      </p>
+
+      <div class="display-box">
+        <input
+          id="eingabe"
+          type="text"
+          placeholder="Type here..."
+          style="
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #66d9ff;
+            font-family: monospace;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            padding: 6px 0;
+            margin: 0;
+            height: auto;
+            line-height: 1.5;
+          "
+        />
+      </div>
+
+      <div
+        id="ausgabe"
+        style="
+          padding: 16px;
+          background: rgba(10, 18, 35, 0.6);
+          border: 1px solid rgba(102, 179, 255, 0.25);
+          border-radius: 12px;
+          text-align: left;
+          color: #66d9ff;
+          font-family: monospace;
+          font-size: 1rem;
+          margin-top: 16px;
+          word-break: break-all;
+          min-height: 54px;
+          max-height: 140px;
+          overflow-y: auto;
+        "
+      >
+        No keystrokes recorded yet.
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; padding:0 4px;">
+        <span id="key-count" style="color:rgba(255,255,255,0.5); font-size:0.88rem;"></span>
+        <button id="key-clear" class="main-btn" style="width:auto; padding:8px 18px; font-size:0.9rem; margin-top:0;">
+          Clear recording
+        </button>
+      </div>
+    </div>
+
+    <script>
+      const eingabe = document.getElementById("eingabe");
+      const ausgabe = document.getElementById("ausgabe");
+      const keyCount = document.getElementById("key-count");
+      const clearBtn = document.getElementById("key-clear");
+
+      const tasteLog = [];
+
+      eingabe.addEventListener("keydown", (event) => {
+        let anzeige;
+        if (event.key === ' ') anzeige = '[\u2423]';
+        else if (event.key === 'Backspace') anzeige = '[\u2190]';
+        else if (event.key === 'Enter') anzeige = '[Enter]';
+        else if (event.key === 'Tab') { event.preventDefault(); anzeige = '[Tab]'; }
+        else if (event.key.length === 1) anzeige = event.key;
+        else anzeige = '[' + event.key + ']';
+
+        tasteLog.push(anzeige);
+        ausgabe.textContent = tasteLog.join(' ');
+        ausgabe.scrollTop = ausgabe.scrollHeight;
+        keyCount.textContent = tasteLog.length + ' keys recorded';
+      });
+
+      clearBtn.addEventListener("click", () => {
+        tasteLog.length = 0;
+        ausgabe.textContent = 'No keystrokes recorded yet.';
+        keyCount.textContent = '';
+        eingabe.value = '';
+        eingabe.focus();
+      });
+    </script>
+
+    <!-- ═══ Demo 2: Attacker Perspective ═══ -->
+    <style>
+      .kl2-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+      @media (max-width: 768px) { .kl2-grid { grid-template-columns: 1fr; } }
+      #kl2-live-dot { display: inline-block; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; transition: opacity 0.15s; }
+    </style>
+
+    <div class="password-container">
+      <h3>Demo 2: Attacker Perspective</h3>
+      <p style="text-align:center;color:#a0c4ff;margin-bottom:24px;">
+        Log in on the &laquo;secure&raquo; login page – and simultaneously see what a keylogger sends to the attacker in the background. The password appears as dots for you, but the attacker reads every letter in plain text.
+      </p>
+
+      <div class="kl2-grid">
+
+        <!-- Left side: fake login page (user perspective) -->
+        <div>
+          <div style="font-size:0.75rem;color:#64748b;text-align:center;margin-bottom:10px;letter-spacing:1px;text-transform:uppercase;">Your view</div>
+          <div style="background:#172441;border:1px solid rgba(59,130,246,0.2);border-radius:12px;padding:24px;">
+            <div style="font-size:0.95rem;font-weight:700;color:white;margin-bottom:18px;">🔒 Secure login</div>
+
+            <label style="font-size:13px;color:#94a3b8;display:block;margin-bottom:5px;">Username</label>
+            <input type="text" id="kl2-user" placeholder="username@email.com" autocomplete="off"
+              style="width:100%;padding:10px 12px;background:#0f172a;border:1px solid rgba(59,130,246,0.2);border-radius:8px;color:white;font-size:14px;font-family:Inter,sans-serif;box-sizing:border-box;outline:none;margin-bottom:14px;">
+
+            <label style="font-size:13px;color:#94a3b8;display:block;margin-bottom:5px;">Password</label>
+            <input type="password" id="kl2-pass" placeholder="••••••••" autocomplete="off"
+              style="width:100%;padding:10px 12px;background:#0f172a;border:1px solid rgba(59,130,246,0.2);border-radius:8px;color:white;font-size:14px;font-family:Inter,sans-serif;box-sizing:border-box;outline:none;margin-bottom:20px;">
+
+            <button style="width:100%;padding:11px;background:linear-gradient(135deg,#3399ff,#66d9ff);color:#0f172a;border:none;border-radius:8px;font-size:14px;font-weight:700;font-family:Inter,sans-serif;cursor:default;">
+              Log in
+            </button>
+          </div>
+        </div>
+
+        <!-- Right side: attacker panel -->
+        <div>
+          <div style="font-size:0.75rem;color:#ef4444;text-align:center;margin-bottom:10px;letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:7px;">
+            <span id="kl2-live-dot"></span> Attacker panel
+          </div>
+          <div style="background:#130a0a;border:1px solid rgba(239,68,68,0.35);border-radius:12px;padding:16px;min-height:210px;display:flex;flex-direction:column;">
+            <div style="color:#ef4444;font-family:monospace;font-size:0.72rem;margin-bottom:10px;">[KEYLOGGER v2.3 — Connection active — Target: 192.168.1.42]</div>
+            <div id="kl2-log"
+              style="color:#fca5a5;font-family:monospace;font-size:0.82rem;line-height:1.8;word-break:break-all;flex:1;overflow-y:auto;max-height:160px;white-space:pre-wrap;">Waiting for input…</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding:0 4px;">
+        <span id="kl2-count" style="color:rgba(255,255,255,0.45);font-size:0.88rem;"></span>
+        <button id="kl2-clear" class="main-btn" style="width:auto;padding:8px 18px;font-size:0.9rem;margin-top:0;">
+          Reset
+        </button>
+      </div>
+    </div>
+
+    <script>
+      // Demo 2: Attacker perspective — keylogger simulation
+      (function () {
+        const userInput = document.getElementById('kl2-user');
+        const passInput = document.getElementById('kl2-pass');
+        const log       = document.getElementById('kl2-log');
+        const liveDot   = document.getElementById('kl2-live-dot');
+        const counter   = document.getElementById('kl2-count');
+        const clearBtn2 = document.getElementById('kl2-clear');
+
+        const ereignisse = [];
+
+        function keyAnzeige(taste) {
+          if (taste === ' ')         return '[SPACE]';
+          if (taste === 'Backspace') return '[DELETE]';
+          if (taste === 'Enter')     return '[ENTER]';
+          if (taste === 'Tab')       return '[TAB]';
+          if (taste.length === 1)    return taste;
+          return null;
+        }
+
+        function eintrag(feld, taste) {
+          const anzeige = keyAnzeige(taste);
+          if (anzeige === null) return;
+
+          const jetzt       = new Date();
+          const zeitstempel = jetzt.toLocaleTimeString('en', { hour12: false });
+          const feldName    = feld === 'user' ? 'Username' : 'Password';
+
+          if (ereignisse.length === 0) log.textContent = '';
+          ereignisse.push('[' + zeitstempel + '] ' + feldName + ' \u2192 ' + anzeige);
+          log.textContent = ereignisse.join('\n');
+          log.scrollTop   = log.scrollHeight;
+          counter.textContent = ereignisse.length + ' events transmitted';
+
+          liveDot.style.opacity = '0.15';
+          setTimeout(() => { liveDot.style.opacity = '1'; }, 150);
+        }
+
+        userInput.addEventListener('keydown', e => eintrag('user', e.key));
+        passInput.addEventListener('keydown', e => eintrag('pass', e.key));
+
+        clearBtn2.addEventListener('click', () => {
+          ereignisse.length   = 0;
+          log.textContent     = 'Waiting for input…';
+          counter.textContent = '';
+          userInput.value     = '';
+          passInput.value     = '';
+        });
+      })();
+    </script>
+
+    <div id="footer"></div>
+    <script>
+      fetch("/en/partials/navbar.html").then(r=>r.text()).then(d=>{
+        document.getElementById("navbar").innerHTML=d;
+        const toggle=document.querySelector(".menu-toggle");
+        const navLinks=document.querySelector(".nav-links");
+        const dropdown=document.querySelector(".dropdown");
+        const dropdownLink=document.querySelector(".dropdown-link");
+        if(toggle)toggle.addEventListener("click",()=>{navLinks.classList.toggle("active");if(!navLinks.classList.contains("active"))dropdown.classList.remove("open");});
+        if(dropdownLink)dropdownLink.addEventListener("click",(e)=>{if(window.innerWidth<=768){if(!dropdown.classList.contains("open")){e.preventDefault();dropdown.classList.add("open");}}});
+      });
+      fetch("/en/partials/footer.html").then(r=>r.text()).then(d=>{document.getElementById("footer").innerHTML=d});
+    </script>
+  </body>
+</html>

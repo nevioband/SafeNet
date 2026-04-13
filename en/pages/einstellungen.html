@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings – SafeNet Security</title>
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/shared.css">
+    <link rel="stylesheet" href="/css/einstellungen.css">
+    <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png">
+    <script type="module" src="/js/auth.js?v=5"></script>
+</head>
+<body>
+    <div id="navbar"></div>
+
+    <div class="settings-wrap">
+        <h1 class="settings-page-title">Settings</h1>
+        <p class="settings-page-sub">Manage your profile and security settings.</p>
+
+        <!-- ── PROFILE ──────────────────────────────── -->
+        <div class="settings-section-label">Profile</div>
+        <div class="s-card">
+            <h3>Profile picture &amp; account</h3>
+            <p class="s-card-desc">Your picture is shown in the top right of the navigation bar.</p>
+            <div class="profile-row">
+                <div class="s-avatar" id="avatarCircle">
+                    <span id="avatarInitial">?</span>
+                </div>
+                <div class="profile-meta">
+                    <div class="name-val" id="profileDisplayName" style="display:none;"></div>
+                    <div class="email-lbl">Email address</div>
+                    <div class="email-val" id="profileEmail">–</div>
+                    <button class="btn btn-secondary" onclick="document.getElementById('avatarInput').click()">Upload / change picture</button>
+                    <input type="file" id="avatarInput" accept="image/*" style="display:none">
+                </div>
+            </div>
+            <div id="avatarMsg" class="msg-box" style="margin-top:16px;margin-bottom:0;"></div>
+        </div>
+
+        <!-- Display name -->
+        <div class="s-card">
+            <h3>Display name</h3>
+            <p class="s-card-desc">Shown in the navigation bar instead of your email address.</p>
+            <div id="nameMsg" class="msg-box"></div>
+            <div class="form-group form-group-last">
+                <label for="displayName">Display name</label>
+                <input type="text" id="displayName" class="form-input" placeholder="e.g. John Doe" maxlength="40">
+            </div>
+            <button class="btn btn-primary" id="saveNameBtn">Save</button>
+        </div>
+        <div class="settings-section-label">Security</div>
+
+        <!-- 2FA -->
+        <div class="s-card">
+            <h3>Two-Factor Authentication</h3>
+            <p class="s-card-desc">Protect your account with a one-time code from your authenticator app (e.g. Google Authenticator, Authy).</p>
+
+            <div id="tfaMsg" class="msg-box"></div>
+
+            <div id="tfaSectionOff">
+                <button class="btn btn-primary btn-full" id="enableBtn">Enable 2FA</button>
+            </div>
+
+            <div id="tfaQrSection">
+                <p style="color:#cbd5e1;font-size:14px;margin:0 0 4px;">Scan this QR code with your authenticator app:</p>
+                <img id="qrImg" class="qr-img" width="180" height="180" alt="QR Code">
+                <p style="color:#94a3b8;font-size:13px;margin:8px 0 0;text-align:center;">Or enter this code manually:</p>
+                <p id="secretText" style="color:#66d9ff;font-size:13px;font-family:monospace;letter-spacing:3px;text-align:center;word-break:break-all;margin:6px 0 0;"></p>
+                <input type="text" inputmode="numeric" maxlength="6" class="code-input" id="verifyCode" placeholder="123456">
+                <button class="btn btn-primary btn-full" id="verifyBtn">Confirm &amp; activate</button>
+                <button class="btn btn-secondary btn-full" id="cancelEnrollBtn" style="margin-top:8px;">Cancel</button>
+            </div>
+
+            <div id="tfaSectionOn" style="display:none;">
+                <button class="btn btn-danger btn-full" id="disableBtn">Disable 2FA</button>
+            </div>
+        </div>
+
+        <!-- Change password -->
+        <div class="s-card">
+            <h3>Change password</h3>
+            <p class="s-card-desc">Choose a strong, unique password for your account.</p>
+            <div id="pwMsg" class="msg-box"></div>
+            <div class="form-group">
+                <label for="currentPassword">Current password</label>
+                <input type="password" id="currentPassword" class="form-input" placeholder="Your current password">
+            </div>
+            <div class="form-group">
+                <label for="newPassword">New password</label>
+                <input type="password" id="newPassword" class="form-input" placeholder="At least 8 characters">
+            </div>
+            <div class="form-group form-group-last">
+                <label for="confirmPassword">Confirm password</label>
+                <input type="password" id="confirmPassword" class="form-input" placeholder="Repeat password">
+            </div>
+            <button class="btn btn-primary" id="changePwBtn">Change password</button>
+        </div>
+
+        <!-- Change email -->
+        <div class="s-card">
+            <h3>Change email address</h3>
+            <p class="s-card-desc">A confirmation email will be sent to the new address. The change only takes effect after clicking the link.</p>
+            <div id="emailMsg" class="msg-box"></div>
+            <div class="form-group form-group-last">
+                <label for="newEmail">New email address</label>
+                <input type="email" id="newEmail" class="form-input" placeholder="new@email.com">
+            </div>
+            <button class="btn btn-primary" id="changeEmailBtn">Send confirmation email</button>
+        </div>
+
+        <!-- ── DATA ────────────────────── -->
+        <div class="settings-section-label">Data</div>
+
+        <!-- Vault statistics -->
+        <div class="s-card">
+            <h3>Vault statistics</h3>
+            <p class="s-card-desc">Overview of your saved password vault.</p>
+            <div class="stat-grid">
+                <div class="stat-tile"><div class="stat-num" id="statTotal">–</div><div class="stat-lbl">Total</div></div>
+                <div class="stat-tile"><div class="stat-num warn" id="statDuplicates">–</div><div class="stat-lbl">Duplicates</div></div>
+                <div class="stat-tile"><div class="stat-num danger" id="statWeak">–</div><div class="stat-lbl">Weak (&lt;8)</div></div>
+                <div class="stat-tile"><div class="stat-num" id="statStrong">–</div><div class="stat-lbl">Strong (≥12)</div></div>
+            </div>
+        </div>
+
+        <!-- ── DANGER ZONE ──────────────── -->
+        <div class="settings-section-label label-danger">Danger zone</div>
+
+        <!-- Delete account -->
+        <div class="s-card danger-card">
+            <h3>Delete account</h3>
+            <p class="s-card-desc">Your account and all saved data will be permanently deleted. This action cannot be undone.</p>
+            <div id="deleteMsg" class="msg-box"></div>
+            <div id="deleteConfirmSection" style="display:none;">
+                <div class="form-group form-group-last">
+                    <label for="deleteConfirmInput">Type <strong style="color:#f87171;">DELETE</strong> to confirm</label>
+                    <input type="text" id="deleteConfirmInput" class="form-input" placeholder="DELETE">
+                </div>
+                <button class="btn btn-danger" id="confirmDeleteBtn">Permanently delete account</button>
+                <button class="btn btn-secondary" id="cancelDeleteBtn" style="margin-left:10px;">Cancel</button>
+            </div>
+            <button class="btn btn-danger" id="deleteAccountBtn">Delete account</button>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script>
+        fetch('/en/partials/navbar.html').then(r => r.text()).then(d => {
+            document.getElementById('navbar').innerHTML = d
+            const toggle = document.querySelector('.menu-toggle')
+            const navLinks = document.querySelector('.nav-links')
+            if (toggle) toggle.addEventListener('click', () => navLinks.classList.toggle('active'))
+        })
+        fetch('/en/partials/footer.html').then(r => r.text()).then(d => {
+            document.getElementById('footer').innerHTML = d
+        })
+    </script>
+
+    <script type="module">
+        import { supabase } from '/js/supabase.js'
+
+        ;(async () => {
+            let tfaEnrolledFactorId = null
+            let session, userId, email, initial, displayName = ''
+
+            const { data } = await supabase.auth.getSession()
+            session = data?.session
+
+            if (!session) {
+                window.location.href = '/en/pages/login.html'
+                return
+            }
+
+            userId      = session.user.id
+            email       = session.user.email
+            initial     = email.charAt(0).toUpperCase()
+            displayName = session.user.user_metadata?.display_name || ''
+
+            document.getElementById('profileEmail').textContent = email
+            document.getElementById('avatarInitial').textContent = displayName ? displayName.charAt(0).toUpperCase() : initial
+            document.getElementById('displayName').value = displayName
+            if (displayName) {
+                const el = document.getElementById('profileDisplayName')
+                el.textContent = displayName
+                el.style.display = 'block'
+            }
+
+            const avatarB64 = session.user.user_metadata?.avatar_b64
+            if (avatarB64) {
+                document.getElementById('avatarCircle').innerHTML = `<img src="${avatarB64}" alt="${initial}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`
+            }
+
+            document.getElementById('avatarInput').addEventListener('change', async (e) => {
+                const file = e.target.files[0]
+                if (!file) return
+                showMsg('avatarMsg', 'Processing…', 'info')
+                const b64 = await resizeToBase64(file, 200)
+                const { error } = await supabase.auth.updateUser({ data: { avatar_b64: b64 } })
+                if (error) { showMsg('avatarMsg', 'Error: ' + error.message, 'error'); return }
+                document.getElementById('avatarCircle').innerHTML = `<img src="${b64}" alt="${initial}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`
+                showMsg('avatarMsg', 'Profile picture updated successfully.', 'success')
+                e.target.value = ''
+            })
+
+            function resizeToBase64(file, maxPx) {
+                return new Promise(resolve => {
+                    const reader = new FileReader()
+                    reader.onload = ev => {
+                        const img = new Image()
+                        img.onload = () => {
+                            let w = img.width, h = img.height
+                            if (w > h && w > maxPx) { h = Math.round(h * maxPx / w); w = maxPx }
+                            else if (h >= w && h > maxPx) { w = Math.round(w * maxPx / h); h = maxPx }
+                            const c = document.createElement('canvas')
+                            c.width = w; c.height = h
+                            c.getContext('2d').drawImage(img, 0, 0, w, h)
+                            resolve(c.toDataURL('image/jpeg', 0.85))
+                        }
+                        img.src = ev.target.result
+                    }
+                    reader.readAsDataURL(file)
+                })
+            }
+
+            async function loadTfaStatus() {
+                const { data, error } = await supabase.auth.mfa.listFactors()
+                if (error) { showMsg('tfaMsg', 'Error loading 2FA status.', 'error'); return }
+                const verified = (data.totp || []).find(f => f.status === 'verified')
+                if (verified) {
+                    tfaEnrolledFactorId = verified.id
+                    document.getElementById('tfaSectionOff').style.display = 'none'
+                    document.getElementById('tfaSectionOn').style.display = 'block'
+                    document.getElementById('tfaQrSection').style.display = 'none'
+                } else {
+                    document.getElementById('tfaSectionOff').style.display = 'block'
+                    document.getElementById('tfaSectionOn').style.display = 'none'
+                    document.getElementById('tfaQrSection').style.display = 'none'
+                }
+            }
+            await loadTfaStatus()
+
+            document.getElementById('enableBtn').addEventListener('click', async () => {
+                showMsg('tfaMsg', '', 'hide')
+                const btn = document.getElementById('enableBtn')
+                btn.textContent = 'Preparing…'; btn.disabled = true
+                const { data, error } = await supabase.auth.mfa.enroll({ factorType: 'totp', friendlyName: 'SafeNet Authenticator' })
+                btn.textContent = 'Enable 2FA'; btn.disabled = false
+                if (error) { showMsg('tfaMsg', 'Error: ' + error.message, 'error'); return }
+                tfaEnrolledFactorId = data.id
+                document.getElementById('qrImg').src = data.totp.qr_code
+                document.getElementById('secretText').textContent = data.totp.secret
+                document.getElementById('tfaSectionOff').style.display = 'none'
+                document.getElementById('tfaQrSection').style.display = 'block'
+            })
+
+            document.getElementById('verifyBtn').addEventListener('click', async () => {
+                showMsg('tfaMsg', '', 'hide')
+                const code = document.getElementById('verifyCode').value.trim()
+                if (!code || code.length !== 6) { showMsg('tfaMsg', 'Please enter a 6-digit code.', 'error'); return }
+                const btn = document.getElementById('verifyBtn')
+                btn.textContent = 'Verifying…'; btn.disabled = true
+                const { data: ch, error: chErr } = await supabase.auth.mfa.challenge({ factorId: tfaEnrolledFactorId })
+                if (chErr) { showMsg('tfaMsg', 'Error: ' + chErr.message, 'error'); btn.textContent = 'Confirm & activate'; btn.disabled = false; return }
+                const { error: vErr } = await supabase.auth.mfa.verify({ factorId: tfaEnrolledFactorId, challengeId: ch.id, code })
+                btn.textContent = 'Confirm & activate'; btn.disabled = false
+                if (vErr) { showMsg('tfaMsg', 'Incorrect code. Please try again.', 'error'); return }
+                showMsg('tfaMsg', '2FA has been successfully enabled!', 'success')
+                document.getElementById('verifyCode').value = ''
+                await loadTfaStatus()
+            })
+
+            document.getElementById('cancelEnrollBtn').addEventListener('click', async () => {
+                if (tfaEnrolledFactorId) {
+                    await supabase.auth.mfa.unenroll({ factorId: tfaEnrolledFactorId })
+                    tfaEnrolledFactorId = null
+                }
+                await loadTfaStatus()
+            })
+
+            document.getElementById('disableBtn').addEventListener('click', async () => {
+                if (!confirm('Really disable 2FA? Your account will be less secure.')) return
+                showMsg('tfaMsg', '', 'hide')
+                const btn = document.getElementById('disableBtn')
+                btn.textContent = 'Disabling…'; btn.disabled = true
+                const { error } = await supabase.auth.mfa.unenroll({ factorId: tfaEnrolledFactorId })
+                btn.textContent = 'Disable 2FA'; btn.disabled = false
+                if (error) { showMsg('tfaMsg', 'Error: ' + error.message, 'error'); return }
+                showMsg('tfaMsg', '2FA has been disabled.', 'success')
+                await loadTfaStatus()
+            })
+
+            document.getElementById('saveNameBtn').addEventListener('click', async () => {
+                const name = document.getElementById('displayName').value.trim()
+                const btn = document.getElementById('saveNameBtn')
+                btn.textContent = 'Saving…'; btn.disabled = true
+                const { error } = await supabase.auth.updateUser({ data: { display_name: name } })
+                btn.textContent = 'Save'; btn.disabled = false
+                if (error) { showMsg('nameMsg', 'Error: ' + error.message, 'error'); return }
+                showMsg('nameMsg', 'Display name saved.', 'success')
+                document.getElementById('avatarInitial').textContent = name ? name.charAt(0).toUpperCase() : initial
+                const nameEl = document.getElementById('profileDisplayName')
+                if (name) { nameEl.textContent = name; nameEl.style.display = 'block' }
+                else { nameEl.style.display = 'none' }
+            })
+
+            document.getElementById('changeEmailBtn').addEventListener('click', async () => {
+                const newEmail = document.getElementById('newEmail').value.trim()
+                if (!newEmail || !newEmail.includes('@')) { showMsg('emailMsg', 'Please enter a valid email address.', 'error'); return }
+                const btn = document.getElementById('changeEmailBtn')
+                btn.textContent = 'Sending…'; btn.disabled = true
+                const { error } = await supabase.auth.updateUser({ email: newEmail })
+                btn.textContent = 'Send confirmation email'; btn.disabled = false
+                if (error) { showMsg('emailMsg', 'Error: ' + error.message, 'error'); return }
+                showMsg('emailMsg', `Confirmation email sent to ${newEmail}. Please click the link in the email.`, 'success')
+                document.getElementById('newEmail').value = ''
+            })
+
+            ;(async () => {
+                const { data: rows } = await supabase.from('passwords').select('id, label').eq('user_id', userId)
+                if (!rows) return
+                const entries = rows.filter(r => !r.label?.startsWith('__'))
+                document.getElementById('statTotal').textContent = entries.length
+                document.getElementById('statDuplicates').textContent = '–'
+                document.getElementById('statWeak').textContent = '–'
+                document.getElementById('statStrong').textContent = '–'
+            })()
+
+            document.getElementById('deleteAccountBtn').addEventListener('click', () => {
+                document.getElementById('deleteAccountBtn').style.display = 'none'
+                document.getElementById('deleteConfirmSection').style.display = 'block'
+            })
+            document.getElementById('cancelDeleteBtn').addEventListener('click', () => {
+                document.getElementById('deleteConfirmSection').style.display = 'none'
+                document.getElementById('deleteAccountBtn').style.display = 'inline-block'
+                document.getElementById('deleteConfirmInput').value = ''
+                showMsg('deleteMsg', '', 'hide')
+            })
+            document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
+                if (document.getElementById('deleteConfirmInput').value !== 'DELETE') {
+                    showMsg('deleteMsg', 'Please type exactly "DELETE".', 'error'); return
+                }
+                const btn = document.getElementById('confirmDeleteBtn')
+                btn.textContent = 'Deleting…'; btn.disabled = true
+                await supabase.from('passwords').delete().eq('user_id', userId)
+                const { error } = await supabase.functions.invoke('delete-account')
+                if (error) {
+                    showMsg('deleteMsg', 'Error deleting account: ' + error.message, 'error')
+                    btn.textContent = 'Permanently delete account'; btn.disabled = false
+                    return
+                }
+                await supabase.auth.signOut()
+                window.location.href = '/'
+            })
+
+            document.getElementById('changePwBtn').addEventListener('click', async () => {
+                const currentPw = document.getElementById('currentPassword').value
+                const newPw     = document.getElementById('newPassword').value
+                const confirmPw = document.getElementById('confirmPassword').value
+                if (!currentPw)                    { showMsg('pwMsg', 'Please enter your current password.', 'error'); return }
+                if (!newPw || newPw.length < 8)    { showMsg('pwMsg', 'New password must be at least 8 characters long.', 'error'); return }
+                if (newPw !== confirmPw)            { showMsg('pwMsg', 'Passwords do not match.', 'error'); return }
+                const btn = document.getElementById('changePwBtn')
+                btn.textContent = 'Verifying…'; btn.disabled = true
+                const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password: currentPw })
+                if (signInErr) {
+                    showMsg('pwMsg', 'Current password is incorrect.', 'error')
+                    btn.textContent = 'Change password'; btn.disabled = false
+                    return
+                }
+                btn.textContent = 'Saving…'
+                const { error } = await supabase.auth.updateUser({ password: newPw })
+                btn.textContent = 'Change password'; btn.disabled = false
+                if (error) { showMsg('pwMsg', 'Error: ' + error.message, 'error'); return }
+                showMsg('pwMsg', 'Password changed successfully.', 'success')
+                document.getElementById('currentPassword').value = ''
+                document.getElementById('newPassword').value = ''
+                document.getElementById('confirmPassword').value = ''
+            })
+
+            document.getElementById('displayName').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('saveNameBtn').click() })
+            document.getElementById('verifyCode').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('verifyBtn').click() })
+            document.getElementById('newEmail').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('changeEmailBtn').click() })
+            document.getElementById('confirmPassword').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('changePwBtn').click() })
+            document.getElementById('deleteConfirmInput').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('confirmDeleteBtn').click() })
+
+            function showMsg(id, text, type) {
+                const box = document.getElementById(id)
+                if (type === 'hide') { box.style.display = 'none'; return }
+                box.textContent = text
+                box.className = 'msg-box ' + (type === 'success' ? 'msg-success' : type === 'info' ? 'msg-info' : 'msg-error')
+                box.style.display = 'block'
+            }
+        })()
+    </script>
+</body>
+</html>

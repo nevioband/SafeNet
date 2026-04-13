@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kontakt – SafeNet Security</title>
+    <title>Contact – SafeNet Security</title>
     <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png" />
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/shared.css" />
@@ -15,49 +15,40 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
     <script type="module" src="/js/auth.js"></script>
-    <script type="module" src="/js/kontakt.js"></script>
+    <script type="module" src="/js/kontakt-en.js"></script>
   </head>
   <body>
     <div id="navbar"></div>
     <main class="kontakt-main">
       <section class="kontakt-section">
-        <h1>Kontakt</h1>
+        <h1>Contact</h1>
         <form id="kontakt-form" class="kontakt-form">
           <label for="name">Name (optional)</label>
           <input type="text" id="name" name="name" maxlength="50" autocomplete="name" />
 
-          <label for="email">E-Mail<span class="pflicht">*</span></label>
+          <label for="email">Email<span class="pflicht">*</span></label>
           <input type="email" id="email" name="email" required maxlength="100" autocomplete="email" />
 
-          <label for="nachricht">Nachricht<span class="pflicht">*</span></label>
+          <label for="nachricht">Message<span class="pflicht">*</span></label>
           <textarea id="nachricht" name="nachricht" required maxlength="1000" rows="6"></textarea>
 
-          <button type="submit" class="btn-primary">Absenden</button>
+          <button type="submit" class="btn-primary">Send</button>
           <div id="kontakt-feedback" class="kontakt-feedback"></div>
         </form>
       </section>
     </main>
     <div id="footer"></div>
     <script>
-      fetch("/de/partials/navbar.html").then(res => res.text()).then(data => {
-        document.getElementById("navbar").innerHTML = data;
-        const toggle = document.querySelector(".menu-toggle");
-        const navLinks = document.querySelector(".nav-links");
-        const dropdownLink = document.querySelector(".dropdown-link");
-        const dropdown = document.querySelector(".dropdown");
-        if (toggle && navLinks) {
-          toggle.addEventListener("click", () => { navLinks.classList.toggle("active"); });
-        }
-        if (dropdownLink && dropdown) {
-          dropdownLink.addEventListener("click", (e) => {
-            if (window.innerWidth <= 768) {
-              e.preventDefault();
-              dropdown.classList.toggle("open");
-            }
-          });
-        }
+      fetch("/en/partials/navbar.html").then(r=>r.text()).then(d=>{
+        document.getElementById("navbar").innerHTML=d;
+        const toggle=document.querySelector(".menu-toggle");
+        const navLinks=document.querySelector(".nav-links");
+        const dropdown=document.querySelector(".dropdown");
+        const dropdownLink=document.querySelector(".dropdown-link");
+        if(toggle&&navLinks){toggle.addEventListener("click",()=>{navLinks.classList.toggle("active");if(!navLinks.classList.contains("active"))dropdown.classList.remove("open");});}
+        if(dropdownLink&&dropdown){dropdownLink.addEventListener("click",(e)=>{if(window.innerWidth<=768){if(!dropdown.classList.contains("open")){e.preventDefault();dropdown.classList.add("open");}}});}
       });
-      fetch("/de/partials/footer.html").then(r=>r.text()).then(d=>{document.getElementById("footer").innerHTML=d});
+      fetch("/en/partials/footer.html").then(r=>r.text()).then(d=>{document.getElementById("footer").innerHTML=d});
     </script>
   </body>
 </html>

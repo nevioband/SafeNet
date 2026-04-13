@@ -15,13 +15,14 @@ async function applyNavbarUser() {
         if (session && session.user) {
             // 2FA-Bypass verhindern: Wenn 2FA aktiviert aber noch nicht abgeschlossen, abmelden
             // Ausnahme: Einstellungen-Seite, damit User 2FA aktivieren kann
+            const isEnglish = window.location.pathname.startsWith('/en/')
             const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
             const isEinstellungen = window.location.pathname.includes('/de/pages/einstellungen.html') || window.location.pathname.includes('/en/pages/einstellungen.html')
             if (aal?.nextLevel === 'aal2' && aal?.currentLevel !== 'aal2' && !isEinstellungen) {
                 await supabase.auth.signOut()
                 const isLoginPage = window.location.pathname.includes('login.html')
                 if (!isLoginPage) {
-                    window.location.href = '/de/pages/login.html'
+                    window.location.href = isEnglish ? '/en/pages/login.html' : '/de/pages/login.html'
                 }
                 return
             }
@@ -31,11 +32,15 @@ async function applyNavbarUser() {
             const initial     = (displayName || email).charAt(0).toUpperCase()
             const shownName   = displayName || email
 
-            // Dropdown: Anzeigename oder E-Mail + Einstellungen-Link (korrekter Pfad für Deutsch)
+            const settingsUrl   = isEnglish ? '/en/pages/einstellungen.html' : '/de/pages/einstellungen.html'
+            const settingsLabel = isEnglish ? 'Settings' : 'Einstellungen'
+            const signOutLabel  = isEnglish ? 'Sign out' : 'Abmelden'
+
+            // Dropdown: Anzeigename oder E-Mail + Einstellungen-Link (sprachabhängig)
             dropdown.innerHTML = `
                 <li class="user-dropdown-name">${shownName}</li>
-                <li><a href="/de/pages/einstellungen.html">Einstellungen</a></li>
-                <li><a href="#" id="logoutBtn">Abmelden</a></li>
+                <li><a href="${settingsUrl}">${settingsLabel}</a></li>
+                <li><a href="#" id="logoutBtn">${signOutLabel}</a></li>
             `
             dropdown.querySelector('#logoutBtn').addEventListener('click', async (e) => {
                 e.preventDefault()

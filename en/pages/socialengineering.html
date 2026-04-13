@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Social Engineering – SafeNet Security</title>
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/shared.css" />
+    <link rel="stylesheet" href="/css/infobox.css" />
+    <link rel="stylesheet" href="/css/hero.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png">
+    <link rel="stylesheet" href="/css/socialengineering.css" />
+    <script type="module" src="/js/auth.js?v=5"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <h1>Social Engineering</h1>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>What is Social Engineering?</h2>
+        <p>
+          Social engineering is a manipulation technique where attackers use
+          psychological tactics to trick people into revealing confidential
+          information or performing unsafe actions. Unlike technical attacks,
+          social engineering does not target systems but rather the weakness of
+          human behaviour. Attackers exploit trust, authority, urgency or
+          emotional manipulation to influence their victims.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>How Does It Work?</h2>
+        <p>
+          Social engineering is based on psychological manipulation. The attacker
+          first researches information about the victim (via social media, public
+          databases, etc.). They then build trust or create pressure through
+          fabricated authority or urgency. The attacker poses as IT support, a
+          police officer, bank employee or manager, for example. The victim is
+          then manipulated into revealing confidential information or clicking on
+          suspicious links.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Examples of Social Engineering Attacks</h2>
+        <p>
+          <strong>Example 1 – Pretexting:</strong> An attacker calls you and
+          poses as your IT support. They claim there is a security problem with
+          your account and ask you to share your password in order to
+          "verify the system".<br><br>
+
+          <strong>Example 2 – Baiting:</strong> A USB stick or external hard
+          drive labelled "Salary lists" is left in public places. A victim finds
+          the stick and plugs it into their computer, installing malware on the
+          system.<br><br>
+
+          <strong>Example 3 – Tailgating / Piggybacking:</strong> An attacker
+          follows an employee through a company security door by pretending to
+          be one or carrying a delivery, thereby gaining access to restricted
+          areas.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Risks and Consequences</h2>
+        <p>
+          Social engineering can lead to serious consequences: theft of
+          credentials and confidential information, installation of malware or
+          ransomware on company devices, unauthorised access to sensitive data
+          and systems, financial losses from fraudulent transactions, damage to
+          the company's reputation and loss of customer trust.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>How to Protect Yourself</h2>
+        <p>
+          <strong>1. Be sceptical of unexpected contacts:</strong> Always
+          question calls or emails asking for personal information or access
+          credentials – even if the sender seems legitimate.<br><br>
+
+          <strong>2. Verify identity:</strong> For suspicious calls, hang up and
+          call the number back directly (look it up in official directories) to
+          confirm identity.<br><br>
+
+          <strong>3. Never share passwords or PINs:</strong> No legitimate
+          company will ever ask you for your password or PIN. These are strictly
+          confidential.<br><br>
+
+          <strong>4. Stay informed:</strong> Keep up to date with new social
+          engineering tactics and trends. Many organisations offer security
+          training.<br><br>
+
+          <strong>5. Protect your information:</strong> Don't carelessly share
+          personal information on social media. Limiting privacy settings can
+          help protect your data.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Scenario Test: How would you react?</h2>
+        <p style="color:#cbd5e1; margin-bottom:20px;">Choose the correct response in each scenario – test your awareness against social engineering.</p>
+
+        <div id="se-quiz">
+          <div id="se-nr" class="se-nr"></div>
+          <div id="se-text" class="se-szenario"></div>
+          <div id="se-optionen" class="se-optionen"></div>
+          <div id="se-feedback" class="se-feedback se-hidden"></div>
+          <button id="se-weiter" class="se-btn se-hidden">Next →</button>
+        </div>
+        <div id="se-ende" class="se-ende se-hidden">
+          <div id="se-score"></div>
+          <button id="se-neustart" class="se-btn" style="margin-top:16px;">Restart</button>
+        </div>
+      </div>
+    </section>
+
+    <script>
+    (function () {
+      const SZENARIEN = [
+        {
+          text: 'A caller says: "Hello, this is Marco Smith from the IT department. I can see in our system that your laptop was unreachable several times last night. I need to quickly check your credentials, otherwise your account will be automatically locked tonight." What do you do?',
+          optionen: [
+            { text: 'I give the details – he knows my laptop status, it sounds genuine.', richtig: false },
+            { text: 'I ask for his extension, hang up and call the IT hotline from the intranet.', richtig: true },
+            { text: 'I only give my username, not my password.', richtig: false },
+            { text: 'I ask him to send me an official email and then wait.', richtig: false },
+          ],
+          erklaerung: 'Attackers research details in advance (e.g. system status, company names) to sound credible. The threat of account suspension creates artificial pressure. Correct: hang up, call back yourself via the known official number. An email from the attacker would be equally fake.'
+        },
+        {
+          text: 'You receive a LinkedIn message from a recruiter with 600+ connections and a real profile picture: "I have an interesting offer for you – details as a PDF." The link leads to a Google Drive document. What do you do?',
+          optionen: [
+            { text: 'I open it – Google Drive is safe and the profile looks real.', richtig: false },
+            { text: 'I download the PDF and open it in an online viewer instead of locally.', richtig: false },
+            { text: 'I verify the recruiter independently first (e.g. company website, direct call) before opening anything.', richtig: true },
+            { text: 'I send the link to a colleague to test it.', richtig: false },
+          ],
+          erklaerung: 'Spear phishing via LinkedIn is real. Fake profiles can have many connections. Google Drive does not protect against malicious content in PDFs (e.g. embedded links, macros). A colleague would be equally at risk.'
+        },
+        {
+          text: 'Your known supplier writes by email – from their usual address: "Our bank details have changed. Please use the following new IBAN for the next payment." What do you do?',
+          optionen: [
+            { text: 'I update the IBAN – the sender address is the familiar one.', richtig: false },
+            { text: 'I reply to the email and ask for confirmation.', richtig: false },
+            { text: 'I call the supplier on the number I already know – not the one in the email.', richtig: true },
+            { text: 'I wait for the next invoice to see if it contains the new IBAN.', richtig: false },
+          ],
+          erklaerung: 'IBAN fraud: attackers spoof or compromise real email addresses. A reply goes back to the attacker. The next invoice could also be manipulated. The only safe option: phone confirmation via an already known number.'
+        },
+        {
+          text: 'You called the IT helpline yourself because your VPN is not working. The technician resolves the issue. At the end they say: "I just need your current password for documentation in the ticket system." What do you do?',
+          optionen: [
+            { text: 'I give it – I called myself so the connection is secure.', richtig: false },
+            { text: 'I give it and immediately change it afterwards.', richtig: false },
+            { text: 'I refuse – no ticketing system requires your plaintext password.', richtig: true },
+            { text: 'I give a variation of my password, not the real one.', richtig: false },
+          ],
+          erklaerung: 'Even if you called, an attacker could have compromised the line or operated a fake number. No legitimate system stores plaintext passwords. IT staff can reset passwords – they do not need to know them.'
+        },
+        {
+          text: 'You post on LinkedIn: "First day at my new job – I\'m now on the IT Security team at the National Bank!" Two days later someone calls: "Hello, this is Alex from Procurement. I saw your post – welcome! I need your employee ID quickly for vendor portal access, it\'s normal during onboarding." What do you do?',
+          optionen: [
+            { text: 'I give the ID – they knew my post, it seems legitimate.', richtig: false },
+            { text: 'I ask for their last name and google whether they exist.', richtig: false },
+            { text: 'I give nothing and verify the request through my manager or the internal contact list.', richtig: true },
+            { text: 'I give the ID but not a password – the ID alone isn\'t critical.', richtig: false },
+          ],
+          erklaerung: 'Pretexting with public info: your post gave the attacker enough context for a credible story. Employee IDs often enable password resets or access escalations. Googling a name is insufficient – fake profiles are easy to create.'
+        },
+        {
+          text: 'An email from your colleague Anna\'s verified address reads: "Hey, I\'m in a client meeting without my laptop. Can you quickly send me the password for our shared tool? Urgent!" What do you do?',
+          optionen: [
+            { text: 'I send it – the email comes from her real address.', richtig: false },
+            { text: 'I only send the username, not the password.', richtig: false },
+            { text: 'I call Anna on her mobile number before sending anything.', richtig: true },
+            { text: 'I reply by email asking: "Is that really you?"', richtig: false },
+          ],
+          erklaerung: 'If Anna\'s email account was compromised, everything goes to the attacker. Asking by email whether someone is "really themselves" is useless – the attacker will simply reply yes. Only safe verification: calling the known mobile number.'
+        },
+      ];
+
+      let aktuell = 0, punkte = 0;
+
+      function ladeSzenario() {
+        const s = SZENARIEN[aktuell];
+        document.getElementById('se-nr').textContent = 'Scenario ' + (aktuell + 1) + ' of ' + SZENARIEN.length;
+        document.getElementById('se-text').textContent = s.text;
+        document.getElementById('se-feedback').className = 'se-feedback se-hidden';
+        document.getElementById('se-weiter').className = 'se-btn se-hidden';
+
+        const optDiv = document.getElementById('se-optionen');
+        optDiv.innerHTML = '';
+        s.optionen.forEach((opt, i) => {
+          const btn = document.createElement('button');
+          btn.className = 'se-option';
+          btn.textContent = opt.text;
+          btn.addEventListener('click', () => waehlOption(i));
+          optDiv.appendChild(btn);
+        });
+      }
+
+      function waehlOption(i) {
+        const s = SZENARIEN[aktuell];
+        const richtig = s.optionen[i].richtig;
+        if (richtig) punkte++;
+
+        document.querySelectorAll('.se-option').forEach((btn, j) => {
+          btn.disabled = true;
+          if (s.optionen[j].richtig) btn.classList.add('se-richtig');
+          else if (j === i && !richtig) btn.classList.add('se-falsch');
+        });
+
+        const fb = document.getElementById('se-feedback');
+        fb.className = 'se-feedback ' + (richtig ? 'se-fb-gut' : 'se-fb-schlecht');
+        fb.textContent = (richtig ? '✓ Correct! ' : '✗ Wrong. ') + s.erklaerung;
+
+        document.getElementById('se-weiter').className = 'se-btn';
+      }
+
+      document.getElementById('se-weiter').addEventListener('click', () => {
+        aktuell++;
+        if (aktuell >= SZENARIEN.length) {
+          document.getElementById('se-quiz').style.display = 'none';
+          const ende = document.getElementById('se-ende');
+          ende.className = 'se-ende';
+          const pct = Math.round(punkte / SZENARIEN.length * 100);
+          const bewertung = punkte === SZENARIEN.length ? '🏆 Perfect!' : punkte >= 3 ? '👍 Well done!' : '⚠ Room for improvement.';
+          document.getElementById('se-score').innerHTML =
+            '<strong>' + bewertung + '</strong><br>' + punkte + ' of ' + SZENARIEN.length + ' correct (' + pct + '%)';
+        } else {
+          ladeSzenario();
+        }
+      });
+
+      document.getElementById('se-neustart').addEventListener('click', () => {
+        aktuell = 0; punkte = 0;
+        document.getElementById('se-ende').className = 'se-ende se-hidden';
+        document.getElementById('se-quiz').style.display = '';
+        ladeSzenario();
+      });
+
+      ladeSzenario();
+    })();
+    </script>
+
+    <div id="footer"></div>
+    <script>
+      fetch("/en/partials/navbar.html").then(r=>r.text()).then(d=>{
+        document.getElementById("navbar").innerHTML=d;
+        const toggle=document.querySelector(".menu-toggle");
+        const navLinks=document.querySelector(".nav-links");
+        const dropdown=document.querySelector(".dropdown");
+        const dropdownLink=document.querySelector(".dropdown-link");
+        if(toggle)toggle.addEventListener("click",()=>{navLinks.classList.toggle("active");if(!navLinks.classList.contains("active"))dropdown.classList.remove("open");});
+        if(dropdownLink)dropdownLink.addEventListener("click",(e)=>{if(window.innerWidth<=768){if(!dropdown.classList.contains("open")){e.preventDefault();dropdown.classList.add("open");}}});
+      });
+      fetch("/en/partials/footer.html").then(r=>r.text()).then(d=>{document.getElementById("footer").innerHTML=d});
+    </script>
+  </body>
+</html>

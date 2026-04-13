@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Attack Methods – SafeNet Security</title>
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/angriff.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/shared.css">
+    <link rel="stylesheet" href="/css/hero.css">
+    <link rel="stylesheet" href="/css/infobox.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/socialengineering.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png" />
+    <script type="module" src="/js/auth.js?v=5"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Overview</h2>
+        <p>
+          Cyber attackers use various tactics to gain access to your passwords
+          and personal data. On this page you will learn how these attacks work,
+          what warning signs to look out for, and most importantly: how to
+          protect yourself. Knowledge is the best defence!
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2 class="section-title">
+          General Protective Measures
+          <span class="material-symbols-outlined">verified_user</span>
+        </h2>
+        <p>
+          <strong>1. Strong passwords:</strong> At least 12 characters with
+          uppercase, lowercase, numbers and special characters.<br /><br />
+
+          <strong>2. Two-factor authentication (2FA):</strong> Enable this extra
+          protection on email, banking, social media. Even if your password is
+          compromised, your account stays safe.<br /><br />
+
+          <strong>3. Password manager:</strong> Use services like this website.
+          It stores secure passwords and also detects phishing!<br /><br />
+
+          <strong>4. Up-to-date software:</strong> Keep your operating system,
+          browser and antivirus always up to date.<br /><br />
+
+          <strong>5. Be sceptical:</strong> If something looks suspicious, it is
+          probably an attack. Don't hesitate to question requests.<br /><br />
+
+          <strong>6. Unique passwords:</strong> Don't use the same password
+          everywhere. If one gets hacked, the others remain safe.<br /><br />
+
+          <strong>7. Check your accounts regularly:</strong>
+          Review activity logs. Are there any suspicious logins?
+        </p>
+      </div>
+    </section>
+
+    <!-- PHISHING -->
+    <section class="info-section">
+      <div class="info-box">
+        <h2 class="section-title">
+          Phishing Attacks
+          <span class="material-symbols-outlined">phishing</span>
+        </h2>
+        <p>
+          <strong>What is phishing?</strong><br />
+          Phishing is a fraud method where attackers pose as a trusted
+          organisation to trick users into revealing sensitive information such
+          as passwords, credit card data or personal details.
+        </p>
+        <p>
+          <strong>How does it work?</strong><br />
+          The attacker sends fake emails that look like they come from PayPal,
+          your bank or Amazon. These emails contain an urgent reason (e.g.
+          "Update your password immediately") or lure with promises. A link
+          leads to a fake website that mimics the original convincingly. When
+          you enter your data, it goes straight to the attacker.
+        </p>
+        <p>
+          <strong>Examples:</strong><br />
+          • <strong>Bank phishing:</strong> "Dear customer, we have detected
+          suspicious activity on your account. Please verify your identity at
+          this link: [fake link]"<br />
+          • <strong>PayPal phishing:</strong> "Your PayPal account will be
+          suspended in 24 hours if you do not verify your password."<br />
+          • <strong>Amazon phishing:</strong> "There is a problem with your
+          payment method. Please update your credit card details immediately."
+        </p>
+        <p>
+          <strong>Warning signs:</strong><br />
+          ✗ Suspicious email addresses (e.g. paypal.com-security.fake.net)<br />
+          ✗ Generic salutation ("Dear customer" instead of your name)<br />
+          ✗ Urgent call to action ("Act immediately!", "Account will be
+          locked")<br />
+          ✗ Suspicious links (hover over them – the URL looks different)<br />
+          ✗ Poor grammar/spelling<br />
+          ✗ Asking for password or PIN (legitimate companies never do this!)<br />
+        </p>
+        <p>
+          <strong>Protection:</strong><br />
+          → Check the sender email address carefully<br />
+          → Type the website directly into the browser (not via email links)<br />
+          → Check that the URL starts with "https://" and shows a padlock<br />
+          → Use a password manager – it recognises fake websites!<br />
+          → Enable two-factor authentication (2FA)
+        </p>
+      </div>
+    </section>
+
+    <!-- BRUTEFORCE -->
+    <section class="info-section">
+      <div class="info-box">
+        <h2 class="section-title">
+          Bruteforce Attacks
+          <span class="material-symbols-outlined">bolt</span>
+        </h2>
+        <p>
+          <strong>What is a bruteforce attack?</strong><br />
+          A bruteforce attack is a method of guessing passwords by
+          systematically trying every possible combination. The attacker
+          automatically attempts every possible password combination until the
+          correct one is found.
+        </p>
+        <p>
+          <strong>How does it work?</strong><br />
+          Software or a script automatically generates password combinations and
+          tries to log in with them. In online attacks, a known username (e.g.
+          email address) is used. The computer then tries logging in with
+          different passwords until access is granted. In offline attacks (on
+          encrypted data) this process runs without delays and is much faster.
+        </p>
+        <p>
+          <strong>Examples:</strong><br />
+          • An attacker knows your email. They use a bruteforce tool to log into
+          Gmail. The program tries: a, b, c, ..., aa, ab, ac, ... and so on.
+          After millions of attempts it eventually finds your password.<br />
+          • A hacker obtains the encrypted passwords of 1 million users. With
+          bruteforce they try to decrypt them. It takes a long time, but with
+          multiple computers it works.<br />
+          • Weak 4-digit PINs (0000–9999) have only 10,000 combinations –
+          easy to crack!
+        </p>
+        <p>
+          <strong>How long does it take?</strong><br />
+          • Password "1234": &lt; 1 second<br />
+          • Password "abcd1234": ~ 1 minute<br />
+          • Password "aB1!xY9$": ~ 1 hour<br />
+          • Password "aBcDeF1!2@3#xYz9": ~ millions of years
+        </p>
+        <p>
+          <strong>Protection:</strong><br />
+          → Use long passwords (at least 12 characters)<br />
+          → The more complex (uppercase, lowercase, numbers, special
+          characters), the harder to bruteforce<br />
+          → Enable two-factor authentication – this stops bruteforce attacks<br />
+          → Rate limiting: good websites prevent too many login attempts<br />
+          → Use a password manager for complex passwords
+        </p>
+      </div>
+    </section>
+
+    <!-- DICTIONARY ATTACKS -->
+    <section class="info-section">
+      <div class="info-box">
+        <h2 class="section-title">
+          Dictionary Attacks
+          <span class="material-symbols-outlined">menu_book</span>
+        </h2>
+        <p>
+          <strong>What is a dictionary attack?</strong><br />
+          A dictionary attack is a method of cracking passwords where the
+          attacker uses a list of common or known words. Instead of trying random
+          combinations, the attacker tries passwords from a "dictionary
+          database". This is much faster than bruteforce.
+        </p>
+        <p>
+          <strong>How does it work?</strong><br />
+          The attacker collects a list of commonly used passwords:<br />
+          • Simple words (password, hello, sweetheart, 123456)<br />
+          • Month names, weekdays, seasons<br />
+          • Common first names<br />
+          • Previously hacked and published passwords<br /><br />
+          The program then modifies the words: password → PASSWORD,
+          Password1, Password123, P@ssword!, etc.
+        </p>
+        <p>
+          <strong>The 20 most common passwords are:</strong><br />
+          123456 · password · passwort · 123456789 · 12345678 · 12345 ·
+          1234567 · password123 · 123123 · 1234567890 · admin · qwerty ·
+          abc123 · ...
+        </p>
+        <p>
+          <strong>Examples:</strong><br />
+          • An attacker has hacked passwords from Twitter. They use a dictionary
+          attack tool. Many passwords like "password123", "123456", "letmein"
+          are identified immediately.<br />
+          • You use the password "Sweetheart1234". A hacker tries all
+          combinations from a dictionary list. After a hundred attempts it
+          works!<br />
+          • A database of 1 million hacked passwords is cross-referenced with a
+          dictionary. 80% of passwords are identified within seconds.
+        </p>
+        <p>
+          <strong>Difference between dictionary and bruteforce:</strong><br />
+          • <strong>Dictionary attack:</strong> Fast (realistic), but only
+          successful against weak passwords<br />
+          • <strong>Bruteforce:</strong> Slow, but works against any password
+          (it's just a matter of time)
+        </p>
+        <p>
+          <strong>Protection:</strong><br />
+          → Do NOT use simple words (Password123, Sweetheart2024 are
+          insecure!)<br />
+          → Use random passwords with uppercase, lowercase, numbers and special
+          characters<br />
+          → At least 12–16 characters<br />
+          → Use a password generator<br />
+          → Check haveibeenpwned.com to see if your password has been leaked<br />
+          → Enable 2FA – even if the password is cracked, you're protected
+        </p>
+      </div>
+    </section>
+
+    <!-- SOCIAL ENGINEERING -->
+    <section class="info-section">
+      <div class="info-box">
+        <h2 class="section-title">
+          Social Engineering
+          <span class="material-symbols-outlined">psychology</span>
+        </h2>
+        <p>
+          <strong>What is social engineering?</strong><br />
+          Social engineering is a method of defrauding people through
+          psychological manipulation to reveal confidential information.
+          Attackers exploit human emotions such as fear, trust, curiosity or
+          helpfulness. It targets the "weakest link" – the human being.
+        </p>
+        <p>
+          <strong>Common methods:</strong><br />
+          • <strong>Pretexting:</strong> An attacker poses as IT support: "I'm
+          conducting a security check. Give me your password."<br />
+          • <strong>Baiting:</strong> A USB stick labelled
+          "Salary_2024.xlsx" is found in the car park. You open it –
+          malware installs itself!<br />
+          • <strong>Tailgating:</strong> An unauthorised person follows you
+          through a locked door into the office building by pretending to
+          belong there.<br />
+          • <strong>Authority:</strong> An attacker poses as your boss:
+          "Transfer €5,000 to this account immediately."<br />
+          • <strong>Scarcity:</strong> Artificial urgency: "This offer is valid
+          today only! Order quickly!"
+        </p>
+        <p>
+          <strong>Examples:</strong><br />
+          • <strong>CEO fraud:</strong> An email supposedly from the CEO:
+          "I'm in a meeting. Can you quickly transfer £50,000?" The email
+          address resembles the real one but is a fake.<br />
+          • <strong>Phone fraud (vishing):</strong> An attacker calls: "I'm from
+          your bank. We've detected suspicious transactions. Give me your PIN
+          for verification." Real banks NEVER ask for that!<br />
+          • <strong>Fake support chat:</strong> "Your Microsoft computer has a
+          critical update. A technician will contact you." The link leads to
+          malware.<br />
+          • <strong>USB baiting in company car park:</strong> You find a USB
+          stick labelled "CONFIDENTIAL_2024". You plug it into your computer –
+          malware infects your system!
+        </p>
+        <p>
+          <strong>Protection:</strong><br />
+          → Verify the identity of requests – call the person directly (use a
+          known number)<br />
+          → Legitimate organisations NEVER ask for passwords or PINs via
+          email/phone<br />
+          → Do not accept USB sticks from unknown sources<br />
+          → If something sounds too good to be true, it's probably a scam<br />
+          → Think before you act – social engineers use pressure and urgency<br />
+          → Enable 2FA – attackers can't get in even with your password
+        </p>
+      </div>
+    </section>
+
+    <!-- KEYLOGGER -->
+    <section class="info-section">
+      <div class="info-box">
+        <h2 class="section-title">
+          Keylogger Attacks
+          <span class="material-symbols-outlined">keyboard</span>
+        </h2>
+        <p>
+          <strong>What is a keylogger?</strong><br />
+          A keylogger is a program or device that records every keystroke you
+          make on your keyboard. This includes everything – passwords, emails,
+          chat messages, search history and personal data.
+        </p>
+        <p>
+          <strong>Types of keyloggers:</strong><br />
+          • <strong>Software keylogger:</strong> A program on your computer
+          (installed via malware or fake downloads). It runs invisibly in the
+          background.<br />
+          • <strong>Hardware keylogger:</strong> A physical device between the
+          keyboard and computer. The attacker must later collect it or retrieve
+          the data.<br />
+          • <strong>Wireless keylogger:</strong> A USB device that wirelessly
+          transmits keystrokes.
+        </p>
+        <p>
+          <strong>Examples:</strong><br />
+          • <strong>Internet café scenario:</strong> You log into your bank.
+          Unknown to you, a hardware keylogger has been installed between the
+          keyboard and computer. Your password is recorded – the attacker later
+          steals money from your account.<br />
+          • <strong>Software keylogger via virus:</strong> You download a free
+          app. It secretly installs a keylogger. Now your passwords for all
+          accounts are being recorded.<br />
+          • <strong>Keylogger on smartphone:</strong> A malicious app pretends
+          to be a game. The keylogger captures your PIN and passwords as you
+          type them.
+        </p>
+        <p>
+          <strong>Signs of a keylogger:</strong><br />
+          <span class="material-symbols-outlined inline-icon" style="color:#ffb300">warning</span>Unexplained slowdown of the computer<br />
+          <span class="material-symbols-outlined inline-icon" style="color:#ffb300">warning</span>New keyboard cables or USB devices between keyboard and computer<br />
+          <span class="material-symbols-outlined inline-icon" style="color:#ffb300">warning</span>Your password no longer works or your account has been misused<br />
+          <span class="material-symbols-outlined inline-icon" style="color:#ffb300">warning</span>Unrecognised logins to your accounts from unknown locations<br />
+          <span class="material-symbols-outlined inline-icon" style="color:#ffb300">warning</span>Antivirus warnings about suspected malware
+        </p>
+        <p>
+          <strong>Protection:</strong><br />
+          → Keep your operating system and antivirus software always up to date<br />
+          → Only download from trusted sources<br />
+          → Regularly check your keyboard for suspicious devices<br />
+          → Use the on-screen keyboard (with a mouse) for sensitive passwords –
+          keyloggers don't capture that!<br />
+          → Use a password manager – it enters passwords directly without you
+          typing them<br />
+          → Avoid public computers for sensitive transactions<br />
+          → Enable 2FA
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Identify Attack Methods – Quiz</h2>
+        <p style="color: #cbd5e1; margin-bottom: 20px">
+          Which attack method is described in each scenario?
+        </p>
+
+        <div id="aq-quiz">
+          <div id="aq-nr" class="se-nr"></div>
+          <div id="aq-text" class="se-szenario"></div>
+          <div id="aq-optionen" class="se-optionen"></div>
+          <div id="aq-feedback" class="se-feedback se-hidden"></div>
+          <button id="aq-weiter" class="se-btn se-hidden">Next →</button>
+        </div>
+        <div id="aq-ende" class="se-ende se-hidden">
+          <div id="aq-score"></div>
+          <button id="aq-neustart" class="se-btn" style="margin-top: 16px">
+            Restart
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      (function () {
+        const FRAGEN = [
+          {
+            text: 'An attacker has gained offline access to an encrypted password database. Using 5 powerful GPUs they systematically try every conceivable character combination – including completely random ones like "Kj#2!xZq". Which method are they using?',
+            optionen: [
+              "Phishing",
+              "Bruteforce attack",
+              "Dictionary attack",
+              "Keylogger",
+              "Social engineering",
+            ],
+            richtig: 1,
+            erklaerung:
+              "Bruteforce: Every possible combination is tried – no word list, no tricks. For random passwords this is the only option. Protection: longer passwords (each additional character multiplies the time exponentially).",
+          },
+          {
+            text: 'Your colleague uses the same password "Summer2021" for multiple services. A small online shop is hacked and the password list is published. Shortly afterwards their email account is taken over – without any attack on that account. Which method?',
+            optionen: [
+              "Phishing",
+              "Bruteforce attack",
+              "Dictionary attack",
+              "Keylogger",
+              "Social engineering",
+            ],
+            richtig: 2,
+            erklaerung:
+              "Credential stuffing – a form of dictionary attack: attackers automatically test leaked password lists against hundreds of other platforms. The password doesn't need to be guessed – it's already known. Protection: a unique password for each service.",
+          },
+          {
+            text: 'You receive an email from "service@paypal-security-check.com": "Unusual activity detected – account temporarily restricted." The link leads to a page that looks exactly like PayPal, asking for your login and credit card. Which attack?',
+            optionen: [
+              "Phishing",
+              "Bruteforce attack",
+              "Dictionary attack",
+              "Keylogger",
+              "Social engineering",
+            ],
+            richtig: 0,
+            erklaerung:
+              "Phishing: Fake domain (paypal-security-check.com instead of paypal.com), artificial urgency and convincingly authentic design. Social engineering is the umbrella term – phishing is the specific technical implementation by email/link.",
+          },
+          {
+            text: "Your antivirus reports: an installed application has secretly logged every keystroke over the last 30 days and sent them to an external server – including passwords you never stored in a browser. Which attack method was used?",
+            optionen: [
+              "Phishing",
+              "Bruteforce attack",
+              "Dictionary attack",
+              "Keylogger",
+              "Social engineering",
+            ],
+            richtig: 3,
+            erklaerung:
+              "Keylogger: The software recorded every keystroke directly – regardless of whether passwords are saved in the browser or whether you clicked any links. This is the defining characteristic of a keylogger. Phishing would require a fake site; here data was captured locally.",
+          },
+          {
+            text: "A caller names your manager, mentions your current project and claims to be from an external IT provider. They ask you to briefly allow a remote desktop connection to \"fix an urgent security issue\". Which attack?",
+            optionen: [
+              "Phishing",
+              "Bruteforce attack",
+              "Dictionary attack",
+              "Keylogger",
+              "Social engineering",
+            ],
+            richtig: 4,
+            erklaerung:
+              "Social engineering: The attacker uses pre-researched details (names, project titles) to build trust – no technical password attack. Remote access would give full system control. Protection: always verify identity through official channels.",
+          },
+        ];
+
+        let aktuell = 0, punkte = 0;
+
+        function ladeFrage() {
+          const f = FRAGEN[aktuell];
+          document.getElementById("aq-nr").textContent =
+            "Question " + (aktuell + 1) + " of " + FRAGEN.length;
+          document.getElementById("aq-text").textContent = f.text;
+          document.getElementById("aq-feedback").className = "se-feedback se-hidden";
+          document.getElementById("aq-weiter").className = "se-btn se-hidden";
+
+          const optDiv = document.getElementById("aq-optionen");
+          optDiv.innerHTML = "";
+          f.optionen.forEach((opt, i) => {
+            const btn = document.createElement("button");
+            btn.className = "se-option";
+            btn.textContent = opt;
+            btn.addEventListener("click", () => waehlAntwort(i));
+            optDiv.appendChild(btn);
+          });
+        }
+
+        function waehlAntwort(i) {
+          const f = FRAGEN[aktuell];
+          const richtig = i === f.richtig;
+          if (richtig) punkte++;
+
+          document.querySelectorAll("#aq-optionen .se-option").forEach((btn, j) => {
+            btn.disabled = true;
+            if (j === f.richtig) btn.classList.add("se-richtig");
+            else if (j === i && !richtig) btn.classList.add("se-falsch");
+          });
+
+          const fb = document.getElementById("aq-feedback");
+          fb.className = "se-feedback " + (richtig ? "se-fb-gut" : "se-fb-schlecht");
+          fb.textContent = (richtig ? "✓ Correct! " : "✗ Wrong. ") + f.erklaerung;
+          document.getElementById("aq-weiter").className = "se-btn";
+        }
+
+        document.getElementById("aq-weiter").addEventListener("click", () => {
+          aktuell++;
+          if (aktuell >= FRAGEN.length) {
+            document.getElementById("aq-quiz").style.display = "none";
+            const ende = document.getElementById("aq-ende");
+            ende.className = "se-ende";
+            const pct = Math.round((punkte / FRAGEN.length) * 100);
+            const bew =
+              punkte === FRAGEN.length ? "🏆 Perfect!" :
+              punkte >= 3 ? "👍 Well done!" : "⚠ Room for improvement.";
+            document.getElementById("aq-score").innerHTML =
+              "<strong>" + bew + "</strong><br>" +
+              punkte + " of " + FRAGEN.length + " correct (" + pct + "%)";
+          } else {
+            ladeFrage();
+          }
+        });
+
+        document.getElementById("aq-neustart").addEventListener("click", () => {
+          aktuell = 0; punkte = 0;
+          document.getElementById("aq-ende").className = "se-ende se-hidden";
+          document.getElementById("aq-quiz").style.display = "";
+          ladeFrage();
+        });
+
+        ladeFrage();
+      })();
+    </script>
+
+    <div id="footer"></div>
+    <script>
+      fetch("/en/partials/navbar.html").then(r=>r.text()).then(d=>{
+        document.getElementById("navbar").innerHTML=d;
+        const toggle=document.querySelector(".menu-toggle");
+        const navLinks=document.querySelector(".nav-links");
+        const dropdown=document.querySelector(".dropdown");
+        const dropdownLink=document.querySelector(".dropdown-link");
+        if(toggle)toggle.addEventListener("click",()=>{navLinks.classList.toggle("active");if(!navLinks.classList.contains("active"))dropdown.classList.remove("open");});
+        if(dropdownLink)dropdownLink.addEventListener("click",(e)=>{if(window.innerWidth<=768){if(!dropdown.classList.contains("open")){e.preventDefault();dropdown.classList.add("open");}}});
+      });
+      fetch("/en/partials/footer.html").then(r=>r.text()).then(d=>{document.getElementById("footer").innerHTML=d});
+    </script>
+  </body>
+</html>

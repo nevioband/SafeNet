@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bruteforce – SafeNet Security</title>
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/shared.css" />
+    <link rel="stylesheet" href="/css/infobox.css" />
+    <link rel="stylesheet" href="/css/hero.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png">
+    <link rel="stylesheet" href="/css/generator.css" />
+    <link rel="stylesheet" href="/css/bruteforce.css" />
+    <script type="module" src="/js/auth.js?v=5"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <h1>Bruteforce</h1>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>What is a Bruteforce Attack?</h2>
+        <p>
+          A bruteforce attack is a method of guessing passwords by systematically
+          trying every possible combination. The attacker automatically attempts
+          every possible password combination until the correct one is found.
+          This is especially effective against weak or short passwords, as these
+          can be cracked quickly.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>How Does It Work?</h2>
+        <p>
+          Software or a script automatically generates password combinations and
+          tries to log in with them. In online attacks, a known username (e.g.
+          email address) is used first. The computer then tries to log in with
+          different passwords until access is granted. In offline attacks on
+          encrypted data, this process runs without any delays and is therefore
+          even faster.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Risks and Consequences</h2>
+        <p>
+          If your password is cracked by a bruteforce attack, attackers can
+          access your account and: steal personal data, misuse your identity,
+          carry out financial transactions, or use your account for further
+          attacks. The consequences can range from data loss to financial damage.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>How to Protect Yourself</h2>
+        <p>
+          <strong>1. Strong passwords:</strong> Use passwords with at least 12
+          characters containing uppercase, lowercase, numbers and special
+          characters. The longer and more complex a password, the longer a
+          bruteforce attack takes.<br><br>
+
+          <strong>2. Two-factor authentication:</strong> Enable two-factor
+          authentication (2FA) on your important accounts. Even if a password is
+          cracked, the attacker still needs a second factor for access.<br><br>
+
+          <strong>3. Unique passwords:</strong> Use a different password for each
+          account. This way an attacker cannot access multiple accounts even if
+          one password is compromised.<br><br>
+
+          <strong>4. Password manager:</strong> Use a password manager to store
+          and manage complex passwords.
+        </p>
+      </div>
+    </section>
+
+    <div class="password-container">
+      <h3>Bruteforce Demo</h3>
+      <p class="demo-desc">Enter any password – the demo detects the character set and calculates how long a bruteforce attack would take.</p>
+
+      <label style="font-size:0.95rem; color:#e8f3ff; margin-bottom:8px; display:block;">Target password (max. 20 characters):</label>
+      <div class="display-box">
+        <input id="bf-target" type="text" maxlength="20" placeholder="e.g. My$Password3" autocomplete="off"
+          style="width:100%; background:transparent; border:none; outline:none; color:#66d9ff; font-family:monospace; font-size:1.1rem; letter-spacing:1px; padding:6px 0;">
+      </div>
+
+      <div class="bf-info-row">
+        <span>Current attempt: <code id="bf-current">—</code></span>
+        <span>Detected character set: <code id="bf-charset-size">—</code></span>
+      </div>
+
+      <div class="bf-progress-wrap">
+        <div id="bf-progress-bar"></div>
+      </div>
+
+      <div id="bf-status" class="bf-status">Enter a password and start the attack.</div>
+
+      <button id="bf-start" class="main-btn" style="margin-top:16px;">Start attack</button>
+
+      <div id="bf-result" class="bf-result"></div>
+    </div>
+
+    <script>
+    (function () {
+      const CS_LOWER   = 'abcdefghijklmnopqrstuvwxyz';
+      const CS_UPPER   = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const CS_DIGITS  = '0123456789';
+      const CS_SPECIAL = '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~';
+
+      const RATE = 1_000_000_000n; // 1 billion attempts/sec (modern attacker)
+      const ANIM_MS = 2500;
+
+      function detectCharset(pw) {
+        let chars = '';
+        let size = 0;
+        const parts = [];
+        if (/[a-z]/.test(pw)) { chars += CS_LOWER;   size += 26; parts.push('Lowercase (26)'); }
+        if (/[A-Z]/.test(pw)) { chars += CS_UPPER;   size += 26; parts.push('Uppercase (26)'); }
+        if (/[0-9]/.test(pw)) { chars += CS_DIGITS;  size += 10; parts.push('Digits (10)'); }
+        if (/[^a-zA-Z0-9]/.test(pw)) { chars += CS_SPECIAL; size += 32; parts.push('Special chars (32)'); }
+        if (!chars) { chars = CS_LOWER; size = 26; parts.push('Lowercase (26)'); }
+        return { chars, size, parts };
+      }
+
+      function formatTime(sek) {
+        // sek is BigInt
+        if (sek <= 0n) return 'instantly';
+        if (sek < 60n) return sek + ' seconds';
+        if (sek < 3600n) return (sek / 60n) + ' minutes';
+        if (sek < 86400n) return (sek / 3600n) + ' hours';
+        const days = sek / 86400n;
+        if (days < 365n) return days + ' days';
+        const years = days / 365n;
+        if (years < 1_000_000n) return years.toLocaleString('en') + ' years';
+        if (years < 1_000_000_000n) return (years / 1_000_000n).toLocaleString('en') + ' million years';
+        return (years / 1_000_000_000n).toLocaleString('en') + ' billion years';
+      }
+
+      function randomCandidate(chars, len) {
+        let r = '';
+        for (let i = 0; i < len; i++) r += chars[Math.floor(Math.random() * chars.length)];
+        return r;
+      }
+
+      let running = false;
+
+      document.getElementById('bf-target').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') document.getElementById('bf-start').click();
+      });
+
+      document.getElementById('bf-start').addEventListener('click', () => {
+        if (running) return;
+
+        const target = document.getElementById('bf-target').value;
+        if (!target) {
+          document.getElementById('bf-status').textContent = 'Please enter a password.';
+          return;
+        }
+
+        const len = target.length;
+        const { chars, size, parts } = detectCharset(target);
+        const total = BigInt(size) ** BigInt(len);
+        const zeitSek = total / RATE;
+
+        running = true;
+        document.getElementById('bf-start').disabled = true;
+        document.getElementById('bf-result').textContent = '';
+        document.getElementById('bf-result').className = 'bf-result';
+        document.getElementById('bf-progress-bar').style.width = '0%';
+        document.getElementById('bf-charset-size').textContent = size + ' characters';
+
+        const startTime = performance.now();
+
+        function animFrame() {
+          const elapsed = performance.now() - startTime;
+          const pct = Math.min((elapsed / ANIM_MS) * 100, 99.9);
+          document.getElementById('bf-current').textContent = randomCandidate(chars, len);
+          document.getElementById('bf-progress-bar').style.width = pct.toFixed(1) + '%';
+          document.getElementById('bf-status').textContent = 'Attack running… (' + parts.join(', ') + ')';
+
+          if (elapsed < ANIM_MS) {
+            requestAnimationFrame(animFrame);
+          } else {
+            running = false;
+            document.getElementById('bf-start').disabled = false;
+            document.getElementById('bf-progress-bar').style.width = '100%';
+            document.getElementById('bf-current').textContent = target;
+
+            const zeitStr = formatTime(zeitSek);
+            const istSicher = zeitSek > 31536000n * 100n; // > 100 years
+
+            document.getElementById('bf-status').textContent = istSicher
+              ? '✓ Very secure – this attack would take an extremely long time.'
+              : '⚠ Insecure – this attack is feasible within a manageable timeframe.';
+
+            const resultEl = document.getElementById('bf-result');
+            resultEl.className = 'bf-result ' + (istSicher ? 'bf-safe' : 'bf-danger');
+            resultEl.innerHTML =
+              '<strong>Character set:</strong> ' + parts.join(' + ') + ' = ' + size + ' possible characters<br>' +
+              '<strong>Combinations:</strong> ' + size + '<sup>' + len + '</sup> = ' + total.toLocaleString('en') + '<br>' +
+              '<strong>Estimated crack time</strong> (10<sup>9</sup> attempts/sec): <strong>' + zeitStr + '</strong>';
+          }
+        }
+
+        requestAnimationFrame(animFrame);
+      });
+    })();
+    </script>
+
+    <div id="footer"></div>
+    <script>
+      fetch("/en/partials/navbar.html").then(r=>r.text()).then(d=>{
+        document.getElementById("navbar").innerHTML=d;
+        const toggle=document.querySelector(".menu-toggle");
+        const navLinks=document.querySelector(".nav-links");
+        const dropdown=document.querySelector(".dropdown");
+        const dropdownLink=document.querySelector(".dropdown-link");
+        if(toggle)toggle.addEventListener("click",()=>{navLinks.classList.toggle("active");if(!navLinks.classList.contains("active"))dropdown.classList.remove("open");});
+        if(dropdownLink)dropdownLink.addEventListener("click",(e)=>{if(window.innerWidth<=768){if(!dropdown.classList.contains("open")){e.preventDefault();dropdown.classList.add("open");}}});
+      });
+      fetch("/en/partials/footer.html").then(r=>r.text()).then(d=>{document.getElementById("footer").innerHTML=d});
+    </script>
+  </body>
+</html>
