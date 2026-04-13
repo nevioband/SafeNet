@@ -1,0 +1,19 @@
+{
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/de/index.html",
+      "permanent": false
+    },
+    {
+      "source": "/pages/:path*",
+      "destination": "/de/pages/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/partials/:path*",
+      "destination": "/de/partials/:path*",
+      "permanent": false
+    }
+  ]
+}
