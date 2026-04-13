@@ -1,5 +1,7 @@
 import { supabase } from "./supabase.js";
 
+const isEN = window.location.pathname.startsWith('/en/');
+
 let vaultData = [];
 let masterKey = null;
 
@@ -24,8 +26,9 @@ function showOfflineBanner() {
   banner.id = "offlineBanner";
   banner.style.cssText =
     "position:fixed;top:0;left:0;right:0;background:#b45309;color:#fef3c7;text-align:center;padding:10px;font-size:14px;z-index:99999;font-family:Inter,sans-serif;";
-  banner.textContent =
-    "\u26a0\ufe0f Kein Internet \u2014 Tresor kann nicht geladen werden.";
+  banner.textContent = isEN
+    ? "\u26a0\ufe0f No internet \u2014 Vault cannot be loaded."
+    : "\u26a0\ufe0f Kein Internet \u2014 Tresor kann nicht geladen werden.";
   document.body.prepend(banner);
 }
 
@@ -106,12 +109,20 @@ function buildMasterModal(isSetup, errorMsg, onCancel) {
   overlay.style.cssText =
     "position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;display:flex;align-items:center;justify-content:center;font-family:Inter,sans-serif;";
 
-  const title = isSetup ? "Master-Passwort erstellen" : "Tresor entsperren";
-  const btnText = isSetup ? "Tresor einrichten" : "Entsperren";
+  const title = isSetup
+    ? (isEN ? "Create Master Password" : "Master-Passwort erstellen")
+    : (isEN ? "Unlock Vault" : "Tresor entsperren");
+  const btnText = isSetup
+    ? (isEN ? "Set up vault" : "Tresor einrichten")
+    : (isEN ? "Unlock" : "Entsperren");
 
   const setupInfo = isSetup
-    ? `<p style="font-size:13px;color:#94a3b8;margin:0 0 20px;line-height:1.6;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:12px;display:flex;gap:10px;align-items:flex-start;"><span class="material-symbols-outlined" style="font-size:20px;color:#ef4444;flex-shrink:0;margin-top:1px;">warning</span><span><strong style="color:#ef4444;">Achtung:</strong> Falls du dein Master-Passwort vergisst, kann der Support es zurücksetzen, aber <b>nicht wiederherstellen</b>. Deine gespeicherten Passwörter gehen dabei verloren. <br> Notiere es an einem sicheren Ort.</span></p>`
-    : `<p style="font-size:13px;color:#94a3b8;margin:0 0 20px;">Gib dein Master-Passwort ein, um den Tresor zu entsperren.</p>`;
+    ? (isEN
+        ? `<p style="font-size:13px;color:#94a3b8;margin:0 0 20px;line-height:1.6;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:12px;display:flex;gap:10px;align-items:flex-start;"><span class="material-symbols-outlined" style="font-size:20px;color:#ef4444;flex-shrink:0;margin-top:1px;">warning</span><span><strong style="color:#ef4444;">Warning:</strong> If you forget your master password, support can reset it, but <b>not restore</b> your saved passwords \u2014 they will be lost. <br> Write it down in a safe place.</span></p>`
+        : `<p style="font-size:13px;color:#94a3b8;margin:0 0 20px;line-height:1.6;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:12px;display:flex;gap:10px;align-items:flex-start;"><span class="material-symbols-outlined" style="font-size:20px;color:#ef4444;flex-shrink:0;margin-top:1px;">warning</span><span><strong style="color:#ef4444;">Achtung:</strong> Falls du dein Master-Passwort vergisst, kann der Support es zurücksetzen, aber <b>nicht wiederherstellen</b>. Deine gespeicherten Passwörter gehen dabei verloren. <br> Notiere es an einem sicheren Ort.</span></p>`)
+    : (isEN
+        ? `<p style="font-size:13px;color:#94a3b8;margin:0 0 20px;">Enter your master password to unlock the vault.</p>`
+        : `<p style="font-size:13px;color:#94a3b8;margin:0 0 20px;">Gib dein Master-Passwort ein, um den Tresor zu entsperren.</p>`);
 
   const errorHtml = errorMsg
     ? `<p style="font-size:13px;color:#ef4444;margin:0 0 16px;padding:10px 12px;background:rgba(239,68,68,0.1);border-radius:8px;border:1px solid rgba(239,68,68,0.3);">${errorMsg}</p>`
@@ -119,7 +130,7 @@ function buildMasterModal(isSetup, errorMsg, onCancel) {
 
   const confirmHtml = isSetup
     ? `<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:24px;">
-               <label style="font-size:14px;color:#cbd5e1;font-weight:500;">Master-Passwort bestätigen</label>
+               <label style="font-size:14px;color:#cbd5e1;font-weight:500;">${isEN ? "Confirm master password" : "Master-Passwort best\u00e4tigen"}</label>
                <input type="password" id="masterPwConfirm" autocomplete="new-password"
                    style="width:100%;padding:12px 14px;background:#0f172a;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:white;font-size:15px;font-family:Inter,sans-serif;box-sizing:border-box;outline:none;">
            </div>`
@@ -130,12 +141,12 @@ function buildMasterModal(isSetup, errorMsg, onCancel) {
             <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
                 <span class="material-symbols-outlined" style="font-size:26px;color:#3399ff;">lock</span>
                 <h3 style="margin:0;font-size:18px;background:linear-gradient(135deg,#3399ff,#66d9ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${title}</h3>
-                ${onCancel ? `<button id="masterModalClose" style="margin-left:auto;background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;padding:4px;display:flex;align-items:center;" title="Abbrechen"><span class="material-symbols-outlined" style="font-size:22px;">close</span></button>` : ""}
+                ${onCancel ? `<button id="masterModalClose" style="margin-left:auto;background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;padding:4px;display:flex;align-items:center;" title="${isEN ? 'Cancel' : 'Abbrechen'}"><span class="material-symbols-outlined" style="font-size:22px;">close</span></button>` : ""}
             </div>
             ${setupInfo}
             ${errorHtml}
             <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px;">
-                <label style="font-size:14px;color:#cbd5e1;font-weight:500;">Master-Passwort</label>
+                <label style="font-size:14px;color:#cbd5e1;font-weight:500;">${isEN ? "Master password" : "Master-Passwort"}</label>
                 <input type="password" id="masterPwInput" autocomplete="${isSetup ? "new-password" : "current-password"}"
                     style="width:100%;padding:12px 14px;background:#0f172a;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:white;font-size:15px;font-family:Inter,sans-serif;box-sizing:border-box;outline:none;">
             </div>
@@ -200,7 +211,7 @@ async function askMasterPassword(session) {
       async function handleSubmit() {
         const pw = pwInput.value;
         if (!pw) {
-          errorMsg = "Bitte ein Master-Passwort eingeben.";
+          errorMsg = isEN ? "Please enter a master password." : "Bitte ein Master-Passwort eingeben.";
           render();
           return;
         }
@@ -208,19 +219,20 @@ async function askMasterPassword(session) {
         if (isSetup) {
           const confirm = confirmInput?.value ?? "";
           if (pw.length < 12) {
-            errorMsg =
-              "Das Master-Passwort muss mindestens 12 Zeichen lang sein.";
+            errorMsg = isEN
+              ? "The master password must be at least 12 characters long."
+              : "Das Master-Passwort muss mindestens 12 Zeichen lang sein.";
             render();
             return;
           }
           if (pw !== confirm) {
-            errorMsg = "Die Passwörter stimmen nicht überein.";
+            errorMsg = isEN ? "The passwords do not match." : "Die Passwörter stimmen nicht überein.";
             render();
             return;
           }
 
           btn.disabled = true;
-          btn.textContent = "Wird eingerichtet\u2026";
+          btn.textContent = isEN ? "Setting up\u2026" : "Wird eingerichtet\u2026";
 
           try {
             const newKey = await deriveKey(pw, session.user.id);
@@ -233,7 +245,7 @@ async function askMasterPassword(session) {
               .neq("label", VERIFY_LABEL);
 
             if (allEntries?.length > 0) {
-              btn.textContent = "Bestehende Daten werden migriert\u2026";
+              btn.textContent = isEN ? "Migrating existing data\u2026" : "Bestehende Daten werden migriert\u2026";
               const legacyKey = await deriveKey(
                 session.user.email,
                 session.user.id,
@@ -256,7 +268,7 @@ async function askMasterPassword(session) {
               user_id: session.user.id,
               label: VERIFY_LABEL,
               value: verifyEnc,
-              date: new Date().toLocaleDateString("de-CH"),
+              date: new Date().toLocaleDateString(isEN ? "en-GB" : "de-CH"),
             });
 
             masterKey = newKey;
@@ -264,19 +276,19 @@ async function askMasterPassword(session) {
             document.getElementById("masterModal")?.remove();
             resolve(masterKey);
           } catch {
-            errorMsg = "Fehler beim Einrichten. Bitte versuche es erneut.";
+            errorMsg = isEN ? "Error during setup. Please try again." : "Fehler beim Einrichten. Bitte versuche es erneut.";
             render();
           }
         } else {
           btn.disabled = true;
-          btn.textContent = "Wird geprüft\u2026";
+          btn.textContent = isEN ? "Verifying\u2026" : "Wird geprüft\u2026";
 
           try {
             const key = await deriveKey(pw, session.user.id);
             const decrypted = await decryptValue(verifyEntry.value, key);
 
             if (decrypted !== VERIFY_PLAINTEXT) {
-              errorMsg = "Falsches Master-Passwort. Bitte versuche es erneut.";
+              errorMsg = isEN ? "Wrong master password. Please try again." : "Falsches Master-Passwort. Bitte versuche es erneut.";
               render();
               return;
             }
@@ -286,7 +298,7 @@ async function askMasterPassword(session) {
             document.getElementById("masterModal")?.remove();
             resolve(masterKey);
           } catch {
-            errorMsg = "Fehler beim Prüfen. Bitte versuche es erneut.";
+            errorMsg = isEN ? "Error during verification. Please try again." : "Fehler beim Prüfen. Bitte versuche es erneut.";
             render();
           }
         }
@@ -324,7 +336,9 @@ async function renderVault() {
   if (isOffline()) {
     showOfflineBanner();
     showVaultError(
-      "Kein Internet \u2014 bitte Verbindung pr\u00fcfen und Seite neu laden.",
+      isEN
+        ? "No internet \u2014 please check your connection and reload the page."
+        : "Kein Internet \u2014 bitte Verbindung pr\u00fcfen und Seite neu laden.",
     );
     return;
   }
@@ -336,22 +350,24 @@ async function renderVault() {
     session = data.session;
   } catch {
     showVaultError(
-      "Verbindungsfehler beim Pr\u00fcfen der Anmeldung. Bitte Seite neu laden.",
+      isEN ? "Connection error. Please reload the page." : "Verbindungsfehler beim Pr\u00fcfen der Anmeldung. Bitte Seite neu laden.",
     );
     return;
   }
 
   if (!session) {
     const loginUrl = window.location.pathname.includes('/en/') ? '/en/pages/login.html' : '/de/pages/login.html';
-    listElement.innerHTML =
-      `<p style="text-align:center; color:rgba(255,255,255,0.5); padding: 20px;">Bitte <a href="${loginUrl}" style="color:#3399ff">einloggen</a> um deinen Tresor zu sehen.</p>`;
+    const loginMsg = isEN
+      ? `Please <a href="${loginUrl}" style="color:#3399ff">log in</a> to see your vault.`
+      : `Bitte <a href="${loginUrl}" style="color:#3399ff">einloggen</a> um deinen Tresor zu sehen.`;
+    listElement.innerHTML = `<p style="text-align:center; color:rgba(255,255,255,0.5); padding: 20px;">${loginMsg}</p>`;
     return;
   }
 
   // Master-Passwort abfragen falls noch nicht entsperrt
   if (!masterKey) {
     listElement.innerHTML =
-      '<p style="text-align:center; color:rgba(255,255,255,0.4); padding:20px;">Tresor wird entsperrt\u2026</p>';
+      `<p style="text-align:center; color:rgba(255,255,255,0.4); padding:20px;">${isEN ? "Unlocking vault\u2026" : "Tresor wird entsperrt\u2026"}</p>`;
     await askMasterPassword(session);
   }
 
@@ -359,8 +375,8 @@ async function renderVault() {
     listElement.innerHTML = `
             <div style="text-align:center;padding:40px 20px;">
                 <span class="material-symbols-outlined" style="font-size:48px;color:rgba(255,255,255,0.2);display:block;margin-bottom:16px;">lock</span>
-                <p style="color:rgba(255,255,255,0.5);margin:0 0 20px;">Der Tresor ist gesperrt.</p>
-                <button id="unlockAgainBtn" style="padding:10px 24px;background:linear-gradient(135deg,#3399ff,#66d9ff);color:#0f172a;border:none;border-radius:8px;font-size:14px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;">Entsperren</button>
+                <p style="color:rgba(255,255,255,0.5);margin:0 0 20px;">${isEN ? "The vault is locked." : "Der Tresor ist gesperrt."}</p>
+                <button id="unlockAgainBtn" style="padding:10px 24px;background:linear-gradient(135deg,#3399ff,#66d9ff);color:#0f172a;border:none;border-radius:8px;font-size:14px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;">${isEN ? "Unlock" : "Entsperren"}</button>
             </div>
         `;
     document
@@ -373,7 +389,7 @@ async function renderVault() {
   if (searchContainer) searchContainer.style.display = "block";
 
   listElement.innerHTML =
-    '<p style="text-align:center; color:rgba(255,255,255,0.4); padding:20px;">Wird geladen\u2026</p>';
+    `<p style="text-align:center; color:rgba(255,255,255,0.4); padding:20px;">${isEN ? "Loading\u2026" : "Wird geladen\u2026"}</p>`;
 
   const { data, error } = await supabase
     .from("passwords")
@@ -387,14 +403,15 @@ async function renderVault() {
       error.message?.includes("token")
     ) {
       const loginUrl = window.location.pathname.includes('/en/') ? '/en/pages/login.html' : '/de/pages/login.html';
-      showVaultError(
-        `Deine Sitzung ist abgelaufen. Bitte <a href="${loginUrl}" style="color:#3399ff">neu einloggen</a>.`,
-      );
+      const sessionMsg = isEN
+        ? `Your session has expired. Please <a href="${loginUrl}" style="color:#3399ff">log in again</a>.`
+        : `Deine Sitzung ist abgelaufen. Bitte <a href="${loginUrl}" style="color:#3399ff">neu einloggen</a>.`;
+      showVaultError(sessionMsg);
     } else if (isOffline()) {
       showOfflineBanner();
-      showVaultError("Kein Internet \u2014 Tresor kann nicht geladen werden.");
+      showVaultError(isEN ? "No internet \u2014 Vault cannot be loaded." : "Kein Internet \u2014 Tresor kann nicht geladen werden.");
     } else {
-      showVaultError("Fehler beim Laden des Tresors. Bitte Seite neu laden.");
+      showVaultError(isEN ? "Error loading the vault. Please reload the page." : "Fehler beim Laden des Tresors. Bitte Seite neu laden.");
     }
     return;
   }
@@ -416,7 +433,7 @@ async function renderVault() {
 
   if (decryptedEntries.length === 0) {
     listElement.innerHTML =
-      '<p style="text-align:center; color:rgba(255,255,255,0.5); padding: 20px;">Noch keine Passwörter gespeichert.</p>';
+      `<p style="text-align:center; color:rgba(255,255,255,0.5); padding: 20px;">${isEN ? "No passwords saved yet." : "Noch keine Passw\u00f6rter gespeichert."}</p>`;
     return;
   }
 
@@ -444,7 +461,9 @@ async function renderVault() {
   if (duplicateCount > 0) {
     dupBanner.style.cssText =
       "display:flex;align-items:center;gap:10px;background:rgba(251,146,60,0.12);border:1px solid rgba(251,146,60,0.4);border-radius:10px;padding:12px 16px;margin-bottom:16px;color:#fb923c;font-size:14px;font-family:Inter,sans-serif;";
-    dupBanner.innerHTML = `<span class="material-symbols-outlined" style="font-size:20px;color:#fb923c;">warning</span> <span><strong>${duplicateCount} Einträge</strong> verwenden dasselbe Passwort — das ist ein Sicherheitsrisiko!</span>`;
+    dupBanner.innerHTML = isEN
+      ? `<span class="material-symbols-outlined" style="font-size:20px;color:#fb923c;">warning</span> <span><strong>${duplicateCount} entries</strong> use the same password \u2014 this is a security risk!</span>`
+      : `<span class="material-symbols-outlined" style="font-size:20px;color:#fb923c;">warning</span> <span><strong>${duplicateCount} Eintr\u00e4ge</strong> verwenden dasselbe Passwort \u2014 das ist ein Sicherheitsrisiko!</span>`;
   } else {
     dupBanner.style.display = "none";
   }
@@ -453,7 +472,7 @@ async function renderVault() {
     .map((pw, index) => {
       const isDup = duplicateIndices.has(index);
       const dupBadge = isDup
-        ? `<span style="font-size:11px;background:rgba(251,146,60,0.2);border:1px solid rgba(251,146,60,0.5);color:#fb923c;border-radius:6px;padding:2px 7px;margin-left:6px;vertical-align:middle;">Duplikat</span>`
+        ? `<span style="font-size:11px;background:rgba(251,146,60,0.2);border:1px solid rgba(251,146,60,0.5);color:#fb923c;border-radius:6px;padding:2px 7px;margin-left:6px;vertical-align:middle;">${isEN ? "Duplicate" : "Duplikat"}</span>`
         : "";
       const borderStyle = isDup ? "border-color:rgba(251,146,60,0.5);" : "";
       return `
@@ -464,16 +483,16 @@ async function renderVault() {
                 <small style="font-size:0.7rem;color:rgba(255,255,255,0.4);">${pw.date || "-"}</small>
             </div>
             <div style="display:flex;gap:8px;flex-shrink:0;">
-                <button class="vault-view-btn" onclick="window.editLabel('${pw.id}', '${pw.label}')" title="Umbenennen" style="background:linear-gradient(135deg,#FFB347,#FFCC33);color:#0b1220 !important;">
+                <button class="vault-view-btn" onclick="window.editLabel('${pw.id}', '${pw.label}')" title="${isEN ? 'Rename' : 'Umbenennen'}" style="background:linear-gradient(135deg,#FFB347,#FFCC33);color:#0b1220 !important;">
                     <span class="material-symbols-outlined">edit</span>
                 </button>
-                <button class="vault-view-btn" onclick="window.toggleVisibility(${index})" title="Anzeigen">
+                <button class="vault-view-btn" onclick="window.toggleVisibility(${index})" title="${isEN ? 'Show' : 'Anzeigen'}">
                     <span class="material-symbols-outlined" id="eye-${index}">visibility</span>
                 </button>
-                <button class="vault-copy-btn" onclick="window.copyToClipboard(${index})" title="Kopieren">
+                <button class="vault-copy-btn" onclick="window.copyToClipboard(${index})" title="${isEN ? 'Copy' : 'Kopieren'}">
                     <span class="material-symbols-outlined">content_copy</span>
                 </button>
-                <button class="vault-delete-btn" onclick="window.deletePassword('${pw.id}')" title="Löschen">
+                <button class="vault-delete-btn" onclick="window.deletePassword('${pw.id}')" title="${isEN ? 'Delete' : 'L\u00f6schen'}">
                     <span class="material-symbols-outlined">delete</span>
                 </button>
             </div>
@@ -491,11 +510,11 @@ async function renderVault() {
 
 // Namen bearbeiten
 window.editLabel = async function (id, currentLabel) {
-  const newLabel = prompt("Gib einen neuen Namen ein:", currentLabel);
+  const newLabel = prompt(isEN ? "Enter a new name:" : "Gib einen neuen Namen ein:", currentLabel);
   if (newLabel === null) return;
-  const label = newLabel.trim() === "" ? "Unbenannt" : newLabel;
+  const label = newLabel.trim() === "" ? (isEN ? "Unnamed" : "Unbenannt") : newLabel;
   if (isOffline()) {
-    alert("Kein Internet \u2014 \u00c4nderung kann nicht gespeichert werden.");
+    alert(isEN ? "No internet \u2014 change cannot be saved." : "Kein Internet \u2014 \u00c4nderung kann nicht gespeichert werden.");
     return;
   }
   const { error } = await supabase
@@ -503,7 +522,7 @@ window.editLabel = async function (id, currentLabel) {
     .update({ label })
     .eq("id", id);
   if (error) {
-    alert("Fehler beim Umbenennen. Bitte versuche es erneut.");
+    alert(isEN ? "Rename error. Please try again." : "Fehler beim Umbenennen. Bitte versuche es erneut.");
     return;
   }
   renderVault();
@@ -527,7 +546,7 @@ window.toggleVisibility = function (index) {
 
 // Passwort löschen
 window.deletePassword = async function (id) {
-  if (!confirm("Möchtest du dieses Passwort wirklich löschen?")) return;
+  if (!confirm(isEN ? "Do you really want to delete this password?" : "Möchtest du dieses Passwort wirklich löschen?")) return;
   await supabase.from("passwords").delete().eq("id", id);
   renderVault();
 };
@@ -536,7 +555,7 @@ window.deletePassword = async function (id) {
 
 window.savePassword = async function (newPasswordValue, labelValue) {
   if (isOffline()) {
-    alert("Kein Internet \u2014 Passwort kann nicht gespeichert werden.");
+    alert(isEN ? "No internet \u2014 password cannot be saved." : "Kein Internet \u2014 Passwort kann nicht gespeichert werden.");
     return;
   }
 
@@ -546,11 +565,11 @@ window.savePassword = async function (newPasswordValue, labelValue) {
     if (error) throw error;
     session = data.session;
   } catch {
-    alert("Verbindungsfehler. Bitte Seite neu laden.");
+    alert(isEN ? "Connection error. Please reload the page." : "Verbindungsfehler. Bitte Seite neu laden.");
     return;
   }
   if (!session) {
-    alert("Deine Sitzung ist abgelaufen. Bitte neu einloggen.");
+    alert(isEN ? "Your session has expired. Please log in again." : "Deine Sitzung ist abgelaufen. Bitte neu einloggen.");
     window.location.href = window.location.pathname.includes('/en/') ? '/en/pages/login.html' : '/de/pages/login.html';
     return;
   }
@@ -558,19 +577,19 @@ window.savePassword = async function (newPasswordValue, labelValue) {
   const finalLabel =
     labelValue && labelValue.trim() !== ""
       ? labelValue
-      : "Unbenanntes Passwort";
+      : (isEN ? "Unnamed password" : "Unbenanntes Passwort");
 
   let valueToStore;
   try {
     const key = await ensureUnlocked();
     if (!key) {
-      alert("Tresor ist gesperrt. Bitte Seite neu laden.");
+      alert(isEN ? "Vault is locked. Please reload the page." : "Tresor ist gesperrt. Bitte Seite neu laden.");
       return;
     }
     valueToStore = await encryptValue(newPasswordValue, key);
   } catch {
     alert(
-      "Verschl\u00fcsselungsfehler. Passwort konnte nicht gespeichert werden.",
+      isEN ? "Encryption error. Password could not be saved." : "Verschl\u00fcsselungsfehler. Passwort konnte nicht gespeichert werden.",
     );
     return;
   }
@@ -579,17 +598,17 @@ window.savePassword = async function (newPasswordValue, labelValue) {
     user_id: session.user.id,
     label: finalLabel,
     value: valueToStore,
-    date: new Date().toLocaleDateString("de-CH"),
+    date: new Date().toLocaleDateString(isEN ? "en-GB" : "de-CH"),
   });
   if (insertError) {
     if (
       insertError.message?.includes("JWT") ||
       insertError.message?.includes("token")
     ) {
-      alert("Deine Sitzung ist abgelaufen. Bitte neu einloggen.");
+      alert(isEN ? "Your session has expired. Please log in again." : "Deine Sitzung ist abgelaufen. Bitte neu einloggen.");
       window.location.href = window.location.pathname.includes('/en/') ? '/en/pages/login.html' : '/de/pages/login.html';
     } else {
-      alert("Fehler beim Speichern: " + insertError.message);
+      alert((isEN ? "Save error: " : "Fehler beim Speichern: ") + insertError.message);
     }
     return;
   }
@@ -603,10 +622,10 @@ window.saveManual = async function () {
     document.getElementById("manualPassword")?.value || ""
   ).trim();
   if (!password) {
-    alert("Bitte ein Passwort eingeben.");
+    alert(isEN ? "Please enter a password." : "Bitte ein Passwort eingeben.");
     return;
   }
-  await window.savePassword(password, label || "Manuell gespeichert");
+  await window.savePassword(password, label || (isEN ? "Manually saved" : "Manuell gespeichert"));
   document.getElementById("manualModal").style.display = "none";
   document.getElementById("manualLabel").value = "";
   document.getElementById("manualPassword").value = "";
@@ -619,13 +638,15 @@ window.transferToVault = async function () {
   const currentPassword = outputField ? outputField.value : "";
   const currentLabel = labelField ? labelField.value : "";
 
-  if (!currentPassword || currentPassword === "Klicke auf Generieren") {
-    alert("Bitte generiere erst ein Passwort.");
+  if (!currentPassword || currentPassword === "Klicke auf Generieren" || currentPassword === "Click Generate") {
+    alert(isEN ? "Please generate a password first." : "Bitte generiere erst ein Passwort.");
     return;
   }
 
   await window.savePassword(currentPassword, currentLabel);
-  alert(`Passwort für "${currentLabel || "Unbenannt"}" gespeichert!`);
+  alert(isEN
+    ? `Password for "${currentLabel || "Unnamed"}" saved!`
+    : `Passwort für "${currentLabel || "Unbenannt"}" gespeichert!`);
   if (labelField) labelField.value = "";
 };
 
@@ -636,10 +657,10 @@ window.clearVault = async function () {
     data: { session },
   } = await supabase.auth.getSession();
   if (!session) return;
-  if (!confirm("Möchtest du wirklich ALLE gespeicherten Passwörter löschen?"))
+  if (!confirm(isEN ? "Do you really want to delete ALL saved passwords?" : "Möchtest du wirklich ALLE gespeicherten Passwörter löschen?"))
     return;
   if (isOffline()) {
-    alert("Kein Internet \u2014 L\u00f6schen nicht m\u00f6glich.");
+    alert(isEN ? "No internet \u2014 deletion not possible." : "Kein Internet \u2014 Löschen nicht möglich.");
     return;
   }
   const { error } = await supabase
@@ -647,7 +668,7 @@ window.clearVault = async function () {
     .delete()
     .eq("user_id", session.user.id);
   if (error) {
-    alert("Fehler beim L\u00f6schen. Bitte versuche es erneut.");
+    alert(isEN ? "Delete error. Please try again." : "Fehler beim Löschen. Bitte versuche es erneut.");
     return;
   }
   renderVault();
@@ -688,17 +709,19 @@ window.copyToClipboard = function (index) {
 
 window.exportCSV = function () {
   if (vaultData.length === 0) {
-    alert("Keine Passwörter zum Exportieren vorhanden.");
+    alert(isEN ? "No passwords to export." : "Keine Passwörter zum Exportieren vorhanden.");
     return;
   }
   if (
     !confirm(
-      `Achtung: Die exportierte Datei enthält alle ${vaultData.length} Passwörter im Klartext. Bewahre sie sicher auf!\n\nExport fortfahren?`,
+      isEN
+        ? `Warning: The exported file contains all ${vaultData.length} passwords in plain text. Keep it in a safe place!\n\nContinue with export?`
+        : `Achtung: Die exportierte Datei enthält alle ${vaultData.length} Passwörter im Klartext. Bewahre sie sicher auf!\n\nExport fortfahren?`,
     )
   )
     return;
 
-  const rows = [["Name", "Passwort", "Datum"]];
+  const rows = [isEN ? ["Name", "Password", "Date"] : ["Name", "Passwort", "Datum"]];
   vaultData.forEach((pw) => {
     const name = `"${(pw.label || "").replace(/"/g, '""')}"`;
     const password = `"${(pw.value || "").replace(/"/g, '""')}"`;
@@ -711,7 +734,8 @@ window.exportCSV = function () {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `safenet-export-${new Date().toLocaleDateString("de-CH").replace(/\./g, "-")}.csv`;
+  const locale = isEN ? "en-GB" : "de-CH";
+  a.download = `safenet-export-${new Date().toLocaleDateString(locale).replace(/[\.]/g, "-")}.csv`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -764,11 +788,11 @@ window.importCSV = async function (input) {
   const dataLines = hasHeader ? lines.slice(1) : lines;
 
   if (dataLines.length === 0) {
-    alert("Keine Einträge in der CSV gefunden.");
+    alert(isEN ? "No entries found in the CSV." : "Keine Einträge in der CSV gefunden.");
     return;
   }
 
-  const today = new Date().toLocaleDateString("de-CH");
+  const today = new Date().toLocaleDateString(isEN ? "en-GB" : "de-CH");
 
   let imported = 0;
   let skipped = 0;
@@ -790,10 +814,10 @@ window.importCSV = async function (input) {
       // Fallback: label, password
       let label, password;
       if (cols.length >= 4) {
-        label = cols[0]?.trim() || cols[2]?.trim() || "Importiert";
+        label = cols[0]?.trim() || cols[2]?.trim() || (isEN ? "Imported" : "Importiert");
         password = cols[3]?.trim();
       } else {
-        label = cols[0]?.trim() || "Importiert";
+        label = cols[0]?.trim() || (isEN ? "Imported" : "Importiert");
         password = cols[1]?.trim();
       }
 
@@ -805,7 +829,7 @@ window.importCSV = async function (input) {
       const encVal = await encryptValue(password, key);
       rows.push({
         user_id: session.user.id,
-        label: label || "Importiert",
+        label: label || (isEN ? "Imported" : "Importiert"),
         value: encVal,
         date: today,
       });
@@ -814,7 +838,7 @@ window.importCSV = async function (input) {
     if (rows.length > 0) {
       const { error } = await supabase.from("passwords").insert(rows);
       if (error) {
-        alert("Fehler beim Importieren: " + error.message);
+        alert((isEN ? "Import error: " : "Fehler beim Importieren: ") + error.message);
         break;
       }
       imported += rows.length;
@@ -822,7 +846,9 @@ window.importCSV = async function (input) {
   }
 
   alert(
-    `Import abgeschlossen: ${imported} Passwörter importiert${skipped > 0 ? `, ${skipped} übersprungen` : ""}.`,
+    isEN
+      ? `Import complete: ${imported} password${imported !== 1 ? "s" : ""} imported${skipped > 0 ? `, ${skipped} skipped` : ""}.`
+      : `Import abgeschlossen: ${imported} Passwörter importiert${skipped > 0 ? `, ${skipped} übersprungen` : ""}.`,
   );
   renderVault();
 };
@@ -865,7 +891,7 @@ window.filterVault = function (query) {
     noResult.id = "vaultNoResult";
     noResult.style.cssText =
       "text-align:center;color:rgba(255,255,255,0.4);padding:16px;";
-    noResult.textContent = "Keine Passwörter gefunden.";
+    noResult.textContent = isEN ? "No passwords found." : "Keine Passwörter gefunden.";
     document.getElementById("saved-passwords-list").after(noResult);
   }
   noResult.style.display = q && visible === 0 ? "block" : "none";
