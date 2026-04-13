@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SafeNet Security</title>
     <script>
-      const lang = (navigator.language || navigator.userLanguage || "de").toLowerCase();
-      if (lang.startsWith("en")) {
-        window.location.replace("/en/index.html");
-      } else {
+      const lang = (navigator.language || navigator.userLanguage || "en").toLowerCase();
+      if (lang.startsWith("de")) {
         window.location.replace("/de/index.html");
+      } else {
+        window.location.replace("/en/index.html");
       }
     </script>
   </head>
