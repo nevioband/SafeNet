@@ -90,7 +90,7 @@
 
     <div id="footer"></div>
     <script>
-      fetch("../partials/navbar.html")
+      fetch("/de/partials/navbar.html")
         .then((r) => r.text())
         .then((d) => {
           document.getElementById("navbar").innerHTML = d;
@@ -116,7 +116,7 @@
               }
             });
         });
-      fetch("../partials/footer.html")
+      fetch("/de/partials/footer.html")
         .then((r) => r.text())
         .then((d) => {
           document.getElementById("footer").innerHTML = d;

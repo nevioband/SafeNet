@@ -561,7 +561,7 @@
     </script>
 
     <script>
-      fetch("../partials/navbar.html")
+      fetch("/de/partials/navbar.html")
         .then((res) => res.text())
         .then((data) => {
           document.getElementById("navbar").innerHTML = data;
@@ -592,7 +592,7 @@
 
     <div id="footer"></div>
     <script>
-      fetch("../partials/footer.html")
+      fetch("/de/partials/footer.html")
         .then((res) => res.text())
         .then((data) => {
           document.getElementById("footer").innerHTML = data;

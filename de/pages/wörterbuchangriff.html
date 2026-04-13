@@ -129,7 +129,7 @@
     </div>
 
     <script type="module">
-    import { WOERTERBUCH } from '../js/passwortliste.js';
+    import { WOERTERBUCH } from '/js/passwortliste.js';
 
     (function () {
       let running = false;
@@ -221,7 +221,7 @@
 
     <div id="footer"></div>
     <script>
-  fetch("../partials/footer.html")
+  fetch("/de/partials/footer.html")
     .then(res => res.text())
     .then(data => {
       document.getElementById("footer").innerHTML = data;
@@ -229,7 +229,7 @@
 </script>
 
         <script>
-  fetch("../partials/navbar.html")
+  fetch("/de/partials/navbar.html")
     .then(res => res.text())
     .then(data => {
       document.getElementById("navbar").innerHTML = data;
