@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Startseiten -->
+  <url>
+    <loc>https://safe-net-umber.vercel.app/de/index.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://safe-net-umber.vercel.app/de/index.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safe-net-umber.vercel.app/en/index.html"/>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://safe-net-umber.vercel.app/en/index.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://safe-net-umber.vercel.app/de/index.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safe-net-umber.vercel.app/en/index.html"/>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Generator -->
+  <url>
+    <loc>https://safe-net-umber.vercel.app/de/pages/generator.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://safe-net-umber.vercel.app/de/pages/generator.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safe-net-umber.vercel.app/en/pages/generator.html"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://safe-net-umber.vercel.app/en/pages/generator.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Analysator -->
+  <url>
+    <loc>https://safe-net-umber.vercel.app/de/pages/analysator.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://safe-net-umber.vercel.app/en/pages/analysator.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Tresor -->
+  <url>
+    <loc>https://safe-net-umber.vercel.app/de/pages/tresor.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://safe-net-umber.vercel.app/en/pages/tresor.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Angriffsmethoden -->
+  <url>
+    <loc>https://safe-net-umber.vercel.app/de/pages/angriff.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://safe-net-umber.vercel.app/en/pages/angriff.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Phishing -->
+  <url>
+    <loc>https://safe-net-umber.vercel.app/de/pages/phishing.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://safe-net-umber.vercel.app/en/pages/phishing.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Bruteforce -->
+  <url>
+    <loc>https://safe-net-umber.vercel.app/de/pages/bruteforce.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://safe-net-umber.vercel.app/en/pages/bruteforce.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Social Engineering -->
+  <url>
+    <loc>https://safe-net-umber.vercel.app/de/pages/socialengineering.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://safe-net-umber.vercel.app/en/pages/socialengineering.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Keylogger -->
+  <url>
+    <loc>https://safe-net-umber.vercel.app/de/pages/keylogger.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://safe-net-umber.vercel.app/en/pages/keylogger.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Wörterbuchangriff -->
+  <url>
+    <loc>https://safe-net-umber.vercel.app/de/pages/w%C3%B6rterbuchangriff.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://safe-net-umber.vercel.app/en/pages/w%C3%B6rterbuchangriff.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Über SafeNet Security -->
+  <url>
+    <loc>https://safe-net-umber.vercel.app/de/pages/%C3%BCbersns.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://safe-net-umber.vercel.app/en/pages/%C3%BCbersns.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Kontakt -->
+  <url>
+    <loc>https://safe-net-umber.vercel.app/de/pages/kontakt.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://safe-net-umber.vercel.app/en/pages/kontakt.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- Impressum -->
+  <url>
+    <loc>https://safe-net-umber.vercel.app/de/pages/impressum.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://safe-net-umber.vercel.app/en/pages/impressum.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- Datenschutzerklärung -->
+  <url>
+    <loc>https://safe-net-umber.vercel.app/de/pages/datenschutzerkl%C3%A4rung.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://safe-net-umber.vercel.app/en/pages/datenschutzerkl%C3%A4rung.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- Haftungsausschluss -->
+  <url>
+    <loc>https://safe-net-umber.vercel.app/de/pages/haftungsausschluss.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://safe-net-umber.vercel.app/en/pages/haftungsausschluss.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+</urlset>
