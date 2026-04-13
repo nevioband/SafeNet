@@ -37,7 +37,7 @@ export const WOERTERBUCH = [
   'hallo','hallo1','hallo12','hallo123','hallo1234','hallo12345',
   'Hallo','Hallo1','Hallo12','Hallo123','Hallo1234','Hallo12345',
   'HALLO','HALLO123','hallo2024','Hallo2024','hallo2023','Hallo2023',
-  'hallo2022','hallo2021','hallo2020','Hallo2020',
+  'hallo2022','hallo2021','hallo2020','Hallo2020', 'Hallo123!'
   'passwort','passwort1','passwort12','passwort123','passwort1234',
   'Passwort','Passwort1','Passwort12','Passwort123','Passwort1234',
   'PASSWORT','PASSWORT123','passwort2024','Passwort2024',
