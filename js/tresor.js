@@ -327,6 +327,31 @@ async function ensureUnlocked() {
   return await askMasterPassword(session);
 }
 
+// ===== PASSWORT-STÄRKE =====
+
+function passwordScore(pw) {
+  if (!pw || pw === "[Entschlüsselungsfehler]") return 100;
+  const HAEUFIGE = ["123456","password","12345678","qwerty","12345","123456789",
+    "letmein","admin","welcome","123123","passw0rd","iloveyou","1234","hallo",
+    "hallo123","passwort","test","abc123","000000","111111","monkey","dragon"];
+  const hasLower   = /[a-z]/.test(pw);
+  const hasUpper   = /[A-Z]/.test(pw);
+  const hasDigit   = /[0-9]/.test(pw);
+  const hasSpecial = /[^A-Za-z0-9]/.test(pw);
+  const len = pw.length;
+  const isCommon = HAEUFIGE.some(w => pw.toLowerCase().includes(w));
+  let score = 0;
+  if (len >= 8)  score += 15;
+  if (len >= 12) score += 20;
+  if (len >= 16) score += 15;
+  if (hasLower)   score += 10;
+  if (hasUpper)   score += 10;
+  if (hasDigit)   score += 10;
+  if (hasSpecial) score += 20;
+  if (isCommon)   score = Math.max(0, score - 35);
+  return Math.min(100, score);
+}
+
 // ===== TRESOR LADEN =====
 
 async function renderVault() {
@@ -451,7 +476,15 @@ async function renderVault() {
   );
   const duplicateCount = duplicateIndices.size;
 
-  // Warnbanner
+  // Schwache Passwörter erkennen (Score < 40)
+  const weakIndices = new Set(
+    decryptedEntries
+      .map((pw, i) => (passwordScore(pw.value) < 40 ? i : -1))
+      .filter((i) => i !== -1),
+  );
+  const weakCount = weakIndices.size;
+
+  // Duplikat-Warnbanner
   let dupBanner = document.getElementById("vaultDupBanner");
   if (!dupBanner) {
     dupBanner = document.createElement("div");
@@ -468,17 +501,42 @@ async function renderVault() {
     dupBanner.style.display = "none";
   }
 
+  // Schwach-Warnbanner
+  let weakBanner = document.getElementById("vaultWeakBanner");
+  if (!weakBanner) {
+    weakBanner = document.createElement("div");
+    weakBanner.id = "vaultWeakBanner";
+    (document.getElementById("vaultDupBanner") ?? listElement).before(weakBanner);
+  }
+  if (weakCount > 0) {
+    weakBanner.style.cssText =
+      "display:flex;align-items:center;gap:10px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.4);border-radius:10px;padding:12px 16px;margin-bottom:16px;color:#f87171;font-size:14px;font-family:Inter,sans-serif;";
+    weakBanner.innerHTML = isEN
+      ? `<span class="material-symbols-outlined" style="font-size:20px;color:#f87171;">security</span> <span><strong>${weakCount} ${weakCount === 1 ? "password is" : "passwords are"} too weak</strong> \u2014 replace them with stronger ones!</span>`
+      : `<span class="material-symbols-outlined" style="font-size:20px;color:#f87171;">security</span> <span><strong>${weakCount} ${weakCount === 1 ? "Passwort ist" : "Passw\u00f6rter sind"} zu schwach</strong> \u2014 ersetze ${weakCount === 1 ? "es" : "sie"} durch st\u00e4rkere!</span>`;
+  } else {
+    weakBanner.style.display = "none";
+  }
+
   listElement.innerHTML = decryptedEntries
     .map((pw, index) => {
       const isDup = duplicateIndices.has(index);
+      const isWeak = weakIndices.has(index);
       const dupBadge = isDup
         ? `<span style="font-size:11px;background:rgba(251,146,60,0.2);border:1px solid rgba(251,146,60,0.5);color:#fb923c;border-radius:6px;padding:2px 7px;margin-left:6px;vertical-align:middle;">${isEN ? "Duplicate" : "Duplikat"}</span>`
         : "";
-      const borderStyle = isDup ? "border-color:rgba(251,146,60,0.5);" : "";
+      const weakBadge = isWeak
+        ? `<span style="font-size:11px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.5);color:#f87171;border-radius:6px;padding:2px 7px;margin-left:6px;vertical-align:middle;">${isEN ? "Weak" : "Schwach"}</span>`
+        : "";
+      const borderStyle = isDup
+        ? "border-color:rgba(251,146,60,0.5);"
+        : isWeak
+        ? "border-color:rgba(239,68,68,0.45);"
+        : "";
       return `
         <div class="vault-item" style="${borderStyle}">
             <div style="display:flex;flex-direction:column;gap:2px;overflow:hidden;margin-right:10px;">
-                <strong style="color:#ffffff;font-size:1rem;margin-bottom:2px;display:block;">${pw.label}${dupBadge}</strong>
+                <strong style="color:#ffffff;font-size:1rem;margin-bottom:2px;display:block;">${pw.label}${dupBadge}${weakBadge}</strong>
                 <span class="password-display" id="pw-${index}" style="font-family:monospace;color:#66d9ff;font-size:1.1rem;letter-spacing:2px;">••••••••</span>
                 <small style="font-size:0.7rem;color:rgba(255,255,255,0.4);">${pw.date || "-"}</small>
             </div>
