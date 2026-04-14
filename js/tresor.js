@@ -484,6 +484,15 @@ async function renderVault() {
   );
   const weakCount = weakIndices.size;
 
+  // Statistiken in sessionStorage speichern (für Einstellungsseite)
+  const strongCount = decryptedEntries.filter(pw => passwordScore(pw.value) >= 60).length;
+  sessionStorage.setItem('vaultStats', JSON.stringify({
+    total: decryptedEntries.length,
+    duplicates: duplicateCount,
+    weak: weakCount,
+    strong: strongCount
+  }));
+
   // Duplikat-Warnbanner
   let dupBanner = document.getElementById("vaultDupBanner");
   if (!dupBanner) {

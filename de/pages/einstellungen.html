@@ -132,9 +132,9 @@
         <!-- ── DATEN ────────────────────── -->
         <div class="settings-section-label">Daten</div>
 
-        <!-- Vault-Statistiken -->
+        <!-- Tresor-Statistiken -->
         <div class="s-card">
-            <h3>Vault-Statistiken</h3>
+            <h3>Tresor-Statistiken</h3>
             <p class="s-card-desc">Auswertung deines gespeicherten Passworttresors.</p>
             <div class="stat-grid">
                 <div class="stat-tile"><div class="stat-num" id="statTotal">–</div><div class="stat-lbl">Gesamt</div></div>
@@ -343,13 +343,27 @@
 
             // ── Vault-Statistiken ──────────────────────────────────
             ;(async () => {
+                // Gesamtanzahl immer laden (kein Master-Passwort nötig)
                 const { data: rows } = await supabase.from('passwords').select('id, label').eq('user_id', userId)
-                if (!rows) return
-                const entries = rows.filter(r => !r.label?.startsWith('__'))
-                document.getElementById('statTotal').textContent = entries.length
-                document.getElementById('statDuplicates').textContent = '–'
-                document.getElementById('statWeak').textContent = '–'
-                document.getElementById('statStrong').textContent = '–'
+                if (rows) {
+                    const entries = rows.filter(r => !r.label?.startsWith('__'))
+                    document.getElementById('statTotal').textContent = entries.length
+                }
+                // Detailstatistiken aus sessionStorage (werden im Tresor nach Entsperren gesetzt)
+                const raw = sessionStorage.getItem('vaultStats')
+                if (raw) {
+                    try {
+                        const stats = JSON.parse(raw)
+                        document.getElementById('statDuplicates').textContent = stats.duplicates ?? '–'
+                        document.getElementById('statWeak').textContent = stats.weak ?? '–'
+                        document.getElementById('statStrong').textContent = stats.strong ?? '–'
+                    } catch {}
+                } else {
+                    const hint = '<span title="Tresor öffnen um Statistiken zu laden" style="font-size:11px;opacity:0.5;cursor:help;">?</span>'
+                    document.getElementById('statDuplicates').innerHTML = hint
+                    document.getElementById('statWeak').innerHTML = hint
+                    document.getElementById('statStrong').innerHTML = hint
+                }
             })()
 
             // ── Konto löschen ──────────────────────────────────────

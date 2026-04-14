@@ -339,12 +339,24 @@
 
             ;(async () => {
                 const { data: rows } = await supabase.from('passwords').select('id, label').eq('user_id', userId)
-                if (!rows) return
-                const entries = rows.filter(r => !r.label?.startsWith('__'))
-                document.getElementById('statTotal').textContent = entries.length
-                document.getElementById('statDuplicates').textContent = '–'
-                document.getElementById('statWeak').textContent = '–'
-                document.getElementById('statStrong').textContent = '–'
+                if (rows) {
+                    const entries = rows.filter(r => !r.label?.startsWith('__'))
+                    document.getElementById('statTotal').textContent = entries.length
+                }
+                const raw = sessionStorage.getItem('vaultStats')
+                if (raw) {
+                    try {
+                        const stats = JSON.parse(raw)
+                        document.getElementById('statDuplicates').textContent = stats.duplicates ?? '–'
+                        document.getElementById('statWeak').textContent = stats.weak ?? '–'
+                        document.getElementById('statStrong').textContent = stats.strong ?? '–'
+                    } catch {}
+                } else {
+                    const hint = '<span title="Open vault to load statistics" style="font-size:11px;opacity:0.5;cursor:help;">?</span>'
+                    document.getElementById('statDuplicates').innerHTML = hint
+                    document.getElementById('statWeak').innerHTML = hint
+                    document.getElementById('statStrong').innerHTML = hint
+                }
             })()
 
             document.getElementById('deleteAccountBtn').addEventListener('click', () => {
