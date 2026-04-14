@@ -138,3 +138,98 @@ setupMobileNavbarEvents();
 
 // Für rückwärts-kompatibilität (alte Seiten die updateNavbarUser() aufrufen)
 window.updateNavbarUser = applyNavbarUser;
+
+
+function initTheme() {
+    const saved = localStorage.getItem('theme') || 'dark'
+    document.documentElement.setAttribute('data-theme', saved)
+
+    function updateBtns() {
+        const darkBtn  = document.getElementById('themeDarkBtn')
+        const lightBtn = document.getElementById('themeLightBtn')
+        if (!darkBtn || !lightBtn) return
+        const current = document.documentElement.getAttribute('data-theme')
+        darkBtn.style.background  = current === 'dark'  ? 'linear-gradient(135deg,#3399ff,#66d9ff)' : ''
+        darkBtn.style.color       = current === 'dark'  ? '#0f172a' : ''
+        darkBtn.style.borderColor = current === 'dark'  ? 'transparent' : ''
+        lightBtn.style.background = current === 'light' ? 'linear-gradient(135deg,#3399ff,#66d9ff)' : ''
+        lightBtn.style.color      = current === 'light' ? '#0f172a' : ''
+        lightBtn.style.borderColor= current === 'light' ? 'transparent' : ''
+    }
+
+    function setTheme(next) {
+        document.documentElement.setAttribute('data-theme', next)
+        localStorage.setItem('theme', next)
+        updateBtns()
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        updateBtns()
+        document.getElementById('themeDarkBtn') ?.addEventListener('click', () => setTheme('dark'))
+        document.getElementById('themeLightBtn')?.addEventListener('click', () => setTheme('light'))
+    })
+}
+
+initTheme()
+
+function initCookieBanner() {
+    if (localStorage.getItem('cookieConsent') || sessionStorage.getItem('cookieBannerClosed')) return
+
+    const isDE = !window.location.pathname.startsWith('/en/')
+    const datenschutzUrl = isDE
+        ? '/de/pages/datenschutzerklärung.html'
+        : '/en/pages/datenschutzerklärung.html'
+
+    const banner = document.createElement('div')
+    banner.id = 'cookie-banner'
+
+    const p = document.createElement('p')
+    const textNode = document.createTextNode(
+        isDE
+            ? 'Diese Website verwendet lokalen Browserspeicher (localStorage), um Dein Farbschema und Deine Einstellungen zu speichern. Es werden keine Tracking- oder Werbe-Cookies eingesetzt. '
+            : 'This website uses local browser storage (localStorage) to save your colour scheme and settings. No tracking or advertising cookies are used. '
+    )
+    const link = document.createElement('a')
+    link.href = datenschutzUrl
+    link.textContent = isDE ? 'Datenschutzerklärung' : 'Privacy Policy'
+    p.appendChild(textNode)
+    p.appendChild(link)
+
+    const btns = document.createElement('div')
+    btns.className = 'cookie-btns'
+
+    const declineBtn = document.createElement('button')
+    declineBtn.id = 'cookie-decline'
+    declineBtn.textContent = isDE ? 'Schließen' : 'Close'
+
+    const acceptBtn = document.createElement('button')
+    acceptBtn.id = 'cookie-accept'
+    acceptBtn.textContent = isDE ? 'Verstanden' : 'Got it'
+
+    btns.appendChild(declineBtn)
+    btns.appendChild(acceptBtn)
+    banner.appendChild(p)
+    banner.appendChild(btns)
+
+    function hideBanner() {
+        banner.classList.add('cookie-hide')
+        banner.addEventListener('animationend', () => banner.remove(), { once: true })
+    }
+
+    acceptBtn.addEventListener('click', () => {
+        localStorage.setItem('cookieConsent', 'accepted')
+        hideBanner()
+    })
+    declineBtn.addEventListener('click', () => {
+        sessionStorage.setItem('cookieBannerClosed', '1')
+        hideBanner()
+    })
+
+    if (document.body) {
+        document.body.appendChild(banner)
+    } else {
+        document.addEventListener('DOMContentLoaded', () => document.body.appendChild(banner))
+    }
+}
+
+initCookieBanner()
