@@ -58,7 +58,13 @@
         <div id="pw-cracktime" class="pw-cracktime"></div>
 
         <ul id="suggestions"></ul>
-      </div>
+
+        <!-- Breach check (Have I Been Pwned, k-Anonymity) -->
+        <div class="hibp-section">
+          <button id="hibpBtn" class="main-btn" type="button">Check for data breaches</button>
+          <p class="hibp-info">Checks anonymously whether your password appears in known data breaches. Your password <strong>never</strong> leaves your browser.</p>
+          <div id="hibpResult"></div>
+        </div>
     </section>
 
     <!-- Footer (loaded via JS from partials/footer.html) -->

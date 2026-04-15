@@ -58,7 +58,13 @@
         <div id="pw-cracktime" class="pw-cracktime"></div>
 
         <ul id="suggestions"></ul>
-      </div>
+
+        <!-- Datenleck-Prüfung (Have I Been Pwned, k-Anonymity) -->
+        <div class="hibp-section">
+          <button id="hibpBtn" class="main-btn" type="button">Auf Datenlecks prüfen</button>
+          <p class="hibp-info">Prüft anonym, ob dein Passwort in bekannten Datenlecks auftaucht. Dein Passwort verlässt dabei <strong>nie</strong> deinen Browser.</p>
+          <div id="hibpResult"></div>
+        </div>
     </section>
 
     <!-- Footer (wird per JS aus partials/footer.html geladen) -->

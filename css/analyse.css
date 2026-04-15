@@ -155,3 +155,65 @@
     padding: 60px 15px;
   }
 }
+
+/* ===== HIBP Datenleck-Prüfung ===== */
+.hibp-section {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(102, 179, 255, 0.12);
+}
+
+.hibp-section .main-btn {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.hibp-section .main-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.hibp-info {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0 0 12px;
+  line-height: 1.5;
+}
+
+.hibp-info strong { color: rgba(255, 255, 255, 0.7); }
+
+.hibp-result {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  padding: 12px 16px;
+  border-radius: 10px;
+  text-align: left;
+  display: none;
+}
+
+.hibp-result:not(:empty) { display: block; }
+
+.hibp-danger {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+}
+
+.hibp-safe {
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  color: #86efac;
+}
+
+.hibp-warn {
+  background: rgba(234, 179, 8, 0.1);
+  border: 1px solid rgba(234, 179, 8, 0.35);
+  color: #fde047;
+}
+
+/* Light theme */
+[data-theme="light"] .hibp-info { color: #64748b; }
+[data-theme="light"] .hibp-info strong { color: #334155; }
+[data-theme="light"] .hibp-danger { background: rgba(239,68,68,0.08); color: #b91c1c; }
+[data-theme="light"] .hibp-safe   { background: rgba(34,197,94,0.08); color: #15803d; }
+[data-theme="light"] .hibp-warn   { background: rgba(234,179,8,0.08); color: #92400e; }

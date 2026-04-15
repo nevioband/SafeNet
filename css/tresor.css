@@ -170,3 +170,50 @@
         font-size: 0.9rem;
     }
 }
+
+/* ===== KATEGORIE-FILTER ===== */
+.vault-kategorie-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.vault-kat-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    background: rgba(51, 153, 255, 0.08);
+    border: 1px solid rgba(51, 153, 255, 0.25);
+    color: #93c5fd;
+    cursor: pointer;
+    font-family: Inter, sans-serif;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.vault-kat-btn:hover {
+    background: rgba(51, 153, 255, 0.18);
+}
+
+.vault-kat-active {
+    background: linear-gradient(135deg, #3399ff, #66d9ff) !important;
+    color: #0f172a !important;
+    border-color: transparent !important;
+    font-weight: 600;
+}
+
+[data-theme="light"] .vault-kat-btn {
+    background: #e2e8f0;
+    border-color: rgba(59, 130, 246, 0.3);
+    color: #1e293b;
+}
+
+[data-theme="light"] .vault-kat-btn:hover {
+    background: #cbd5e1;
+}
+
+[data-theme="light"] .vault-kat-active {
+    background: linear-gradient(135deg, #3399ff, #66d9ff) !important;
+    color: #0f172a !important;
+    border-color: transparent !important;
+}

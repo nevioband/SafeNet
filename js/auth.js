@@ -233,3 +233,27 @@ function initCookieBanner() {
 }
 
 initCookieBanner()
+
+function initScrollToTop() {
+    const btn = document.createElement('button')
+    btn.id = 'scrollTopBtn'
+    btn.title = window.location.pathname.startsWith('/en/') ? 'Back to top' : 'Nach oben'
+    btn.setAttribute('aria-label', btn.title)
+    btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>'
+
+    if (document.body) {
+        document.body.appendChild(btn)
+    } else {
+        document.addEventListener('DOMContentLoaded', () => document.body.appendChild(btn))
+    }
+
+    window.addEventListener('scroll', () => {
+        btn.classList.toggle('scroll-top-visible', window.scrollY > 300)
+    }, { passive: true })
+
+    btn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+    })
+}
+
+initScrollToTop()

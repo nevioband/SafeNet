@@ -4,6 +4,25 @@ const isEN = window.location.pathname.startsWith('/en/');
 
 let vaultData = [];
 let masterKey = null;
+let aktivKategorie = 'alle'; // Aktiver Kategorie-Filter
+
+// Kategorien in DE und EN
+const KATEGORIEN = [
+  { key: 'alle',           de: 'Alle',          en: 'All' },
+  { key: 'allgemein',     de: 'Allgemein',     en: 'General' },
+  { key: 'banking',       de: 'Banking',       en: 'Banking' },
+  { key: 'email',         de: 'E-Mail',        en: 'E-Mail' },
+  { key: 'sozial',        de: 'Soziale Medien',en: 'Social Media' },
+  { key: 'shopping',      de: 'Shopping',      en: 'Shopping' },
+  { key: 'arbeit',        de: 'Arbeit',        en: 'Work' },
+  { key: 'gaming',        de: 'Gaming',        en: 'Gaming' },
+];
+
+function kategorieLabel(key) {
+  const k = KATEGORIEN.find(k => k.key === key);
+  if (!k) return key;
+  return isEN ? k.en : k.de;
+}
 
 const VERIFY_LABEL = "__vault_verify__";
 const VERIFY_PLAINTEXT = "__safenet_vault_verified__";
@@ -413,6 +432,32 @@ async function renderVault() {
   const searchContainer = document.getElementById("vaultSearchContainer");
   if (searchContainer) searchContainer.style.display = "block";
 
+  // Kategorie-Filter-Leiste aufbauen
+  let filterBar = document.getElementById('vaultKategorieFilter');
+  if (!filterBar) {
+    filterBar = document.createElement('div');
+    filterBar.id = 'vaultKategorieFilter';
+    filterBar.className = 'vault-kategorie-filter';
+    searchContainer
+      ? searchContainer.after(filterBar)
+      : listElement.before(filterBar);
+  }
+  filterBar.innerHTML = KATEGORIEN.map(k => {
+    const label = isEN ? k.en : k.de;
+    const active = aktivKategorie === k.key ? ' vault-kat-active' : '';
+    return `<button class="vault-kat-btn${active}" data-key="${k.key}">${label}</button>`;
+  }).join('');
+  filterBar.querySelectorAll('.vault-kat-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      aktivKategorie = btn.dataset.key;
+      filterBar.querySelectorAll('.vault-kat-btn').forEach(b => b.classList.remove('vault-kat-active'));
+      btn.classList.add('vault-kat-active');
+      // Aktive Suche beibehalten
+      const searchInput = document.getElementById('vaultSearch');
+      window.filterVault(searchInput?.value ?? '');
+    });
+  });
+
   listElement.innerHTML =
     `<p style="text-align:center; color:rgba(255,255,255,0.4); padding:20px;">${isEN ? "Loading\u2026" : "Wird geladen\u2026"}</p>`;
 
@@ -537,6 +582,10 @@ async function renderVault() {
       const weakBadge = isWeak
         ? `<span style="font-size:11px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.5);color:#f87171;border-radius:6px;padding:2px 7px;margin-left:6px;vertical-align:middle;">${isEN ? "Weak" : "Schwach"}</span>`
         : "";
+      const kat = pw.kategorie || '';
+      const katBadge = kat && kat !== 'allgemein'
+        ? `<span style="font-size:11px;background:rgba(51,153,255,0.12);border:1px solid rgba(51,153,255,0.35);color:#93c5fd;border-radius:6px;padding:2px 7px;margin-left:6px;vertical-align:middle;">${kategorieLabel(kat)}</span>`
+        : '';
       const borderStyle = isDup
         ? "border-color:rgba(251,146,60,0.5);"
         : isWeak
@@ -545,7 +594,7 @@ async function renderVault() {
       return `
         <div class="vault-item" style="${borderStyle}">
             <div style="display:flex;flex-direction:column;gap:2px;overflow:hidden;margin-right:10px;">
-                <strong style="color:#ffffff;font-size:1rem;margin-bottom:2px;display:block;">${pw.label}${dupBadge}${weakBadge}</strong>
+                <strong style="color:#ffffff;font-size:1rem;margin-bottom:2px;display:block;">${pw.label}${dupBadge}${weakBadge}${katBadge}</strong>
                 <span class="password-display" id="pw-${index}" style="font-family:monospace;color:#66d9ff;font-size:1.1rem;letter-spacing:2px;">••••••••</span>
                 <small style="font-size:0.7rem;color:rgba(255,255,255,0.4);">${pw.date || "-"}</small>
             </div>
@@ -572,6 +621,8 @@ async function renderVault() {
   const searchInput = document.getElementById("vaultSearch");
   if (searchInput && searchInput.value.trim()) {
     window.filterVault(searchInput.value);
+  } else if (aktivKategorie !== 'alle') {
+    window.filterVault('');
   }
 }
 
@@ -620,7 +671,7 @@ window.deletePassword = async function (id) {
 
 // ===== PASSWORT SPEICHERN =====
 
-window.savePassword = async function (newPasswordValue, labelValue) {
+window.savePassword = async function (newPasswordValue, labelValue, kategorieValue) {
   if (isOffline()) {
     alert(isEN ? "No internet \u2014 password cannot be saved." : "Kein Internet \u2014 Passwort kann nicht gespeichert werden.");
     return;
@@ -666,6 +717,7 @@ window.savePassword = async function (newPasswordValue, labelValue) {
     label: finalLabel,
     value: valueToStore,
     date: new Date().toLocaleDateString(isEN ? "en-GB" : "de-CH"),
+    kategorie: kategorieValue || 'allgemein',
   });
   if (insertError) {
     if (
@@ -688,14 +740,16 @@ window.saveManual = async function () {
   const password = (
     document.getElementById("manualPassword")?.value || ""
   ).trim();
+  const kategorie = document.getElementById("manualKategorie")?.value || 'allgemein';
   if (!password) {
     alert(isEN ? "Please enter a password." : "Bitte ein Passwort eingeben.");
     return;
   }
-  await window.savePassword(password, label || (isEN ? "Manually saved" : "Manuell gespeichert"));
+  await window.savePassword(password, label || (isEN ? "Manually saved" : "Manuell gespeichert"), kategorie);
   document.getElementById("manualModal").style.display = "none";
   document.getElementById("manualLabel").value = "";
   document.getElementById("manualPassword").value = "";
+  if (document.getElementById("manualKategorie")) document.getElementById("manualKategorie").value = 'allgemein';
 };
 
 // Vom Generator zum Tresor übertragen
@@ -942,12 +996,15 @@ function parseCSVLine(line) {
 // ===== SUCHE =====
 
 window.filterVault = function (query) {
-  const q = query.trim().toLowerCase();
+  const q = (query || '').trim().toLowerCase();
   const items = document.querySelectorAll("#saved-passwords-list .vault-item");
   let visible = 0;
   items.forEach((item, index) => {
-    const label = vaultData[index]?.label?.toLowerCase() ?? "";
-    const match = !q || label.includes(q);
+    const pw = vaultData[index];
+    const label = pw?.label?.toLowerCase() ?? "";
+    const matchText = !q || label.includes(q);
+    const matchKat = aktivKategorie === 'alle' || (pw?.kategorie || 'allgemein') === aktivKategorie;
+    const match = matchText && matchKat;
     item.style.display = match ? "" : "none";
     if (match) visible++;
   });
@@ -961,7 +1018,7 @@ window.filterVault = function (query) {
     noResult.textContent = isEN ? "No passwords found." : "Keine Passwörter gefunden.";
     document.getElementById("saved-passwords-list").after(noResult);
   }
-  noResult.style.display = q && visible === 0 ? "block" : "none";
+  noResult.style.display = visible === 0 ? "block" : "none";
 };
 
 // ===== START =====

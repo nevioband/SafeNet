@@ -160,3 +160,59 @@ document.getElementById('pw-toggle').addEventListener('click', () => {
     ? '<line x1="2" y1="2" x2="22" y2="22"/><path d="M6.71 6.71C4.01 8.36 2 12 2 12s4 8 10 8a9.9 9.9 0 0 0 5.29-1.53"/><path d="M10.58 5.11A9.9 9.9 0 0 1 12 5c6 0 10 7 10 7a18.5 18.5 0 0 1-2.16 3.19"/><circle cx="12" cy="12" r="3"/>'
     : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
 });
+
+// ─── HIBP Datenleck-Prüfung (k-Anonymity) ─────────────────────────────────────
+async function sha1(str) {
+  const buffer = new TextEncoder().encode(str);
+  const hashBuffer = await crypto.subtle.digest('SHA-1', buffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase();
+}
+
+async function datenleckPruefen() {
+  const pw = document.getElementById('passwordInput').value;
+  const resultEl = document.getElementById('hibpResult');
+  const btn = document.getElementById('hibpBtn');
+
+  if (!pw) {
+    resultEl.textContent = 'Bitte zuerst ein Passwort eingeben.';
+    resultEl.className = 'hibp-result hibp-warn';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Wird geprüft\u2026';
+  resultEl.textContent = '';
+  resultEl.className = '';
+
+  try {
+    const hash = await sha1(pw);
+    const prefix = hash.slice(0, 5);
+    const suffix = hash.slice(5);
+
+    const response = await fetch('https://api.pwnedpasswords.com/range/' + prefix, {
+      headers: { 'Add-Padding': 'true' }
+    });
+    if (!response.ok) throw new Error('API nicht erreichbar');
+
+    const text = await response.text();
+    const found = text.split('\n').find(line => line.split(':')[0] === suffix);
+
+    if (found) {
+      const count = parseInt(found.split(':')[1], 10);
+      resultEl.innerHTML = '<strong>&#9888; Gefunden!</strong> Dieses Passwort erscheint <strong>' + count.toLocaleString('de-CH') + '\xd7</strong> in bekannten Datenlecks. Wechsle es sofort!';
+      resultEl.className = 'hibp-result hibp-danger';
+    } else {
+      resultEl.innerHTML = '<strong>&#10003; Nicht gefunden.</strong> Dieses Passwort taucht in keinem bekannten Datenleck auf.';
+      resultEl.className = 'hibp-result hibp-safe';
+    }
+  } catch {
+    resultEl.textContent = 'Prüfung fehlgeschlagen. Bitte versuche es erneut.';
+    resultEl.className = 'hibp-result hibp-warn';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Auf Datenlecks prüfen';
+  }
+}
+
+document.getElementById('hibpBtn')?.addEventListener('click', datenleckPruefen);
