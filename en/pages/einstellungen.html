@@ -417,6 +417,35 @@
             document.getElementById('confirmPassword').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('changePwBtn').click() })
             document.getElementById('deleteConfirmInput').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('confirmDeleteBtn').click() })
 
+            // ── Profile picture lightbox ─────────────────────────────
+            document.getElementById('avatarCircle').addEventListener('click', () => {
+                const lightbox = document.getElementById('avatarLightbox')
+                const img = document.querySelector('#avatarCircle img')
+                const content = document.getElementById('avatarLightboxInhalt')
+                content.innerHTML = ''
+                if (img) {
+                    const bigImg = document.createElement('img')
+                    bigImg.src = img.src
+                    bigImg.alt = img.alt
+                    bigImg.className = 'avatar-lightbox-bild'
+                    content.appendChild(bigImg)
+                } else {
+                    const circle = document.createElement('div')
+                    circle.className = 'avatar-lightbox-initial'
+                    circle.textContent = document.getElementById('avatarInitial').textContent
+                    content.appendChild(circle)
+                }
+                lightbox.classList.add('offen')
+            })
+            document.getElementById('avatarLightbox').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget || e.target.id === 'avatarLightboxSchliessen') {
+                    document.getElementById('avatarLightbox').classList.remove('offen')
+                }
+            })
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') document.getElementById('avatarLightbox').classList.remove('offen')
+            })
+
             function showMsg(id, text, type) {
                 const box = document.getElementById(id)
                 if (type === 'hide') { box.style.display = 'none'; return }
@@ -426,5 +455,11 @@
             }
         })()
     </script>
+
+    <!-- Profile picture lightbox -->
+    <div class="avatar-lightbox" id="avatarLightbox" role="dialog" aria-modal="true" aria-label="Profile picture enlarged">
+        <button class="avatar-lightbox-schliessen" id="avatarLightboxSchliessen" aria-label="Close">&#x2715;</button>
+        <div id="avatarLightboxInhalt"></div>
+    </div>
 </body>
 </html>
