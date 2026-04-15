@@ -256,6 +256,20 @@ h2 {
 [data-theme="light"] .founder-info p { color: #334155; }
 [data-theme="light"] .about-hero p { color: #334155; }
 
+/* Tresor – Master-Passwort Modal (inline-styles überschreiben) */
+[data-theme="light"] #masterModal > div {
+    background: #ffffff !important;
+    border-color: rgba(59,130,246,0.2) !important;
+}
+[data-theme="light"] #masterModal label { color: #334155 !important; }
+[data-theme="light"] #masterModal p { color: #475569 !important; }
+[data-theme="light"] #masterModal #masterModalClose { color: #94a3b8 !important; }
+[data-theme="light"] #masterModal input[type="password"] {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+    border-color: rgba(59,130,246,0.3) !important;
+}
+
 /* Tresor – Manuelles Modal (inline-styles überschreiben) */
 [data-theme="light"] #manualModal > div {
     background: #ffffff !important;
