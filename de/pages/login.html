@@ -147,13 +147,12 @@
             return 'Fehler: ' + msg
         }
 
-        async function loginBenachrichtigung() {
+        function loginBenachrichtigung(accessToken) {
             try {
-                const { data: { session } } = await supabase.auth.getSession()
-                if (!session?.access_token) return
+                if (!accessToken) return
                 fetch('https://dygrabyaiyessqmjdprc.supabase.co/functions/v1/login-benachrichtigung', {
                     method: 'POST',
-                    headers: { 'Authorization': 'Bearer ' + session.access_token },
+                    headers: { 'Authorization': 'Bearer ' + accessToken },
                     keepalive: true
                 }).catch(() => {})
             } catch (_) {}
@@ -196,7 +195,7 @@
             btn.textContent = 'Wird eingeloggt…'
             btn.disabled = true
 
-            const { error } = await supabase.auth.signInWithPassword({ email, password })
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password })
 
             if (error) {
                 showError(supabaseError(error.message))
@@ -214,7 +213,7 @@
                 btn.textContent = 'Einloggen'
                 btn.disabled = false
             } else {
-                loginBenachrichtigung()
+                loginBenachrichtigung(data?.session?.access_token)
                 sessionStorage.setItem('loginSuccess', '1')
                 window.location.href = '/de/index.html'
             }
@@ -326,7 +325,8 @@
                 return
             }
 
-            loginBenachrichtigung()
+            const { data: { session: mfaSession } } = await supabase.auth.getSession()
+            loginBenachrichtigung(mfaSession?.access_token)
             sessionStorage.setItem('loginSuccess', '1')
             window.location.href = '/de/index.html'
         })

@@ -21,16 +21,20 @@ Deno.serve(async (req) => {
 
   const token = authHeader.slice(7)
 
-  // Supabase-Client mit Service-Role-Key initialisieren
-  const supabaseAdmin = createClient(
+  // User-Client mit dem JWT des Nutzers initialisieren (empfohlenes Supabase-Pattern)
+  const supabaseClient = createClient(
     Deno.env.get('SUPABASE_URL') ?? '',
-    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
-    { auth: { persistSession: false } }
+    Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+    {
+      global: { headers: { Authorization: `Bearer ${token}` } },
+      auth: { persistSession: false }
+    }
   )
 
   // JWT verifizieren und Benutzer abrufen
-  const { data: { user }, error: userError } = await supabaseAdmin.auth.getUser(token)
+  const { data: { user }, error: userError } = await supabaseClient.auth.getUser()
   if (userError || !user?.email) {
+    console.error('Auth error:', userError?.message, 'user:', user?.email)
     return new Response('Unauthorized', { status: 401 })
   }
 
