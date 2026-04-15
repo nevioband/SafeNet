@@ -57,7 +57,7 @@ Deno.serve(async (req) => {
     req.headers.get('X-Forwarded-For')?.split(',')[0]?.trim() ??
     'Unbekannt'
 
-  const userAgent = req.headers.get('User-Agent') ?? 'Unbekannt'
+  const userAgent = req.headers.get('User-Agent') ?? 'Unbekannt'  
 
   const emailBody = {
     from: 'SafeNet Security <noreply@safenet-security.ch>',
