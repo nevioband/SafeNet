@@ -2,6 +2,7 @@
   position: sticky;
   top: 0;
   z-index: 1000;
+  background: var(--bg-card);
 }
 
 .language-switcher {
@@ -19,12 +20,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: var(--bg-card);
   padding: 15px 40px;
   gap: 30px;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+  max-width: 1600px;
+  margin: 0 auto;
 }
 
 
