@@ -56,7 +56,7 @@ Deno.serve(async (req) => {
   const userAgent = req.headers.get('User-Agent') ?? 'Unbekannt'
 
   const emailBody = {
-    from: 'SafeNet Security <onboarding@resend.dev>',
+    from: 'SafeNet Security <noreply@safenet-security.ch>',
     to: [user.email],
     subject: 'Sicherheitshinweis: Neue Anmeldung bei SafeNet',
     html: `

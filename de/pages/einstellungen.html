@@ -122,6 +122,14 @@
             <h3>E-Mail-Adresse ändern</h3>
             <p class="s-card-desc">An die neue Adresse wird eine Bestätigungsmail gesendet. Die Änderung wird erst nach dem Klick auf den Link aktiv.</p>
             <div id="emailMsg" class="msg-box"></div>
+            <div class="form-group">
+                <label for="oldEmail">Aktuelle E-Mail-Adresse</label>
+                <input type="email" id="oldEmail" class="form-input" placeholder="deine@aktuelle-email.ch">
+            </div>
+            <div class="form-group">
+                <label for="emailCurrentPassword">Aktuelles Passwort</label>
+                <input type="password" id="emailCurrentPassword" class="form-input" placeholder="Dein aktuelles Passwort">
+            </div>
             <div class="form-group form-group-last">
                 <label for="newEmail">Neue E-Mail-Adresse</label>
                 <input type="email" id="newEmail" class="form-input" placeholder="neue@email.ch">
@@ -360,14 +368,29 @@
 
             // ── E-Mail ändern ──────────────────────────────────────
             document.getElementById('changeEmailBtn').addEventListener('click', async () => {
+                const oldEmailInput = document.getElementById('oldEmail').value.trim()
+                const currentPw = document.getElementById('emailCurrentPassword').value
                 const newEmail = document.getElementById('newEmail').value.trim()
-                if (!newEmail || !newEmail.includes('@')) { showMsg('emailMsg', 'Bitte eine gültige E-Mail-Adresse eingeben.', 'error'); return }
+                if (!oldEmailInput || !oldEmailInput.includes('@')) { showMsg('emailMsg', 'Bitte deine aktuelle E-Mail-Adresse eingeben.', 'error'); return }
+                if (oldEmailInput.toLowerCase() !== email.toLowerCase()) { showMsg('emailMsg', 'Die eingegebene E-Mail-Adresse stimmt nicht mit deiner aktuellen überein.', 'error'); return }
+                if (!currentPw) { showMsg('emailMsg', 'Bitte dein aktuelles Passwort eingeben.', 'error'); return }
+                if (!newEmail || !newEmail.includes('@')) { showMsg('emailMsg', 'Bitte eine gültige neue E-Mail-Adresse eingeben.', 'error'); return }
+                if (newEmail.toLowerCase() === email.toLowerCase()) { showMsg('emailMsg', 'Die neue E-Mail-Adresse muss sich von der aktuellen unterscheiden.', 'error'); return }
                 const btn = document.getElementById('changeEmailBtn')
-                btn.textContent = 'Wird gesendet…'; btn.disabled = true
+                btn.textContent = 'Wird überprüft…'; btn.disabled = true
+                const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password: currentPw })
+                if (signInErr) {
+                    showMsg('emailMsg', 'Das aktuelle Passwort ist falsch.', 'error')
+                    btn.textContent = 'Bestätigungsmail senden'; btn.disabled = false
+                    return
+                }
+                btn.textContent = 'Wird gesendet…'
                 const { error } = await supabase.auth.updateUser({ email: newEmail })
                 btn.textContent = 'Bestätigungsmail senden'; btn.disabled = false
                 if (error) { showMsg('emailMsg', 'Fehler: ' + error.message, 'error'); return }
                 showMsg('emailMsg', `Bestätigungsmail wurde an ${newEmail} gesendet. Bitte klicke auf den Link in der Mail.`, 'success')
+                document.getElementById('oldEmail').value = ''
+                document.getElementById('emailCurrentPassword').value = ''
                 document.getElementById('newEmail').value = ''
             })
 
@@ -453,6 +476,8 @@
             // ── Enter-Tasten ───────────────────────────────────────
             document.getElementById('displayName').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('saveNameBtn').click() })
             document.getElementById('verifyCode').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('verifyBtn').click() })
+            document.getElementById('oldEmail').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('emailCurrentPassword').focus() })
+            document.getElementById('emailCurrentPassword').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('newEmail').focus() })
             document.getElementById('newEmail').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('changeEmailBtn').click() })
             document.getElementById('confirmPassword').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('changePwBtn').click() })
             document.getElementById('deleteConfirmInput').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('confirmDeleteBtn').click() })
