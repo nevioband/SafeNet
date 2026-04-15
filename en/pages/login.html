@@ -207,6 +207,7 @@
                 btn.disabled = false
             } else {
                 loginBenachrichtigung()
+                sessionStorage.setItem('loginSuccess', '1')
                 window.location.href = '/en/index.html'
             }
         })
@@ -315,6 +316,7 @@
             }
 
             loginBenachrichtigung()
+            sessionStorage.setItem('loginSuccess', '1')
             window.location.href = '/en/index.html'
         })
 
