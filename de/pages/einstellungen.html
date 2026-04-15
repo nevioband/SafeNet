@@ -181,6 +181,36 @@
     <script type="module">
         import { supabase } from '/js/supabase.js'
 
+        // ── Profilbild Lightbox (sofort registrieren) ──────────────
+        document.getElementById('avatarCircle').addEventListener('click', () => {
+            const lightbox = document.getElementById('avatarLightbox')
+            const img = document.querySelector('#avatarCircle img')
+            const inhalt = document.getElementById('avatarLightboxInhalt')
+            inhalt.innerHTML = ''
+            if (img) {
+                const grossesBild = document.createElement('img')
+                grossesBild.src = img.src
+                grossesBild.alt = img.alt
+                grossesBild.className = 'avatar-lightbox-bild'
+                inhalt.appendChild(grossesBild)
+            } else {
+                const kreis = document.createElement('div')
+                kreis.className = 'avatar-lightbox-initial'
+                const span = document.getElementById('avatarInitial')
+                kreis.textContent = span ? span.textContent : '?'
+                inhalt.appendChild(kreis)
+            }
+            lightbox.style.display = 'flex'
+        })
+        document.getElementById('avatarLightbox').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget || e.target.id === 'avatarLightboxSchliessen') {
+                document.getElementById('avatarLightbox').style.display = 'none'
+            }
+        })
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') document.getElementById('avatarLightbox').style.display = 'none'
+        })
+
         ;(async () => {
             let tfaEnrolledFactorId = null
             let session, userId, email, initial, displayName = ''
@@ -426,35 +456,6 @@
             document.getElementById('newEmail').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('changeEmailBtn').click() })
             document.getElementById('confirmPassword').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('changePwBtn').click() })
             document.getElementById('deleteConfirmInput').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('confirmDeleteBtn').click() })
-
-            // ── Profilbild Lightbox ────────────────────────────────
-            document.getElementById('avatarCircle').addEventListener('click', () => {
-                const lightbox = document.getElementById('avatarLightbox')
-                const img = document.querySelector('#avatarCircle img')
-                const inhalt = document.getElementById('avatarLightboxInhalt')
-                inhalt.innerHTML = ''
-                if (img) {
-                    const grossesBild = document.createElement('img')
-                    grossesBild.src = img.src
-                    grossesBild.alt = img.alt
-                    grossesBild.className = 'avatar-lightbox-bild'
-                    inhalt.appendChild(grossesBild)
-                } else {
-                    const kreis = document.createElement('div')
-                    kreis.className = 'avatar-lightbox-initial'
-                    kreis.textContent = document.getElementById('avatarInitial').textContent
-                    inhalt.appendChild(kreis)
-                }
-                lightbox.classList.add('offen')
-            })
-            document.getElementById('avatarLightbox').addEventListener('click', (e) => {
-                if (e.target === e.currentTarget || e.target.id === 'avatarLightboxSchliessen') {
-                    document.getElementById('avatarLightbox').classList.remove('offen')
-                }
-            })
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') document.getElementById('avatarLightbox').classList.remove('offen')
-            })
 
             // ── Helper ─────────────────────────────────────────────
             function showMsg(id, text, type) {
