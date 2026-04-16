@@ -576,13 +576,28 @@ async function renderVault() {
   listElement.innerHTML =
     `<p style="text-align:center; color:rgba(255,255,255,0.4); padding:20px;">${isEN ? "Loading\u2026" : "Wird geladen\u2026"}</p>`;
 
-  const { data, error } = await supabase
-    .from("passwords")
-    .select("*")
-    .order("created_at", { ascending: false });
+  // Fetch mit 12s Timeout damit der Tresor auf Mobile nicht hängt
+  const fetchCtrl = new AbortController();
+  const fetchTimer = setTimeout(() => fetchCtrl.abort(), 12000);
+  let data, error;
+  try {
+    ({ data, error } = await supabase
+      .from("passwords")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .abortSignal(fetchCtrl.signal));
+  } catch (e) {
+    error = e;
+  } finally {
+    clearTimeout(fetchTimer);
+  }
 
   if (error) {
-    if (
+    if (error?.name === 'AbortError' || error?.code === 20) {
+      showVaultError(isEN
+        ? "No server response. Please check your internet connection and reload the page."
+        : "Keine Serverantwort. Bitte Internetverbindung prüfen und Seite neu laden.");
+    } else if (
       error.message?.includes("JWT") ||
       error.message?.includes("session") ||
       error.message?.includes("token")
