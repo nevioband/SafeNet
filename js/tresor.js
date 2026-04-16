@@ -483,45 +483,37 @@ async function renderVault() {
       let cachedVerifyValue = null;
       try { cachedVerifyValue = localStorage.getItem(CACHE_KEY); } catch {}
 
-      // Supabase-Abfrage mit Timeout (Promise.race - kompatibel mit allen Supabase-Versionen)
-      let verifyValue = null;
-      let timedOut = false;
-      const timeoutHandle = setTimeout(() => { timedOut = true; }, 10000);
-      try {
-        const queryPromise = supabase
-          .from("passwords")
-          .select("value")
-          .eq("user_id", userId)
-          .eq("label", VERIFY_LABEL)
-          .maybeSingle();
-        const timeoutPromise = new Promise(resolve =>
-          setTimeout(() => resolve({ data: null, error: null, _timeout: true }), 10000)
-        );
-        const result = await Promise.race([queryPromise, timeoutPromise]);
-        clearTimeout(timeoutHandle);
-        if (result._timeout) {
-          // Query hat nicht geantwortet
-          if (cachedVerifyValue) {
-            verifyValue = cachedVerifyValue;
-          } else {
-            setInlineError(isEN ? "Connection timed out. Please try again." : "Verbindungstimeout. Bitte erneut versuchen.");
+      // Wenn Cache vorhanden → kein Netzwerk-Request nötig
+      let verifyValue = cachedVerifyValue;
+
+      if (!verifyValue) {
+        // Nativer fetch() mit AbortController (umgeht Supabase-Client-Hänger auf iOS)
+        const SB_URL = 'https://dygrabyaiyessqmjdprc.supabase.co';
+        const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5Z3JhYnlhaXllc3NxbWpkcHJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0OTkzMzMsImV4cCI6MjA5MTA3NTMzM30.l4fAwsz3deB3rZuA5EOG-_9doe2ohXunv1KwFezR2ss';
+        const ctrl = new AbortController();
+        const abortTimer = setTimeout(() => ctrl.abort(), 12000);
+        try {
+          const resp = await fetch(
+            `${SB_URL}/rest/v1/passwords?user_id=eq.${encodeURIComponent(userId)}&label=eq.${encodeURIComponent(VERIFY_LABEL)}&select=value&limit=1`,
+            { signal: ctrl.signal, headers: { apikey: SB_KEY, Authorization: `Bearer ${freshSession.access_token}` } }
+          );
+          clearTimeout(abortTimer);
+          if (!resp.ok) {
+            setInlineError(isEN ? `Server error ${resp.status}. Please try again.` : `Serverfehler ${resp.status}. Bitte erneut versuchen.`);
             return;
           }
-        } else {
-          const { data, error } = result;
-          if (error) {
-            // Echten Fehler anzeigen (Debug-Modus)
-            setInlineError((isEN ? "Error: " : "Fehler: ") + (error.message || error.code || JSON.stringify(error)));
-            return;
-          }
-          verifyValue = data?.value ?? null;
+          const rows = await resp.json();
+          verifyValue = rows?.[0]?.value ?? null;
           if (verifyValue) { try { localStorage.setItem(CACHE_KEY, verifyValue); } catch {} }
+        } catch (e) {
+          clearTimeout(abortTimer);
+          if (e.name === 'AbortError') {
+            setInlineError(isEN ? "No response from server (12s). Please check your internet." : "Keine Serverantwort (12s). Bitte Internetverbindung prüfen.");
+          } else {
+            setInlineError((isEN ? "Network error: " : "Netzwerkfehler: ") + (e.message || e.name));
+          }
+          return;
         }
-      } catch (e) {
-        clearTimeout(timeoutHandle);
-        // Echten Fehler anzeigen (Debug-Modus)
-        setInlineError((isEN ? "Exception: " : "Ausnahme: ") + (e?.message || e?.name || String(e)));
-        return;
       }
 
       if (!verifyValue) {
@@ -547,6 +539,31 @@ async function renderVault() {
     inlineBtn.addEventListener("click", handleInlineUnlock);
     inlinePw.addEventListener("keydown", e => { if (e.key === "Enter") handleInlineUnlock(); });
     setTimeout(() => inlinePw.focus(), 100);
+
+    // Hintergrund-Prefetch: Verify-Wert laden während User tippt (kein await → blockiert nicht)
+    const PREFETCH_KEY = "vaultVerifyCache_" + session.user.id;
+    if (!localStorage.getItem(PREFETCH_KEY)) {
+      (async () => {
+        try {
+          const { data: sd } = await supabase.auth.getSession();
+          const tok = sd?.session?.access_token;
+          if (!tok) return;
+          const SB_URL = 'https://dygrabyaiyessqmjdprc.supabase.co';
+          const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5Z3JhYnlhaXllc3NxbWpkcHJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0OTkzMzMsImV4cCI6MjA5MTA3NTMzM30.l4fAwsz3deB3rZuA5EOG-_9doe2ohXunv1KwFezR2ss';
+          const ctrl = new AbortController();
+          setTimeout(() => ctrl.abort(), 30000);
+          const resp = await fetch(
+            `${SB_URL}/rest/v1/passwords?user_id=eq.${encodeURIComponent(session.user.id)}&label=eq.${encodeURIComponent(VERIFY_LABEL)}&select=value&limit=1`,
+            { signal: ctrl.signal, headers: { apikey: SB_KEY, Authorization: `Bearer ${tok}` } }
+          );
+          if (!resp.ok) return;
+          const rows = await resp.json();
+          const val = rows?.[0]?.value;
+          if (val) { try { localStorage.setItem(PREFETCH_KEY, val); } catch {} }
+        } catch {} // Fehler ignorieren — ist nur Hintergrund-Fetch
+      })();
+    }
+
     return;
   }
 
