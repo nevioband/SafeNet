@@ -270,6 +270,7 @@ function showMigrationBanner(session, entries) {
         migrated++;
       }
 
+      localStorage.setItem('vault_migrated_' + session.user.id, '1');
       alert(isEN
         ? `Migration complete! ${migrated} password${migrated !== 1 ? 's' : ''} converted.`
         : `Migration abgeschlossen! ${migrated} Passwort${migrated !== 1 ? 'wörter' : ''} konvertiert.`);
@@ -416,9 +417,11 @@ async function renderVault() {
   vaultData = decryptedEntries;
 
   // Prüfen ob alle Einträge Entschlüsselungsfehler haben → Migrations-Banner zeigen
+  // Nur anzeigen wenn Migration noch nicht durchgeführt wurde.
   const encryptedCount = entries.filter(e => e.value?.startsWith("ENC:")).length;
   const errorCount = decryptedEntries.filter(e => e.value === "[Entschlüsselungsfehler]").length;
-  if (encryptedCount > 0 && errorCount === encryptedCount) {
+  const alreadyMigrated = !!localStorage.getItem('vault_migrated_' + session.user.id);
+  if (encryptedCount > 0 && errorCount === encryptedCount && !alreadyMigrated) {
     showMigrationBanner(session, entries);
     return;
   }
