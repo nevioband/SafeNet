@@ -602,6 +602,9 @@ async function renderVault() {
                 <button class="vault-view-btn" onclick="window.editLabel('${pw.id}', '${pw.label}')" title="${isEN ? 'Rename' : 'Umbenennen'}" style="background:linear-gradient(135deg,#FFB347,#FFCC33);color:#0b1220 !important;">
                     <span class="material-symbols-outlined">edit</span>
                 </button>
+                <button class="vault-view-btn" onclick="window.editKategorie('${pw.id}', '${pw.kategorie || 'allgemein'}')" title="${isEN ? 'Change category' : 'Kategorie ändern'}" style="background:linear-gradient(135deg,#3399ff,#66d9ff);color:#0b1220 !important;">
+                    <span class="material-symbols-outlined">label</span>
+                </button>
                 <button class="vault-view-btn" onclick="window.toggleVisibility(${index})" title="${isEN ? 'Show' : 'Anzeigen'}">
                     <span class="material-symbols-outlined" id="eye-${index}">visibility</span>
                 </button>
@@ -625,6 +628,34 @@ async function renderVault() {
     window.filterVault('');
   }
 }
+
+// Kategorie bearbeiten
+window.editKategorie = async function (id, currentKategorie) {
+  const options = KATEGORIEN.filter(k => k.key !== 'alle');
+  const optionText = options.map((k, i) => `${i + 1}. ${isEN ? k.en : k.de}`).join('\n');
+  const current = options.findIndex(k => k.key === currentKategorie) + 1;
+  const input = prompt(
+    (isEN ? `Choose category (current: ${kategorieLabel(currentKategorie)}):\n` : `Kategorie wählen (aktuell: ${kategorieLabel(currentKategorie)}):\n`) + optionText,
+    String(current)
+  );
+  if (input === null) return;
+  const idx = parseInt(input) - 1;
+  if (isNaN(idx) || idx < 0 || idx >= options.length) {
+    alert(isEN ? 'Invalid selection.' : 'Ungültige Auswahl.');
+    return;
+  }
+  const newKategorie = options[idx].key;
+  if (isOffline()) {
+    alert(isEN ? 'No internet — change cannot be saved.' : 'Kein Internet — Änderung kann nicht gespeichert werden.');
+    return;
+  }
+  const { error } = await supabase.from('passwords').update({ kategorie: newKategorie }).eq('id', id);
+  if (error) {
+    alert(isEN ? 'Error saving category.' : 'Fehler beim Speichern der Kategorie.');
+    return;
+  }
+  renderVault();
+};
 
 // Namen bearbeiten
 window.editLabel = async function (id, currentLabel) {
@@ -756,15 +787,17 @@ window.saveManual = async function () {
 window.transferToVault = async function () {
   const outputField = document.getElementById("password-output");
   const labelField = document.getElementById("password-label");
+  const kategorieField = document.getElementById("generator-kategorie");
   const currentPassword = outputField ? outputField.value : "";
   const currentLabel = labelField ? labelField.value : "";
+  const currentKategorie = kategorieField ? kategorieField.value : "allgemein";
 
   if (!currentPassword || currentPassword === "Klicke auf Generieren" || currentPassword === "Click Generate") {
     alert(isEN ? "Please generate a password first." : "Bitte generiere erst ein Passwort.");
     return;
   }
 
-  await window.savePassword(currentPassword, currentLabel);
+  await window.savePassword(currentPassword, currentLabel, currentKategorie);
   alert(isEN
     ? `Password for "${currentLabel || "Unnamed"}" saved!`
     : `Passwort für "${currentLabel || "Unbenannt"}" gespeichert!`);
