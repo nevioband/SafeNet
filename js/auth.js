@@ -62,8 +62,20 @@ async function applyNavbarUser() {
             `
             dropdown.querySelector('#logoutBtn').addEventListener('click', async (e) => {
                 e.preventDefault()
-                await supabase.auth.signOut()
-                window.location.reload()
+                // Lokale Session sofort löschen (funktioniert auch ohne Netzwerk)
+                try {
+                    localStorage.removeItem('sb-dygrabyaiyessqmjdprc-auth-token')
+                    sessionStorage.clear()
+                } catch {}
+                // Supabase signOut mit 5s Timeout – wartet nicht ewig auf Mobile
+                try {
+                    await Promise.race([
+                        supabase.auth.signOut(),
+                        new Promise(resolve => setTimeout(resolve, 5000))
+                    ])
+                } catch {}
+                const isEnglish = window.location.pathname.startsWith('/en/')
+                window.location.href = isEnglish ? '/en/pages/login.html' : '/de/pages/login.html'
             })
 
             // Button: Initialbuchstabe oder gespeichertes Profilbild
