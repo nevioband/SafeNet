@@ -186,8 +186,8 @@ function initCookieBanner() {
     const p = document.createElement('p')
     const textNode = document.createTextNode(
         isDE
-            ? 'Diese Website verwendet lokalen Browserspeicher, um Dein Farbschema und Deine Einstellungen zu speichern. Es werden keine Tracking- oder Werbe-Cookies eingesetzt. '
-            : 'This website uses local browser storage (localStorage) to save your colour scheme and settings. No tracking or advertising cookies are used. '
+            ? 'Diese Website verwendet lokalen Browserspeicher, um dein Farbschema und deine Einstellungen zu speichern. Es werden keine Tracking- oder Werbe-Cookies eingesetzt. '
+            : 'This website uses local browser storage to save your colour scheme and settings. No tracking or advertising cookies are used. '
     )
     const link = document.createElement('a')
     link.href = datenschutzUrl
