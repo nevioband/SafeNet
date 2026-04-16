@@ -16,25 +16,31 @@ Deno.serve(async (req) => {
 
   const authHeader = req.headers.get('Authorization')
   if (!authHeader?.startsWith('Bearer ')) {
+    console.error('No Bearer token in Authorization header')
     return new Response('Unauthorized', { status: 401 })
   }
 
   const token = authHeader.slice(7)
+  const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? ''
+  const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY') ?? ''
 
-  // User-Client mit dem JWT des Nutzers initialisieren (empfohlenes Supabase-Pattern)
-  const supabaseClient = createClient(
-    Deno.env.get('SUPABASE_URL') ?? '',
-    Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-    {
-      global: { headers: { Authorization: `Bearer ${token}` } },
-      auth: { persistSession: false }
+  // JWT direkt über REST API verifizieren (zuverlässiger in Edge Functions)
+  const userRes = await fetch(`${supabaseUrl}/auth/v1/user`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'apikey': supabaseAnonKey,
     }
-  )
+  })
 
-  // JWT verifizieren und Benutzer abrufen
-  const { data: { user }, error: userError } = await supabaseClient.auth.getUser()
-  if (userError || !user?.email) {
-    console.error('Auth error:', userError?.message, 'user:', user?.email)
+  if (!userRes.ok) {
+    const errText = await userRes.text()
+    console.error('Auth REST error:', userRes.status, errText)
+    return new Response('Unauthorized', { status: 401 })
+  }
+
+  const user = await userRes.json()
+  if (!user?.email) {
+    console.error('No email in user response:', JSON.stringify(user))
     return new Response('Unauthorized', { status: 401 })
   }
 
