@@ -191,5 +191,20 @@
   .password-container h3 { font-size: 1.6rem; }
   #password-output { font-size: 1rem; }
   .main-btn { font-size: 0.95rem; }
-  .checkbox-grid { grid-template-columns: repeat(2, 1fr); } /* Auf Handy 2x2 */
+  .checkbox-grid { grid-template-columns: repeat(2, 1fr); }
+
+  .input-group-row {
+    flex-direction: column;
+  }
+  .input-group-row #password-label,
+  .input-group-row #generator-kategorie,
+  .input-group-row #vault-save-btn {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .input-group-row #vault-save-btn {
+    margin-top: 0;
+    padding: 12px 14px !important;
+    justify-content: center;
+  }
 }
