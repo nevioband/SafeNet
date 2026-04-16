@@ -431,23 +431,27 @@ function showVaultAuthGate(session) {
 
       async function savePin() {
         const pin = pinNew.value.replace(/\D/g, '');
-        const confirm = pinConfirm.value.replace(/\D/g, '');
+        const pinConfirmVal = pinConfirm.value.replace(/\D/g, '');
         if (pin.length < 4 || pin.length > 6) { showPinErr(isEN ? 'PIN must be 4-6 digits.' : 'PIN muss 4-6 Ziffern haben.'); return; }
-        if (pin !== confirm) { showPinErr(isEN ? 'PINs do not match.' : 'PINs stimmen nicht überein.'); return; }
+        if (pin !== pinConfirmVal) { showPinErr(isEN ? 'PINs do not match.' : 'PINs stimmen nicht überein.'); return; }
         pinBtn.textContent = isEN ? 'Saving…' : 'Wird gespeichert…';
         pinBtn.disabled = true;
-        const hash = await derivePinHash(pin, userId);
-        await supabase.auth.updateUser({ data: { vault_pin: hash } });
-        // Biometrie anbieten wenn verfügbar
-        if (window.PublicKeyCredential) {
-          const wantBio = confirm(isEN
-            ? 'Do you also want to enable Face ID / Touch ID for quick access?'
-            : 'Möchtest du auch Face ID / Touch ID für schnellen Zugriff aktivieren?');
-          if (wantBio) await registerBiometrics(userId, session.user.email);
+        try {
+          const hash = await derivePinHash(pin, userId);
+          await supabase.auth.updateUser({ data: { vault_pin: hash } });
+          // Biometrie anbieten wenn verfügbar
+          if (window.PublicKeyCredential) {
+            const wantBio = window.confirm(isEN
+              ? 'Do you also want to enable Face ID / Touch ID for quick access?'
+              : 'Möchtest du auch Face ID / Touch ID für schnellen Zugriff aktivieren?');
+            if (wantBio) await registerBiometrics(userId, session.user.email);
+          }
+          sessionStorage.setItem('vault_auth_' + userId, '1');
+          resolve(true);
+          renderVault();
+        } catch (e) {
+          showPinErr((isEN ? 'Error: ' : 'Fehler: ') + e.message);
         }
-        sessionStorage.setItem('vault_auth_' + userId, '1');
-        resolve(true);
-        renderVault();
       }
 
       pinBtn.addEventListener('click', savePin);
