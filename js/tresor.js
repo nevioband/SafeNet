@@ -298,6 +298,9 @@ async function askMasterPassword(session) {
               value: verifyEnc,
               date: new Date().toLocaleDateString(isEN ? "en-GB" : "de-CH"),
             });
+            // In user_metadata speichern → auf Mobile aus JWT lesbar, kein DB-Request nötig
+            supabase.auth.updateUser({ data: { vault_verify: verifyEnc } }).catch(() => {});
+            try { localStorage.setItem("vaultVerifyCache_" + session.user.id, verifyEnc); } catch {}
 
             masterKey = newKey;
             sessionStorage.setItem("vaultMasterPw_" + session.user.id, pw);
@@ -321,12 +324,17 @@ async function askMasterPassword(session) {
               return;
             }
 
+            // In user_metadata speichern → auf Mobile aus JWT lesbar, kein DB-Request nötig
+            if (!session.user?.user_metadata?.vault_verify) {
+              supabase.auth.updateUser({ data: { vault_verify: verifyEntry.value } }).catch(() => {});
+            }
+            try { localStorage.setItem("vaultVerifyCache_" + session.user.id, verifyEntry.value); } catch {}
             masterKey = key;
             sessionStorage.setItem("vaultMasterPw_" + session.user.id, pw);
             document.getElementById("masterModal")?.remove();
             resolve(masterKey);
           } catch {
-            errorMsg = isEN ? "Error during verification. Please try again." : "Fehler beim Prüfen. Bitte versuche es erneut.";
+            errorMsg = isEN ? "Error during verification. Please try again." : "Fehler beim Prüfen. Bitte versuche es erneut.":
             render();
           }
         }
@@ -421,11 +429,13 @@ async function renderVault() {
     return;
   }
 
-  // Auto-unlock: sessionStorage-Passwort + localStorage-Cache (kein Supabase-Request nötig)
+  // Auto-unlock: gespeichertes Passwort + verify aus user_metadata oder localStorage (kein Supabase-Request)
   if (!masterKey) {
     const storedPw = sessionStorage.getItem("vaultMasterPw_" + session.user.id);
     if (storedPw) {
-      const cachedVerify = localStorage.getItem("vaultVerifyCache_" + session.user.id);
+      const cachedVerify =
+        session.user?.user_metadata?.vault_verify ||
+        (() => { try { return localStorage.getItem("vaultVerifyCache_" + session.user.id); } catch { return null; } })();
       if (cachedVerify) {
         try {
           const key = await deriveKey(storedPw, session.user.id);
@@ -480,11 +490,15 @@ async function renderVault() {
 
       const userId = freshSession.user.id;
       const CACHE_KEY = "vaultVerifyCache_" + userId;
-      let cachedVerifyValue = null;
-      try { cachedVerifyValue = localStorage.getItem(CACHE_KEY); } catch {}
 
-      // Wenn Cache vorhanden → kein Netzwerk-Request nötig
-      let verifyValue = cachedVerifyValue;
+      // Priorität 1: user_metadata – bereits im JWT, absolut kein Netzwerk-Request nötig
+      let verifyValue = freshSession.user?.user_metadata?.vault_verify ?? null;
+
+      // Priorität 2: localStorage-Cache
+      if (!verifyValue) { try { verifyValue = localStorage.getItem(CACHE_KEY); } catch {} }
+
+      // localStorage synchron halten
+      if (verifyValue) { try { localStorage.setItem(CACHE_KEY, verifyValue); } catch {} }
 
       if (!verifyValue) {
         // Nativer fetch() mit AbortController (umgeht Supabase-Client-Hänger auf iOS)

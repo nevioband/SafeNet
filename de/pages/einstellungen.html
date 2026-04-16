@@ -474,10 +474,13 @@
                 btn.textContent = 'Wird geprüft…'; btn.disabled = true
                 try {
                     const CACHE_KEY = 'vaultVerifyCache_' + userId
-                    let verifyValue = null
+                    // Priorität 1: user_metadata aus JWT (kein Netzwerk-Request nötig)
+                    const { data: sd } = await supabase.auth.getSession()
+                    let verifyValue = sd?.session?.user?.user_metadata?.vault_verify ?? null
 
-                    // Erst localStorage-Cache prüfen (funktioniert offline / bei hängendem Supabase)
-                    try { verifyValue = localStorage.getItem(CACHE_KEY) } catch {}
+                    // Priorität 2: localStorage-Cache
+                    if (!verifyValue) { try { verifyValue = localStorage.getItem(CACHE_KEY) } catch {} }
+                    if (verifyValue) { try { localStorage.setItem(CACHE_KEY, verifyValue) } catch {} }
 
                     if (!verifyValue) {
                         // Supabase-Abfrage mit AbortController (bricht echten Fetch ab)
