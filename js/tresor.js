@@ -144,8 +144,8 @@ function buildMasterModal(isSetup, errorMsg, onCancel) {
         ? `<p style="font-size:13px;color:#94a3b8;margin:0 0 20px;line-height:1.6;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:12px;display:flex;gap:10px;align-items:flex-start;"><span class="material-symbols-outlined" style="font-size:20px;color:#ef4444;flex-shrink:0;margin-top:1px;">warning</span><span><strong style="color:#ef4444;">Warning:</strong> If you forget your master password, support can reset it, but <b>not restore</b> your saved passwords \u2014 they will be lost. <br> Write it down in a safe place.</span></p>`
         : `<p style="font-size:13px;color:#94a3b8;margin:0 0 20px;line-height:1.6;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:12px;display:flex;gap:10px;align-items:flex-start;"><span class="material-symbols-outlined" style="font-size:20px;color:#ef4444;flex-shrink:0;margin-top:1px;">warning</span><span><strong style="color:#ef4444;">Achtung:</strong> Falls du dein Master-Passwort vergisst, kann der Support es zurücksetzen, aber <b>nicht wiederherstellen</b>. Deine gespeicherten Passwörter gehen dabei verloren. <br> Notiere es an einem sicheren Ort.</span></p>`)
     : (isEN
-        ? `<p style="font-size:13px;color:#94a3b8;margin:0 0 20px;">Enter your master password to unlock the vault.</p>`
-        : `<p style="font-size:13px;color:#94a3b8;margin:0 0 20px;">Gib dein Master-Passwort ein, um den Tresor zu entsperren.</p>`);
+        ? `<p style="font-size:13px;color:#94a3b8;margin:0 0 20px;">Enter your master password to unlock the vault. <a href="/en/pages/einstellungen.html" style="color:#3399ff;text-decoration:none;">You can also unlock it in Settings.</a></p>`
+        : `<p style="font-size:13px;color:#94a3b8;margin:0 0 20px;">Gib dein Master-Passwort ein, um den Tresor zu entsperren. <a href="/de/pages/einstellungen.html" style="color:#3399ff;text-decoration:none;">Du kannst ihn auch in den Einstellungen entsperren.</a></p>`);
 
   const errorHtml = errorMsg
     ? `<p style="font-size:13px;color:#ef4444;margin:0 0 16px;padding:10px 12px;background:rgba(239,68,68,0.1);border-radius:8px;border:1px solid rgba(239,68,68,0.3);">${errorMsg}</p>`
@@ -416,24 +416,21 @@ async function renderVault() {
     return;
   }
 
-  // Master-Passwort abfragen falls noch nicht entsperrt
+  // Master-Passwort: gesperrten Zustand anzeigen, Modal nur auf Klick öffnen
   if (!masterKey) {
-    listElement.innerHTML =
-      `<p style="text-align:center; color:rgba(255,255,255,0.4); padding:20px;">${isEN ? "Unlocking vault\u2026" : "Tresor wird entsperrt\u2026"}</p>`;
-    await askMasterPassword(session);
-  }
-
-  if (!masterKey) {
+    const settingsUrl = isEN ? '/en/pages/einstellungen.html' : '/de/pages/einstellungen.html'
     listElement.innerHTML = `
-            <div style="text-align:center;padding:40px 20px;">
-                <span class="material-symbols-outlined" style="font-size:48px;color:rgba(255,255,255,0.2);display:block;margin-bottom:16px;">lock</span>
-                <p style="color:rgba(255,255,255,0.5);margin:0 0 20px;">${isEN ? "The vault is locked." : "Der Tresor ist gesperrt."}</p>
-                <button id="unlockAgainBtn" style="padding:10px 24px;background:linear-gradient(135deg,#3399ff,#66d9ff);color:#0f172a;border:none;border-radius:8px;font-size:14px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;">${isEN ? "Unlock" : "Entsperren"}</button>
-            </div>
-        `;
-    document
-      .getElementById("unlockAgainBtn")
-      ?.addEventListener("click", renderVault);
+      <div style="text-align:center;padding:40px 20px;">
+        <span class="material-symbols-outlined" style="font-size:48px;color:rgba(255,255,255,0.2);display:block;margin-bottom:16px;">lock</span>
+        <p style="color:rgba(255,255,255,0.5);margin:0 0 20px;">${isEN ? "The vault is locked." : "Der Tresor ist gesperrt."}</p>
+        <button id="unlockAgainBtn" style="padding:10px 24px;background:linear-gradient(135deg,#3399ff,#66d9ff);color:#0f172a;border:none;border-radius:8px;font-size:14px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;">${isEN ? "Unlock" : "Entsperren"}</button>
+        <p style="margin-top:16px;font-size:13px;color:rgba(255,255,255,0.35);">${isEN ? `Tip: You can also unlock in <a href="${settingsUrl}" style="color:#3399ff;text-decoration:none;">Settings</a>.` : `Tipp: Du kannst den Tresor auch in den <a href="${settingsUrl}" style="color:#3399ff;text-decoration:none;">Einstellungen</a> entsperren.`}</p>
+      </div>
+    `;
+    document.getElementById("unlockAgainBtn")?.addEventListener("click", async () => {
+      await askMasterPassword(session);
+      if (masterKey) renderVault();
+    });
     return;
   }
 
