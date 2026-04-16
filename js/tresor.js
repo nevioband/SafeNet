@@ -5,6 +5,7 @@ const isEN = window.location.pathname.startsWith('/en/');
 let vaultData = [];
 let masterKey = null;
 let aktivKategorie = 'alle'; // Aktiver Kategorie-Filter
+let _renderLock = false;    // Verhindert parallele renderVault-Aufrufe (Safari Race Condition)
 
 // Kategorien in DE und EN
 const KATEGORIEN = [
@@ -377,6 +378,10 @@ function passwordScore(pw) {
 // ===== TRESOR LADEN =====
 
 async function renderVault() {
+  if (_renderLock) return;
+  _renderLock = true;
+  try {
+
   const listElement = document.getElementById("saved-passwords-list");
   if (!listElement) return;
 
@@ -629,6 +634,9 @@ async function renderVault() {
     window.filterVault(searchInput.value);
   } else if (aktivKategorie !== 'alle') {
     window.filterVault('');
+  }
+  } finally {
+    _renderLock = false;
   }
 }
 
@@ -1157,6 +1165,8 @@ document.addEventListener("DOMContentLoaded", () => {
         .filter((k) => k.startsWith("vaultMasterPw_"))
         .forEach((k) => sessionStorage.removeItem(k));
       masterKey = null;
+      _renderLock = false; // Lock freigeben damit renderVault durchkommt
+      document.getElementById("masterModal")?.remove();
       renderVault();
       return;
     }
@@ -1167,6 +1177,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
     // INITIAL_SESSION, SIGNED_IN, USER_UPDATED etc.
+    // Nur starten wenn nicht bereits ein Render läuft
     masterKey = null;
     renderVault();
   });
