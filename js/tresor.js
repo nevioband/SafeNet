@@ -134,6 +134,45 @@ async function ensureUnlocked() {
   }
 }
 
+// ===== VAULT API PROXY =====
+// Leitet alle DB-Anfragen über den Vercel-Proxy (umgeht Supabase-REST-Sperren auf Mobile)
+async function vaultApi(method, body = null, params = {}) {
+  let session = currentSession;
+  if (!session) {
+    try {
+      const raw = localStorage.getItem('sb-dygrabyaiyessqmjdprc-auth-token');
+      const parsed = raw ? JSON.parse(raw) : null;
+      if (parsed?.access_token) session = parsed;
+    } catch {}
+  }
+  if (!session?.access_token) return { data: null, error: { message: 'No session' }, aborted: false };
+
+  const url = new URL('/api/vault', window.location.origin);
+  Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 15000);
+  try {
+    const resp = await fetch(url.toString(), {
+      method,
+      signal: ctrl.signal,
+      headers: {
+        'Authorization': `Bearer ${session.access_token}`,
+        'Content-Type': 'application/json',
+      },
+      body: body !== null ? JSON.stringify(body) : undefined,
+    });
+    clearTimeout(timer);
+    const text = await resp.text();
+    const data = text ? JSON.parse(text) : null;
+    if (!resp.ok) return { data: null, error: { message: (data?.message || data?.error || `HTTP ${resp.status}`) }, aborted: false };
+    return { data, error: null, aborted: false };
+  } catch (e) {
+    clearTimeout(timer);
+    return { data: null, error: e, aborted: ctrl.signal.aborted };
+  }
+}
+
 function passwordScore(pw) {
   if (!pw || pw === "[Entschlüsselungsfehler]") return 100;
   const HAEUFIGE = ["123456","password","12345678","qwerty","12345","123456789",
@@ -239,28 +278,11 @@ async function renderVault() {
   listElement.innerHTML =
     `<p style="text-align:center; color:rgba(255,255,255,0.4); padding:20px;">${isEN ? "Loading\u2026" : "Wird geladen\u2026"}</p>`;
 
-  // Fetch mit 12s Timeout damit der Tresor auf Mobile nicht hängt
-  const fetchCtrl = new AbortController();
-  const fetchTimer = setTimeout(() => fetchCtrl.abort(), 12000);
-  let data, error;
-  try {
-    ({ data, error } = await supabase
-      .from("passwords")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .abortSignal(fetchCtrl.signal));
-  } catch (e) {
-    error = e;
-  } finally {
-    clearTimeout(fetchTimer);
-  }
+  // Über Vercel-Proxy laden – umgeht Netzwerksperren die Supabase direkt blockieren
+  const { data, error, aborted } = await vaultApi('GET');
 
-  if (error || fetchCtrl.signal.aborted) {
-    // Timeout: AbortController hat ausgelöst (zuverlässigste Prüfung)
-    const isTimeout = fetchCtrl.signal.aborted ||
-      error?.name === 'AbortError' || error?.code === 20 ||
-      error?.message?.toLowerCase().includes('abort');
-    // Netzwerkfehler: Server generell nicht erreichbar
+  if (error || aborted) {
+    const isTimeout = aborted || error?.name === 'AbortError';
     const isNetworkError = !isTimeout && (
       error?.message?.toLowerCase().includes('network') ||
       error?.message?.toLowerCase().includes('fetch') ||
@@ -491,7 +513,7 @@ window.editKategorie = async function (id, currentKategorie) {
           close();
           if (k.key === currentKategorie) return;
           if (isOffline()) { alert(isEN ? 'No internet — change cannot be saved.' : 'Kein Internet — \u00c4nderung kann nicht gespeichert werden.'); return; }
-          const { error } = await supabase.from('passwords').update({ kategorie: k.key }).eq('id', id);
+          const { error } = await vaultApi('PATCH', { kategorie: k.key }, { id });
           if (error) { alert(isEN ? 'Error saving category.' : 'Fehler beim Speichern der Kategorie.'); return; }
           renderVault();
         });
@@ -504,7 +526,7 @@ window.editKategorie = async function (id, currentKategorie) {
       close();
       if (val === currentKategorie) return;
       if (isOffline()) { alert(isEN ? 'No internet — change cannot be saved.' : 'Kein Internet — \u00c4nderung kann nicht gespeichert werden.'); return; }
-      const { error } = await supabase.from('passwords').update({ kategorie: val }).eq('id', id);
+      const { error } = await vaultApi('PATCH', { kategorie: val }, { id });
       if (error) { alert(isEN ? 'Error saving category.' : 'Fehler beim Speichern der Kategorie.'); return; }
       renderVault();
     });
@@ -542,10 +564,7 @@ window.editLabel = async function (id, currentLabel) {
     alert(isEN ? "No internet \u2014 change cannot be saved." : "Kein Internet \u2014 \u00c4nderung kann nicht gespeichert werden.");
     return;
   }
-  const { error } = await supabase
-    .from("passwords")
-    .update({ label })
-    .eq("id", id);
+  const { error } = await vaultApi('PATCH', { label }, { id });
   if (error) {
     alert(isEN ? "Rename error. Please try again." : "Fehler beim Umbenennen. Bitte versuche es erneut.");
     return;
@@ -572,7 +591,7 @@ window.toggleVisibility = function (index) {
 // Passwort löschen
 window.deletePassword = async function (id) {
   if (!confirm(isEN ? "Do you really want to delete this password?" : "Möchtest du dieses Passwort wirklich löschen?")) return;
-  await supabase.from("passwords").delete().eq("id", id);
+  await vaultApi('DELETE', null, { id });
   renderVault();
 };
 
@@ -619,7 +638,7 @@ window.savePassword = async function (newPasswordValue, labelValue, kategorieVal
     return;
   }
 
-  const { error: insertError } = await supabase.from("passwords").insert({
+  const { error: insertError } = await vaultApi('POST', {
     user_id: session.user.id,
     label: finalLabel,
     value: valueToStore,
@@ -712,10 +731,7 @@ window.clearVault = async function () {
     alert(isEN ? "No internet \u2014 deletion not possible." : "Kein Internet \u2014 Löschen nicht möglich.");
     return;
   }
-  const { error } = await supabase
-    .from("passwords")
-    .delete()
-    .eq("user_id", session.user.id);
+  const { error } = await vaultApi('DELETE', null, { user_id: session.user.id });
   if (error) {
     alert(isEN ? "Delete error. Please try again." : "Fehler beim Löschen. Bitte versuche es erneut.");
     return;
@@ -885,7 +901,7 @@ window.importCSV = async function (input) {
     }
 
     if (rows.length > 0) {
-      const { error } = await supabase.from("passwords").insert(rows);
+      const { error } = await vaultApi('POST', rows);
       if (error) {
         alert((isEN ? "Import error: " : "Fehler beim Importieren: ") + error.message);
         break;
