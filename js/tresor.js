@@ -6,6 +6,7 @@ let vaultData = [];
 let masterKey = null;
 let aktivKategorie = 'alle'; // Aktiver Kategorie-Filter
 let _renderLock = false;    // Verhindert parallele renderVault-Aufrufe (Safari Race Condition)
+let currentSession = null;  // Wird von onAuthStateChange gesetzt (kein getSession()-Aufruf nötig)
 
 // Kategorien in DE und EN
 const KATEGORIEN = [
@@ -408,22 +409,20 @@ async function renderVault() {
     return;
   }
 
-  // Session direkt aus localStorage lesen (kein Netzwerk, funktioniert immer auf Mobile)
-  // Supabase speichert die Session unter diesem Key als JSON.
-  let session = null;
-  try {
-    const raw = localStorage.getItem('sb-dygrabyaiyessqmjdprc-auth-token');
-    if (raw) session = JSON.parse(raw);
-  } catch {}
-  // Fallback: Supabase-Client (nur wenn localStorage leer)
+  // Session aus onAuthStateChange-Callback (kein Netzwerk-Request, sofort verfügbar)
+  // Fallback: localStorage direkt durchsuchen (falls renderVault vor onAuthStateChange aufgerufen wird)
+  let session = currentSession;
   if (!session) {
     try {
-      const { data } = await supabase.auth.getSession();
-      session = data?.session ?? null;
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k?.startsWith('sb-') && k?.endsWith('-auth-token')) {
+          const parsed = JSON.parse(localStorage.getItem(k) || 'null');
+          if (parsed?.user?.id) { session = parsed; break; }
+        }
+      }
     } catch {}
   }
-  // Token im Hintergrund refreshen (kein await – blockiert nicht)
-  supabase.auth.getSession().catch(() => {});
 
   if (!session) {
     const loginUrl = window.location.pathname.includes('/en/') ? '/en/pages/login.html' : '/de/pages/login.html';
@@ -485,16 +484,17 @@ async function renderVault() {
       inlineBtn.disabled = true;
       inlineErr.style.display = "none";
 
-      // Session aus localStorage lesen (kein Netzwerk, instant)
-      let freshSession = null;
-      try {
-        const raw = localStorage.getItem('sb-dygrabyaiyessqmjdprc-auth-token');
-        if (raw) freshSession = JSON.parse(raw);
-      } catch {}
+      // Session aus Module-Variable (von onAuthStateChange gesetzt, kein Netzwerk)
+      let freshSession = currentSession;
       if (!freshSession) {
         try {
-          const { data } = await supabase.auth.getSession();
-          freshSession = data?.session ?? null;
+          for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            if (k?.startsWith('sb-') && k?.endsWith('-auth-token')) {
+              const parsed = JSON.parse(localStorage.getItem(k) || 'null');
+              if (parsed?.user?.id) { freshSession = parsed; break; }
+            }
+          }
         } catch {}
       }
       if (!freshSession) {
@@ -573,8 +573,7 @@ async function renderVault() {
     if (!localStorage.getItem(PREFETCH_KEY)) {
       (async () => {
         try {
-          const { data: sd } = await supabase.auth.getSession();
-          const tok = sd?.session?.access_token;
+          const tok = currentSession?.access_token;
           if (!tok) return;
           const SB_URL = 'https://dygrabyaiyessqmjdprc.supabase.co';
           const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5Z3JhYnlhaXllc3NxbWpkcHJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0OTkzMzMsImV4cCI6MjA5MTA3NTMzM30.l4fAwsz3deB3rZuA5EOG-_9doe2ohXunv1KwFezR2ss';
@@ -1317,6 +1316,7 @@ window.filterVault = function (query) {
 
 function startVault() {
   supabase.auth.onAuthStateChange((event, session) => {
+    currentSession = session;  // Immer aktuell halten
     if (event === "SIGNED_OUT" || !session) {
       // Master-Passwort aus sessionStorage entfernen
       Object.keys(sessionStorage)
