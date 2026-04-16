@@ -450,14 +450,22 @@ async function renderVault() {
       inlineBtn.disabled = true;
       inlineErr.style.display = "none";
 
-      // Supabase-Abfrage mit 8s Timeout (Mobile kann hängen)
+      // Frische Session holen (verhindert abgelaufene Token-Fehler auf Mobile)
+      const { data: freshSessionData, error: sessionError } = await supabase.auth.getSession();
+      const freshSession = freshSessionData?.session;
+      if (sessionError || !freshSession) {
+        setInlineError(isEN ? "Session expired. Please log in again." : "Sitzung abgelaufen. Bitte erneut anmelden.");
+        return;
+      }
+
+      // Supabase-Abfrage mit 10s Timeout (Mobile kann hängen)
       let verifyValue = null;
       try {
-        const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 8000));
+        const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 10000));
         const query = supabase
           .from("passwords")
           .select("value")
-          .eq("user_id", session.user.id)
+          .eq("user_id", freshSession.user.id)
           .eq("label", VERIFY_LABEL)
           .maybeSingle();
         const { data, error } = await Promise.race([query, timeout]);
@@ -465,7 +473,7 @@ async function renderVault() {
         verifyValue = data?.value ?? null;
       } catch (e) {
         if (e?.message === 'timeout') {
-          setInlineError(isEN ? "Request timed out. Please check your internet connection." : "Zeitüberschreitung. Bitte Internetverbindung prüfen.");
+          setInlineError(isEN ? "Request timed out. Please try again." : "Zeitüberschreitung. Bitte erneut versuchen.");
         } else {
           setInlineError(isEN ? "Connection error. Please try again." : "Verbindungsfehler. Bitte erneut versuchen.");
         }
@@ -479,14 +487,14 @@ async function renderVault() {
       }
 
       try {
-        const key = await deriveKey(pw, session.user.id);
+        const key = await deriveKey(pw, freshSession.user.id);
         const decrypted = await decryptValue(verifyValue, key);
         if (decrypted !== VERIFY_PLAINTEXT) {
           setInlineError(isEN ? "Wrong master password. Please try again." : "Falsches Master-Passwort. Bitte erneut versuchen.");
           return;
         }
         masterKey = key;
-        sessionStorage.setItem("vaultMasterPw_" + session.user.id, pw);
+        sessionStorage.setItem("vaultMasterPw_" + freshSession.user.id, pw);
         renderVault();
       } catch {
         setInlineError(isEN ? "Decryption error. Please try again." : "Entschlüsselungsfehler. Bitte erneut versuchen.");
