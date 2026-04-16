@@ -409,18 +409,14 @@ async function renderVault() {
     return;
   }
 
-  // Session aus onAuthStateChange-Callback (kein Netzwerk-Request, sofort verfügbar)
-  // Fallback: localStorage direkt durchsuchen (falls renderVault vor onAuthStateChange aufgerufen wird)
+  // Session lesen: zuerst onAuthStateChange-Wert, dann direkt aus localStorage (Supabase-Key)
+  // Kein await, kein Netzwerk — funktioniert sofort auf Mobile.
   let session = currentSession;
   if (!session) {
     try {
-      for (let i = 0; i < localStorage.length; i++) {
-        const k = localStorage.key(i);
-        if (k?.startsWith('sb-') && k?.endsWith('-auth-token')) {
-          const parsed = JSON.parse(localStorage.getItem(k) || 'null');
-          if (parsed?.user?.id) { session = parsed; break; }
-        }
-      }
+      const raw = localStorage.getItem('sb-dygrabyaiyessqmjdprc-auth-token');
+      const parsed = raw ? JSON.parse(raw) : null;
+      if (parsed?.user?.id) session = parsed;
     } catch {}
   }
 
@@ -1315,6 +1311,10 @@ window.filterVault = function (query) {
 // ===== START =====
 
 function startVault() {
+  // Sofort rendern — liest Session aus localStorage ohne Netzwerk.
+  // Wartet NICHT auf onAuthStateChange (der hängt auf Mobile wenn Token-Refresh nötig ist).
+  renderVault();
+
   supabase.auth.onAuthStateChange((event, session) => {
     currentSession = session;  // Immer aktuell halten
     if (event === "SIGNED_OUT" || !session) {
