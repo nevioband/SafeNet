@@ -255,15 +255,26 @@ async function renderVault() {
     clearTimeout(fetchTimer);
   }
 
-  if (error) {
-    if (error?.name === 'AbortError' || error?.code === 20) {
+  if (error || fetchCtrl.signal.aborted) {
+    // Timeout: AbortController hat ausgelöst (zuverlässigste Prüfung)
+    const isTimeout = fetchCtrl.signal.aborted ||
+      error?.name === 'AbortError' || error?.code === 20 ||
+      error?.message?.toLowerCase().includes('abort');
+    // Netzwerkfehler: Server generell nicht erreichbar
+    const isNetworkError = !isTimeout && (
+      error?.message?.toLowerCase().includes('network') ||
+      error?.message?.toLowerCase().includes('fetch') ||
+      error?.message?.toLowerCase().includes('failed') ||
+      !navigator.onLine
+    );
+    if (isTimeout || isNetworkError) {
       showVaultError(isEN
-        ? "No server response. Please check your internet connection and reload the page."
-        : "Keine Serverantwort. Bitte Internetverbindung prüfen und Seite neu laden.");
+        ? "Server not reachable. Please check your internet connection and reload the page."
+        : "Server nicht erreichbar. Bitte Internetverbindung prüfen und Seite neu laden.");
     } else if (
-      error.message?.includes("JWT") ||
-      error.message?.includes("session") ||
-      error.message?.includes("token")
+      error?.message?.includes("JWT") ||
+      error?.message?.includes("session") ||
+      error?.message?.includes("token")
     ) {
       const loginUrl = window.location.pathname.includes('/en/') ? '/en/pages/login.html' : '/de/pages/login.html';
       const sessionMsg = isEN
