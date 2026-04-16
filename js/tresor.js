@@ -196,95 +196,6 @@ function passwordScore(pw) {
   return Math.min(100, score);
 }
 
-// ===== MIGRATION (altes Master-Passwort → automatischer Schlüssel) =====
-
-function showMigrationBanner(session, entries) {
-  const listEl = document.getElementById("saved-passwords-list");
-  if (!listEl) return;
-  listEl.innerHTML = `
-    <div style="max-width:420px;margin:40px auto;padding:32px;background:#172441;border:1px solid rgba(251,146,60,0.4);border-radius:16px;text-align:center;font-family:Inter,sans-serif;">
-      <span class="material-symbols-outlined" style="font-size:44px;color:#fb923c;display:block;margin-bottom:16px;">key</span>
-      <h3 style="margin:0 0 8px;font-size:18px;background:linear-gradient(135deg,#fb923c,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${isEN ? 'One-time migration' : 'Einmalige Migration'}</h3>
-      <p style="color:#94a3b8;font-size:14px;margin:0 0 24px;line-height:1.6;">${isEN
-        ? 'Your passwords were encrypted with your old master password. Enter it once to migrate to the new keyless system.'
-        : 'Deine Passwörter wurden mit dem alten Master-Passwort verschlüsselt. Gib es einmalig ein, um auf das neue System ohne Master-Passwort zu migrieren.'}</p>
-      <div id="migrateError" style="display:none;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:8px;color:#f87171;font-size:13px;padding:10px 12px;margin-bottom:16px;"></div>
-      <input type="password" id="migratePwInput" autocomplete="current-password"
-        placeholder="${isEN ? 'Old master password' : 'Altes Master-Passwort'}"
-        style="width:100%;padding:12px 14px;background:#0f172a;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:white;font-size:15px;box-sizing:border-box;outline:none;margin-bottom:12px;">
-      <button id="migrateBtn" style="width:100%;padding:13px;background:linear-gradient(135deg,#fb923c,#fbbf24);color:#0f172a;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;">${isEN ? 'Migrate now' : 'Jetzt migrieren'}</button>
-      <p style="color:#475569;font-size:12px;margin:16px 0 0;">${isEN
-        ? 'If you have forgotten your master password, you can delete all entries and start fresh.'
-        : 'Falls du das Master-Passwort vergessen hast, kannst du alle Einträge löschen und neu beginnen.'}</p>
-      <button id="migrateClearBtn" style="margin-top:8px;background:none;border:none;color:#ef4444;font-size:12px;cursor:pointer;text-decoration:underline;font-family:Inter,sans-serif;">${isEN ? 'Delete all entries' : 'Alle Einträge löschen'}</button>
-    </div>
-  `;
-
-  const btn = document.getElementById('migrateBtn');
-  const input = document.getElementById('migratePwInput');
-  const errEl = document.getElementById('migrateError');
-  const clearBtn = document.getElementById('migrateClearBtn');
-
-  function showErr(msg) {
-    errEl.textContent = msg;
-    errEl.style.display = 'block';
-    btn.textContent = isEN ? 'Migrate now' : 'Jetzt migrieren';
-    btn.disabled = false;
-  }
-
-  clearBtn.addEventListener('click', async () => {
-    if (!confirm(isEN ? 'Really delete ALL passwords? This cannot be undone.' : 'Wirklich ALLE Passwörter löschen? Das kann nicht rückgängig gemacht werden.')) return;
-    await vaultApi('DELETE', null, { user_id: session.user.id });
-    masterKey = null;
-    renderVault();
-  });
-
-  async function doMigrate() {
-    const oldPw = input.value;
-    if (!oldPw) { showErr(isEN ? 'Please enter your old master password.' : 'Bitte altes Master-Passwort eingeben.'); return; }
-    btn.textContent = isEN ? 'Migrating…' : 'Wird migriert…';
-    btn.disabled = true;
-    errEl.style.display = 'none';
-
-    try {
-      const oldKey = await deriveKey(oldPw, session.user.id);
-      // Ersten Eintrag testen
-      const testEntry = entries.find(e => e.value?.startsWith('ENC:'));
-      if (testEntry) {
-        const testDec = await decryptValue(testEntry.value, oldKey);
-        if (testDec === null) {
-          showErr(isEN ? 'Wrong master password. Please try again.' : 'Falsches Master-Passwort. Bitte versuche es erneut.');
-          return;
-        }
-      }
-
-      // Alle Einträge migrieren
-      const newKey = masterKey; // = deriveKey(userId, userId), bereits gesetzt
-      let migrated = 0;
-      for (const entry of entries) {
-        if (!entry.value?.startsWith('ENC:')) continue;
-        const plain = await decryptValue(entry.value, oldKey);
-        if (plain === null) continue;
-        const newEnc = await encryptValue(plain, newKey);
-        await vaultApi('PATCH', { value: newEnc }, { id: entry.id });
-        migrated++;
-      }
-
-      localStorage.setItem('vault_migrated_' + session.user.id, '1');
-      alert(isEN
-        ? `Migration complete! ${migrated} password${migrated !== 1 ? 's' : ''} converted.`
-        : `Migration abgeschlossen! ${migrated} Passwort${migrated !== 1 ? 'wörter' : ''} konvertiert.`);
-      renderVault();
-    } catch (e) {
-      showErr((isEN ? 'Migration error: ' : 'Migrationsfehler: ') + e.message);
-    }
-  }
-
-  btn.addEventListener('click', doMigrate);
-  input.addEventListener('keydown', e => { if (e.key === 'Enter') doMigrate(); });
-  setTimeout(() => input.focus(), 50);
-}
-
 // ===== TRESOR LADEN =====
 
 async function renderVault() {
@@ -415,16 +326,6 @@ async function renderVault() {
   );
 
   vaultData = decryptedEntries;
-
-  // Prüfen ob alle Einträge Entschlüsselungsfehler haben → Migrations-Banner zeigen
-  // Nur anzeigen wenn Migration noch nicht durchgeführt wurde.
-  const encryptedCount = entries.filter(e => e.value?.startsWith("ENC:")).length;
-  const errorCount = decryptedEntries.filter(e => e.value === "[Entschlüsselungsfehler]").length;
-  const alreadyMigrated = !!localStorage.getItem('vault_migrated_' + session.user.id);
-  if (encryptedCount > 0 && errorCount === encryptedCount && !alreadyMigrated) {
-    showMigrationBanner(session, entries);
-    return;
-  }
 
   if (decryptedEntries.length === 0) {
     listElement.innerHTML =
