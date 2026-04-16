@@ -62,7 +62,7 @@
             <label for="password-label">Label for the password:</label>
             <div class="input-group-row">
                 <input type="text" id="password-label" placeholder="e.g. Instagram, Google, Bank">
-                <select id="generator-kategorie" style="padding:12px 14px;background:#0f172a;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:white;font-size:15px;font-family:Inter,sans-serif;outline:none;min-width:0;flex-shrink:1;">
+                <select id="generator-kategorie" onchange="const ci=document.getElementById('generator-kategorie-custom');ci.style.display=this.value==='sonstiges'?'block':'none';if(this.value==='sonstiges')ci.focus();" style="padding:12px 14px;background:#0f172a;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:white;font-size:15px;font-family:Inter,sans-serif;outline:none;min-width:0;flex-shrink:1;">
                     <option value="allgemein">General</option>
                     <option value="banking">Banking</option>
                     <option value="email">E-Mail</option>
@@ -70,7 +70,13 @@
                     <option value="shopping">Shopping</option>
                     <option value="arbeit">Work</option>
                     <option value="gaming">Gaming</option>
+                    <option value="sonstiges">Other…</option>
                 </select>
+                <button class="main-btn" onclick="transferToVault()" style="width: auto; margin-top: 0; white-space: nowrap; display: flex; align-items: center; gap: 5px; padding: 0 15px;">
+                    <span class="material-symbols-outlined" style="font-size: 20px;">shield</span> Save
+                </button>
+            </div>
+            <input type="text" id="generator-kategorie-custom" placeholder="Enter custom category…" style="display:none;width:100%;padding:12px 14px;background:#0f172a;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:white;font-size:15px;font-family:Inter,sans-serif;box-sizing:border-box;outline:none;margin-top:8px;">
                 <button class="main-btn" onclick="transferToVault()" style="width: auto; margin-top: 0; white-space: nowrap; display: flex; align-items: center; gap: 5px; padding: 0 15px;">
                     <span class="material-symbols-outlined" style="font-size: 20px;">shield</span> Save
                 </button>

@@ -8,15 +8,18 @@ let aktivKategorie = 'alle'; // Aktiver Kategorie-Filter
 
 // Kategorien in DE und EN
 const KATEGORIEN = [
-  { key: 'alle',           de: 'Alle',          en: 'All' },
-  { key: 'allgemein',     de: 'Allgemein',     en: 'General' },
-  { key: 'banking',       de: 'Banking',       en: 'Banking' },
-  { key: 'email',         de: 'E-Mail',        en: 'E-Mail' },
-  { key: 'sozial',        de: 'Soziale Medien',en: 'Social Media' },
-  { key: 'shopping',      de: 'Shopping',      en: 'Shopping' },
-  { key: 'arbeit',        de: 'Arbeit',        en: 'Work' },
-  { key: 'gaming',        de: 'Gaming',        en: 'Gaming' },
+  { key: 'alle',       de: 'Alle',          en: 'All' },
+  { key: 'allgemein', de: 'Allgemein',     en: 'General' },
+  { key: 'banking',   de: 'Banking',       en: 'Banking' },
+  { key: 'email',     de: 'E-Mail',        en: 'E-Mail' },
+  { key: 'sozial',    de: 'Soziale Medien',en: 'Social Media' },
+  { key: 'shopping',  de: 'Shopping',      en: 'Shopping' },
+  { key: 'arbeit',    de: 'Arbeit',        en: 'Work' },
+  { key: 'gaming',    de: 'Gaming',        en: 'Gaming' },
+  { key: 'sonstiges', de: 'Sonstiges',     en: 'Other' },
 ];
+
+const STANDARD_KAT_KEYS = new Set(['allgemein','banking','email','sozial','shopping','arbeit','gaming']);
 
 function kategorieLabel(key) {
   const k = KATEGORIEN.find(k => k.key === key);
@@ -632,13 +635,12 @@ async function renderVault() {
 // Kategorie bearbeiten
 window.editKategorie = async function (id, currentKategorie) {
   const options = KATEGORIEN.filter(k => k.key !== 'alle');
+  const isCurrentCustom = !STANDARD_KAT_KEYS.has(currentKategorie) && currentKategorie !== 'sonstiges';
 
   return new Promise((resolve) => {
-    // Overlay
     const overlay = document.createElement('div');
     overlay.style.cssText = 'position:fixed;top:0;right:0;bottom:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:9999;display:flex;align-items:center;justify-content:center;';
 
-    // Modal
     const modal = document.createElement('div');
     modal.style.cssText = 'background:#1e293b;border:1px solid rgba(59,130,246,0.25);border-radius:16px;padding:32px;min-width:320px;max-width:400px;width:90%;';
 
@@ -647,27 +649,65 @@ window.editKategorie = async function (id, currentKategorie) {
     title.style.cssText = 'margin:0 0 20px;font-size:18px;color:#f1f5f9;font-family:Inter,sans-serif;';
 
     const btnGrid = document.createElement('div');
-    btnGrid.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;';
+    btnGrid.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;';
+
+    // Custom input section (shown when Sonstiges is clicked)
+    const customSection = document.createElement('div');
+    customSection.style.cssText = 'display:none;flex-direction:column;gap:8px;margin-bottom:16px;';
+
+    const customInput = document.createElement('input');
+    customInput.type = 'text';
+    customInput.placeholder = isEN ? 'Enter custom category\u2026' : 'Eigene Kategorie eingeben\u2026';
+    customInput.value = isCurrentCustom ? currentKategorie : '';
+    customInput.style.cssText = 'width:100%;padding:12px 14px;background:#0f172a;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:white;font-size:15px;font-family:Inter,sans-serif;box-sizing:border-box;outline:none;';
+
+    const confirmBtn = document.createElement('button');
+    confirmBtn.textContent = isEN ? 'Confirm' : 'Best\u00e4tigen';
+    confirmBtn.style.cssText = 'width:100%;padding:11px;border-radius:8px;border:none;background:linear-gradient(135deg,#3399ff,#66d9ff);color:#0f172a;font-size:14px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;';
 
     const close = () => { document.body.removeChild(overlay); resolve(); };
 
     options.forEach(k => {
       const btn = document.createElement('button');
       btn.textContent = isEN ? k.en : k.de;
-      const isActive = k.key === currentKategorie;
+      const isActive = k.key === 'sonstiges'
+        ? (isCurrentCustom || currentKategorie === 'sonstiges')
+        : k.key === currentKategorie;
       btn.style.cssText = `padding:10px 14px;border-radius:8px;border:1px solid rgba(51,153,255,${isActive ? '0.8' : '0.25'});background:${isActive ? 'rgba(51,153,255,0.2)' : 'rgba(15,23,42,0.8)'};color:${isActive ? '#66d9ff' : '#cbd5e1'};font-size:14px;font-family:Inter,sans-serif;cursor:pointer;transition:all .15s;`;
       btn.addEventListener('mouseenter', () => { if (!isActive) btn.style.background = 'rgba(51,153,255,0.1)'; });
       btn.addEventListener('mouseleave', () => { if (!isActive) btn.style.background = 'rgba(15,23,42,0.8)'; });
-      btn.addEventListener('click', async () => {
-        close();
-        if (k.key === currentKategorie) return;
-        if (isOffline()) { alert(isEN ? 'No internet — change cannot be saved.' : 'Kein Internet — Änderung kann nicht gespeichert werden.'); return; }
-        const { error } = await supabase.from('passwords').update({ kategorie: k.key }).eq('id', id);
-        if (error) { alert(isEN ? 'Error saving category.' : 'Fehler beim Speichern der Kategorie.'); return; }
-        renderVault();
-      });
+
+      if (k.key === 'sonstiges') {
+        btn.addEventListener('click', () => {
+          customSection.style.display = 'flex';
+          setTimeout(() => customInput.focus(), 50);
+        });
+      } else {
+        btn.addEventListener('click', async () => {
+          close();
+          if (k.key === currentKategorie) return;
+          if (isOffline()) { alert(isEN ? 'No internet — change cannot be saved.' : 'Kein Internet — \u00c4nderung kann nicht gespeichert werden.'); return; }
+          const { error } = await supabase.from('passwords').update({ kategorie: k.key }).eq('id', id);
+          if (error) { alert(isEN ? 'Error saving category.' : 'Fehler beim Speichern der Kategorie.'); return; }
+          renderVault();
+        });
+      }
       btnGrid.appendChild(btn);
     });
+
+    confirmBtn.addEventListener('click', async () => {
+      const val = customInput.value.trim() || 'sonstiges';
+      close();
+      if (val === currentKategorie) return;
+      if (isOffline()) { alert(isEN ? 'No internet — change cannot be saved.' : 'Kein Internet — \u00c4nderung kann nicht gespeichert werden.'); return; }
+      const { error } = await supabase.from('passwords').update({ kategorie: val }).eq('id', id);
+      if (error) { alert(isEN ? 'Error saving category.' : 'Fehler beim Speichern der Kategorie.'); return; }
+      renderVault();
+    });
+    customInput.addEventListener('keydown', e => { if (e.key === 'Enter') confirmBtn.click(); });
+
+    customSection.appendChild(customInput);
+    customSection.appendChild(confirmBtn);
 
     const cancelBtn = document.createElement('button');
     cancelBtn.textContent = isEN ? 'Cancel' : 'Abbrechen';
@@ -676,10 +716,16 @@ window.editKategorie = async function (id, currentKategorie) {
 
     modal.appendChild(title);
     modal.appendChild(btnGrid);
+    modal.appendChild(customSection);
     modal.appendChild(cancelBtn);
     overlay.appendChild(modal);
     overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
     document.body.appendChild(overlay);
+
+    // If current category is already custom text, show input section immediately
+    if (isCurrentCustom) {
+      customSection.style.display = 'flex';
+    }
   });
 };
 
@@ -797,7 +843,11 @@ window.saveManual = async function () {
   const password = (
     document.getElementById("manualPassword")?.value || ""
   ).trim();
-  const kategorie = document.getElementById("manualKategorie")?.value || 'allgemein';
+  let kategorie = document.getElementById("manualKategorie")?.value || 'allgemein';
+  if (kategorie === 'sonstiges') {
+    const custom = document.getElementById("manualKategorie-custom")?.value?.trim();
+    kategorie = custom || 'sonstiges';
+  }
   if (!password) {
     alert(isEN ? "Please enter a password." : "Bitte ein Passwort eingeben.");
     return;
@@ -807,6 +857,8 @@ window.saveManual = async function () {
   document.getElementById("manualLabel").value = "";
   document.getElementById("manualPassword").value = "";
   if (document.getElementById("manualKategorie")) document.getElementById("manualKategorie").value = 'allgemein';
+  const manualCustom = document.getElementById("manualKategorie-custom");
+  if (manualCustom) { manualCustom.value = ''; manualCustom.style.display = 'none'; }
 };
 
 // Vom Generator zum Tresor übertragen
@@ -816,7 +868,11 @@ window.transferToVault = async function () {
   const kategorieField = document.getElementById("generator-kategorie");
   const currentPassword = outputField ? outputField.value : "";
   const currentLabel = labelField ? labelField.value : "";
-  const currentKategorie = kategorieField ? kategorieField.value : "allgemein";
+  let currentKategorie = kategorieField ? kategorieField.value : "allgemein";
+  if (currentKategorie === 'sonstiges') {
+    const custom = document.getElementById("generator-kategorie-custom")?.value?.trim();
+    currentKategorie = custom || 'sonstiges';
+  }
 
   if (!currentPassword || currentPassword === "Klicke auf Generieren" || currentPassword === "Click Generate") {
     alert(isEN ? "Please generate a password first." : "Bitte generiere erst ein Passwort.");
@@ -1062,7 +1118,9 @@ window.filterVault = function (query) {
     const pw = vaultData[index];
     const label = pw?.label?.toLowerCase() ?? "";
     const matchText = !q || label.includes(q);
-    const matchKat = aktivKategorie === 'alle' || (pw?.kategorie || 'allgemein') === aktivKategorie;
+    const kat = pw?.kategorie || 'allgemein';
+    const matchKat = aktivKategorie === 'alle' ||
+      (aktivKategorie === 'sonstiges' ? !STANDARD_KAT_KEYS.has(kat) : kat === aktivKategorie);
     const match = matchText && matchKat;
     item.style.display = match ? "" : "none";
     if (match) visible++;

@@ -92,7 +92,7 @@
 
             <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:24px;">
                 <label style="font-size:14px;color:#cbd5e1;font-weight:500;">Kategorie</label>
-                <select id="manualKategorie" style="width:100%;padding:12px 14px;background:#0f172a;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:white;font-size:15px;font-family:Inter,sans-serif;box-sizing:border-box;outline:none;">
+                <select id="manualKategorie" onchange="const ci=document.getElementById('manualKategorie-custom');ci.style.display=this.value==='sonstiges'?'block':'none';if(this.value==='sonstiges')ci.focus();" style="width:100%;padding:12px 14px;background:#0f172a;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:white;font-size:15px;font-family:Inter,sans-serif;box-sizing:border-box;outline:none;">
                     <option value="allgemein">Allgemein</option>
                     <option value="banking">Banking</option>
                     <option value="email">E-Mail</option>
@@ -100,7 +100,9 @@
                     <option value="shopping">Shopping</option>
                     <option value="arbeit">Arbeit</option>
                     <option value="gaming">Gaming</option>
+                    <option value="sonstiges">Sonstiges…</option>
                 </select>
+                <input type="text" id="manualKategorie-custom" placeholder="Eigene Kategorie eingeben…" style="display:none;width:100%;padding:12px 14px;background:#0f172a;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:white;font-size:15px;font-family:Inter,sans-serif;box-sizing:border-box;outline:none;margin-top:8px;">
             </div>
 
             <button onclick="window.saveManual()" style="width:100%;padding:13px;background:linear-gradient(135deg,#3399ff,#66d9ff);color:#0f172a;border:none;border-radius:8px;font-size:15px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;margin-bottom:10px;">
