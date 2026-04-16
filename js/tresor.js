@@ -483,36 +483,45 @@ async function renderVault() {
       let cachedVerifyValue = null;
       try { cachedVerifyValue = localStorage.getItem(CACHE_KEY); } catch {}
 
-      // Supabase-Abfrage mit AbortController (bricht Fetch wirklich ab, nicht nur Promise)
+      // Supabase-Abfrage mit Timeout (Promise.race - kompatibel mit allen Supabase-Versionen)
       let verifyValue = null;
-      const controller = new AbortController();
-      const abortTimer = setTimeout(() => controller.abort(), 10000);
+      let timedOut = false;
+      const timeoutHandle = setTimeout(() => { timedOut = true; }, 10000);
       try {
-        const { data, error } = await supabase
+        const queryPromise = supabase
           .from("passwords")
           .select("value")
           .eq("user_id", userId)
           .eq("label", VERIFY_LABEL)
-          .maybeSingle()
-          .abortSignal(controller.signal);
-        clearTimeout(abortTimer);
-        if (error) throw error;
-        verifyValue = data?.value ?? null;
-        // Erfolgreich geladen → Cache aktualisieren
-        if (verifyValue) { try { localStorage.setItem(CACHE_KEY, verifyValue); } catch {} }
-      } catch (e) {
-        clearTimeout(abortTimer);
-        const isAbort = e?.name === "AbortError" || e?.code === 20;
-        if (isAbort && cachedVerifyValue) {
-          // Supabase hängt, aber lokaler Cache vorhanden → Offline-Fallback
-          verifyValue = cachedVerifyValue;
-        } else if (isAbort) {
-          setInlineError(isEN ? "Connection timed out. Please check your internet and try again." : "Verbindung unterbrochen. Bitte Internetverbindung prüfen und erneut versuchen.");
-          return;
+          .maybeSingle();
+        const timeoutPromise = new Promise(resolve =>
+          setTimeout(() => resolve({ data: null, error: null, _timeout: true }), 10000)
+        );
+        const result = await Promise.race([queryPromise, timeoutPromise]);
+        clearTimeout(timeoutHandle);
+        if (result._timeout) {
+          // Query hat nicht geantwortet
+          if (cachedVerifyValue) {
+            verifyValue = cachedVerifyValue;
+          } else {
+            setInlineError(isEN ? "Connection timed out. Please try again." : "Verbindungstimeout. Bitte erneut versuchen.");
+            return;
+          }
         } else {
-          setInlineError(isEN ? "Connection error. Please try again." : "Verbindungsfehler. Bitte erneut versuchen.");
-          return;
+          const { data, error } = result;
+          if (error) {
+            // Echten Fehler anzeigen (Debug-Modus)
+            setInlineError((isEN ? "Error: " : "Fehler: ") + (error.message || error.code || JSON.stringify(error)));
+            return;
+          }
+          verifyValue = data?.value ?? null;
+          if (verifyValue) { try { localStorage.setItem(CACHE_KEY, verifyValue); } catch {} }
         }
+      } catch (e) {
+        clearTimeout(timeoutHandle);
+        // Echten Fehler anzeigen (Debug-Modus)
+        setInlineError((isEN ? "Exception: " : "Ausnahme: ") + (e?.message || e?.name || String(e)));
+        return;
       }
 
       if (!verifyValue) {
