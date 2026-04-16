@@ -436,38 +436,55 @@ async function renderVault() {
     const inlinePw  = document.getElementById("vaultInlinePw");
     const inlineErr = document.getElementById("vaultInlineError");
 
+    function setInlineError(msg) {
+      inlineErr.textContent = msg;
+      inlineErr.style.display = "block";
+      inlineBtn.textContent = isEN ? "Unlock" : "Entsperren";
+      inlineBtn.disabled = false;
+    }
+
     async function handleInlineUnlock() {
       const pw = inlinePw.value;
-      if (!pw) { inlineErr.textContent = isEN ? "Please enter your master password." : "Bitte Master-Passwort eingeben."; inlineErr.style.display = "block"; return; }
+      if (!pw) { setInlineError(isEN ? "Please enter your master password." : "Bitte Master-Passwort eingeben."); return; }
       inlineBtn.textContent = isEN ? "Verifying…" : "Wird geprüft…";
       inlineBtn.disabled = true;
       inlineErr.style.display = "none";
+
+      // Erst lokal entschlüsseln, dann erst wenn nötig Supabase befragen
+      // Damit vermeiden wir Hänger wenn Supabase auf Mobile langsam ist
+      let verifyValue = null;
       try {
-        const VERIFY_LABEL = "__vault_verify__";
-        const VERIFY_PLAINTEXT = "__safenet_vault_verified__";
-        const { data: verifyEntry } = await supabase.from("passwords").select("value").eq("user_id", session.user.id).eq("label", VERIFY_LABEL).maybeSingle();
-        if (!verifyEntry) {
-          // Noch kein Master-Passwort eingerichtet → askMasterPassword für Setup aufrufen
-          inlineBtn.textContent = isEN ? "Unlock" : "Entsperren"; inlineBtn.disabled = false;
-          await askMasterPassword(session);
-          if (masterKey) renderVault();
-          return;
-        }
+        const { data, error } = await supabase
+          .from("passwords")
+          .select("value")
+          .eq("user_id", session.user.id)
+          .eq("label", VERIFY_LABEL)
+          .maybeSingle();
+        if (error) throw error;
+        verifyValue = data?.value ?? null;
+      } catch (e) {
+        setInlineError(isEN ? "Connection error. Please check your internet and try again." : "Verbindungsfehler. Bitte Internet prüfen und erneut versuchen.");
+        return;
+      }
+
+      if (!verifyValue) {
+        // Noch kein Master-Passwort eingerichtet — Passwort als neues setzen
+        setInlineError(isEN ? "No master password set yet. Please open the vault on a desktop first to set it up." : "Noch kein Master-Passwort eingerichtet. Bitte zuerst auf einem Desktop-Gerät den Tresor öffnen.");
+        return;
+      }
+
+      try {
         const key = await deriveKey(pw, session.user.id);
-        const decrypted = await decryptValue(verifyEntry.value, key);
+        const decrypted = await decryptValue(verifyValue, key);
         if (decrypted !== VERIFY_PLAINTEXT) {
-          inlineErr.textContent = isEN ? "Wrong master password." : "Falsches Master-Passwort.";
-          inlineErr.style.display = "block";
-          inlineBtn.textContent = isEN ? "Unlock" : "Entsperren"; inlineBtn.disabled = false;
+          setInlineError(isEN ? "Wrong master password. Please try again." : "Falsches Master-Passwort. Bitte erneut versuchen.");
           return;
         }
         masterKey = key;
         sessionStorage.setItem("vaultMasterPw_" + session.user.id, pw);
         renderVault();
       } catch {
-        inlineErr.textContent = isEN ? "Error. Please try again." : "Fehler. Bitte versuche es erneut.";
-        inlineErr.style.display = "block";
-        inlineBtn.textContent = isEN ? "Unlock" : "Entsperren"; inlineBtn.disabled = false;
+        setInlineError(isEN ? "Decryption error. Please try again." : "Entschlüsselungsfehler. Bitte erneut versuchen.");
       }
     }
 
