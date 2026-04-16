@@ -14,10 +14,12 @@ async function applyNavbarUser() {
 
         if (session && session.user) {
             // 2FA-Bypass verhindern: Wenn 2FA aktiviert aber noch nicht abgeschlossen, abmelden
-            // Ausnahme: Einstellungen-Seite, damit User 2FA aktivieren kann
+            // Ausnahme: Einstellungen-Seite und direkt nach MFA-Login (Race Condition mit Token-Refresh)
             const isEnglish = window.location.pathname.startsWith('/en/')
             const isEinstellungen = window.location.pathname.includes('/de/pages/einstellungen.html') || window.location.pathname.includes('/en/pages/einstellungen.html')
-            if (!isEinstellungen) {
+            const justLoggedIn = sessionStorage.getItem('loginSuccess') === '1'
+            if (justLoggedIn) sessionStorage.removeItem('loginSuccess')
+            if (!isEinstellungen && !justLoggedIn) {
                 const [{ data: aal }, { data: factors }] = await Promise.all([
                     supabase.auth.mfa.getAuthenticatorAssuranceLevel(),
                     supabase.auth.mfa.listFactors()
