@@ -450,20 +450,25 @@ async function renderVault() {
       inlineBtn.disabled = true;
       inlineErr.style.display = "none";
 
-      // Erst lokal entschlüsseln, dann erst wenn nötig Supabase befragen
-      // Damit vermeiden wir Hänger wenn Supabase auf Mobile langsam ist
+      // Supabase-Abfrage mit 8s Timeout (Mobile kann hängen)
       let verifyValue = null;
       try {
-        const { data, error } = await supabase
+        const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 8000));
+        const query = supabase
           .from("passwords")
           .select("value")
           .eq("user_id", session.user.id)
           .eq("label", VERIFY_LABEL)
           .maybeSingle();
+        const { data, error } = await Promise.race([query, timeout]);
         if (error) throw error;
         verifyValue = data?.value ?? null;
       } catch (e) {
-        setInlineError(isEN ? "Connection error. Please check your internet and try again." : "Verbindungsfehler. Bitte Internet prüfen und erneut versuchen.");
+        if (e?.message === 'timeout') {
+          setInlineError(isEN ? "Request timed out. Please check your internet connection." : "Zeitüberschreitung. Bitte Internetverbindung prüfen.");
+        } else {
+          setInlineError(isEN ? "Connection error. Please try again." : "Verbindungsfehler. Bitte erneut versuchen.");
+        }
         return;
       }
 
