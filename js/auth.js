@@ -16,15 +16,21 @@ async function applyNavbarUser() {
             // 2FA-Bypass verhindern: Wenn 2FA aktiviert aber noch nicht abgeschlossen, abmelden
             // Ausnahme: Einstellungen-Seite, damit User 2FA aktivieren kann
             const isEnglish = window.location.pathname.startsWith('/en/')
-            const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
             const isEinstellungen = window.location.pathname.includes('/de/pages/einstellungen.html') || window.location.pathname.includes('/en/pages/einstellungen.html')
-            if (aal?.nextLevel === 'aal2' && aal?.currentLevel !== 'aal2' && !isEinstellungen) {
-                await supabase.auth.signOut()
-                const isLoginPage = window.location.pathname.includes('login.html')
-                if (!isLoginPage) {
-                    window.location.href = isEnglish ? '/en/pages/login.html' : '/de/pages/login.html'
+            if (!isEinstellungen) {
+                const [{ data: aal }, { data: factors }] = await Promise.all([
+                    supabase.auth.mfa.getAuthenticatorAssuranceLevel(),
+                    supabase.auth.mfa.listFactors()
+                ])
+                const hasVerifiedTotp = factors?.totp?.some(f => f.status === 'verified')
+                if (hasVerifiedTotp && aal?.nextLevel === 'aal2' && aal?.currentLevel !== 'aal2') {
+                    await supabase.auth.signOut()
+                    const isLoginPage = window.location.pathname.includes('login.html')
+                    if (!isLoginPage) {
+                        window.location.href = isEnglish ? '/en/pages/login.html' : '/de/pages/login.html'
+                    }
+                    return
                 }
-                return
             }
 
             const email       = session.user.email

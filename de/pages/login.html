@@ -148,14 +148,14 @@
         }
 
         function loginBenachrichtigung(accessToken) {
-            try {
-                if (!accessToken) return
-                fetch('https://dygrabyaiyessqmjdprc.supabase.co/functions/v1/login-benachrichtigung', {
-                    method: 'POST',
-                    headers: { 'Authorization': 'Bearer ' + accessToken },
-                    keepalive: true
-                }).catch(() => {})
-            } catch (_) {}
+            if (!accessToken) { console.error('[Login-Benachrichtigung] Kein Access Token'); return }
+            fetch('https://dygrabyaiyessqmjdprc.supabase.co/functions/v1/login-benachrichtigung', {
+                method: 'POST',
+                headers: { 'Authorization': 'Bearer ' + accessToken },
+                keepalive: true
+            }).then(res => {
+                if (!res.ok) res.text().then(t => console.error('[Login-Benachrichtigung] Fehler', res.status, t))
+            }).catch(err => console.error('[Login-Benachrichtigung] Fetch-Fehler', err))
         }
 
         function showError(text) {
