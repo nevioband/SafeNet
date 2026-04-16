@@ -95,9 +95,9 @@ Deno.serve(async (req) => {
         </p>
 
         <!-- Button -->
-        <a href="https://safe-net-umber.vercel.app/de/pages/einstellungen.html"
+        <a href="https://safe-net-umber.vercel.app/de/pages/reset-password.html"
            style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#3399ff,#66d9ff);color:#0f172a;font-weight:700;font-size:15px;border-radius:999px;text-decoration:none;margin-bottom:36px;">
-          Aktivität prüfen
+          Passwort zurücksetzen
         </a>
 
         <!-- Details -->
@@ -118,9 +118,8 @@ Deno.serve(async (req) => {
 
         <!-- Footer -->
         <p style="margin:0;font-size:12px;color:#475569;line-height:1.6;">
-          Wenn du diese Anmeldung kennst, musst du nichts weiter tun.<br>
-          Sicherheitsaktivitäten einsehen:
-          <a href="https://safe-net-umber.vercel.app/de/pages/einstellungen.html" style="color:#3399ff;text-decoration:none;">Einstellungen öffnen</a>
+          Warst du das nicht? Setze sofort dein Passwort zurück und sichere dein Konto.<br>
+          War es doch du, musst du nichts weiter tun.
         </p>
 
       </div>
