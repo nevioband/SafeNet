@@ -19,7 +19,10 @@ async function applyNavbarUser() {
             const isEinstellungen = window.location.pathname.includes('/de/pages/einstellungen.html') || window.location.pathname.includes('/en/pages/einstellungen.html')
             const justLoggedIn = sessionStorage.getItem('loginSuccess') === '1'
             if (justLoggedIn) sessionStorage.removeItem('loginSuccess')
-            if (!isEinstellungen && !justLoggedIn) {
+            // AAL-Check nur einmal pro Tab-Session (nicht bei jedem Seitenwechsel).
+            // Verhindert falsche Logouts durch Mobile Token-Refresh (aal1-Glitch).
+            const aalOk = sessionStorage.getItem('safenet_aal_ok') === session.user.id
+            if (!isEinstellungen && !justLoggedIn && !aalOk) {
                 try {
                     const [{ data: aal }, { data: factors }] = await Promise.all([
                         supabase.auth.mfa.getAuthenticatorAssuranceLevel(),
@@ -28,6 +31,7 @@ async function applyNavbarUser() {
                     const hasVerifiedTotp = factors?.totp?.some(f => f.status === 'verified')
                     if (hasVerifiedTotp && aal?.nextLevel === 'aal2' && aal?.currentLevel !== 'aal2') {
                         await supabase.auth.signOut()
+                        sessionStorage.removeItem('safenet_aal_ok')
                         const isLoginPage = window.location.pathname.includes('login.html')
                         if (!isLoginPage) {
                             window.location.href = isEnglish ? '/en/pages/login.html' : '/de/pages/login.html'
@@ -35,9 +39,11 @@ async function applyNavbarUser() {
                         return
                     }
                 } catch (_) {
-                    // Netzwerkfehler beim AAL-Check → Session beibehalten (kein Logout)
+                    // Netzwerkfehler → Session beibehalten
                 }
             }
+            // AAL-Check bestanden oder übersprungen → für restliche Tab-Session merken
+            if (!aalOk) sessionStorage.setItem('safenet_aal_ok', session.user.id)
 
             const email       = session.user.email
             const displayName = session.user.user_metadata?.display_name
