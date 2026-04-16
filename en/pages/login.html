@@ -145,7 +145,7 @@
 
         function loginBenachrichtigung(accessToken) {
             if (!accessToken) { console.error('[Login-Benachrichtigung] No access token'); return }
-            fetch('https://dygrabyaiyessqmjdprc.supabase.co/functions/v1/login-benachrichtigung', {
+            fetch('/api/login-benachrichtigung', {
                 method: 'POST',
                 headers: { 'Authorization': 'Bearer ' + accessToken },
                 keepalive: true
