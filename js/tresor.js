@@ -216,6 +216,11 @@ async function askMasterPassword(session) {
     .eq("label", VERIFY_LABEL)
     .maybeSingle();
 
+  // Verify-Wert für Mobile-Fallback in localStorage cachen
+  if (verifyEntry?.value) {
+    try { localStorage.setItem("vaultVerifyCache_" + session.user.id, verifyEntry.value); } catch {}
+  }
+
   const isSetup = !verifyEntry;
 
   return new Promise((resolve) => {
@@ -450,7 +455,7 @@ async function renderVault() {
       inlineBtn.disabled = true;
       inlineErr.style.display = "none";
 
-      // Frische Session holen (verhindert abgelaufene Token-Fehler auf Mobile)
+      // Frische Session holen
       const { data: freshSessionData, error: sessionError } = await supabase.auth.getSession();
       const freshSession = freshSessionData?.session;
       if (sessionError || !freshSession) {
@@ -458,43 +463,57 @@ async function renderVault() {
         return;
       }
 
-      // Supabase-Abfrage mit 10s Timeout (Mobile kann hängen)
+      const userId = freshSession.user.id;
+      const CACHE_KEY = "vaultVerifyCache_" + userId;
+      let cachedVerifyValue = null;
+      try { cachedVerifyValue = localStorage.getItem(CACHE_KEY); } catch {}
+
+      // Supabase-Abfrage mit AbortController (bricht Fetch wirklich ab, nicht nur Promise)
       let verifyValue = null;
+      const controller = new AbortController();
+      const abortTimer = setTimeout(() => controller.abort(), 10000);
       try {
-        const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 10000));
-        const query = supabase
+        const { data, error } = await supabase
           .from("passwords")
           .select("value")
-          .eq("user_id", freshSession.user.id)
+          .eq("user_id", userId)
           .eq("label", VERIFY_LABEL)
-          .maybeSingle();
-        const { data, error } = await Promise.race([query, timeout]);
+          .maybeSingle()
+          .abortSignal(controller.signal);
+        clearTimeout(abortTimer);
         if (error) throw error;
         verifyValue = data?.value ?? null;
+        // Erfolgreich geladen → Cache aktualisieren
+        if (verifyValue) { try { localStorage.setItem(CACHE_KEY, verifyValue); } catch {} }
       } catch (e) {
-        if (e?.message === 'timeout') {
-          setInlineError(isEN ? "Request timed out. Please try again." : "Zeitüberschreitung. Bitte erneut versuchen.");
+        clearTimeout(abortTimer);
+        const isAbort = e?.name === "AbortError" || e?.code === 20;
+        if (isAbort && cachedVerifyValue) {
+          // Supabase hängt, aber lokaler Cache vorhanden → Offline-Fallback
+          verifyValue = cachedVerifyValue;
+        } else if (isAbort) {
+          setInlineError(isEN ? "Connection timed out. Please check your internet and try again." : "Verbindung unterbrochen. Bitte Internetverbindung prüfen und erneut versuchen.");
+          return;
         } else {
           setInlineError(isEN ? "Connection error. Please try again." : "Verbindungsfehler. Bitte erneut versuchen.");
+          return;
         }
-        return;
       }
 
       if (!verifyValue) {
-        // Noch kein Master-Passwort eingerichtet — Passwort als neues setzen
         setInlineError(isEN ? "No master password set yet. Please open the vault on a desktop first to set it up." : "Noch kein Master-Passwort eingerichtet. Bitte zuerst auf einem Desktop-Gerät den Tresor öffnen.");
         return;
       }
 
       try {
-        const key = await deriveKey(pw, freshSession.user.id);
+        const key = await deriveKey(pw, userId);
         const decrypted = await decryptValue(verifyValue, key);
         if (decrypted !== VERIFY_PLAINTEXT) {
           setInlineError(isEN ? "Wrong master password. Please try again." : "Falsches Master-Passwort. Bitte erneut versuchen.");
           return;
         }
         masterKey = key;
-        sessionStorage.setItem("vaultMasterPw_" + freshSession.user.id, pw);
+        sessionStorage.setItem("vaultMasterPw_" + userId, pw);
         renderVault();
       } catch {
         setInlineError(isEN ? "Decryption error. Please try again." : "Entschlüsselungsfehler. Bitte erneut versuchen.");
