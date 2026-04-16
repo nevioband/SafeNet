@@ -284,6 +284,191 @@ function showMigrationBanner(session, entries) {
   setTimeout(() => input.focus(), 50);
 }
 
+// ===== VAULT SICHERHEITSGATE (PIN + BIOMETRIE) =====
+
+async function derivePinHash(pin, userId) {
+  const enc = new TextEncoder();
+  const km = await crypto.subtle.importKey('raw', enc.encode(pin), 'PBKDF2', false, ['deriveBits']);
+  const bits = await crypto.subtle.deriveBits(
+    { name: 'PBKDF2', salt: enc.encode(userId + '_pin'), iterations: 200000, hash: 'SHA-256' },
+    km, 256
+  );
+  return btoa(String.fromCharCode(...new Uint8Array(bits)));
+}
+
+function hasBiometricCred(userId) {
+  return !!localStorage.getItem('vault_biocred_' + userId);
+}
+
+async function registerBiometrics(userId, userEmail) {
+  if (!window.PublicKeyCredential) return false;
+  try {
+    const cred = await navigator.credentials.create({
+      publicKey: {
+        challenge: crypto.getRandomValues(new Uint8Array(32)),
+        rp: { name: 'SafeNet Security', id: window.location.hostname },
+        user: {
+          id: new TextEncoder().encode(userId.slice(0, 32).padEnd(32, '0')),
+          name: userEmail || userId,
+          displayName: userEmail || userId,
+        },
+        pubKeyCredParams: [
+          { type: 'public-key', alg: -7 },
+          { type: 'public-key', alg: -257 },
+        ],
+        authenticatorSelection: {
+          userVerification: 'required',
+          authenticatorAttachment: 'platform',
+          residentKey: 'preferred',
+        },
+        timeout: 60000,
+      }
+    });
+    const credId = btoa(String.fromCharCode(...new Uint8Array(cred.rawId)));
+    localStorage.setItem('vault_biocred_' + userId, credId);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function authenticateBiometrics(userId) {
+  if (!window.PublicKeyCredential) return false;
+  const credIdB64 = localStorage.getItem('vault_biocred_' + userId);
+  if (!credIdB64) return false;
+  const credId = Uint8Array.from(atob(credIdB64), c => c.charCodeAt(0));
+  try {
+    await navigator.credentials.get({
+      publicKey: {
+        challenge: crypto.getRandomValues(new Uint8Array(32)),
+        allowCredentials: [{ id: credId, type: 'public-key' }],
+        userVerification: 'required',
+        timeout: 60000,
+      }
+    });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function showVaultAuthGate(session) {
+  return new Promise(resolve => {
+    const listEl = document.getElementById('saved-passwords-list');
+    if (!listEl) { resolve(false); return; }
+    const userId = session.user.id;
+    const pinHash = session.user?.user_metadata?.vault_pin ?? null;
+    const hasBio = hasBiometricCred(userId);
+
+    function showPinErr(msg) {
+      const el = document.getElementById('vaultPinError');
+      if (el) { el.textContent = msg; el.style.display = 'block'; }
+      const btn = document.getElementById('vaultPinBtn');
+      if (btn) { btn.textContent = isEN ? 'Unlock' : 'Entsperren'; btn.disabled = false; }
+    }
+
+    function renderPinInput(withBioOption) {
+      listEl.innerHTML = `
+        <div style="max-width:360px;margin:40px auto;padding:32px;background:#172441;border:1px solid rgba(59,130,246,0.25);border-radius:16px;text-align:center;font-family:Inter,sans-serif;">
+          <span class="material-symbols-outlined" style="font-size:44px;color:rgba(51,153,255,0.5);display:block;margin-bottom:16px;">pin</span>
+          <h3 style="margin:0 0 8px;font-size:18px;background:linear-gradient(135deg,#3399ff,#66d9ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${isEN ? 'Enter PIN' : 'PIN eingeben'}</h3>
+          <p style="color:#64748b;font-size:14px;margin:0 0 20px;">${isEN ? 'Enter your vault PIN to continue.' : 'Gib deinen Tresor-PIN ein, um fortzufahren.'}</p>
+          <div id="vaultPinError" style="display:none;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:8px;color:#f87171;font-size:13px;padding:10px 12px;margin-bottom:14px;"></div>
+          <input type="password" id="vaultPinInput" inputmode="numeric" pattern="[0-9]*" autocomplete="off"
+            placeholder="${isEN ? 'PIN (4-6 digits)' : 'PIN (4-6 Ziffern)'}"
+            style="width:100%;padding:12px 14px;background:#0f172a;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:white;font-size:20px;letter-spacing:8px;text-align:center;box-sizing:border-box;outline:none;margin-bottom:12px;">
+          <button id="vaultPinBtn" style="width:100%;padding:13px;background:linear-gradient(135deg,#3399ff,#66d9ff);color:#0f172a;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;">${isEN ? 'Unlock' : 'Entsperren'}</button>
+          ${withBioOption ? `<button id="vaultBioBtn" style="width:100%;margin-top:10px;padding:11px;background:none;border:1px solid rgba(59,130,246,0.3);border-radius:8px;color:#66d9ff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;"><span class="material-symbols-outlined" style="font-size:18px;">fingerprint</span>${isEN ? 'Use Face ID / Touch ID' : 'Face ID / Touch ID nutzen'}</button>` : ''}
+        </div>
+      `;
+      const pinInput = document.getElementById('vaultPinInput');
+      const pinBtn = document.getElementById('vaultPinBtn');
+      const bioBtn = document.getElementById('vaultBioBtn');
+
+      async function verifyPin() {
+        const pin = pinInput.value.replace(/\D/g, '');
+        if (pin.length < 4) { showPinErr(isEN ? 'Please enter your PIN (min. 4 digits).' : 'Bitte PIN eingeben (mind. 4 Ziffern).'); return; }
+        pinBtn.textContent = isEN ? 'Checking…' : 'Wird geprüft…';
+        pinBtn.disabled = true;
+        const hash = await derivePinHash(pin, userId);
+        if (hash !== pinHash) { showPinErr(isEN ? 'Wrong PIN. Please try again.' : 'Falscher PIN. Bitte erneut versuchen.'); return; }
+        sessionStorage.setItem('vault_auth_' + userId, '1');
+        resolve(true);
+        renderVault();
+      }
+
+      pinBtn.addEventListener('click', verifyPin);
+      pinInput.addEventListener('keydown', e => { if (e.key === 'Enter') verifyPin(); });
+      if (bioBtn) {
+        bioBtn.addEventListener('click', async () => {
+          const ok = await authenticateBiometrics(userId);
+          if (ok) { sessionStorage.setItem('vault_auth_' + userId, '1'); resolve(true); renderVault(); }
+          else showPinErr(isEN ? 'Biometry failed. Please enter your PIN.' : 'Biometrie fehlgeschlagen. Bitte PIN eingeben.');
+        });
+      }
+      setTimeout(() => pinInput.focus(), 50);
+    }
+
+    function renderPinSetup() {
+      listEl.innerHTML = `
+        <div style="max-width:380px;margin:40px auto;padding:32px;background:#172441;border:1px solid rgba(59,130,246,0.25);border-radius:16px;text-align:center;font-family:Inter,sans-serif;">
+          <span class="material-symbols-outlined" style="font-size:44px;color:rgba(51,153,255,0.5);display:block;margin-bottom:16px;">lock</span>
+          <h3 style="margin:0 0 8px;font-size:18px;background:linear-gradient(135deg,#3399ff,#66d9ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${isEN ? 'Set up vault PIN' : 'Tresor-PIN einrichten'}</h3>
+          <p style="color:#64748b;font-size:14px;margin:0 0 20px;line-height:1.6;">${isEN ? 'Choose a 4-6 digit PIN to protect your vault. You will need it every time you open the vault.' : 'Wähle einen 4-6-stelligen PIN, um deinen Tresor zu schützen. Du brauchst ihn jedes Mal beim Öffnen.'}</p>
+          <div id="vaultPinError" style="display:none;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:8px;color:#f87171;font-size:13px;padding:10px 12px;margin-bottom:14px;"></div>
+          <input type="password" id="vaultPinNew" inputmode="numeric" pattern="[0-9]*" autocomplete="new-password"
+            placeholder="${isEN ? 'New PIN (4-6 digits)' : 'Neuer PIN (4-6 Ziffern)'}"
+            style="width:100%;padding:12px 14px;background:#0f172a;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:white;font-size:20px;letter-spacing:8px;text-align:center;box-sizing:border-box;outline:none;margin-bottom:10px;">
+          <input type="password" id="vaultPinConfirm" inputmode="numeric" pattern="[0-9]*" autocomplete="new-password"
+            placeholder="${isEN ? 'Confirm PIN' : 'PIN bestätigen'}"
+            style="width:100%;padding:12px 14px;background:#0f172a;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:white;font-size:20px;letter-spacing:8px;text-align:center;box-sizing:border-box;outline:none;margin-bottom:12px;">
+          <button id="vaultPinBtn" style="width:100%;padding:13px;background:linear-gradient(135deg,#3399ff,#66d9ff);color:#0f172a;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;">${isEN ? 'Set PIN' : 'PIN speichern'}</button>
+        </div>
+      `;
+      const pinNew = document.getElementById('vaultPinNew');
+      const pinConfirm = document.getElementById('vaultPinConfirm');
+      const pinBtn = document.getElementById('vaultPinBtn');
+
+      async function savePin() {
+        const pin = pinNew.value.replace(/\D/g, '');
+        const confirm = pinConfirm.value.replace(/\D/g, '');
+        if (pin.length < 4 || pin.length > 6) { showPinErr(isEN ? 'PIN must be 4-6 digits.' : 'PIN muss 4-6 Ziffern haben.'); return; }
+        if (pin !== confirm) { showPinErr(isEN ? 'PINs do not match.' : 'PINs stimmen nicht überein.'); return; }
+        pinBtn.textContent = isEN ? 'Saving…' : 'Wird gespeichert…';
+        pinBtn.disabled = true;
+        const hash = await derivePinHash(pin, userId);
+        await supabase.auth.updateUser({ data: { vault_pin: hash } });
+        // Biometrie anbieten wenn verfügbar
+        if (window.PublicKeyCredential) {
+          const wantBio = confirm(isEN
+            ? 'Do you also want to enable Face ID / Touch ID for quick access?'
+            : 'Möchtest du auch Face ID / Touch ID für schnellen Zugriff aktivieren?');
+          if (wantBio) await registerBiometrics(userId, session.user.email);
+        }
+        sessionStorage.setItem('vault_auth_' + userId, '1');
+        resolve(true);
+        renderVault();
+      }
+
+      pinBtn.addEventListener('click', savePin);
+      pinConfirm.addEventListener('keydown', e => { if (e.key === 'Enter') savePin(); });
+      setTimeout(() => pinNew.focus(), 50);
+    }
+
+    if (!pinHash) {
+      renderPinSetup();
+    } else if (hasBio) {
+      // Biometrie zuerst versuchen
+      authenticateBiometrics(userId).then(ok => {
+        if (ok) { sessionStorage.setItem('vault_auth_' + userId, '1'); resolve(true); renderVault(); }
+        else renderPinInput(true);
+      });
+    } else {
+      renderPinInput(false);
+    }
+  });
+}
+
 // ===== TRESOR LADEN =====
 
 async function renderVault() {
@@ -332,6 +517,12 @@ async function renderVault() {
       showVaultError(isEN ? 'Encryption error. Please reload the page.' : 'Verschlüsselungsfehler. Bitte Seite neu laden.');
       return;
     }
+  }
+
+  // Sicherheitsgate: PIN / Biometrie — einmal pro Tab-Session
+  if (!sessionStorage.getItem('vault_auth_' + session.user.id)) {
+    await showVaultAuthGate(session);
+    return;
   }
 
   const searchContainer = document.getElementById("vaultSearchContainer");
@@ -1073,12 +1264,12 @@ function startVault() {
   supabase.auth.onAuthStateChange((event, session) => {
     currentSession = session;  // Immer aktuell halten
     if (event === "SIGNED_OUT" || !session) {
-      // Master-Passwort aus sessionStorage entfernen
+      // Session-Auth zurücksetzen
       Object.keys(sessionStorage)
-        .filter((k) => k.startsWith("vaultMasterPw_"))
-        .forEach((k) => sessionStorage.removeItem(k));
+        .filter(k => k.startsWith('vault_auth_') || k.startsWith('vaultMasterPw_'))
+        .forEach(k => sessionStorage.removeItem(k));
       masterKey = null;
-      _renderLock = false; // Lock freigeben damit renderVault durchkommt
+      _renderLock = false;
       document.getElementById("masterModal")?.remove();
       renderVault();
       return;
@@ -1107,6 +1298,10 @@ if (document.readyState === 'loading') {
 // wird DOMContentLoaded NICHT erneut gefeuert. pageshow mit persisted=true abfangen.
 window.addEventListener('pageshow', (e) => {
   if (e.persisted) {
+    // Bei BFCache-Wiederkehr: Auth-Gate zurücksetzen (Sicherheit bei Gerätewechsel)
+    Object.keys(sessionStorage)
+      .filter(k => k.startsWith('vault_auth_'))
+      .forEach(k => sessionStorage.removeItem(k));
     masterKey = null;
     _renderLock = false;
     document.getElementById("masterModal")?.remove();
