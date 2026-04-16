@@ -335,7 +335,7 @@ async function askMasterPassword(session) {
             document.getElementById("masterModal")?.remove();
             resolve(masterKey);
           } catch {
-            errorMsg = isEN ? "Error during verification. Please try again." : "Fehler beim Prüfen. Bitte versuche es erneut.":
+            errorMsg = isEN ? "Error during verification. Please try again." : "Fehler beim Prüfen. Bitte versuche es erneut.";
             render();
           }
         }
@@ -357,11 +357,22 @@ async function askMasterPassword(session) {
 
 async function ensureUnlocked() {
   if (masterKey) return masterKey;
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+  // Aus sessionStorage + localStorage-Cache entsperren (kein Netzwerk)
+  const session = currentSession;
   if (!session) return null;
-  return await askMasterPassword(session);
+  const storedPw = sessionStorage.getItem('vaultMasterPw_' + session.user.id);
+  if (storedPw) {
+    const cached = session.user?.user_metadata?.vault_verify
+      || (() => { try { return localStorage.getItem('vaultVerifyCache_' + session.user.id); } catch { return null; } })();
+    if (cached) {
+      try {
+        const key = await deriveKey(storedPw, session.user.id);
+        const dec = await decryptValue(cached, key);
+        if (dec === VERIFY_PLAINTEXT) { masterKey = key; return masterKey; }
+      } catch {}
+    }
+  }
+  return null;
 }
 
 // ===== PASSWORT-STÄRKE =====
@@ -429,164 +440,107 @@ async function renderVault() {
     return;
   }
 
-  // Auto-unlock: gespeichertes Passwort + verify aus user_metadata oder localStorage (kein Supabase-Request)
+  // Schlüssel aus sessionStorage laden (kein Netzwerk, sofort)
   if (!masterKey) {
-    const storedPw = sessionStorage.getItem("vaultMasterPw_" + session.user.id);
+    const storedPw = sessionStorage.getItem('vaultMasterPw_' + session.user.id);
     if (storedPw) {
-      const cachedVerify =
-        session.user?.user_metadata?.vault_verify ||
-        (() => { try { return localStorage.getItem("vaultVerifyCache_" + session.user.id); } catch { return null; } })();
+      const cachedVerify = session.user?.user_metadata?.vault_verify
+        || (() => { try { return localStorage.getItem('vaultVerifyCache_' + session.user.id); } catch { return null; } })();
       if (cachedVerify) {
         try {
           const key = await deriveKey(storedPw, session.user.id);
-          const decrypted = await decryptValue(cachedVerify, key);
-          if (decrypted === VERIFY_PLAINTEXT) masterKey = key;
+          const dec = await decryptValue(cachedVerify, key);
+          if (dec === VERIFY_PLAINTEXT) masterKey = key;
         } catch {}
       }
     }
   }
 
-  // Master-Passwort: Inline-Formular (kein Modal-Overlay, iOS-kompatibel)
+  // Inline-Formular anzeigen wenn noch kein Schlüssel
   if (!masterKey) {
-    const settingsUrl = isEN ? '/en/pages/einstellungen.html' : '/de/pages/einstellungen.html'
     listElement.innerHTML = `
       <div id="vaultInlineUnlock" style="max-width:380px;margin:40px auto;padding:32px;background:#172441;border:1px solid rgba(59,130,246,0.25);border-radius:16px;text-align:center;">
         <span class="material-symbols-outlined" style="font-size:44px;color:rgba(51,153,255,0.5);display:block;margin-bottom:16px;">lock</span>
-        <h3 style="margin:0 0 8px;font-size:18px;background:linear-gradient(135deg,#3399ff,#66d9ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${isEN ? "Vault locked" : "Tresor gesperrt"}</h3>
-        <p style="color:#64748b;font-size:14px;margin:0 0 24px;">${isEN ? "Enter your master password to unlock." : "Gib dein Master-Passwort ein, um zu entsperren."}</p>
+        <h3 style="margin:0 0 8px;font-size:18px;background:linear-gradient(135deg,#3399ff,#66d9ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${isEN ? 'Vault locked' : 'Tresor gesperrt'}</h3>
+        <p style="color:#64748b;font-size:14px;margin:0 0 24px;">${isEN ? 'Enter your master password to unlock.' : 'Gib dein Master-Passwort ein, um zu entsperren.'}</p>
         <div id="vaultInlineError" style="display:none;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:8px;color:#f87171;font-size:13px;padding:10px 12px;margin-bottom:16px;"></div>
-        <input type="password" id="vaultInlinePw" autocomplete="current-password" placeholder="${isEN ? "Master password" : "Master-Passwort"}"
+        <input type="password" id="vaultInlinePw" autocomplete="current-password" placeholder="${isEN ? 'Master password' : 'Master-Passwort'}"
           style="width:100%;padding:12px 14px;background:#0f172a;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:white;font-size:15px;font-family:Inter,sans-serif;box-sizing:border-box;outline:none;margin-bottom:12px;">
-        <button id="vaultInlineBtn" style="width:100%;padding:13px;background:linear-gradient(135deg,#3399ff,#66d9ff);color:#0f172a;border:none;border-radius:8px;font-size:15px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;">${isEN ? "Unlock" : "Entsperren"}</button>
-        <p style="margin-top:16px;font-size:12px;color:rgba(255,255,255,0.25);">${isEN ? `Or unlock in <a href="${settingsUrl}" style="color:#3399ff;text-decoration:none;">Settings</a>.` : `Oder in <a href="${settingsUrl}" style="color:#3399ff;text-decoration:none;">Einstellungen</a> entsperren.`}</p>
+        <button id="vaultInlineBtn" style="width:100%;padding:13px;background:linear-gradient(135deg,#3399ff,#66d9ff);color:#0f172a;border:none;border-radius:8px;font-size:15px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;">${isEN ? 'Unlock' : 'Entsperren'}</button>
       </div>
     `;
-
-    const inlineBtn = document.getElementById("vaultInlineBtn");
-    const inlinePw  = document.getElementById("vaultInlinePw");
-    const inlineErr = document.getElementById("vaultInlineError");
+    const inlineBtn = document.getElementById('vaultInlineBtn');
+    const inlinePw  = document.getElementById('vaultInlinePw');
+    const inlineErr = document.getElementById('vaultInlineError');
 
     function setInlineError(msg) {
       inlineErr.textContent = msg;
-      inlineErr.style.display = "block";
-      inlineBtn.textContent = isEN ? "Unlock" : "Entsperren";
+      inlineErr.style.display = 'block';
+      inlineBtn.textContent = isEN ? 'Unlock' : 'Entsperren';
       inlineBtn.disabled = false;
     }
 
     async function handleInlineUnlock() {
       const pw = inlinePw.value;
-      if (!pw) { setInlineError(isEN ? "Please enter your master password." : "Bitte Master-Passwort eingeben."); return; }
-      inlineBtn.textContent = isEN ? "Verifying…" : "Wird geprüft…";
+      if (!pw) { setInlineError(isEN ? 'Please enter your master password.' : 'Bitte Master-Passwort eingeben.'); return; }
+      inlineBtn.textContent = isEN ? 'Verifying…' : 'Wird geprüft…';
       inlineBtn.disabled = true;
-      inlineErr.style.display = "none";
+      inlineErr.style.display = 'none';
 
-      // Session aus Module-Variable (von onAuthStateChange gesetzt, kein Netzwerk)
-      let freshSession = currentSession;
-      if (!freshSession) {
-        try {
-          for (let i = 0; i < localStorage.length; i++) {
-            const k = localStorage.key(i);
-            if (k?.startsWith('sb-') && k?.endsWith('-auth-token')) {
-              const parsed = JSON.parse(localStorage.getItem(k) || 'null');
-              if (parsed?.user?.id) { freshSession = parsed; break; }
-            }
-          }
-        } catch {}
-      }
-      if (!freshSession) {
-        setInlineError(isEN ? "Session expired. Please log in again." : "Sitzung abgelaufen. Bitte erneut anmelden.");
-        return;
-      }
+      const userId = session.user.id;
+      const CACHE_KEY = 'vaultVerifyCache_' + userId;
 
-      const userId = freshSession.user.id;
-      const CACHE_KEY = "vaultVerifyCache_" + userId;
-
-      // Priorität 1: user_metadata – bereits im JWT, absolut kein Netzwerk-Request nötig
-      let verifyValue = freshSession.user?.user_metadata?.vault_verify ?? null;
-
+      // Priorität 1: user_metadata (im JWT, kein Netzwerk)
+      let verifyValue = session.user?.user_metadata?.vault_verify ?? null;
       // Priorität 2: localStorage-Cache
       if (!verifyValue) { try { verifyValue = localStorage.getItem(CACHE_KEY); } catch {} }
 
-      // localStorage synchron halten
-      if (verifyValue) { try { localStorage.setItem(CACHE_KEY, verifyValue); } catch {} }
-
       if (!verifyValue) {
-        // Nativer fetch() mit AbortController (umgeht Supabase-Client-Hänger auf iOS)
+        // Nativer fetch mit 12s Timeout
         const SB_URL = 'https://dygrabyaiyessqmjdprc.supabase.co';
         const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5Z3JhYnlhaXllc3NxbWpkcHJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0OTkzMzMsImV4cCI6MjA5MTA3NTMzM30.l4fAwsz3deB3rZuA5EOG-_9doe2ohXunv1KwFezR2ss';
         const ctrl = new AbortController();
-        const abortTimer = setTimeout(() => ctrl.abort(), 12000);
+        const t = setTimeout(() => ctrl.abort(), 12000);
         try {
+          const tok = currentSession?.access_token ?? session.access_token;
           const resp = await fetch(
             `${SB_URL}/rest/v1/passwords?user_id=eq.${encodeURIComponent(userId)}&label=eq.${encodeURIComponent(VERIFY_LABEL)}&select=value&limit=1`,
-            { signal: ctrl.signal, headers: { apikey: SB_KEY, Authorization: `Bearer ${freshSession.access_token}` } }
+            { signal: ctrl.signal, headers: { apikey: SB_KEY, Authorization: `Bearer ${tok}` } }
           );
-          clearTimeout(abortTimer);
-          if (!resp.ok) {
-            setInlineError(isEN ? `Server error ${resp.status}. Please try again.` : `Serverfehler ${resp.status}. Bitte erneut versuchen.`);
-            return;
+          clearTimeout(t);
+          if (resp.ok) {
+            const rows = await resp.json();
+            verifyValue = rows?.[0]?.value ?? null;
+            if (verifyValue) { try { localStorage.setItem(CACHE_KEY, verifyValue); } catch {} }
           }
-          const rows = await resp.json();
-          verifyValue = rows?.[0]?.value ?? null;
-          if (verifyValue) { try { localStorage.setItem(CACHE_KEY, verifyValue); } catch {} }
-        } catch (e) {
-          clearTimeout(abortTimer);
-          if (e.name === 'AbortError') {
-            setInlineError(isEN ? "No response from server (12s). Please check your internet." : "Keine Serverantwort (12s). Bitte Internetverbindung prüfen.");
-          } else {
-            setInlineError((isEN ? "Network error: " : "Netzwerkfehler: ") + (e.message || e.name));
-          }
-          return;
-        }
+        } catch { clearTimeout(t); }
       }
 
       if (!verifyValue) {
-        setInlineError(isEN ? "No master password set yet. Please open the vault on a desktop first to set it up." : "Noch kein Master-Passwort eingerichtet. Bitte zuerst auf einem Desktop-Gerät den Tresor öffnen.");
+        setInlineError(isEN ? 'Could not reach server. Please check your internet.' : 'Server nicht erreichbar. Bitte Internetverbindung prüfen.');
         return;
       }
 
       try {
-        const key = await deriveKey(pw, userId);
-        const decrypted = await decryptValue(verifyValue, key);
-        if (decrypted !== VERIFY_PLAINTEXT) {
-          setInlineError(isEN ? "Wrong master password. Please try again." : "Falsches Master-Passwort. Bitte erneut versuchen.");
+        const key = await deriveKey(pw, session.user.id);
+        const dec = await decryptValue(verifyValue, key);
+        if (dec !== VERIFY_PLAINTEXT) {
+          setInlineError(isEN ? 'Wrong master password.' : 'Falsches Master-Passwort.');
           return;
         }
         masterKey = key;
-        sessionStorage.setItem("vaultMasterPw_" + userId, pw);
+        sessionStorage.setItem('vaultMasterPw_' + session.user.id, pw);
+        // In user_metadata cachen damit nächster Unlock kein DB-Request braucht
+        supabase.auth.updateUser({ data: { vault_verify: verifyValue } }).catch(() => {});
         renderVault();
       } catch {
-        setInlineError(isEN ? "Decryption error. Please try again." : "Entschlüsselungsfehler. Bitte erneut versuchen.");
+        setInlineError(isEN ? 'Decryption error.' : 'Entschlüsselungsfehler.');
       }
     }
 
-    inlineBtn.addEventListener("click", handleInlineUnlock);
-    inlinePw.addEventListener("keydown", e => { if (e.key === "Enter") handleInlineUnlock(); });
-    setTimeout(() => inlinePw.focus(), 100);
-
-    // Hintergrund-Prefetch: Verify-Wert laden während User tippt (kein await → blockiert nicht)
-    const PREFETCH_KEY = "vaultVerifyCache_" + session.user.id;
-    if (!localStorage.getItem(PREFETCH_KEY)) {
-      (async () => {
-        try {
-          const tok = currentSession?.access_token;
-          if (!tok) return;
-          const SB_URL = 'https://dygrabyaiyessqmjdprc.supabase.co';
-          const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5Z3JhYnlhaXllc3NxbWpkcHJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0OTkzMzMsImV4cCI6MjA5MTA3NTMzM30.l4fAwsz3deB3rZuA5EOG-_9doe2ohXunv1KwFezR2ss';
-          const ctrl = new AbortController();
-          setTimeout(() => ctrl.abort(), 30000);
-          const resp = await fetch(
-            `${SB_URL}/rest/v1/passwords?user_id=eq.${encodeURIComponent(session.user.id)}&label=eq.${encodeURIComponent(VERIFY_LABEL)}&select=value&limit=1`,
-            { signal: ctrl.signal, headers: { apikey: SB_KEY, Authorization: `Bearer ${tok}` } }
-          );
-          if (!resp.ok) return;
-          const rows = await resp.json();
-          const val = rows?.[0]?.value;
-          if (val) { try { localStorage.setItem(PREFETCH_KEY, val); } catch {} }
-        } catch {} // Fehler ignorieren — ist nur Hintergrund-Fetch
-      })();
-    }
-
+    inlineBtn.addEventListener('click', handleInlineUnlock);
+    inlinePw.addEventListener('keydown', e => { if (e.key === 'Enter') handleInlineUnlock(); });
+    setTimeout(() => inlinePw.focus(), 50);
     return;
   }
 

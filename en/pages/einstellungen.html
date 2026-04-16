@@ -97,26 +97,6 @@
             </div>
         </div>
 
-        <!-- Unlock vault -->
-        <div class="s-card">
-            <h3>Unlock vault</h3>
-            <p class="s-card-desc">Enter your master password to unlock the vault for this session. You can also enter it directly on the vault page.</p>
-            <div id="vaultUnlockMsg" class="msg-box"></div>
-            <div id="vaultUnlockForm">
-                <div class="form-group form-group-last">
-                    <label for="vaultMasterPwInput">Master password</label>
-                    <input type="password" id="vaultMasterPwInput" class="form-input" placeholder="Your master password" autocomplete="current-password">
-                </div>
-                <button class="btn btn-primary" id="vaultUnlockBtn">Unlock</button>
-            </div>
-            <div id="vaultUnlockedState" style="display:none;">
-                <div style="display:flex;align-items:center;gap:10px;color:#4ade80;font-size:15px;font-weight:600;margin-bottom:14px;">
-                    <span style="font-size:22px;">✓</span> Vault is unlocked
-                </div>
-                <button class="btn btn-secondary" id="vaultLockBtn">Lock vault</button>
-            </div>
-        </div>
-
         <!-- Change password -->
         <div class="s-card">
             <h3>Change password</h3>
@@ -431,92 +411,6 @@
                     document.getElementById('statStrong').innerHTML = hint
                 }
             })()
-
-            // ── Unlock vault ───────────────────────────────────────
-            const VERIFY_LABEL = '__vault_verify__'
-            const VERIFY_PLAINTEXT = '__safenet_vault_verified__'
-
-            async function deriveVaultKey(password, salt) {
-                const enc = new TextEncoder()
-                const km = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey'])
-                return await crypto.subtle.deriveKey(
-                    { name: 'PBKDF2', salt: enc.encode(salt), iterations: 100000, hash: 'SHA-256' },
-                    km, { name: 'AES-GCM', length: 256 }, false, ['decrypt']
-                )
-            }
-
-            async function decryptVaultValue(encString, key) {
-                try {
-                    const data = Uint8Array.from(atob(encString.slice(4)), c => c.charCodeAt(0))
-                    const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: data.slice(0, 12) }, key, data.slice(12))
-                    return new TextDecoder().decode(plain)
-                } catch { return null }
-            }
-
-            function updateVaultUnlockUI() {
-                const isUnlocked = !!sessionStorage.getItem('vaultMasterPw_' + userId)
-                document.getElementById('vaultUnlockForm').style.display = isUnlocked ? 'none' : 'block'
-                document.getElementById('vaultUnlockedState').style.display = isUnlocked ? 'block' : 'none'
-            }
-            updateVaultUnlockUI()
-
-            document.getElementById('vaultUnlockBtn').addEventListener('click', async () => {
-                const pw = document.getElementById('vaultMasterPwInput').value
-                if (!pw) { showMsg('vaultUnlockMsg', 'Please enter your master password.', 'error'); return }
-                const btn = document.getElementById('vaultUnlockBtn')
-                btn.textContent = 'Verifying…'; btn.disabled = true
-                try {
-                    const CACHE_KEY = 'vaultVerifyCache_' + userId
-                    // Priority 1: user_metadata from JWT (no network request needed)
-                    const { data: sd } = await supabase.auth.getSession()
-                    let verifyValue = sd?.session?.user?.user_metadata?.vault_verify ?? null
-
-                    // Priority 2: localStorage cache
-                    if (!verifyValue) { try { verifyValue = localStorage.getItem(CACHE_KEY) } catch {} }
-                    if (verifyValue) { try { localStorage.setItem(CACHE_KEY, verifyValue) } catch {} }
-
-                    if (!verifyValue) {
-                        // Supabase query with AbortController (actually cancels the fetch)
-                        const controller = new AbortController()
-                        const abortTimer = setTimeout(() => controller.abort(), 10000)
-                        try {
-                            const { data, error } = await supabase.from('passwords').select('value').eq('user_id', userId).eq('label', VERIFY_LABEL).maybeSingle().abortSignal(controller.signal)
-                            clearTimeout(abortTimer)
-                            if (error) throw error
-                            verifyValue = data?.value ?? null
-                            if (verifyValue) { try { localStorage.setItem(CACHE_KEY, verifyValue) } catch {} }
-                        } catch (e) {
-                            clearTimeout(abortTimer)
-                            showMsg('vaultUnlockMsg', e?.name === 'AbortError' || e?.code === 20 ? 'Connection timed out. Please try again.' : 'Connection error. Please try again.', 'error')
-                            btn.textContent = 'Unlock'; btn.disabled = false; return
-                        }
-                    }
-
-                    if (!verifyValue) {
-                        showMsg('vaultUnlockMsg', 'No master password set yet. Please open the vault first.', 'error')
-                        btn.textContent = 'Unlock'; btn.disabled = false; return
-                    }
-                    const key = await deriveVaultKey(pw, userId)
-                    const decrypted = await decryptVaultValue(verifyValue, key)
-                    if (decrypted !== VERIFY_PLAINTEXT) {
-                        showMsg('vaultUnlockMsg', 'Wrong master password. Please try again.', 'error')
-                        btn.textContent = 'Unlock'; btn.disabled = false; return
-                    }
-                    sessionStorage.setItem('vaultMasterPw_' + userId, pw)
-                    document.getElementById('vaultMasterPwInput').value = ''
-                    showMsg('vaultUnlockMsg', '', 'hide')
-                    updateVaultUnlockUI()
-                } catch {
-                    showMsg('vaultUnlockMsg', 'Error unlocking vault. Please try again.', 'error')
-                }
-                btn.textContent = 'Unlock'; btn.disabled = false
-            })
-            document.getElementById('vaultMasterPwInput').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('vaultUnlockBtn').click() })
-            document.getElementById('vaultLockBtn').addEventListener('click', () => {
-                sessionStorage.removeItem('vaultMasterPw_' + userId)
-                showMsg('vaultUnlockMsg', '', 'hide')
-                updateVaultUnlockUI()
-            })
 
             document.getElementById('deleteAccountBtn').addEventListener('click', () => {
                 document.getElementById('deleteAccountBtn').style.display = 'none'
