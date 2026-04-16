@@ -408,17 +408,22 @@ async function renderVault() {
     return;
   }
 
-  let session;
+  // Session direkt aus localStorage lesen (kein Netzwerk, funktioniert immer auf Mobile)
+  // Supabase speichert die Session unter diesem Key als JSON.
+  let session = null;
   try {
-    const { data, error } = await supabase.auth.getSession();
-    if (error) throw error;
-    session = data.session;
-  } catch {
-    showVaultError(
-      isEN ? "Connection error. Please reload the page." : "Verbindungsfehler beim Pr\u00fcfen der Anmeldung. Bitte Seite neu laden.",
-    );
-    return;
+    const raw = localStorage.getItem('sb-dygrabyaiyessqmjdprc-auth-token');
+    if (raw) session = JSON.parse(raw);
+  } catch {}
+  // Fallback: Supabase-Client (nur wenn localStorage leer)
+  if (!session) {
+    try {
+      const { data } = await supabase.auth.getSession();
+      session = data?.session ?? null;
+    } catch {}
   }
+  // Token im Hintergrund refreshen (kein await – blockiert nicht)
+  supabase.auth.getSession().catch(() => {});
 
   if (!session) {
     const loginUrl = window.location.pathname.includes('/en/') ? '/en/pages/login.html' : '/de/pages/login.html';
@@ -480,10 +485,19 @@ async function renderVault() {
       inlineBtn.disabled = true;
       inlineErr.style.display = "none";
 
-      // Frische Session holen
-      const { data: freshSessionData, error: sessionError } = await supabase.auth.getSession();
-      const freshSession = freshSessionData?.session;
-      if (sessionError || !freshSession) {
+      // Session aus localStorage lesen (kein Netzwerk, instant)
+      let freshSession = null;
+      try {
+        const raw = localStorage.getItem('sb-dygrabyaiyessqmjdprc-auth-token');
+        if (raw) freshSession = JSON.parse(raw);
+      } catch {}
+      if (!freshSession) {
+        try {
+          const { data } = await supabase.auth.getSession();
+          freshSession = data?.session ?? null;
+        } catch {}
+      }
+      if (!freshSession) {
         setInlineError(isEN ? "Session expired. Please log in again." : "Sitzung abgelaufen. Bitte erneut anmelden.");
         return;
       }
