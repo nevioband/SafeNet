@@ -20,18 +20,22 @@ async function applyNavbarUser() {
             const justLoggedIn = sessionStorage.getItem('loginSuccess') === '1'
             if (justLoggedIn) sessionStorage.removeItem('loginSuccess')
             if (!isEinstellungen && !justLoggedIn) {
-                const [{ data: aal }, { data: factors }] = await Promise.all([
-                    supabase.auth.mfa.getAuthenticatorAssuranceLevel(),
-                    supabase.auth.mfa.listFactors()
-                ])
-                const hasVerifiedTotp = factors?.totp?.some(f => f.status === 'verified')
-                if (hasVerifiedTotp && aal?.nextLevel === 'aal2' && aal?.currentLevel !== 'aal2') {
-                    await supabase.auth.signOut()
-                    const isLoginPage = window.location.pathname.includes('login.html')
-                    if (!isLoginPage) {
-                        window.location.href = isEnglish ? '/en/pages/login.html' : '/de/pages/login.html'
+                try {
+                    const [{ data: aal }, { data: factors }] = await Promise.all([
+                        supabase.auth.mfa.getAuthenticatorAssuranceLevel(),
+                        supabase.auth.mfa.listFactors()
+                    ])
+                    const hasVerifiedTotp = factors?.totp?.some(f => f.status === 'verified')
+                    if (hasVerifiedTotp && aal?.nextLevel === 'aal2' && aal?.currentLevel !== 'aal2') {
+                        await supabase.auth.signOut()
+                        const isLoginPage = window.location.pathname.includes('login.html')
+                        if (!isLoginPage) {
+                            window.location.href = isEnglish ? '/en/pages/login.html' : '/de/pages/login.html'
+                        }
+                        return
                     }
-                    return
+                } catch (_) {
+                    // Netzwerkfehler beim AAL-Check → Session beibehalten (kein Logout)
                 }
             }
 
