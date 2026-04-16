@@ -416,21 +416,64 @@ async function renderVault() {
     return;
   }
 
-  // Master-Passwort: gesperrten Zustand anzeigen, Modal nur auf Klick öffnen
+  // Master-Passwort: Inline-Formular (kein Modal-Overlay, iOS-kompatibel)
   if (!masterKey) {
     const settingsUrl = isEN ? '/en/pages/einstellungen.html' : '/de/pages/einstellungen.html'
     listElement.innerHTML = `
-      <div style="text-align:center;padding:40px 20px;">
-        <span class="material-symbols-outlined" style="font-size:48px;color:rgba(255,255,255,0.2);display:block;margin-bottom:16px;">lock</span>
-        <p style="color:rgba(255,255,255,0.5);margin:0 0 20px;">${isEN ? "The vault is locked." : "Der Tresor ist gesperrt."}</p>
-        <button id="unlockAgainBtn" style="padding:10px 24px;background:linear-gradient(135deg,#3399ff,#66d9ff);color:#0f172a;border:none;border-radius:8px;font-size:14px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;">${isEN ? "Unlock" : "Entsperren"}</button>
-        <p style="margin-top:16px;font-size:13px;color:rgba(255,255,255,0.35);">${isEN ? `Tip: You can also unlock in <a href="${settingsUrl}" style="color:#3399ff;text-decoration:none;">Settings</a>.` : `Tipp: Du kannst den Tresor auch in den <a href="${settingsUrl}" style="color:#3399ff;text-decoration:none;">Einstellungen</a> entsperren.`}</p>
+      <div id="vaultInlineUnlock" style="max-width:380px;margin:40px auto;padding:32px;background:#172441;border:1px solid rgba(59,130,246,0.25);border-radius:16px;text-align:center;">
+        <span class="material-symbols-outlined" style="font-size:44px;color:rgba(51,153,255,0.5);display:block;margin-bottom:16px;">lock</span>
+        <h3 style="margin:0 0 8px;font-size:18px;background:linear-gradient(135deg,#3399ff,#66d9ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${isEN ? "Vault locked" : "Tresor gesperrt"}</h3>
+        <p style="color:#64748b;font-size:14px;margin:0 0 24px;">${isEN ? "Enter your master password to unlock." : "Gib dein Master-Passwort ein, um zu entsperren."}</p>
+        <div id="vaultInlineError" style="display:none;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:8px;color:#f87171;font-size:13px;padding:10px 12px;margin-bottom:16px;"></div>
+        <input type="password" id="vaultInlinePw" autocomplete="current-password" placeholder="${isEN ? "Master password" : "Master-Passwort"}"
+          style="width:100%;padding:12px 14px;background:#0f172a;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:white;font-size:15px;font-family:Inter,sans-serif;box-sizing:border-box;outline:none;margin-bottom:12px;">
+        <button id="vaultInlineBtn" style="width:100%;padding:13px;background:linear-gradient(135deg,#3399ff,#66d9ff);color:#0f172a;border:none;border-radius:8px;font-size:15px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;">${isEN ? "Unlock" : "Entsperren"}</button>
+        <p style="margin-top:16px;font-size:12px;color:rgba(255,255,255,0.25);">${isEN ? `Or unlock in <a href="${settingsUrl}" style="color:#3399ff;text-decoration:none;">Settings</a>.` : `Oder in <a href="${settingsUrl}" style="color:#3399ff;text-decoration:none;">Einstellungen</a> entsperren.`}</p>
       </div>
     `;
-    document.getElementById("unlockAgainBtn")?.addEventListener("click", async () => {
-      await askMasterPassword(session);
-      if (masterKey) renderVault();
-    });
+
+    const inlineBtn = document.getElementById("vaultInlineBtn");
+    const inlinePw  = document.getElementById("vaultInlinePw");
+    const inlineErr = document.getElementById("vaultInlineError");
+
+    async function handleInlineUnlock() {
+      const pw = inlinePw.value;
+      if (!pw) { inlineErr.textContent = isEN ? "Please enter your master password." : "Bitte Master-Passwort eingeben."; inlineErr.style.display = "block"; return; }
+      inlineBtn.textContent = isEN ? "Verifying…" : "Wird geprüft…";
+      inlineBtn.disabled = true;
+      inlineErr.style.display = "none";
+      try {
+        const VERIFY_LABEL = "__vault_verify__";
+        const VERIFY_PLAINTEXT = "__safenet_vault_verified__";
+        const { data: verifyEntry } = await supabase.from("passwords").select("value").eq("user_id", session.user.id).eq("label", VERIFY_LABEL).maybeSingle();
+        if (!verifyEntry) {
+          // Noch kein Master-Passwort eingerichtet → askMasterPassword für Setup aufrufen
+          inlineBtn.textContent = isEN ? "Unlock" : "Entsperren"; inlineBtn.disabled = false;
+          await askMasterPassword(session);
+          if (masterKey) renderVault();
+          return;
+        }
+        const key = await deriveKey(pw, session.user.id);
+        const decrypted = await decryptValue(verifyEntry.value, key);
+        if (decrypted !== VERIFY_PLAINTEXT) {
+          inlineErr.textContent = isEN ? "Wrong master password." : "Falsches Master-Passwort.";
+          inlineErr.style.display = "block";
+          inlineBtn.textContent = isEN ? "Unlock" : "Entsperren"; inlineBtn.disabled = false;
+          return;
+        }
+        masterKey = key;
+        sessionStorage.setItem("vaultMasterPw_" + session.user.id, pw);
+        renderVault();
+      } catch {
+        inlineErr.textContent = isEN ? "Error. Please try again." : "Fehler. Bitte versuche es erneut.";
+        inlineErr.style.display = "block";
+        inlineBtn.textContent = isEN ? "Unlock" : "Entsperren"; inlineBtn.disabled = false;
+      }
+    }
+
+    inlineBtn.addEventListener("click", handleInlineUnlock);
+    inlinePw.addEventListener("keydown", e => { if (e.key === "Enter") handleInlineUnlock(); });
+    setTimeout(() => inlinePw.focus(), 100);
     return;
   }
 
