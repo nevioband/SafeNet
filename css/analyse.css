@@ -148,7 +148,7 @@
     padding: 24px 20px;
     width: 100%;
   }
-  .analyser-box h2 {
+  .analyser-box h1 {
     font-size: 1.6rem;
   }
   .analyser-section {
@@ -156,7 +156,7 @@
   }
 }
 
-/* ===== HIBP Datenleck-Prüfung ===== */
+/* ===== HIBP Button ===== */
 .hibp-section {
   margin-top: 24px;
   padding-top: 20px;
@@ -165,12 +165,29 @@
 
 .hibp-section .main-btn {
   width: 100%;
+  margin-top: 0;
   margin-bottom: 10px;
+  padding: 13px 18px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #3399ff, #66d9ff);
+  color: #0b1220;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: "Inter", sans-serif;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 0 18px rgba(51, 153, 255, 0.45), 0 0 36px rgba(102, 217, 255, 0.2);
 }
-
+.hibp-section .main-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 28px rgba(51, 153, 255, 0.65), 0 0 52px rgba(102, 217, 255, 0.35);
+}
 .hibp-section .main-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  transform: none;
 }
 
 .hibp-info {

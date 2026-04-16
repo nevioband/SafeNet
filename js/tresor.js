@@ -859,6 +859,15 @@ window.saveManual = async function () {
   if (document.getElementById("manualKategorie")) document.getElementById("manualKategorie").value = 'allgemein';
   const manualCustom = document.getElementById("manualKategorie-custom");
   if (manualCustom) { manualCustom.value = ''; manualCustom.style.display = 'none'; }
+  // Custom select label zurücksetzen
+  const csWrapper = document.querySelector('#manualKategorie')?.closest('.custom-select-wrapper');
+  if (csWrapper) {
+    const textEl = csWrapper.querySelector('.cs-text');
+    if (textEl) textEl.textContent = isEN ? 'General' : 'Allgemein';
+    csWrapper.querySelectorAll('.custom-select-list li').forEach((li, i) => {
+      li.classList.toggle('cs-active', i === 0);
+    });
+  }
 };
 
 // Vom Generator zum Tresor übertragen
@@ -1147,7 +1156,17 @@ document.addEventListener("DOMContentLoaded", () => {
       Object.keys(sessionStorage)
         .filter((k) => k.startsWith("vaultMasterPw_"))
         .forEach((k) => sessionStorage.removeItem(k));
+      masterKey = null;
+      renderVault();
+      return;
     }
+    // TOKEN_REFRESHED: nur neu laden wenn Tresor bereits entsperrt ist.
+    // Kein Reset während das Master-Passwort-Modal offen ist (Race Condition auf Mobile).
+    if (event === "TOKEN_REFRESHED") {
+      if (masterKey) renderVault();
+      return;
+    }
+    // INITIAL_SESSION, SIGNED_IN, USER_UPDATED etc.
     masterKey = null;
     renderVault();
   });

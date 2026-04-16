@@ -62,25 +62,28 @@
             <label for="password-label">Label for the password:</label>
             <div class="input-group-row">
                 <input type="text" id="password-label" placeholder="e.g. Instagram, Google, Bank">
-                <select id="generator-kategorie" onchange="const ci=document.getElementById('generator-kategorie-custom');ci.style.display=this.value==='sonstiges'?'block':'none';if(this.value==='sonstiges')ci.focus();" style="padding:12px 14px;background:#0f172a;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:white;font-size:15px;font-family:Inter,sans-serif;outline:none;min-width:0;flex-shrink:1;">
-                    <option value="allgemein">General</option>
-                    <option value="banking">Banking</option>
-                    <option value="email">E-Mail</option>
-                    <option value="sozial">Social Media</option>
-                    <option value="shopping">Shopping</option>
-                    <option value="arbeit">Work</option>
-                    <option value="gaming">Gaming</option>
-                    <option value="sonstiges">Other…</option>
-                </select>
+                <div class="custom-select-wrapper" style="flex-shrink:1;">
+                    <input type="hidden" id="generator-kategorie" value="allgemein">
+                    <button type="button" class="custom-select-btn">
+                        <span class="cs-text">General</span>
+                        <span class="material-symbols-outlined cs-arrow">expand_more</span>
+                    </button>
+                    <ul class="custom-select-list">
+                        <li data-value="allgemein" class="cs-active">General</li>
+                        <li data-value="banking">Banking</li>
+                        <li data-value="email">E-Mail</li>
+                        <li data-value="sozial">Social Media</li>
+                        <li data-value="shopping">Shopping</li>
+                        <li data-value="arbeit">Work</li>
+                        <li data-value="gaming">Gaming</li>
+                        <li data-value="sonstiges">Other&hellip;</li>
+                    </ul>
+                </div>
                 <button class="main-btn" onclick="transferToVault()" style="width: auto; margin-top: 0; white-space: nowrap; display: flex; align-items: center; gap: 5px; padding: 0 15px;">
                     <span class="material-symbols-outlined" style="font-size: 20px;">shield</span> Save
                 </button>
             </div>
-            <input type="text" id="generator-kategorie-custom" placeholder="Enter custom category…" style="display:none;width:100%;padding:12px 14px;background:#0f172a;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:white;font-size:15px;font-family:Inter,sans-serif;box-sizing:border-box;outline:none;margin-top:8px;">
-                <button class="main-btn" onclick="transferToVault()" style="width: auto; margin-top: 0; white-space: nowrap; display: flex; align-items: center; gap: 5px; padding: 0 15px;">
-                    <span class="material-symbols-outlined" style="font-size: 20px;">shield</span> Save
-                </button>
-            </div>
+            <input type="text" id="generator-kategorie-custom" placeholder="Enter custom category&hellip;" style="display:none;width:100%;padding:12px 14px;background:#0f172a;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:white;font-size:15px;font-family:Inter,sans-serif;box-sizing:border-box;outline:none;margin-top:8px;">
         </div>
 
         <button id="generate-btn" class="main-btn">Generate secure password</button>
@@ -168,6 +171,33 @@
       navigator.clipboard.writeText(outputEl.value);
       alert("Copied!");
     });
+
+    // Custom Select
+    (function initCustomSelects() {
+      document.querySelectorAll('.custom-select-wrapper').forEach(wrapper => {
+        const btn = wrapper.querySelector('.custom-select-btn');
+        const list = wrapper.querySelector('.custom-select-list');
+        const hidden = wrapper.querySelector('input[type="hidden"]');
+        const textEl = wrapper.querySelector('.cs-text');
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          document.querySelectorAll('.custom-select-wrapper.open').forEach(w => { if (w !== wrapper) w.classList.remove('open'); });
+          wrapper.classList.toggle('open');
+        });
+        list.querySelectorAll('li').forEach(li => {
+          li.addEventListener('click', () => {
+            hidden.value = li.dataset.value;
+            textEl.textContent = li.textContent;
+            list.querySelectorAll('li').forEach(l => l.classList.remove('cs-active'));
+            li.classList.add('cs-active');
+            wrapper.classList.remove('open');
+            const ci = document.getElementById(hidden.id + '-custom');
+            if (ci) { ci.style.display = li.dataset.value === 'sonstiges' ? 'block' : 'none'; if (li.dataset.value === 'sonstiges') ci.focus(); }
+          });
+        });
+      });
+      document.addEventListener('click', () => { document.querySelectorAll('.custom-select-wrapper.open').forEach(w => w.classList.remove('open')); });
+    })();
     </script>
 
     <div id="footer"></div>
