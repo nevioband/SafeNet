@@ -632,29 +632,55 @@ async function renderVault() {
 // Kategorie bearbeiten
 window.editKategorie = async function (id, currentKategorie) {
   const options = KATEGORIEN.filter(k => k.key !== 'alle');
-  const optionText = options.map((k, i) => `${i + 1}. ${isEN ? k.en : k.de}`).join('\n');
-  const current = options.findIndex(k => k.key === currentKategorie) + 1;
-  const input = prompt(
-    (isEN ? `Choose category (current: ${kategorieLabel(currentKategorie)}):\n` : `Kategorie wählen (aktuell: ${kategorieLabel(currentKategorie)}):\n`) + optionText,
-    String(current)
-  );
-  if (input === null) return;
-  const idx = parseInt(input) - 1;
-  if (isNaN(idx) || idx < 0 || idx >= options.length) {
-    alert(isEN ? 'Invalid selection.' : 'Ungültige Auswahl.');
-    return;
-  }
-  const newKategorie = options[idx].key;
-  if (isOffline()) {
-    alert(isEN ? 'No internet — change cannot be saved.' : 'Kein Internet — Änderung kann nicht gespeichert werden.');
-    return;
-  }
-  const { error } = await supabase.from('passwords').update({ kategorie: newKategorie }).eq('id', id);
-  if (error) {
-    alert(isEN ? 'Error saving category.' : 'Fehler beim Speichern der Kategorie.');
-    return;
-  }
-  renderVault();
+
+  return new Promise((resolve) => {
+    // Overlay
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;display:flex;align-items:center;justify-content:center;';
+
+    // Modal
+    const modal = document.createElement('div');
+    modal.style.cssText = 'background:#1e293b;border:1px solid rgba(59,130,246,0.25);border-radius:16px;padding:32px;min-width:320px;max-width:400px;width:90%;';
+
+    const title = document.createElement('h3');
+    title.textContent = isEN ? 'Choose category' : 'Kategorie wählen';
+    title.style.cssText = 'margin:0 0 20px;font-size:18px;color:#f1f5f9;font-family:Inter,sans-serif;';
+
+    const btnGrid = document.createElement('div');
+    btnGrid.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;';
+
+    const close = () => { document.body.removeChild(overlay); resolve(); };
+
+    options.forEach(k => {
+      const btn = document.createElement('button');
+      btn.textContent = isEN ? k.en : k.de;
+      const isActive = k.key === currentKategorie;
+      btn.style.cssText = `padding:10px 14px;border-radius:8px;border:1px solid rgba(51,153,255,${isActive ? '0.8' : '0.25'});background:${isActive ? 'rgba(51,153,255,0.2)' : 'rgba(15,23,42,0.8)'};color:${isActive ? '#66d9ff' : '#cbd5e1'};font-size:14px;font-family:Inter,sans-serif;cursor:pointer;transition:all .15s;`;
+      btn.addEventListener('mouseenter', () => { if (!isActive) btn.style.background = 'rgba(51,153,255,0.1)'; });
+      btn.addEventListener('mouseleave', () => { if (!isActive) btn.style.background = 'rgba(15,23,42,0.8)'; });
+      btn.addEventListener('click', async () => {
+        close();
+        if (k.key === currentKategorie) return;
+        if (isOffline()) { alert(isEN ? 'No internet — change cannot be saved.' : 'Kein Internet — Änderung kann nicht gespeichert werden.'); return; }
+        const { error } = await supabase.from('passwords').update({ kategorie: k.key }).eq('id', id);
+        if (error) { alert(isEN ? 'Error saving category.' : 'Fehler beim Speichern der Kategorie.'); return; }
+        renderVault();
+      });
+      btnGrid.appendChild(btn);
+    });
+
+    const cancelBtn = document.createElement('button');
+    cancelBtn.textContent = isEN ? 'Cancel' : 'Abbrechen';
+    cancelBtn.style.cssText = 'width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#64748b;font-size:14px;font-family:Inter,sans-serif;cursor:pointer;';
+    cancelBtn.addEventListener('click', close);
+
+    modal.appendChild(title);
+    modal.appendChild(btnGrid);
+    modal.appendChild(cancelBtn);
+    overlay.appendChild(modal);
+    overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+    document.body.appendChild(overlay);
+  });
 };
 
 // Namen bearbeiten
