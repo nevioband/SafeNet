@@ -29,9 +29,6 @@ function kategorieLabel(key) {
   return isEN ? k.en : k.de;
 }
 
-const VERIFY_LABEL = "__vault_verify__";
-const VERIFY_PLAINTEXT = "__safenet_vault_verified__";
-
 // ===== NETZWERK-STATUS =====
 
 function isOffline() {
@@ -123,259 +120,19 @@ async function decryptValue(encString, key) {
   }
 }
 
-// ===== MASTER-PASSWORT =====
-
-function buildMasterModal(isSetup, errorMsg, onCancel) {
-  document.getElementById("masterModal")?.remove();
-
-  const overlay = document.createElement("div");
-  overlay.id = "masterModal";
-  overlay.style.cssText =
-    "position:fixed;top:0;right:0;bottom:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:99999;display:flex;align-items:center;justify-content:center;font-family:Inter,sans-serif;";
-
-  const title = isSetup
-    ? (isEN ? "Create Master Password" : "Master-Passwort erstellen")
-    : (isEN ? "Unlock Vault" : "Tresor entsperren");
-  const btnText = isSetup
-    ? (isEN ? "Set up vault" : "Tresor einrichten")
-    : (isEN ? "Unlock" : "Entsperren");
-
-  const setupInfo = isSetup
-    ? (isEN
-        ? `<p style="font-size:13px;color:#94a3b8;margin:0 0 20px;line-height:1.6;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:12px;display:flex;gap:10px;align-items:flex-start;"><span class="material-symbols-outlined" style="font-size:20px;color:#ef4444;flex-shrink:0;margin-top:1px;">warning</span><span><strong style="color:#ef4444;">Warning:</strong> If you forget your master password, support can reset it, but <b>not restore</b> your saved passwords \u2014 they will be lost. <br> Write it down in a safe place.</span></p>`
-        : `<p style="font-size:13px;color:#94a3b8;margin:0 0 20px;line-height:1.6;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:12px;display:flex;gap:10px;align-items:flex-start;"><span class="material-symbols-outlined" style="font-size:20px;color:#ef4444;flex-shrink:0;margin-top:1px;">warning</span><span><strong style="color:#ef4444;">Achtung:</strong> Falls du dein Master-Passwort vergisst, kann der Support es zurücksetzen, aber <b>nicht wiederherstellen</b>. Deine gespeicherten Passwörter gehen dabei verloren. <br> Notiere es an einem sicheren Ort.</span></p>`)
-    : (isEN
-        ? `<p style="font-size:13px;color:#94a3b8;margin:0 0 20px;">Enter your master password to unlock the vault. <a href="/en/pages/einstellungen.html" style="color:#3399ff;text-decoration:none;">You can also unlock it in Settings.</a></p>`
-        : `<p style="font-size:13px;color:#94a3b8;margin:0 0 20px;">Gib dein Master-Passwort ein, um den Tresor zu entsperren. <a href="/de/pages/einstellungen.html" style="color:#3399ff;text-decoration:none;">Du kannst ihn auch in den Einstellungen entsperren.</a></p>`);
-
-  const errorHtml = errorMsg
-    ? `<p style="font-size:13px;color:#ef4444;margin:0 0 16px;padding:10px 12px;background:rgba(239,68,68,0.1);border-radius:8px;border:1px solid rgba(239,68,68,0.3);">${errorMsg}</p>`
-    : "";
-
-  const confirmHtml = isSetup
-    ? `<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:24px;">
-               <label style="font-size:14px;color:#cbd5e1;font-weight:500;">${isEN ? "Confirm master password" : "Master-Passwort best\u00e4tigen"}</label>
-               <input type="password" id="masterPwConfirm" autocomplete="new-password"
-                   style="width:100%;padding:12px 14px;background:#0f172a;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:white;font-size:15px;font-family:Inter,sans-serif;box-sizing:border-box;outline:none;">
-           </div>`
-    : "";
-
-  overlay.innerHTML = `
-        <div style="background:#172441;border:1px solid rgba(59,130,246,0.25);border-radius:16px;padding:36px 32px;width:100%;max-width:440px;margin:20px;box-shadow:0 20px 60px rgba(0,0,0,0.5);">
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
-                <span class="material-symbols-outlined" style="font-size:26px;color:#3399ff;">lock</span>
-                <h3 style="margin:0;font-size:18px;background:linear-gradient(135deg,#3399ff,#66d9ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${title}</h3>
-                ${onCancel ? `<button id="masterModalClose" style="margin-left:auto;background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;padding:4px;display:flex;align-items:center;" title="${isEN ? 'Cancel' : 'Abbrechen'}"><span class="material-symbols-outlined" style="font-size:22px;">close</span></button>` : ""}
-            </div>
-            ${setupInfo}
-            ${errorHtml}
-            <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px;">
-                <label style="font-size:14px;color:#cbd5e1;font-weight:500;">${isEN ? "Master password" : "Master-Passwort"}</label>
-                <input type="password" id="masterPwInput" autocomplete="${isSetup ? "new-password" : "current-password"}"
-                    style="width:100%;padding:12px 14px;background:#0f172a;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:white;font-size:15px;font-family:Inter,sans-serif;box-sizing:border-box;outline:none;">
-            </div>
-            ${confirmHtml}
-            <button id="masterPwBtn" style="width:100%;padding:13px;background:linear-gradient(135deg,#3399ff,#66d9ff);color:#0f172a;border:none;border-radius:8px;font-size:15px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;">${btnText}</button>
-        </div>
-    `;
-  document.body.appendChild(overlay);
-  if (onCancel)
-    document
-      .getElementById("masterModalClose")
-      ?.addEventListener("click", onCancel);
-  setTimeout(() => document.getElementById("masterPwInput")?.focus(), 50);
-}
-
-async function askMasterPassword(session) {
-  if (masterKey) return masterKey;
-
-  // Master-Passwort aus sessionStorage laden (bleibt im Tab nach Reload erhalten)
-  const storedPw = sessionStorage.getItem("vaultMasterPw_" + session.user.id);
-  if (storedPw) {
-    const { data: verifyEntry } = await supabase
-      .from("passwords")
-      .select("value")
-      .eq("user_id", session.user.id)
-      .eq("label", VERIFY_LABEL)
-      .maybeSingle();
-    if (verifyEntry) {
-      const key = await deriveKey(storedPw, session.user.id);
-      const decrypted = await decryptValue(verifyEntry.value, key);
-      if (decrypted === VERIFY_PLAINTEXT) {
-        masterKey = key;
-        return masterKey;
-      }
-    }
-    // Gespeichertes Passwort ungültig → löschen und neu fragen
-    sessionStorage.removeItem("vaultMasterPw_" + session.user.id);
-  }
-
-  const { data: verifyEntry } = await supabase
-    .from("passwords")
-    .select("id, value")
-    .eq("user_id", session.user.id)
-    .eq("label", VERIFY_LABEL)
-    .maybeSingle();
-
-  // Verify-Wert für Mobile-Fallback in localStorage cachen
-  if (verifyEntry?.value) {
-    try { localStorage.setItem("vaultVerifyCache_" + session.user.id, verifyEntry.value); } catch {}
-  }
-
-  const isSetup = !verifyEntry;
-
-  return new Promise((resolve) => {
-    let errorMsg = "";
-
-    function render() {
-      buildMasterModal(isSetup, errorMsg, () => {
-        document.getElementById("masterModal")?.remove();
-        resolve(null);
-      });
-
-      const btn = document.getElementById("masterPwBtn");
-      const pwInput = document.getElementById("masterPwInput");
-      const confirmInput = document.getElementById("masterPwConfirm");
-
-      async function handleSubmit() {
-        const pw = pwInput.value;
-        if (!pw) {
-          errorMsg = isEN ? "Please enter a master password." : "Bitte ein Master-Passwort eingeben.";
-          render();
-          return;
-        }
-
-        if (isSetup) {
-          const confirm = confirmInput?.value ?? "";
-          if (pw.length < 12) {
-            errorMsg = isEN
-              ? "The master password must be at least 12 characters long."
-              : "Das Master-Passwort muss mindestens 12 Zeichen lang sein.";
-            render();
-            return;
-          }
-          if (pw !== confirm) {
-            errorMsg = isEN ? "The passwords do not match." : "Die Passwörter stimmen nicht überein.";
-            render();
-            return;
-          }
-
-          btn.disabled = true;
-          btn.textContent = isEN ? "Setting up\u2026" : "Wird eingerichtet\u2026";
-
-          try {
-            const newKey = await deriveKey(pw, session.user.id);
-
-            // Bestehende Einträge mit altem Key (E-Mail + UserID) migrieren
-            const { data: allEntries } = await supabase
-              .from("passwords")
-              .select("id, value")
-              .eq("user_id", session.user.id)
-              .neq("label", VERIFY_LABEL);
-
-            if (allEntries?.length > 0) {
-              btn.textContent = isEN ? "Migrating existing data\u2026" : "Bestehende Daten werden migriert\u2026";
-              const legacyKey = await deriveKey(
-                session.user.email,
-                session.user.id,
-              );
-              for (const entry of allEntries) {
-                if (!entry.value?.startsWith("ENC:")) continue;
-                const plain = await decryptValue(entry.value, legacyKey);
-                if (plain === null) continue;
-                const newEnc = await encryptValue(plain, newKey);
-                await supabase
-                  .from("passwords")
-                  .update({ value: newEnc })
-                  .eq("id", entry.id);
-              }
-            }
-
-            // Verify-Eintrag speichern
-            const verifyEnc = await encryptValue(VERIFY_PLAINTEXT, newKey);
-            await supabase.from("passwords").insert({
-              user_id: session.user.id,
-              label: VERIFY_LABEL,
-              value: verifyEnc,
-              date: new Date().toLocaleDateString(isEN ? "en-GB" : "de-CH"),
-            });
-            // In user_metadata speichern → auf Mobile aus JWT lesbar, kein DB-Request nötig
-            supabase.auth.updateUser({ data: { vault_verify: verifyEnc } }).catch(() => {});
-            try { localStorage.setItem("vaultVerifyCache_" + session.user.id, verifyEnc); } catch {}
-
-            masterKey = newKey;
-            sessionStorage.setItem("vaultMasterPw_" + session.user.id, pw);
-            document.getElementById("masterModal")?.remove();
-            resolve(masterKey);
-          } catch {
-            errorMsg = isEN ? "Error during setup. Please try again." : "Fehler beim Einrichten. Bitte versuche es erneut.";
-            render();
-          }
-        } else {
-          btn.disabled = true;
-          btn.textContent = isEN ? "Verifying\u2026" : "Wird geprüft\u2026";
-
-          try {
-            const key = await deriveKey(pw, session.user.id);
-            const decrypted = await decryptValue(verifyEntry.value, key);
-
-            if (decrypted !== VERIFY_PLAINTEXT) {
-              errorMsg = isEN ? "Wrong master password. Please try again." : "Falsches Master-Passwort. Bitte versuche es erneut.";
-              render();
-              return;
-            }
-
-            // In user_metadata speichern → auf Mobile aus JWT lesbar, kein DB-Request nötig
-            if (!session.user?.user_metadata?.vault_verify) {
-              supabase.auth.updateUser({ data: { vault_verify: verifyEntry.value } }).catch(() => {});
-            }
-            try { localStorage.setItem("vaultVerifyCache_" + session.user.id, verifyEntry.value); } catch {}
-            masterKey = key;
-            sessionStorage.setItem("vaultMasterPw_" + session.user.id, pw);
-            document.getElementById("masterModal")?.remove();
-            resolve(masterKey);
-          } catch {
-            errorMsg = isEN ? "Error during verification. Please try again." : "Fehler beim Prüfen. Bitte versuche es erneut.";
-            render();
-          }
-        }
-      }
-
-      btn.addEventListener("click", handleSubmit);
-      pwInput.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") handleSubmit();
-      });
-      if (confirmInput)
-        confirmInput.addEventListener("keydown", (e) => {
-          if (e.key === "Enter") handleSubmit();
-        });
-    }
-
-    render();
-  });
-}
+// ===== PASSWORT-STÄRKE =====
 
 async function ensureUnlocked() {
   if (masterKey) return masterKey;
-  // Aus sessionStorage + localStorage-Cache entsperren (kein Netzwerk)
   const session = currentSession;
   if (!session) return null;
-  const storedPw = sessionStorage.getItem('vaultMasterPw_' + session.user.id);
-  if (storedPw) {
-    const cached = session.user?.user_metadata?.vault_verify
-      || (() => { try { return localStorage.getItem('vaultVerifyCache_' + session.user.id); } catch { return null; } })();
-    if (cached) {
-      try {
-        const key = await deriveKey(storedPw, session.user.id);
-        const dec = await decryptValue(cached, key);
-        if (dec === VERIFY_PLAINTEXT) { masterKey = key; return masterKey; }
-      } catch {}
-    }
+  try {
+    masterKey = await deriveKey(session.user.id, session.user.id);
+    return masterKey;
+  } catch {
+    return null;
   }
-  return null;
 }
-
-// ===== PASSWORT-STÄRKE =====
 
 function passwordScore(pw) {
   if (!pw || pw === "[Entschlüsselungsfehler]") return 100;
@@ -440,108 +197,14 @@ async function renderVault() {
     return;
   }
 
-  // Schlüssel aus sessionStorage laden (kein Netzwerk, sofort)
+  // Schlüssel automatisch aus der User-ID ableiten – kein Master-Passwort nötig
   if (!masterKey) {
-    const storedPw = sessionStorage.getItem('vaultMasterPw_' + session.user.id);
-    if (storedPw) {
-      const cachedVerify = session.user?.user_metadata?.vault_verify
-        || (() => { try { return localStorage.getItem('vaultVerifyCache_' + session.user.id); } catch { return null; } })();
-      if (cachedVerify) {
-        try {
-          const key = await deriveKey(storedPw, session.user.id);
-          const dec = await decryptValue(cachedVerify, key);
-          if (dec === VERIFY_PLAINTEXT) masterKey = key;
-        } catch {}
-      }
+    try {
+      masterKey = await deriveKey(session.user.id, session.user.id);
+    } catch {
+      showVaultError(isEN ? 'Encryption error. Please reload the page.' : 'Verschlüsselungsfehler. Bitte Seite neu laden.');
+      return;
     }
-  }
-
-  // Inline-Formular anzeigen wenn noch kein Schlüssel
-  if (!masterKey) {
-    listElement.innerHTML = `
-      <div id="vaultInlineUnlock" style="max-width:380px;margin:40px auto;padding:32px;background:#172441;border:1px solid rgba(59,130,246,0.25);border-radius:16px;text-align:center;">
-        <span class="material-symbols-outlined" style="font-size:44px;color:rgba(51,153,255,0.5);display:block;margin-bottom:16px;">lock</span>
-        <h3 style="margin:0 0 8px;font-size:18px;background:linear-gradient(135deg,#3399ff,#66d9ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${isEN ? 'Vault locked' : 'Tresor gesperrt'}</h3>
-        <p style="color:#64748b;font-size:14px;margin:0 0 24px;">${isEN ? 'Enter your master password to unlock.' : 'Gib dein Master-Passwort ein, um zu entsperren.'}</p>
-        <div id="vaultInlineError" style="display:none;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:8px;color:#f87171;font-size:13px;padding:10px 12px;margin-bottom:16px;"></div>
-        <input type="password" id="vaultInlinePw" autocomplete="current-password" placeholder="${isEN ? 'Master password' : 'Master-Passwort'}"
-          style="width:100%;padding:12px 14px;background:#0f172a;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:white;font-size:15px;font-family:Inter,sans-serif;box-sizing:border-box;outline:none;margin-bottom:12px;">
-        <button id="vaultInlineBtn" style="width:100%;padding:13px;background:linear-gradient(135deg,#3399ff,#66d9ff);color:#0f172a;border:none;border-radius:8px;font-size:15px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;">${isEN ? 'Unlock' : 'Entsperren'}</button>
-      </div>
-    `;
-    const inlineBtn = document.getElementById('vaultInlineBtn');
-    const inlinePw  = document.getElementById('vaultInlinePw');
-    const inlineErr = document.getElementById('vaultInlineError');
-
-    function setInlineError(msg) {
-      inlineErr.textContent = msg;
-      inlineErr.style.display = 'block';
-      inlineBtn.textContent = isEN ? 'Unlock' : 'Entsperren';
-      inlineBtn.disabled = false;
-    }
-
-    async function handleInlineUnlock() {
-      const pw = inlinePw.value;
-      if (!pw) { setInlineError(isEN ? 'Please enter your master password.' : 'Bitte Master-Passwort eingeben.'); return; }
-      inlineBtn.textContent = isEN ? 'Verifying…' : 'Wird geprüft…';
-      inlineBtn.disabled = true;
-      inlineErr.style.display = 'none';
-
-      const userId = session.user.id;
-      const CACHE_KEY = 'vaultVerifyCache_' + userId;
-
-      // Priorität 1: user_metadata (im JWT, kein Netzwerk)
-      let verifyValue = session.user?.user_metadata?.vault_verify ?? null;
-      // Priorität 2: localStorage-Cache
-      if (!verifyValue) { try { verifyValue = localStorage.getItem(CACHE_KEY); } catch {} }
-
-      if (!verifyValue) {
-        // Nativer fetch mit 12s Timeout
-        const SB_URL = 'https://dygrabyaiyessqmjdprc.supabase.co';
-        const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5Z3JhYnlhaXllc3NxbWpkcHJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0OTkzMzMsImV4cCI6MjA5MTA3NTMzM30.l4fAwsz3deB3rZuA5EOG-_9doe2ohXunv1KwFezR2ss';
-        const ctrl = new AbortController();
-        const t = setTimeout(() => ctrl.abort(), 12000);
-        try {
-          const tok = currentSession?.access_token ?? session.access_token;
-          const resp = await fetch(
-            `${SB_URL}/rest/v1/passwords?user_id=eq.${encodeURIComponent(userId)}&label=eq.${encodeURIComponent(VERIFY_LABEL)}&select=value&limit=1`,
-            { signal: ctrl.signal, headers: { apikey: SB_KEY, Authorization: `Bearer ${tok}` } }
-          );
-          clearTimeout(t);
-          if (resp.ok) {
-            const rows = await resp.json();
-            verifyValue = rows?.[0]?.value ?? null;
-            if (verifyValue) { try { localStorage.setItem(CACHE_KEY, verifyValue); } catch {} }
-          }
-        } catch { clearTimeout(t); }
-      }
-
-      if (!verifyValue) {
-        setInlineError(isEN ? 'Could not reach server. Please check your internet.' : 'Server nicht erreichbar. Bitte Internetverbindung prüfen.');
-        return;
-      }
-
-      try {
-        const key = await deriveKey(pw, session.user.id);
-        const dec = await decryptValue(verifyValue, key);
-        if (dec !== VERIFY_PLAINTEXT) {
-          setInlineError(isEN ? 'Wrong master password.' : 'Falsches Master-Passwort.');
-          return;
-        }
-        masterKey = key;
-        sessionStorage.setItem('vaultMasterPw_' + session.user.id, pw);
-        // In user_metadata cachen damit nächster Unlock kein DB-Request braucht
-        supabase.auth.updateUser({ data: { vault_verify: verifyValue } }).catch(() => {});
-        renderVault();
-      } catch {
-        setInlineError(isEN ? 'Decryption error.' : 'Entschlüsselungsfehler.');
-      }
-    }
-
-    inlineBtn.addEventListener('click', handleInlineUnlock);
-    inlinePw.addEventListener('keydown', e => { if (e.key === 'Enter') handleInlineUnlock(); });
-    setTimeout(() => inlinePw.focus(), 50);
-    return;
   }
 
   const searchContainer = document.getElementById("vaultSearchContainer");
