@@ -421,6 +421,21 @@ async function renderVault() {
     return;
   }
 
+  // Auto-unlock: sessionStorage-Passwort + localStorage-Cache (kein Supabase-Request nötig)
+  if (!masterKey) {
+    const storedPw = sessionStorage.getItem("vaultMasterPw_" + session.user.id);
+    if (storedPw) {
+      const cachedVerify = localStorage.getItem("vaultVerifyCache_" + session.user.id);
+      if (cachedVerify) {
+        try {
+          const key = await deriveKey(storedPw, session.user.id);
+          const decrypted = await decryptValue(cachedVerify, key);
+          if (decrypted === VERIFY_PLAINTEXT) masterKey = key;
+        } catch {}
+      }
+    }
+  }
+
   // Master-Passwort: Inline-Formular (kein Modal-Overlay, iOS-kompatibel)
   if (!masterKey) {
     const settingsUrl = isEN ? '/en/pages/einstellungen.html' : '/de/pages/einstellungen.html'

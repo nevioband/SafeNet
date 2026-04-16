@@ -473,13 +473,35 @@
                 const btn = document.getElementById('vaultUnlockBtn')
                 btn.textContent = 'Wird geprüft…'; btn.disabled = true
                 try {
-                    const { data: verifyEntry } = await supabase.from('passwords').select('value').eq('user_id', userId).eq('label', VERIFY_LABEL).maybeSingle()
-                    if (!verifyEntry) {
+                    const CACHE_KEY = 'vaultVerifyCache_' + userId
+                    let verifyValue = null
+
+                    // Erst localStorage-Cache prüfen (funktioniert offline / bei hängendem Supabase)
+                    try { verifyValue = localStorage.getItem(CACHE_KEY) } catch {}
+
+                    if (!verifyValue) {
+                        // Supabase-Abfrage mit AbortController (bricht echten Fetch ab)
+                        const controller = new AbortController()
+                        const abortTimer = setTimeout(() => controller.abort(), 10000)
+                        try {
+                            const { data, error } = await supabase.from('passwords').select('value').eq('user_id', userId).eq('label', VERIFY_LABEL).maybeSingle().abortSignal(controller.signal)
+                            clearTimeout(abortTimer)
+                            if (error) throw error
+                            verifyValue = data?.value ?? null
+                            if (verifyValue) { try { localStorage.setItem(CACHE_KEY, verifyValue) } catch {} }
+                        } catch (e) {
+                            clearTimeout(abortTimer)
+                            showMsg('vaultUnlockMsg', e?.name === 'AbortError' || e?.code === 20 ? 'Verbindungstimeout. Bitte erneut versuchen.' : 'Verbindungsfehler. Bitte erneut versuchen.', 'error')
+                            btn.textContent = 'Entsperren'; btn.disabled = false; return
+                        }
+                    }
+
+                    if (!verifyValue) {
                         showMsg('vaultUnlockMsg', 'Noch kein Master-Passwort eingerichtet. Bitte zuerst den Tresor öffnen.', 'error')
                         btn.textContent = 'Entsperren'; btn.disabled = false; return
                     }
                     const key = await deriveVaultKey(pw, userId)
-                    const decrypted = await decryptVaultValue(verifyEntry.value, key)
+                    const decrypted = await decryptVaultValue(verifyValue, key)
                     if (decrypted !== VERIFY_PLAINTEXT) {
                         showMsg('vaultUnlockMsg', 'Falsches Master-Passwort. Bitte versuche es erneut.', 'error')
                         btn.textContent = 'Entsperren'; btn.disabled = false; return

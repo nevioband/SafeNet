@@ -466,13 +466,35 @@
                 const btn = document.getElementById('vaultUnlockBtn')
                 btn.textContent = 'Verifying…'; btn.disabled = true
                 try {
-                    const { data: verifyEntry } = await supabase.from('passwords').select('value').eq('user_id', userId).eq('label', VERIFY_LABEL).maybeSingle()
-                    if (!verifyEntry) {
+                    const CACHE_KEY = 'vaultVerifyCache_' + userId
+                    let verifyValue = null
+
+                    // Check localStorage cache first (works when Supabase hangs on mobile)
+                    try { verifyValue = localStorage.getItem(CACHE_KEY) } catch {}
+
+                    if (!verifyValue) {
+                        // Supabase query with AbortController (actually cancels the fetch)
+                        const controller = new AbortController()
+                        const abortTimer = setTimeout(() => controller.abort(), 10000)
+                        try {
+                            const { data, error } = await supabase.from('passwords').select('value').eq('user_id', userId).eq('label', VERIFY_LABEL).maybeSingle().abortSignal(controller.signal)
+                            clearTimeout(abortTimer)
+                            if (error) throw error
+                            verifyValue = data?.value ?? null
+                            if (verifyValue) { try { localStorage.setItem(CACHE_KEY, verifyValue) } catch {} }
+                        } catch (e) {
+                            clearTimeout(abortTimer)
+                            showMsg('vaultUnlockMsg', e?.name === 'AbortError' || e?.code === 20 ? 'Connection timed out. Please try again.' : 'Connection error. Please try again.', 'error')
+                            btn.textContent = 'Unlock'; btn.disabled = false; return
+                        }
+                    }
+
+                    if (!verifyValue) {
                         showMsg('vaultUnlockMsg', 'No master password set yet. Please open the vault first.', 'error')
                         btn.textContent = 'Unlock'; btn.disabled = false; return
                     }
                     const key = await deriveVaultKey(pw, userId)
-                    const decrypted = await decryptVaultValue(verifyEntry.value, key)
+                    const decrypted = await decryptVaultValue(verifyValue, key)
                     if (decrypted !== VERIFY_PLAINTEXT) {
                         showMsg('vaultUnlockMsg', 'Wrong master password. Please try again.', 'error')
                         btn.textContent = 'Unlock'; btn.disabled = false; return
