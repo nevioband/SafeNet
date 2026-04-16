@@ -1157,7 +1157,7 @@ window.filterVault = function (query) {
 
 // ===== START =====
 
-document.addEventListener("DOMContentLoaded", () => {
+function startVault() {
   supabase.auth.onAuthStateChange((event, session) => {
     if (event === "SIGNED_OUT" || !session) {
       // Master-Passwort aus sessionStorage entfernen
@@ -1177,8 +1177,26 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
     // INITIAL_SESSION, SIGNED_IN, USER_UPDATED etc.
-    // Nur starten wenn nicht bereits ein Render läuft
     masterKey = null;
     renderVault();
   });
+}
+
+// ES-Module sind immer deferred – DOM ist bereits geparst wenn dieses Skript läuft.
+// Sicherheitshalber mit readyState-Check statt DOMContentLoaded (Safari-Kompatibilität).
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', startVault);
+} else {
+  startVault();
+}
+
+// iOS BFCache: Wenn der Browser zur Seite zurücknavigiert (Zurück-Button),
+// wird DOMContentLoaded NICHT erneut gefeuert. pageshow mit persisted=true abfangen.
+window.addEventListener('pageshow', (e) => {
+  if (e.persisted) {
+    masterKey = null;
+    _renderLock = false;
+    document.getElementById("masterModal")?.remove();
+    renderVault();
+  }
 });
