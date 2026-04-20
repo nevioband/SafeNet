@@ -2,16 +2,6 @@
   "cleanUrls": true,
   "redirects": [
     {
-      "source": "/de",
-      "destination": "/de/index",
-      "permanent": true
-    },
-    {
-      "source": "/en",
-      "destination": "/en/index",
-      "permanent": true
-    },
-    {
       "source": "/pages/:path*",
       "destination": "/de/pages/:path*",
       "permanent": false
@@ -21,6 +11,10 @@
       "destination": "/de/partials/:path*",
       "permanent": false
     }
+  ],
+  "rewrites": [
+    { "source": "/de", "destination": "/de/index.html" },
+    { "source": "/en", "destination": "/en/index.html" }
   ],
   "routes": [
     { "handle": "filesystem" },
