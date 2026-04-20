@@ -15,7 +15,7 @@ async function applyNavbarUser() {
         if (session && session.user) {
             // 2FA-Bypass verhindern: Wenn 2FA aktiviert aber noch nicht abgeschlossen, abmelden
             // Ausnahme: Einstellungen-Seite und direkt nach MFA-Login (Race Condition mit Token-Refresh)
-            const isEnglish = window.location.pathname.startsWith('/en/')
+            const isEnglish = /^\/en(\/|$)/.test(window.location.pathname)
             const isEinstellungen = window.location.pathname.includes('/de/pages/einstellungen.html') || window.location.pathname.includes('/en/pages/einstellungen.html')
             const justLoggedIn = sessionStorage.getItem('loginSuccess') === '1'
             if (justLoggedIn) sessionStorage.removeItem('loginSuccess')
@@ -74,7 +74,7 @@ async function applyNavbarUser() {
                         new Promise(resolve => setTimeout(resolve, 5000))
                     ])
                 } catch {}
-                const isEnglish = window.location.pathname.startsWith('/en/')
+                const isEnglish = /^\/en(\/|$)/.test(window.location.pathname)
                 window.location.href = isEnglish ? '/en/pages/login.html' : '/de/pages/login.html'
             })
 
@@ -205,7 +205,7 @@ initTheme()
 function initCookieBanner() {
     if (localStorage.getItem('cookieConsent') || sessionStorage.getItem('cookieBannerClosed')) return
 
-    const isDE = !window.location.pathname.startsWith('/en/')
+    const isDE = !/^\/en(\/|$)/.test(window.location.pathname)
     const datenschutzUrl = isDE
         ? '/de/pages/datenschutzerklärung.html'
         : '/en/pages/datenschutzerklärung.html'
@@ -267,7 +267,7 @@ initCookieBanner()
 function initScrollToTop() {
     const btn = document.createElement('button')
     btn.id = 'scrollTopBtn'
-    btn.title = window.location.pathname.startsWith('/en/') ? 'Back to top' : 'Nach oben'
+    btn.title = /^\/en(\/|$)/.test(window.location.pathname) ? 'Back to top' : 'Nach oben'
     btn.setAttribute('aria-label', btn.title)
     btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>'
 
