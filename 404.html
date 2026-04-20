@@ -83,8 +83,12 @@
     <div id="footer"></div>
 
     <script>
-      const lang = (navigator.language || "en").toLowerCase();
-      window.location.replace(lang.startsWith("de") ? "/de/404.html" : "/en/404.html");
+      const path = window.location.pathname;
+      if (path.startsWith('/de')) {
+        window.location.replace('/de/404.html');
+      } else {
+        window.location.replace('/en/404.html');
+      }
 
       fetch("/en/partials/navbar.html")
         .then(r => r.text())

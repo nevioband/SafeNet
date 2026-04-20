@@ -11,14 +11,5 @@
       "destination": "/de/partials/:path*",
       "permanent": false
     }
-  ],
-  "rewrites": [
-    { "source": "/de", "destination": "/de/index.html" },
-    { "source": "/en", "destination": "/en/index.html" }
-  ],
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/de/(.*)", "dest": "/de/404.html", "status": 404 },
-    { "src": "/(.*)", "dest": "/en/404.html", "status": 404 }
   ]
 }
