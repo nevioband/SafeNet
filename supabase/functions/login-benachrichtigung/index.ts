@@ -88,13 +88,13 @@ Deno.serve(async (req) => {
 
           <table class="details" role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#172441;border-radius:12px;margin-bottom:28px;"><tr><td style="padding:20px;">
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-              <tr><td style="font-size:13px;color:#64748b;font-family:Arial,sans-serif;padding-bottom:10px;">Zeitpunkt</td><td align="right" style="font-size:13px;color:#cbd5e1;font-family:Arial,sans-serif;padding-bottom:10px;">${zeitstempel}</td></tr>
-              <tr><td style="font-size:13px;color:#64748b;font-family:Arial,sans-serif;padding-bottom:10px;">IP-Adresse</td><td align="right" style="font-size:13px;color:#cbd5e1;font-family:Arial,sans-serif;padding-bottom:10px;">${ip}</td></tr>
-              <tr><td style="font-size:13px;color:#64748b;font-family:Arial,sans-serif;">Browser</td><td align="right" style="font-size:13px;color:#cbd5e1;font-family:Arial,sans-serif;">${userAgent.split(' ').slice(0,3).join(' ')}</td></tr>
+              <tr><td style="font-size:13px;color:#94a3b8;font-family:Arial,sans-serif;padding-bottom:10px;">Zeitpunkt</td><td align="right" style="font-size:13px;color:#e2e8f0;font-family:Arial,sans-serif;padding-bottom:10px;">${zeitstempel}</td></tr>
+              <tr><td style="font-size:13px;color:#94a3b8;font-family:Arial,sans-serif;padding-bottom:10px;">IP-Adresse</td><td align="right" style="font-size:13px;color:#e2e8f0;font-family:Arial,sans-serif;padding-bottom:10px;">${ip}</td></tr>
+              <tr><td style="font-size:13px;color:#94a3b8;font-family:Arial,sans-serif;">Browser</td><td align="right" style="font-size:13px;color:#e2e8f0;font-family:Arial,sans-serif;">${userAgent.split(' ').slice(0,3).join(' ')}</td></tr>
             </table>
           </td></tr></table>
 
-          <p style="margin:0;font-size:12px;color:#475569;line-height:1.6;font-family:Arial,sans-serif;">
+          <p style="margin:0;font-size:12px;color:#94a3b8;line-height:1.6;font-family:Arial,sans-serif;">
             Warst du das nicht? Setze sofort dein Passwort zur&uuml;ck und sichere dein Konto.
           </p>
 
