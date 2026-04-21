@@ -73,7 +73,7 @@ export default async function handler(req) {
       <div style="font-family:Inter,Arial,sans-serif;max-width:480px;margin:0 auto;background:#0f172a;color:#e2e8f0;border-radius:16px;padding:48px 40px;text-align:center;">
 
         <div style="margin-bottom:32px;">
-          <img src="https://safe-net-umber.vercel.app/images/SafeNet-Security-Logo/Withoutbg/ShieldWhiteName.png" alt="SafeNet Security" style="height:48px;width:auto;">
+          <img src="https://safenet-security.ch/images/SafeNet-Security-Logo/Withoutbg/ShieldWhiteName.png" alt="SafeNet Security" style="height:48px;width:auto;">
         </div>
 
         <h1 style="margin:0 0 20px;font-size:26px;font-weight:700;color:#f1f5f9;line-height:1.3;">Neue Anmeldung erkannt</h1>
@@ -89,7 +89,7 @@ export default async function handler(req) {
           Falls du das nicht warst, sichere bitte sofort dein Konto.
         </p>
 
-        <a href="https://safe-net-umber.vercel.app/de/pages/reset-password.html"
+        <a href="https://safenet-security.ch/de/pages/reset-password.html"
            style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#3399ff,#66d9ff);color:#0f172a;font-weight:700;font-size:15px;border-radius:999px;text-decoration:none;margin-bottom:36px;">
           Passwort zurücksetzen
         </a>
