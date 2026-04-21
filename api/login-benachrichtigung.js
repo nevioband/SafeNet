@@ -75,7 +75,7 @@ export default async function handler(req) {
 
           <h1 style="margin:0 0 20px;font-size:26px;font-weight:700;color:#f1f5f9;line-height:1.3;font-family:Arial,sans-serif;">Neue Anmeldung erkannt</h1>
 
-          <table class="badge" role="presentation" cellpadding="0" cellspacing="0" align="center" style="background-color:#172441;border-radius:999px;margin-bottom:28px;"><tr><td style="padding:8px 18px;font-size:14px;color:#93c5fd;font-family:Arial,sans-serif;">${user.email}</td></tr></table>
+          <table class="badge" role="presentation" cellpadding="0" cellspacing="0" align="center" style="background-color:#172441;border-radius:999px;margin-bottom:28px;"><tr><td style="padding:8px 18px;font-size:14px;color:#93c5fd;font-family:Arial,sans-serif;text-decoration:none;">${user.email}</td></tr></table>
 
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="border-top:1px solid rgba(255,255,255,0.08);padding-bottom:28px;"></td></tr></table>
 
