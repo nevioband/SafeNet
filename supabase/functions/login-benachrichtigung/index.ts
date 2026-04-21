@@ -69,60 +69,36 @@ Deno.serve(async (req) => {
     from: 'SafeNet Security <info@safenet-security.ch>',
     to: [user.email],
     subject: 'Sicherheitshinweis: Neue Anmeldung bei SafeNet',
-    html: `
-      <div style="font-family:Inter,Arial,sans-serif;max-width:480px;margin:0 auto;background:#0f172a;color:#e2e8f0;border-radius:16px;padding:48px 40px;text-align:center;">
+    html: `<!DOCTYPE html><html lang="de" xmlns="http://www.w3.org/1999/xhtml"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="only light"><meta name="supported-color-schemes" content="only light"><style>:root{color-scheme:only light;supported-color-schemes:only light;}body,table,td,div,p,a,span{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}body{margin:0;padding:0;background-color:#0a0f1e !important;}@media(prefers-color-scheme:dark){body,table,td,div,p,span{background-color:#0a0f1e !important;color:#e2e8f0 !important;}.card{background-color:#0f172a !important;}.badge{background-color:#172441 !important;}.details{background-color:#172441 !important;}}</style></head><body style="margin:0;padding:0;background-color:#0a0f1e;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#0a0f1e;"><tr><td align="center" style="padding:24px 16px;"><table class="card" role="presentation" width="480" cellpadding="0" cellspacing="0" style="max-width:480px;width:100%;background-color:#0f172a;border-radius:16px;border:1px solid rgba(51,153,255,0.2);"><tr><td style="padding:48px 40px;text-align:center;font-family:Arial,sans-serif;">
 
-        <!-- Logo -->
-        <div style="margin-bottom:32px;">
-          <img src="https://safe-net-umber.vercel.app/images/SafeNet-Security-Logo/Withoutbg/ShieldWhiteName.png" alt="SafeNet Security" style="height:48px;width:auto;">
-        </div>
+          <img src="https://safenet-security.ch/images/SafeNet-Security-Logo/Withoutbg/ShieldWhiteName.png" alt="SafeNet Security" height="48" style="display:block;margin:0 auto 32px;height:48px;width:auto;">
 
-        <!-- Titel -->
-        <h1 style="margin:0 0 20px;font-size:26px;font-weight:700;color:#f1f5f9;line-height:1.3;">Neue Anmeldung erkannt</h1>
+          <h1 style="margin:0 0 20px;font-size:26px;font-weight:700;color:#f1f5f9;line-height:1.3;font-family:Arial,sans-serif;">Neue Anmeldung erkannt</h1>
 
-        <!-- E-Mail Badge -->
-        <div style="display:inline-block;background:#172441;border-radius:999px;padding:8px 18px;margin-bottom:28px;">
-          <span style="font-size:14px;color:#93c5fd;">${user.email}</span>
-        </div>
+          <table class="badge" role="presentation" cellpadding="0" cellspacing="0" align="center" style="background-color:#172441;border-radius:999px;margin-bottom:28px;"><tr><td style="padding:8px 18px;font-size:14px;color:#93c5fd;font-family:Arial,sans-serif;">${user.email}</td></tr></table>
 
-        <!-- Trennlinie -->
-        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:0 0 28px;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="border-top:1px solid rgba(255,255,255,0.08);padding-bottom:28px;"></td></tr></table>
 
-        <!-- Text -->
-        <p style="margin:0 0 32px;font-size:15px;color:#94a3b8;line-height:1.7;">
-          Dein SafeNet-Konto wurde soeben erfolgreich angemeldet.<br>
-          Falls du das nicht warst, sichere bitte sofort dein Konto.
-        </p>
+          <p style="margin:0 0 32px;font-size:15px;color:#94a3b8;line-height:1.7;font-family:Arial,sans-serif;">
+            Dein SafeNet-Konto wurde soeben erfolgreich angemeldet.<br>
+            Falls du das nicht warst, sichere bitte sofort dein Konto.
+          </p>
 
-        <!-- Button -->
-        <a href="https://safe-net-umber.vercel.app/de/pages/reset-password.html"
-           style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#3399ff,#66d9ff);color:#0f172a;font-weight:700;font-size:15px;border-radius:999px;text-decoration:none;margin-bottom:36px;">
-          Passwort zurücksetzen
-        </a>
+          <table role="presentation" cellpadding="0" cellspacing="0" align="center" style="margin-bottom:36px;"><tr><td style="background:#3399ff;border-radius:999px;"><a href="https://safenet-security.ch/de/pages/reset-password.html" style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#3399ff,#66d9ff);color:#0f172a;font-weight:700;font-size:15px;border-radius:999px;text-decoration:none;font-family:Arial,sans-serif;">Passwort zur&uuml;cksetzen</a></td></tr></table>
 
-        <!-- Details -->
-        <div style="background:#172441;border-radius:12px;padding:20px;text-align:left;margin-bottom:28px;font-size:13px;">
-          <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
-            <span style="color:#64748b;">Zeitpunkt</span>
-            <span style="color:#cbd5e1;">${zeitstempel}</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
-            <span style="color:#64748b;">IP-Adresse</span>
-            <span style="color:#cbd5e1;">${ip}</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;">
-            <span style="color:#64748b;">Browser</span>
-            <span style="color:#cbd5e1;max-width:260px;text-align:right;">${userAgent.split(' ').slice(0,3).join(' ')}</span>
-          </div>
-        </div>
+          <table class="details" role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#172441;border-radius:12px;margin-bottom:28px;"><tr><td style="padding:20px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+              <tr><td style="font-size:13px;color:#64748b;font-family:Arial,sans-serif;padding-bottom:10px;">Zeitpunkt</td><td align="right" style="font-size:13px;color:#cbd5e1;font-family:Arial,sans-serif;padding-bottom:10px;">${zeitstempel}</td></tr>
+              <tr><td style="font-size:13px;color:#64748b;font-family:Arial,sans-serif;padding-bottom:10px;">IP-Adresse</td><td align="right" style="font-size:13px;color:#cbd5e1;font-family:Arial,sans-serif;padding-bottom:10px;">${ip}</td></tr>
+              <tr><td style="font-size:13px;color:#64748b;font-family:Arial,sans-serif;">Browser</td><td align="right" style="font-size:13px;color:#cbd5e1;font-family:Arial,sans-serif;">${userAgent.split(' ').slice(0,3).join(' ')}</td></tr>
+            </table>
+          </td></tr></table>
 
-        <!-- Footer -->
-        <p style="margin:0;font-size:12px;color:#475569;line-height:1.6;">
-          Warst du das nicht? Setze sofort dein Passwort zurück und sichere dein Konto.<br>
-          War es doch du, musst du nichts weiter tun.
-        </p>
+          <p style="margin:0;font-size:12px;color:#475569;line-height:1.6;font-family:Arial,sans-serif;">
+            Warst du das nicht? Setze sofort dein Passwort zur&uuml;ck und sichere dein Konto.
+          </p>
 
-      </div>
+        </td></tr></table></td></tr></table></body></html>
     `,
   }
 
