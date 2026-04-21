@@ -248,6 +248,7 @@
     justify-content: center;
     z-index: 2000;
     padding: 20px;
+    -webkit-backdrop-filter: blur(3px);
     backdrop-filter: blur(3px);
 }
 
@@ -350,3 +351,106 @@
 .strength-label.str-fair { color: #f59e0b; }
 .strength-label.str-good { color: #3b82f6; }
 .strength-label.str-best { color: #22c55e; }
+
+/* ── Reset-Passwort Statusboxen ── */
+#invalidBox {
+    display: none;
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    border-radius: 8px;
+    color: #fca5a5;
+    font-size: 14px;
+    padding: 14px;
+    text-align: center;
+    margin-bottom: 18px;
+}
+
+#invalidBox a {
+    color: #3399ff;
+    margin-top: 8px;
+    display: inline-block;
+}
+
+#successBox {
+    display: none;
+    text-align: center;
+}
+
+.success-message {
+    background: rgba(34, 197, 94, 0.12);
+    border: 1px solid rgba(34, 197, 94, 0.4);
+    border-radius: 8px;
+    color: #86efac;
+    font-size: 14px;
+    padding: 14px;
+    margin-bottom: 20px;
+}
+
+a.login-btn {
+    display: block;
+    text-decoration: none;
+    text-align: center;
+}
+
+/* ── Passwort-vergessen Modal ── */
+#forgotModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+
+.forgot-modal-inner {
+    background: #172441;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 16px;
+    padding: 36px 32px;
+    width: 100%;
+    max-width: 380px;
+    margin: 20px;
+}
+
+.forgot-modal-inner h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+}
+
+.forgot-modal-inner p {
+    color: #94a3b8;
+    font-size: 14px;
+    margin: 0 0 20px;
+}
+
+#forgotError {
+    margin-bottom: 14px;
+}
+
+#forgotSuccess {
+    display: none;
+    background: rgba(34, 197, 94, 0.12);
+    border: 1px solid rgba(34, 197, 94, 0.4);
+    border-radius: 8px;
+    color: #86efac;
+    font-size: 13px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+}
+
+#forgotBtn {
+    margin-bottom: 10px;
+}
+
+#forgotClose {
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    border-radius: 8px;
+    color: #94a3b8;
+    cursor: pointer;
+    font-family: Inter, sans-serif;
+    font-size: 14px;
+}
