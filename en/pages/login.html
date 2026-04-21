@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,8 +7,8 @@
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Login – SafeNet Security" />
     <meta property="og:description" content="Log in to SafeNet Security and securely access your personal password vault." />
-    <meta property="og:image" content="https://safe-net-umber.vercel.app/images/SafeNet-Security-Logo/Withbg/ShieldWhiteName.png" />
-    <meta property="og:url" content="https://safe-net-umber.vercel.app/en/pages/login.html" />    <link rel="stylesheet" href="/css/navbar.css">
+    <meta property="og:image" content="https://safenet-security.ch/images/SafeNet-Security-Logo/Withbg/ShieldWhiteName.png" />
+    <link rel="stylesheet" href="/css/navbar.css">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/shared.css">
     <link rel="stylesheet" href="/css/footer.css">
@@ -257,7 +257,7 @@
             btn.disabled = true
 
             const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: 'https://safe-net-umber.vercel.app/en/pages/reset-password.html'
+                redirectTo: 'https://safenet-security.ch/en/pages/reset-password.html'
             })
 
             if (error) {

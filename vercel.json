@@ -2,6 +2,12 @@
   "cleanUrls": true,
   "redirects": [
     {
+      "source": "/(.*)",
+      "has": [{"type": "host", "value": "safe-net-umber.vercel.app"}],
+      "destination": "https://safenet-security.ch/$1",
+      "permanent": true
+    },
+    {
       "source": "/pages/:path*",
       "destination": "/de/pages/:path*",
       "permanent": false
