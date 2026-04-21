@@ -40,7 +40,7 @@
 
         <div class="settings">
             <label>Length: <span id="length-val">16</span></label>
-            <input type="range" id="length-slider" min="8" max="50" value="16">
+            <input type="range" id="length-slider" min="8" max="50" value="16" aria-label="Password length">
 
             <div class="checkbox-grid">
                 <label class="custom-check">
@@ -62,11 +62,11 @@
             </div>
         </div>
 
-        <div class="settings" style="margin-top: 20px;">
+        <div class="settings settings-vault">
             <label for="password-label">Label for the password:</label>
             <div class="input-group-row">
                 <input type="text" id="password-label" placeholder="e.g. Instagram, Google, Bank">
-                <div class="custom-select-wrapper" style="flex-shrink:1;">
+                <div class="custom-select-wrapper custom-select-wrapper--shrink">
                     <input type="hidden" id="generator-kategorie" value="allgemein">
                     <button type="button" class="custom-select-btn">
                         <span class="cs-text">General</span>
@@ -83,11 +83,11 @@
                         <li data-value="sonstiges">Other&hellip;</li>
                     </ul>
                 </div>
-                <button class="main-btn" onclick="transferToVault()" style="width: auto; margin-top: 0; white-space: nowrap; display: flex; align-items: center; gap: 5px; padding: 0 15px;">
-                    <span class="material-symbols-outlined" style="font-size: 20px;">shield</span> Save
+                <button class="main-btn" onclick="transferToVault()">
+                    <span class="material-symbols-outlined vault-save-icon">shield</span> Save
                 </button>
             </div>
-            <input type="text" id="generator-kategorie-custom" placeholder="Enter custom category&hellip;" style="display:none;width:100%;padding:12px 14px;background:#0f172a;border:1px solid rgba(59,130,246,0.25);border-radius:8px;color:white;font-size:15px;font-family:Inter,sans-serif;box-sizing:border-box;outline:none;margin-top:8px;">
+            <input type="text" id="generator-kategorie-custom" placeholder="Enter custom category&hellip;">
         </div>
 
         <button id="generate-btn" class="main-btn">Generate secure password</button>
