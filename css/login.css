@@ -454,3 +454,13 @@ a.login-btn {
     font-family: Inter, sans-serif;
     font-size: 14px;
 }
+
+/* ── MFA Card ── */
+#mfaCard {
+    display: none;
+}
+
+.mfa-code-input {
+    letter-spacing: 4px;
+    font-size: 18px;
+}
