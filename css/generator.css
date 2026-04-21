@@ -156,6 +156,43 @@
   box-sizing: border-box;
 }
 
+.settings-vault {
+  margin-top: 20px;
+}
+
+.custom-select-wrapper--shrink {
+  flex-shrink: 1;
+}
+
+#vault-save-btn {
+  width: auto;
+  margin-top: 0;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 15px;
+}
+
+.vault-save-icon {
+  font-size: 20px;
+}
+
+#generator-kategorie-custom {
+  display: none;
+  width: 100%;
+  padding: 12px 14px;
+  background: #0f172a;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  border-radius: 8px;
+  color: white;
+  font-size: 15px;
+  font-family: Inter, sans-serif;
+  box-sizing: border-box;
+  outline: none;
+  margin-top: 8px;
+}
+
 .main-btn {
   width: 100%;
   margin-top: 16px;
