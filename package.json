@@ -1,0 +1,17 @@
+{
+  "name": "safenet-smoke-tests",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Automatische Smoke-Tests fuer SafeNet Security",
+  "scripts": {
+    "smoke": "playwright test tests/smoke.spec.js --project=chromium",
+    "smoke:flows": "playwright test tests/flows.spec.js --project=chromium",
+    "smoke:deep": "playwright test tests/flows.spec.js --project=chromium",
+    "smoke:all": "playwright test tests --project=chromium --workers=1",
+    "smoke:headed": "playwright test tests/smoke.spec.js --project=chromium --headed",
+    "smoke:report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.54.2"
+  }
+}
