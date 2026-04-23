@@ -1,0 +1,360 @@
+body {
+  min-height: 100vh;
+}
+
+.notizen-main {
+  padding: 24px 18px 40px;
+}
+
+.notizen-seite {
+  max-width: 1450px;
+  margin: 0 auto;
+}
+
+.notizen-kopf {
+  margin-bottom: 18px;
+}
+
+.notizen-kopf h1 {
+  margin: 0;
+  font-size: clamp(1.8rem, 2.7vw, 2.35rem);
+}
+
+.notizen-kopf p {
+  margin: 10px 0 0;
+  color: var(--text-muted);
+}
+
+.notizen-grid {
+  display: grid;
+  grid-template-columns: 250px 360px minmax(0, 1fr);
+  gap: 14px;
+  align-items: stretch;
+}
+
+.notizen-karte {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  min-height: 560px;
+}
+
+.notizen-karte h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.ordner-kopf,
+.liste-kopf,
+.editor-kopf {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.notiz-mini-btn,
+.notiz-haupt-btn,
+.notiz-aktion-btn {
+  border: 0;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-family: Inter, sans-serif;
+}
+
+.notiz-mini-btn {
+  min-width: 34px;
+  height: 34px;
+  color: #0f172a;
+  background: linear-gradient(135deg, #3399ff, #66d9ff);
+}
+
+.notiz-haupt-btn {
+  width: 100%;
+  height: 42px;
+  color: #0f172a;
+  background: linear-gradient(135deg, #3399ff, #66d9ff);
+  margin-bottom: 10px;
+}
+
+.cloud-btn {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.cloud-status {
+  margin: 0 0 10px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.notiz-aktion-btn {
+  height: 38px;
+  padding: 0 12px;
+  color: var(--text);
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.notiz-aktion-btn.warnung {
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.4);
+  background: rgba(239, 68, 68, 0.12);
+}
+
+.ordner-liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ordner-liste li {
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(148, 163, 184, 0.07);
+  transition: 0.2s ease;
+}
+
+.ordner-liste li:hover {
+  border-color: rgba(59, 130, 246, 0.35);
+}
+
+.ordner-liste li.aktiv {
+  border-color: rgba(102, 217, 255, 0.7);
+  background: rgba(51, 153, 255, 0.2);
+}
+
+.ordner-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ordner-zaehler {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.notizen-suche {
+  width: 100%;
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  background: rgba(15, 23, 42, 0.55);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+}
+
+.notizen-suche:focus,
+.editor-feld input:focus,
+.editor-feld textarea:focus {
+  outline: none;
+  border-color: #66d9ff;
+  box-shadow: 0 0 0 3px rgba(51, 153, 255, 0.18);
+}
+
+.filter-reihe {
+  margin-bottom: 10px;
+}
+
+.filter-reihe label {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.notizen-liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 490px;
+  overflow-y: auto;
+}
+
+.notizen-liste li {
+  border-radius: 11px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: rgba(148, 163, 184, 0.08);
+  padding: 10px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.notizen-liste li:hover {
+  border-color: rgba(102, 217, 255, 0.6);
+}
+
+.notizen-liste li.aktiv {
+  border-color: rgba(102, 217, 255, 0.8);
+  background: rgba(51, 153, 255, 0.18);
+}
+
+.notiz-listen-titel {
+  font-weight: 700;
+  margin: 0 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.pin-symbol {
+  color: #66d9ff;
+  font-size: 0.9rem;
+}
+
+.notiz-listen-vorschau {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
+.notiz-listen-meta {
+  margin-top: 7px;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+.keine-notiz {
+  margin: 12px 0;
+  color: var(--text-muted);
+}
+
+.editor-felder {
+  display: grid;
+  gap: 9px;
+}
+
+.editor-feld {
+  display: grid;
+  gap: 6px;
+}
+
+.editor-feld label {
+  font-size: 0.87rem;
+  color: var(--text-muted);
+}
+
+.editor-feld input,
+.editor-feld textarea {
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  background: rgba(15, 23, 42, 0.55);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-family: Inter, sans-serif;
+  font-size: 0.95rem;
+}
+
+.editor-feld textarea {
+  min-height: 360px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.editor-zeile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.editor-tag {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.editor-werkzeuge {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 4px 0;
+}
+
+.speicher-status {
+  margin-top: 9px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+@media (max-width: 1220px) {
+  .notizen-grid {
+    grid-template-columns: 220px minmax(0, 1fr);
+  }
+
+  .editor-panel {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .notizen-main {
+    padding: 16px 10px 28px;
+  }
+
+  .notizen-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .notizen-karte {
+    min-height: 0;
+    padding: 12px;
+  }
+
+  .notizen-liste {
+    max-height: 320px;
+  }
+
+  .editor-feld textarea {
+    min-height: 260px;
+  }
+}
+
+[data-theme="light"] .notizen-karte {
+  background: #ffffff;
+  border-color: rgba(59, 130, 246, 0.24);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+[data-theme="light"] .ordner-liste li,
+[data-theme="light"] .notizen-liste li {
+  background: #f8fbff;
+  border-color: rgba(59, 130, 246, 0.22);
+}
+
+[data-theme="light"] .ordner-liste li.aktiv,
+[data-theme="light"] .notizen-liste li.aktiv {
+  background: rgba(102, 217, 255, 0.2);
+}
+
+[data-theme="light"] .notizen-suche,
+[data-theme="light"] .editor-feld input,
+[data-theme="light"] .editor-feld textarea {
+  background: #f8fbff;
+  color: #0f172a;
+}
+
+[data-theme="light"] .cloud-status {
+  color: #475569;
+}

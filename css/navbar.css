@@ -12,6 +12,20 @@
   margin-right: 18px;
 }
 
+.flag-icon {
+  height: 20px;
+  width: auto;
+  display: block;
+}
+
+.flag-icon-desktop-first {
+  margin-right: 3px;
+}
+
+.flag-icon-mobile {
+  height: 22px;
+}
+
 .lang-item {
   display: none !important;
 }
@@ -57,6 +71,11 @@
 
 .nav-links a:hover {
   color: #3b82f6;
+}
+
+.nav-links a.active {
+  color: #66d9ff;
+  font-weight: 700;
 }
 
 .menu-toggle {

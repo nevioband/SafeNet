@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notes – SafeNet Security</title>
+    <meta name="description" content="Create structured notes with folders, tags and checklists directly in SafeNet Security." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Notes – SafeNet Security" />
+    <meta property="og:description" content="Create structured notes with folders, tags and checklists directly in SafeNet Security." />
+    <meta property="og:image" content="https://safenet-security.ch/images/SafeNet-Security-Logo/Withbg/ShieldWhiteName.png" />
+    <meta property="og:url" content="https://safenet-security.ch/en/pages/notizen.html" />
+    <link rel="canonical" href="https://safenet-security.ch/en/pages/notizen.html" />
+    <link rel="alternate" hreflang="de" href="https://safenet-security.ch/de/pages/notizen.html" />
+    <link rel="alternate" hreflang="en" href="https://safenet-security.ch/en/pages/notizen.html" />
+    <link rel="alternate" hreflang="x-default" href="https://safenet-security.ch/en/pages/notizen.html" />
+    <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png" />
+
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/shared.css" />
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/notizen.css" />
+
+    <script type="module" src="/js/auth.js?v=7"></script>
+    <script type="module" src="/js/notizen.js?v=3" defer></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <main class="notizen-main">
+      <section class="notizen-seite">
+        <header class="notizen-kopf">
+          <h1>Notes</h1>
+          <p>Create clean, structured notes with folders, tags and auto-save.</p>
+        </header>
+
+        <div class="notizen-grid">
+          <aside class="notizen-karte ordner-panel" data-mobile-panel>
+            <div class="ordner-kopf">
+              <h2>Folders</h2>
+              <button class="mobile-panel-toggle" type="button" data-mobile-toggle aria-expanded="false" aria-label="Toggle folders panel">
+                <span class="mobile-panel-icon">⌄</span>
+              </button>
+              <button id="ordnerAnlegen" class="notiz-mini-btn" type="button" aria-label="Add folder">+</button>
+            </div>
+            <div class="mobile-panel-inhalt">
+              <ul id="ordnerListe" class="ordner-liste"></ul>
+            </div>
+          </aside>
+
+          <section class="notizen-karte liste-panel mobile-standard-offen" data-mobile-panel>
+            <div class="liste-kopf">
+              <h2>Notes</h2>
+              <button class="mobile-panel-toggle" type="button" data-mobile-toggle aria-expanded="true" aria-label="Toggle notes panel">
+                <span class="mobile-panel-icon">⌄</span>
+              </button>
+            </div>
+            <div class="mobile-panel-inhalt">
+              <button id="notizAnlegen" class="notiz-haupt-btn" type="button">New note</button>
+              <button id="cloudSyncBtn" class="notiz-aktion-btn cloud-btn" type="button">Cloud sync</button>
+              <p id="cloudStatus" class="cloud-status">Cloud: checking ...</p>
+              <input id="notizenSuche" class="notizen-suche" type="search" placeholder="Search notes..." />
+              <div class="filter-reihe">
+                <label>
+                  <input id="nurAngepinnt" type="checkbox" />
+                  Pinned only
+                </label>
+              </div>
+              <div id="notizenListe" class="notizen-liste"></div>
+            </div>
+          </section>
+
+          <section class="notizen-karte editor-panel" data-mobile-panel>
+            <div class="editor-kopf">
+              <h2>Editor</h2>
+              <button class="mobile-panel-toggle" type="button" data-mobile-toggle aria-expanded="false" aria-label="Toggle editor panel">
+                <span class="mobile-panel-icon">⌄</span>
+              </button>
+              <button id="notizLoeschen" class="notiz-aktion-btn warnung" type="button">Delete</button>
+            </div>
+            <div class="mobile-panel-inhalt">
+              <div class="editor-felder">
+                <div class="editor-feld">
+                  <label for="notizTitel">Title</label>
+                  <input id="notizTitel" type="text" maxlength="100" placeholder="Enter title" />
+                </div>
+
+                <div class="editor-feld">
+                  <label for="notizTags">Tags</label>
+                  <input id="notizTags" type="text" maxlength="140" placeholder="e.g. learning, phishing" />
+                  <small id="tagHinweis" class="speicher-status"></small>
+                </div>
+
+                <div class="editor-zeile">
+                  <label class="editor-tag">
+                    <input id="notizAngepinnt" type="checkbox" />
+                    Pin note
+                  </label>
+                  <div class="editor-werkzeuge">
+                    <button id="vorlageTitel" class="notiz-aktion-btn" type="button">Heading</button>
+                    <button id="vorlageCheckliste" class="notiz-aktion-btn" type="button">Checklist</button>
+                    <button id="vorlageInfo" class="notiz-aktion-btn" type="button">Info Box</button>
+                  </div>
+                </div>
+
+                <div class="editor-feld">
+                  <label for="notizInhalt">Content</label>
+                  <textarea id="notizInhalt" placeholder="Write your note here..."></textarea>
+                </div>
+              </div>
+              <p id="speicherStatus" class="speicher-status">Just now</p>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <div id="footer"></div>
+
+    <script>
+      fetch('/en/partials/navbar.html')
+        .then((res) => res.text())
+        .then((data) => {
+          document.getElementById('navbar').innerHTML = data;
+          const toggle = document.querySelector('.menu-toggle');
+          const navLinks = document.querySelector('.nav-links');
+          if (toggle && navLinks) {
+            toggle.addEventListener('click', () => {
+              navLinks.classList.toggle('active');
+            });
+          }
+        });
+
+      fetch('/en/partials/footer.html')
+        .then((res) => res.text())
+        .then((data) => {
+          document.getElementById('footer').innerHTML = data;
+        });
+    </script>
+  </body>
+</html>
