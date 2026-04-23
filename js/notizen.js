@@ -1,4 +1,4 @@
-import { supabase } from './supabase.js';
+﻿import { supabase } from './supabase.js';
 
 const istEnglisch = /^\/en(\/|$)/.test(window.location.pathname) || document.documentElement.lang === 'en';
 
@@ -10,6 +10,9 @@ const texte = istEnglisch
       ordnerPrompt: 'Name for the new folder:',
       ordnerLeer: 'Please enter a folder name.',
       ordnerExistiert: 'This folder already exists.',
+      ordnerLoeschenAuswahl: 'Select a folder first (not "All notes").',
+      ordnerLoeschenLetzter: 'You cannot delete the last folder.',
+      ordnerLoeschenFrage: 'Delete this folder including all contained notes?',
       loeschenFrage: 'Delete this note permanently?',
       gespeichert: 'Saved',
       geradeJetzt: 'Just now',
@@ -18,7 +21,6 @@ const texte = istEnglisch
       vorlageTitel: '\n## Heading\n',
       vorlageCheck: '\n- [ ] Task\n',
       vorlageInfo: '\n> Info: ...\n',
-      tagHinweis: 'Tags are separated with commas.',
       ordnerStandard: 'General',
       cloudSync: 'Cloud sync',
       cloudNichtEingeloggt: 'Cloud: local only (not signed in)',
@@ -39,6 +41,9 @@ const texte = istEnglisch
       ordnerPrompt: 'Name für den neuen Ordner:',
       ordnerLeer: 'Bitte gib einen Ordnernamen ein.',
       ordnerExistiert: 'Dieser Ordner existiert bereits.',
+      ordnerLoeschenAuswahl: 'Wähle zuerst einen Ordner aus (nicht "Alle Notizen").',
+      ordnerLoeschenLetzter: 'Der letzte Ordner kann nicht gelöscht werden.',
+      ordnerLoeschenFrage: 'Diesen Ordner inklusive aller enthaltenen Notizen löschen?',
       loeschenFrage: 'Diese Notiz wirklich dauerhaft löschen?',
       gespeichert: 'Gespeichert',
       geradeJetzt: 'Gerade eben',
@@ -47,7 +52,6 @@ const texte = istEnglisch
       vorlageTitel: '\n## Überschrift\n',
       vorlageCheck: '\n- [ ] Aufgabe\n',
       vorlageInfo: '\n> Info: ...\n',
-      tagHinweis: 'Tags werden mit Kommas getrennt.',
       ordnerStandard: 'Allgemein',
       cloudSync: 'Cloud-Sync',
       cloudNichtEingeloggt: 'Cloud: nur lokal (nicht eingeloggt)',
@@ -74,8 +78,8 @@ const elemente = {
   nurAngepinnt: document.getElementById('nurAngepinnt'),
   notizAnlegen: document.getElementById('notizAnlegen'),
   ordnerAnlegen: document.getElementById('ordnerAnlegen'),
+  ordnerLoeschen: document.getElementById('ordnerLoeschen'),
   titel: document.getElementById('notizTitel'),
-  tags: document.getElementById('notizTags'),
   inhalt: document.getElementById('notizInhalt'),
   angepinnt: document.getElementById('notizAngepinnt'),
   loeschen: document.getElementById('notizLoeschen'),
@@ -86,8 +90,7 @@ const elemente = {
   zurueckZuNotizen: document.getElementById('zurueckZuNotizen'),
   vorlageTitel: document.getElementById('vorlageTitel'),
   vorlageCheck: document.getElementById('vorlageCheckliste'),
-  vorlageInfo: document.getElementById('vorlageInfo'),
-  tagHinweis: document.getElementById('tagHinweis')
+  vorlageInfo: document.getElementById('vorlageInfo')
 };
 
 const zustand = {
@@ -103,12 +106,16 @@ const zustand = {
   cloudVerfuegbar: true,
   userId: null,
   laufenderCloudSync: false,
-  mobileSchritt: 'ordner'
+  mobileSchritt: 'ordner',
+  zuletztGeaendertGlobal: Date.now()
 };
 
-function istMobilAnsicht() {
-  return window.innerWidth <= 768;
-}
+function istMobilAnsicht() { return window.innerWidth <= 768; }
+function setzeCloudStatus(text) { if (elemente.cloudStatus) elemente.cloudStatus.textContent = text; }
+function istOffline() { return !navigator.onLine; }
+function markiereAenderung() { zustand.zuletztGeaendertGlobal = Date.now(); }
+function erstelleId() { return `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`; }
+function jetztIso() { return new Date().toISOString(); }
 
 function setzeMobilSchritt(schritt) {
   zustand.mobileSchritt = schritt;
@@ -133,20 +140,11 @@ function aktualisiereMobileAnsicht() {
   });
 }
 
-function setzeCloudStatus(text) {
-  if (elemente.cloudStatus) elemente.cloudStatus.textContent = text;
-}
-
-function istOffline() {
-  return !navigator.onLine;
-}
-
 async function mitTimeout(promise, timeoutMs = 10000) {
   let timeoutId;
   const timeoutPromise = new Promise((_, reject) => {
     timeoutId = setTimeout(() => reject(new Error('timeout')), timeoutMs);
   });
-
   try {
     return await Promise.race([promise, timeoutPromise]);
   } finally {
@@ -155,29 +153,17 @@ async function mitTimeout(promise, timeoutMs = 10000) {
 }
 
 function gibLetzteAenderung(notizen) {
-  if (!Array.isArray(notizen) || notizen.length === 0) return null;
+  if (!Array.isArray(notizen) || notizen.length === 0) return 0;
   return notizen.reduce((max, notiz) => {
     const zeit = new Date(notiz.geaendertAm || notiz.erstelltAm || 0).getTime();
     return Math.max(max, Number.isFinite(zeit) ? zeit : 0);
   }, 0);
 }
 
-function baueCloudPayload() {
-  return {
-    version: 1,
-    ordner: zustand.ordner,
-    notizen: zustand.notizen,
-    zuletztGeaendert: gibLetzteAenderung(zustand.notizen)
-  };
-}
-
 function datenAusPayload(payload) {
   if (!payload || typeof payload !== 'object') return null;
   if (!Array.isArray(payload.ordner) || !Array.isArray(payload.notizen) || payload.ordner.length === 0) return null;
-  return {
-    ordner: payload.ordner,
-    notizen: payload.notizen
-  };
+  return { ordner: payload.ordner, notizen: payload.notizen };
 }
 
 async function ladeUserSession() {
@@ -189,14 +175,10 @@ async function ladeUserSession() {
       zustand.userId = id;
       return id;
     }
-  } catch {
-    // Fallback unten
-  }
+  } catch {}
 
   try {
-    const {
-      data: { session }
-    } = await mitTimeout(supabase.auth.getSession(), 8000);
+    const { data: { session } } = await mitTimeout(supabase.auth.getSession(), 8000);
     zustand.userId = session?.user?.id || null;
     return zustand.userId;
   } catch {
@@ -208,16 +190,47 @@ async function ladeUserSession() {
 async function ladeCloudDaten() {
   if (!zustand.userId || !zustand.cloudVerfuegbar) return null;
 
-  let antwort;
   try {
-    antwort = await mitTimeout(
+    const { data: rows, error } = await mitTimeout(
       supabase
         .from(cloudTabelle)
-        .select('daten, updated_at')
-        .eq('user_id', zustand.userId)
-        .maybeSingle(),
+        .select('ordner_id, ordner_name, notiz_id, titel, inhalt, angepinnt, erstellt_am, geaendert_am')
+        .eq('user_id', zustand.userId),
       10000
     );
+
+    if (error) throw new Error('cloud-load-error');
+    if (!rows || rows.length === 0) return null;
+
+    const ordnerMap = new Map();
+    const notizen = [];
+
+    rows.forEach((row) => {
+      if (row.ordner_id) ordnerMap.set(row.ordner_id, row.ordner_name || texte.ordnerStandard);
+      if (row.notiz_id) {
+        notizen.push({
+          id: row.notiz_id,
+          ordnerId: row.ordner_id,
+          titel: row.titel || texte.titelNeu,
+          inhalt: row.inhalt || '',
+          angepinnt: Boolean(row.angepinnt),
+          erstelltAm: row.erstellt_am || jetztIso(),
+          geaendertAm: row.geaendert_am || jetztIso()
+        });
+      }
+    });
+
+    const ordner = Array.from(ordnerMap.entries()).map(([id, name]) => ({ id, name }));
+    if (ordner.length === 0) ordner.push({ id: erstelleId(), name: texte.ordnerStandard });
+
+    return {
+      daten: {
+        version: 1,
+        ordner,
+        notizen,
+        zuletztGeaendert: Math.max(gibLetzteAenderung(notizen), 0)
+      }
+    };
   } catch (error) {
     if (error?.message === 'timeout') {
       setzeCloudStatus(texte.cloudTimeout);
@@ -227,47 +240,57 @@ async function ladeCloudDaten() {
     setzeCloudStatus(texte.cloudFehler);
     return null;
   }
-
-  const { data, error } = antwort;
-
-  if (error) {
-    zustand.cloudVerfuegbar = false;
-    setzeCloudStatus(texte.cloudFehler);
-    return null;
-  }
-
-  return data || null;
 }
 
 async function speichereCloudDaten() {
   if (!zustand.userId || !zustand.cloudVerfuegbar || istOffline()) return false;
 
-  const payload = baueCloudPayload();
-  let antwort;
   try {
-    antwort = await mitTimeout(
-      supabase.from(cloudTabelle).upsert(
-        {
-          user_id: zustand.userId,
-          daten: payload
-        },
-        { onConflict: 'user_id' }
-      ),
+    const ordnerMap = new Map(zustand.ordner.map((ordner) => [ordner.id, ordner.name]));
+
+    const ordnerRows = zustand.ordner.map((ordner) => ({
+      user_id: zustand.userId,
+      ordner_id: ordner.id,
+      ordner_name: ordner.name,
+      notiz_id: null,
+      titel: null,
+      inhalt: null,
+      angepinnt: false,
+      erstellt_am: null,
+      geaendert_am: jetztIso()
+    }));
+
+    const notizRows = zustand.notizen.map((notiz) => ({
+      user_id: zustand.userId,
+      ordner_id: notiz.ordnerId,
+      ordner_name: ordnerMap.get(notiz.ordnerId) || texte.ordnerStandard,
+      notiz_id: notiz.id,
+      titel: notiz.titel || texte.titelNeu,
+      inhalt: notiz.inhalt || '',
+      angepinnt: Boolean(notiz.angepinnt),
+      erstellt_am: notiz.erstelltAm || jetztIso(),
+      geaendert_am: notiz.geaendertAm || jetztIso()
+    }));
+
+    const { error: delErr } = await mitTimeout(
+      supabase.from(cloudTabelle).delete().eq('user_id', zustand.userId),
       10000
     );
+    if (delErr) throw new Error('cloud-save-error');
+
+    const rows = [...ordnerRows, ...notizRows];
+    if (rows.length > 0) {
+      const { error: insErr } = await mitTimeout(
+        supabase.from(cloudTabelle).insert(rows),
+        10000
+      );
+      if (insErr) throw new Error('cloud-save-error');
+    }
   } catch (error) {
     if (error?.message === 'timeout') {
       setzeCloudStatus(texte.cloudTimeout);
       return false;
     }
-    zustand.cloudVerfuegbar = false;
-    setzeCloudStatus(texte.cloudFehler);
-    return false;
-  }
-
-  const { error } = antwort;
-
-  if (error) {
     zustand.cloudVerfuegbar = false;
     setzeCloudStatus(texte.cloudFehler);
     return false;
@@ -292,11 +315,8 @@ function stoppeAutoCloudSync() {
 
 function starteAutoCloudSync() {
   if (zustand.cloudIntervall || !zustand.userId || !zustand.cloudVerfuegbar) return;
-
   zustand.cloudIntervall = setInterval(() => {
-    if (document.visibilityState === 'visible') {
-      fuehreCloudSyncAus(false);
-    }
+    if (document.visibilityState === 'visible') fuehreCloudSyncAus(false);
   }, cloudSyncIntervallMs);
 }
 
@@ -322,11 +342,12 @@ async function fuehreCloudSyncAus(manuell) {
     const remotePayload = cloudDatensatz.daten;
     const remote = datenAusPayload(remotePayload);
     const remoteZeit = Number(remotePayload?.zuletztGeaendert || 0);
-    const lokalZeit = Number(gibLetzteAenderung(zustand.notizen) || 0);
+    const lokalZeit = Math.max(Number(zustand.zuletztGeaendertGlobal || 0), Number(gibLetzteAenderung(zustand.notizen) || 0));
 
     if (remote && remoteZeit > lokalZeit) {
       zustand.ordner = remote.ordner;
       zustand.notizen = remote.notizen;
+      zustand.zuletztGeaendertGlobal = remoteZeit || Date.now();
       zustand.aktiveNotizId = zustand.notizen[0]?.id || null;
       speichereDaten(false);
       renderAlles();
@@ -336,9 +357,7 @@ async function fuehreCloudSyncAus(manuell) {
 
     if (lokalZeit >= remoteZeit) {
       const ok = await speichereCloudDaten();
-      if (ok) {
-        setzeCloudStatus(lokalZeit > remoteZeit ? texte.cloudKonfliktLokal : (manuell ? texte.cloudManuellFertig : texte.cloudFertig));
-      }
+      if (ok) setzeCloudStatus(lokalZeit > remoteZeit ? texte.cloudKonfliktLokal : (manuell ? texte.cloudManuellFertig : texte.cloudFertig));
     }
   } catch {
     setzeCloudStatus(texte.cloudFehler);
@@ -366,14 +385,6 @@ async function initialisiereCloudSync() {
   starteAutoCloudSync();
 }
 
-function erstelleId() {
-  return `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-}
-
-function jetztIso() {
-  return new Date().toISOString();
-}
-
 function standardDaten() {
   const ordnerId = erstelleId();
   const notizId = erstelleId();
@@ -381,18 +392,16 @@ function standardDaten() {
 
   return {
     ordner: [{ id: ordnerId, name: texte.ordnerStandard }],
-    notizen: [
-      {
-        id: notizId,
-        ordnerId,
-        titel: texte.standardNotiz,
-        inhalt: texte.standardInhalt,
-        tags: ['start'],
-        angepinnt: true,
-        erstelltAm: zeit,
-        geaendertAm: zeit
-      }
-    ]
+    notizen: [{
+      id: notizId,
+      ordnerId,
+      titel: texte.standardNotiz,
+      inhalt: texte.standardInhalt,
+      angepinnt: true,
+      erstelltAm: zeit,
+      geaendertAm: zeit
+    }],
+    zuletztGeaendertGlobal: Date.now()
   };
 }
 
@@ -403,6 +412,7 @@ function ladeDaten() {
       const daten = standardDaten();
       zustand.ordner = daten.ordner;
       zustand.notizen = daten.notizen;
+      zustand.zuletztGeaendertGlobal = Number(daten.zuletztGeaendertGlobal || Date.now());
       zustand.aktiveNotizId = daten.notizen[0].id;
       speichereDaten(false);
       return;
@@ -410,26 +420,29 @@ function ladeDaten() {
 
     const daten = JSON.parse(roh);
     if (!Array.isArray(daten.ordner) || !Array.isArray(daten.notizen) || daten.ordner.length === 0) {
-      throw new Error('Ungültige Datenstruktur');
+      throw new Error('ungueltig');
     }
 
     zustand.ordner = daten.ordner;
     zustand.notizen = daten.notizen;
+    zustand.zuletztGeaendertGlobal = Number(daten.zuletztGeaendertGlobal || Date.now());
     zustand.aktiveNotizId = zustand.notizen[0]?.id || null;
   } catch {
     const daten = standardDaten();
     zustand.ordner = daten.ordner;
     zustand.notizen = daten.notizen;
+    zustand.zuletztGeaendertGlobal = Number(daten.zuletztGeaendertGlobal || Date.now());
     zustand.aktiveNotizId = daten.notizen[0].id;
     speichereDaten(false);
   }
 }
 
 function speichereDaten(mitStatus = true) {
-  localStorage.setItem(
-    speicherSchluessel,
-    JSON.stringify({ ordner: zustand.ordner, notizen: zustand.notizen })
-  );
+  localStorage.setItem(speicherSchluessel, JSON.stringify({
+    ordner: zustand.ordner,
+    notizen: zustand.notizen,
+    zuletztGeaendertGlobal: zustand.zuletztGeaendertGlobal
+  }));
 
   if (mitStatus && elemente.status) {
     elemente.status.textContent = `${texte.gespeichert}: ${formatZeit(new Date().toISOString())}`;
@@ -442,39 +455,20 @@ function formatZeit(isoWert) {
   if (!isoWert) return texte.geradeJetzt;
   const datum = new Date(isoWert);
   return datum.toLocaleString(istEnglisch ? 'en-US' : 'de-CH', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
+    day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
   });
 }
 
 function holeGefilterteNotizen() {
   return zustand.notizen
     .filter((notiz) => {
-      if (zustand.aktiverOrdner !== 'alle' && notiz.ordnerId !== zustand.aktiverOrdner) {
-        return false;
-      }
-
-      if (zustand.nurAngepinnt && !notiz.angepinnt) {
-        return false;
-      }
-
-      if (!zustand.suchbegriff) {
-        return true;
-      }
-
+      if (zustand.aktiverOrdner !== 'alle' && notiz.ordnerId !== zustand.aktiverOrdner) return false;
+      if (zustand.nurAngepinnt && !notiz.angepinnt) return false;
+      if (!zustand.suchbegriff) return true;
       const begriff = zustand.suchbegriff.toLowerCase();
-      const quelle = `${notiz.titel} ${notiz.inhalt} ${(notiz.tags || []).join(' ')}`.toLowerCase();
-      return quelle.includes(begriff);
+      return `${notiz.titel} ${notiz.inhalt}`.toLowerCase().includes(begriff);
     })
-    .sort((a, b) => {
-      if (a.angepinnt !== b.angepinnt) {
-        return a.angepinnt ? -1 : 1;
-      }
-      return new Date(b.geaendertAm) - new Date(a.geaendertAm);
-    });
+    .sort((a, b) => (a.angepinnt === b.angepinnt ? new Date(b.geaendertAm) - new Date(a.geaendertAm) : (a.angepinnt ? -1 : 1)));
 }
 
 function setzeAktiveNotiz(notizId) {
@@ -491,98 +485,75 @@ function renderOrdner() {
   if (!elemente.ordnerListe) return;
 
   const anzahlProOrdner = new Map();
-  zustand.notizen.forEach((notiz) => {
-    anzahlProOrdner.set(notiz.ordnerId, (anzahlProOrdner.get(notiz.ordnerId) || 0) + 1);
-  });
+  zustand.notizen.forEach((n) => anzahlProOrdner.set(n.ordnerId, (anzahlProOrdner.get(n.ordnerId) || 0) + 1));
 
-  const gesamt = zustand.notizen.length;
-  const ordnerHtml = [
-    `<li data-ordner-id="alle" class="${zustand.aktiverOrdner === 'alle' ? 'aktiv' : ''}"><span class="ordner-name">${istEnglisch ? 'All notes' : 'Alle Notizen'}</span><span class="ordner-zaehler">${gesamt}</span></li>`
+  const html = [
+    `<li data-ordner-id="alle" class="${zustand.aktiverOrdner === 'alle' ? 'aktiv' : ''}"><span class="ordner-name">${istEnglisch ? 'All notes' : 'Alle Notizen'}</span><span class="ordner-zaehler">${zustand.notizen.length}</span></li>`
   ];
 
   zustand.ordner.forEach((ordner) => {
-    ordnerHtml.push(
-      `<li data-ordner-id="${ordner.id}" class="${zustand.aktiverOrdner === ordner.id ? 'aktiv' : ''}"><span class="ordner-name">${ordner.name}</span><span class="ordner-zaehler">${anzahlProOrdner.get(ordner.id) || 0}</span></li>`
-    );
+    html.push(`<li data-ordner-id="${ordner.id}" class="${zustand.aktiverOrdner === ordner.id ? 'aktiv' : ''}"><span class="ordner-name">${ordner.name}</span><span class="ordner-zaehler">${anzahlProOrdner.get(ordner.id) || 0}</span></li>`);
   });
 
-  elemente.ordnerListe.innerHTML = ordnerHtml.join('');
-
+  elemente.ordnerListe.innerHTML = html.join('');
   elemente.ordnerListe.querySelectorAll('li').forEach((eintrag) => {
     eintrag.addEventListener('click', () => {
       zustand.aktiverOrdner = eintrag.dataset.ordnerId;
       const gefiltert = holeGefilterteNotizen();
-      if (!gefiltert.some((notiz) => notiz.id === zustand.aktiveNotizId)) {
-        zustand.aktiveNotizId = gefiltert[0]?.id || null;
-      }
+      if (!gefiltert.some((n) => n.id === zustand.aktiveNotizId)) zustand.aktiveNotizId = gefiltert[0]?.id || null;
       renderAlles();
       if (istMobilAnsicht()) setzeMobilSchritt('notizen');
     });
   });
 }
 
+function entitaetenSichern(text) {
+  return String(text).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;');
+}
+
 function renderNotizenListe() {
   if (!elemente.notizenListe) return;
-
   const gefiltert = holeGefilterteNotizen();
+
   if (gefiltert.length === 0) {
     elemente.notizenListe.innerHTML = `<p class="keine-notiz">${texte.leereListe}</p>`;
     return;
   }
 
-  elemente.notizenListe.innerHTML = gefiltert
-    .map((notiz) => {
-      const vorschau = (notiz.inhalt || '').replace(/\s+/g, ' ').trim().slice(0, 95);
-      const meta = `${formatZeit(notiz.geaendertAm)} · ${(notiz.tags || []).join(', ') || '-'}`;
-      return `
-        <li data-notiz-id="${notiz.id}" class="${notiz.id === zustand.aktiveNotizId ? 'aktiv' : ''}">
-          <p class="notiz-listen-titel">
-            <span>${entitaetenSichern(notiz.titel || texte.titelNeu)}</span>
-            ${notiz.angepinnt ? '<span class="pin-symbol">📌</span>' : ''}
-          </p>
-          <p class="notiz-listen-vorschau">${entitaetenSichern(vorschau || '...')}</p>
-          <p class="notiz-listen-meta">${entitaetenSichern(meta)}</p>
-        </li>
-      `;
-    })
-    .join('');
+  elemente.notizenListe.innerHTML = gefiltert.map((notiz) => {
+    const vorschau = (notiz.inhalt || '').replace(/\s+/g, ' ').trim().slice(0, 95);
+    return `
+      <li data-notiz-id="${notiz.id}" class="${notiz.id === zustand.aktiveNotizId ? 'aktiv' : ''}">
+        <p class="notiz-listen-titel"><span>${entitaetenSichern(notiz.titel || texte.titelNeu)}</span>${notiz.angepinnt ? '<span class="pin-symbol">📌</span>' : ''}</p>
+        <p class="notiz-listen-vorschau">${entitaetenSichern(vorschau || '...')}</p>
+        <p class="notiz-listen-meta">${entitaetenSichern(formatZeit(notiz.geaendertAm))}</p>
+      </li>`;
+  }).join('');
 
   elemente.notizenListe.querySelectorAll('li[data-notiz-id]').forEach((eintrag) => {
     eintrag.addEventListener('click', () => setzeAktiveNotiz(eintrag.dataset.notizId));
   });
 }
 
-function entitaetenSichern(text) {
-  return String(text)
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#39;');
-}
-
 function renderEditor() {
-  const notiz = gibAktiveNotiz();
-  const istBearbeitbar = Boolean(notiz);
+  if (!elemente.titel || !elemente.inhalt || !elemente.angepinnt) return;
 
-  [elemente.titel, elemente.tags, elemente.inhalt, elemente.angepinnt, elemente.loeschen].forEach((feld) => {
-    if (feld) feld.disabled = !istBearbeitbar;
-  });
+  const notiz = gibAktiveNotiz();
+  const aktiv = Boolean(notiz);
+  [elemente.titel, elemente.inhalt, elemente.angepinnt, elemente.loeschen].forEach((feld) => { if (feld) feld.disabled = !aktiv; });
 
   if (!notiz) {
-    if (elemente.titel) elemente.titel.value = '';
-    if (elemente.tags) elemente.tags.value = '';
-    if (elemente.inhalt) elemente.inhalt.value = '';
-    if (elemente.angepinnt) elemente.angepinnt.checked = false;
+    elemente.titel.value = '';
+    elemente.inhalt.value = '';
+    elemente.angepinnt.checked = false;
     if (elemente.status) elemente.status.textContent = texte.geradeJetzt;
     return;
   }
 
   elemente.titel.value = notiz.titel || '';
-  elemente.tags.value = (notiz.tags || []).join(', ');
   elemente.inhalt.value = notiz.inhalt || '';
   elemente.angepinnt.checked = Boolean(notiz.angepinnt);
-  elemente.status.textContent = `${texte.gespeichert}: ${formatZeit(notiz.geaendertAm)}`;
+  if (elemente.status) elemente.status.textContent = `${texte.gespeichert}: ${formatZeit(notiz.geaendertAm)}`;
 }
 
 function renderAlles() {
@@ -591,149 +562,128 @@ function renderAlles() {
   renderEditor();
 }
 
-function planeAutospeichern() {
-  clearTimeout(zustand.autoSpeichernTimer);
-  zustand.autoSpeichernTimer = setTimeout(() => {
-    aktualisiereAktiveNotizAusEditor();
-  }, 260);
-}
-
 function aktualisiereAktiveNotizAusEditor() {
+  if (!elemente.titel || !elemente.inhalt || !elemente.angepinnt) return;
   const notiz = gibAktiveNotiz();
   if (!notiz) return;
 
   notiz.titel = (elemente.titel.value || '').trim() || texte.titelNeu;
-  notiz.tags = (elemente.tags.value || '')
-    .split(',')
-    .map((tag) => tag.trim())
-    .filter(Boolean)
-    .slice(0, 20);
   notiz.inhalt = elemente.inhalt.value || '';
   notiz.angepinnt = Boolean(elemente.angepinnt.checked);
   notiz.geaendertAm = jetztIso();
 
+  markiereAenderung();
   speichereDaten();
   renderNotizenListe();
 }
 
-function notizErstellen() {
-  const zielOrdnerId =
-    zustand.aktiverOrdner !== 'alle'
-      ? zustand.aktiverOrdner
-      : zustand.ordner[0]?.id || erstelleId();
+function planeAutospeichern() {
+  clearTimeout(zustand.autoSpeichernTimer);
+  zustand.autoSpeichernTimer = setTimeout(aktualisiereAktiveNotizAusEditor, 260);
+}
 
-  if (!zustand.ordner.find((ordner) => ordner.id === zielOrdnerId)) {
-    zustand.ordner.unshift({ id: zielOrdnerId, name: texte.ordnerStandard });
-  }
+function notizErstellen() {
+  const ordnerId = zustand.aktiverOrdner !== 'alle' ? zustand.aktiverOrdner : (zustand.ordner[0]?.id || erstelleId());
+  if (!zustand.ordner.find((o) => o.id === ordnerId)) zustand.ordner.unshift({ id: ordnerId, name: texte.ordnerStandard });
 
   const zeit = jetztIso();
-  const notiz = {
-    id: erstelleId(),
-    ordnerId: zielOrdnerId,
-    titel: texte.titelNeu,
-    inhalt: '',
-    tags: [],
-    angepinnt: false,
-    erstelltAm: zeit,
-    geaendertAm: zeit
-  };
-
+  const notiz = { id: erstelleId(), ordnerId, titel: texte.titelNeu, inhalt: '', angepinnt: false, erstelltAm: zeit, geaendertAm: zeit };
   zustand.notizen.unshift(notiz);
   zustand.aktiveNotizId = notiz.id;
+
+  markiereAenderung();
   speichereDaten(false);
   renderAlles();
   if (istMobilAnsicht()) setzeMobilSchritt('editor');
-  elemente.titel.focus();
+  elemente.titel?.focus();
 }
 
 function ordnerErstellen() {
   const name = window.prompt(texte.ordnerPrompt, '');
   if (name === null) return;
-
   const bereinigt = name.trim();
-  if (!bereinigt) {
-    window.alert(texte.ordnerLeer);
-    return;
-  }
-
-  const existiert = zustand.ordner.some((ordner) => ordner.name.toLowerCase() === bereinigt.toLowerCase());
-  if (existiert) {
-    window.alert(texte.ordnerExistiert);
-    return;
-  }
+  if (!bereinigt) return window.alert(texte.ordnerLeer);
+  if (zustand.ordner.some((o) => o.name.toLowerCase() === bereinigt.toLowerCase())) return window.alert(texte.ordnerExistiert);
 
   const ordner = { id: erstelleId(), name: bereinigt };
   zustand.ordner.push(ordner);
   zustand.aktiverOrdner = ordner.id;
+
+  markiereAenderung();
   speichereDaten(false);
   renderAlles();
+}
+
+function aktivenOrdnerLoeschen() {
+  if (zustand.aktiverOrdner === 'alle') return window.alert(texte.ordnerLoeschenAuswahl);
+  if (zustand.ordner.length <= 1) return window.alert(texte.ordnerLoeschenLetzter);
+  if (!window.confirm(texte.ordnerLoeschenFrage)) return;
+
+  const ordnerId = zustand.aktiverOrdner;
+  zustand.ordner = zustand.ordner.filter((o) => o.id !== ordnerId);
+  zustand.notizen = zustand.notizen.filter((n) => n.ordnerId !== ordnerId);
+  zustand.aktiverOrdner = 'alle';
+
+  const gefiltert = holeGefilterteNotizen();
+  zustand.aktiveNotizId = gefiltert[0]?.id || null;
+
+  markiereAenderung();
+  speichereDaten(false);
+  renderAlles();
+  if (istMobilAnsicht()) setzeMobilSchritt('ordner');
 }
 
 function aktiveNotizLoeschen() {
   if (!zustand.aktiveNotizId) return;
   if (!window.confirm(texte.loeschenFrage)) return;
 
-  zustand.notizen = zustand.notizen.filter((notiz) => notiz.id !== zustand.aktiveNotizId);
+  zustand.notizen = zustand.notizen.filter((n) => n.id !== zustand.aktiveNotizId);
+  zustand.aktiveNotizId = null;
 
-  const gefiltert = holeGefilterteNotizen();
-  zustand.aktiveNotizId = gefiltert[0]?.id || zustand.notizen[0]?.id || null;
-
+  markiereAenderung();
   speichereDaten(false);
   renderAlles();
+  if (istMobilAnsicht()) setzeMobilSchritt('notizen');
 }
 
 function fuegeTextEin(vorlageText) {
   const feld = elemente.inhalt;
   if (!feld) return;
-
   const start = feld.selectionStart;
   const ende = feld.selectionEnd;
-  const vorher = feld.value.slice(0, start);
-  const nachher = feld.value.slice(ende);
-  feld.value = `${vorher}${vorlageText}${nachher}`;
-
-  const neuePosition = start + vorlageText.length;
+  feld.value = `${feld.value.slice(0, start)}${vorlageText}${feld.value.slice(ende)}`;
+  const pos = start + vorlageText.length;
   feld.focus();
-  feld.setSelectionRange(neuePosition, neuePosition);
+  feld.setSelectionRange(pos, pos);
   planeAutospeichern();
 }
 
 function registriereEvents() {
   aktualisiereMobileAnsicht();
 
-  elemente.zurueckZuOrdnern?.addEventListener('click', () => {
-    setzeMobilSchritt('ordner');
-  });
-
-  elemente.zurueckZuNotizen?.addEventListener('click', () => {
-    setzeMobilSchritt('notizen');
-  });
+  elemente.zurueckZuOrdnern?.addEventListener('click', () => setzeMobilSchritt('ordner'));
+  elemente.zurueckZuNotizen?.addEventListener('click', () => setzeMobilSchritt('notizen'));
 
   elemente.notizAnlegen?.addEventListener('click', notizErstellen);
   elemente.ordnerAnlegen?.addEventListener('click', ordnerErstellen);
+  elemente.ordnerLoeschen?.addEventListener('click', aktivenOrdnerLoeschen);
   elemente.loeschen?.addEventListener('click', aktiveNotizLoeschen);
 
-  elemente.suche?.addEventListener('input', (ereignis) => {
-    zustand.suchbegriff = ereignis.target.value || '';
+  elemente.suche?.addEventListener('input', (e) => {
+    zustand.suchbegriff = e.target.value || '';
     const gefiltert = holeGefilterteNotizen();
-    if (!gefiltert.some((notiz) => notiz.id === zustand.aktiveNotizId)) {
-      zustand.aktiveNotizId = gefiltert[0]?.id || null;
-    }
+    if (!gefiltert.some((n) => n.id === zustand.aktiveNotizId)) zustand.aktiveNotizId = gefiltert[0]?.id || null;
     renderAlles();
   });
 
-  elemente.nurAngepinnt?.addEventListener('change', (ereignis) => {
-    zustand.nurAngepinnt = Boolean(ereignis.target.checked);
+  elemente.nurAngepinnt?.addEventListener('change', (e) => {
+    zustand.nurAngepinnt = Boolean(e.target.checked);
     const gefiltert = holeGefilterteNotizen();
-    if (!gefiltert.some((notiz) => notiz.id === zustand.aktiveNotizId)) {
-      zustand.aktiveNotizId = gefiltert[0]?.id || null;
-    }
+    if (!gefiltert.some((n) => n.id === zustand.aktiveNotizId)) zustand.aktiveNotizId = gefiltert[0]?.id || null;
     renderAlles();
   });
 
-  [elemente.titel, elemente.tags, elemente.inhalt].forEach((feld) => {
-    feld?.addEventListener('input', planeAutospeichern);
-  });
+  [elemente.titel, elemente.inhalt].forEach((feld) => feld?.addEventListener('input', planeAutospeichern));
 
   elemente.angepinnt?.addEventListener('change', () => {
     aktualisiereAktiveNotizAusEditor();
@@ -743,10 +693,7 @@ function registriereEvents() {
   elemente.vorlageTitel?.addEventListener('click', () => fuegeTextEin(texte.vorlageTitel));
   elemente.vorlageCheck?.addEventListener('click', () => fuegeTextEin(texte.vorlageCheck));
   elemente.vorlageInfo?.addEventListener('click', () => fuegeTextEin(texte.vorlageInfo));
-
-  elemente.cloudSyncBtn?.addEventListener('click', () => {
-    fuehreCloudSyncAus(true);
-  });
+  elemente.cloudSyncBtn?.addEventListener('click', () => fuehreCloudSyncAus(true));
 
   window.addEventListener('online', () => {
     if (zustand.userId) {
@@ -755,41 +702,29 @@ function registriereEvents() {
     }
   });
 
-  window.addEventListener('offline', () => {
-    setzeCloudStatus(texte.cloudOffline);
-  });
-
+  window.addEventListener('offline', () => setzeCloudStatus(texte.cloudOffline));
   document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible' && zustand.userId) {
-      fuehreCloudSyncAus(false);
-    }
+    if (document.visibilityState === 'visible' && zustand.userId) fuehreCloudSyncAus(false);
   });
-
   window.addEventListener('focus', () => {
-    if (zustand.userId) {
-      fuehreCloudSyncAus(false);
-    }
+    if (zustand.userId) fuehreCloudSyncAus(false);
   });
-
-  window.addEventListener('beforeunload', () => {
-    stoppeAutoCloudSync();
-  });
-
+  window.addEventListener('beforeunload', stoppeAutoCloudSync);
   window.addEventListener('resize', aktualisiereMobileAnsicht);
 
-  supabase.auth.onAuthStateChange(async (_event, session) => {
-    if (_event === 'INITIAL_SESSION' && !session?.user?.id && zustand.userId) {
-      return;
-    }
+  supabase.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'INITIAL_SESSION' && !session?.user?.id && zustand.userId) return;
 
     const neueUserId = session?.user?.id || null;
     if (neueUserId === zustand.userId) return;
+
     zustand.userId = neueUserId;
     if (!neueUserId) {
       stoppeAutoCloudSync();
       setzeCloudStatus(texte.cloudNichtEingeloggt);
       return;
     }
+
     setzeCloudStatus(texte.cloudLade);
     await fuehreCloudSyncAus(false);
     starteAutoCloudSync();
@@ -800,14 +735,8 @@ async function init() {
   ladeDaten();
   registriereEvents();
   renderAlles();
-  if (elemente.tagHinweis) {
-    elemente.tagHinweis.textContent = texte.tagHinweis;
-  }
 
-  if (elemente.cloudSyncBtn) {
-    elemente.cloudSyncBtn.textContent = texte.cloudSync;
-  }
-
+  if (elemente.cloudSyncBtn) elemente.cloudSyncBtn.textContent = texte.cloudSync;
   await initialisiereCloudSync();
 }
 
