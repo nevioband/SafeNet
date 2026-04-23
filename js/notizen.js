@@ -665,7 +665,65 @@ function fuegeTextEin(vorlageText) {
   planeAutospeichern();
 }
 
+function setupMobilePanels() {
+  const panels = Array.from(document.querySelectorAll('[data-mobile-panel]'));
+  if (panels.length === 0) return;
+
+  const istMobil = window.innerWidth <= 768;
+
+  if (!istMobil) {
+    panels.forEach((panel) => {
+      panel.classList.remove('mobile-offen');
+      const toggle = panel.querySelector('[data-mobile-toggle]');
+      if (toggle) toggle.setAttribute('aria-expanded', 'false');
+    });
+    return;
+  }
+
+  let offenPanel = panels.find((panel) => panel.classList.contains('mobile-offen'));
+  if (!offenPanel) {
+    offenPanel = panels.find((panel) => panel.classList.contains('mobile-standard-offen')) || panels[0];
+  }
+
+  panels.forEach((panel) => {
+    const istOffen = panel === offenPanel;
+    panel.classList.toggle('mobile-offen', istOffen);
+    const toggle = panel.querySelector('[data-mobile-toggle]');
+    if (toggle) toggle.setAttribute('aria-expanded', istOffen ? 'true' : 'false');
+  });
+
+  panels.forEach((panel) => {
+    const toggle = panel.querySelector('[data-mobile-toggle]');
+    if (!toggle) return;
+
+    if (toggle._mobilePanelHandler) {
+      toggle.removeEventListener('click', toggle._mobilePanelHandler);
+    }
+
+    const handler = () => {
+      if (window.innerWidth > 768) return;
+
+      const istAktuellOffen = panel.classList.contains('mobile-offen');
+      panels.forEach((anderesPanel) => {
+        anderesPanel.classList.remove('mobile-offen');
+        const andererToggle = anderesPanel.querySelector('[data-mobile-toggle]');
+        if (andererToggle) andererToggle.setAttribute('aria-expanded', 'false');
+      });
+
+      if (!istAktuellOffen) {
+        panel.classList.add('mobile-offen');
+        toggle.setAttribute('aria-expanded', 'true');
+      }
+    };
+
+    toggle.addEventListener('click', handler);
+    toggle._mobilePanelHandler = handler;
+  });
+}
+
 function registriereEvents() {
+  setupMobilePanels();
+
   elemente.notizAnlegen?.addEventListener('click', notizErstellen);
   elemente.ordnerAnlegen?.addEventListener('click', ordnerErstellen);
   elemente.loeschen?.addEventListener('click', aktiveNotizLoeschen);
@@ -731,6 +789,8 @@ function registriereEvents() {
   window.addEventListener('beforeunload', () => {
     stoppeAutoCloudSync();
   });
+
+  window.addEventListener('resize', setupMobilePanels);
 
   supabase.auth.onAuthStateChange(async (_event, session) => {
     if (_event === 'INITIAL_SESSION' && !session?.user?.id && zustand.userId) {

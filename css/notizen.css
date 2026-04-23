@@ -55,6 +55,30 @@ body {
   margin-bottom: 12px;
 }
 
+.mobile-panel-toggle {
+  display: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  border: 1px solid rgba(59, 130, 246, 0.32);
+  background: rgba(59, 130, 246, 0.16);
+  color: var(--text);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-panel-icon {
+  display: inline-block;
+  font-size: 1.05rem;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+[data-mobile-panel].mobile-offen .mobile-panel-icon {
+  transform: rotate(180deg);
+}
+
 .notiz-mini-btn,
 .notiz-haupt-btn,
 .notiz-aktion-btn {
@@ -322,6 +346,18 @@ body {
     padding: 12px;
   }
 
+  .mobile-panel-toggle {
+    display: inline-flex;
+  }
+
+  .mobile-panel-inhalt {
+    display: none;
+  }
+
+  [data-mobile-panel].mobile-offen .mobile-panel-inhalt {
+    display: block;
+  }
+
   .notizen-liste {
     max-height: 320px;
   }
@@ -357,4 +393,9 @@ body {
 
 [data-theme="light"] .cloud-status {
   color: #475569;
+}
+
+[data-theme="light"] .mobile-panel-toggle {
+  color: #1e293b;
+  background: rgba(59, 130, 246, 0.08);
 }
