@@ -973,6 +973,7 @@ function renderEditor() {
   elemente.titel.value = notiz.titel || '';
   elemente.inhalt.innerHTML = inhaltAlsHtml(notiz.inhalt || '');
   elemente.angepinnt.checked = Boolean(notiz.angepinnt);
+  schliesseSchriftgroessenMenue();
   setzeAktiveGroessenTaste(18, false);
   if (elemente.status) elemente.status.textContent = `${texte.gespeichert}: ${formatZeit(notiz.geaendertAm)}`;
 }

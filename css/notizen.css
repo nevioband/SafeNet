@@ -185,6 +185,10 @@ body {
   gap: 5px;
 }
 
+.schriftgroesse-menue[hidden] {
+  display: none !important;
+}
+
 .schriftgroesse-option {
   height: 34px;
   border-radius: 9px;
