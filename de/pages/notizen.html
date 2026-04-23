@@ -38,10 +38,9 @@
         <div class="notizen-grid">
           <aside class="notizen-karte ordner-panel" data-mobile-panel>
             <div class="ordner-kopf">
-              <h2>Ordner</h2>
-              <button class="mobile-panel-toggle" type="button" data-mobile-toggle aria-expanded="false" aria-label="Ordner ein- oder ausklappen">
-                <span class="mobile-panel-icon">⌄</span>
-              </button>
+              <div class="panel-titel">
+                <h2>Ordner</h2>
+              </div>
               <button id="ordnerAnlegen" class="notiz-mini-btn" type="button" aria-label="Ordner hinzufügen">+</button>
             </div>
             <div class="mobile-panel-inhalt">
@@ -49,12 +48,12 @@
             </div>
           </aside>
 
-          <section class="notizen-karte liste-panel mobile-standard-offen" data-mobile-panel>
+          <section class="notizen-karte liste-panel" data-mobile-panel>
             <div class="liste-kopf">
-              <h2>Notizen</h2>
-              <button class="mobile-panel-toggle" type="button" data-mobile-toggle aria-expanded="true" aria-label="Notizen ein- oder ausklappen">
-                <span class="mobile-panel-icon">⌄</span>
-              </button>
+              <div class="panel-titel">
+                <button id="zurueckZuOrdnern" class="mobile-back-btn" type="button" aria-label="Zurück zu Ordnern">←</button>
+                <h2>Notizen</h2>
+              </div>
             </div>
             <div class="mobile-panel-inhalt">
               <button id="notizAnlegen" class="notiz-haupt-btn" type="button">Neue Notiz</button>
@@ -73,10 +72,10 @@
 
           <section class="notizen-karte editor-panel" data-mobile-panel>
             <div class="editor-kopf">
-              <h2>Editor</h2>
-              <button class="mobile-panel-toggle" type="button" data-mobile-toggle aria-expanded="false" aria-label="Editor ein- oder ausklappen">
-                <span class="mobile-panel-icon">⌄</span>
-              </button>
+              <div class="panel-titel">
+                <button id="zurueckZuNotizen" class="mobile-back-btn" type="button" aria-label="Zurück zu Notizen">←</button>
+                <h2>Editor</h2>
+              </div>
               <button id="notizLoeschen" class="notiz-aktion-btn warnung" type="button">Löschen</button>
             </div>
             <div class="mobile-panel-inhalt">

@@ -82,6 +82,8 @@ const elemente = {
   status: document.getElementById('speicherStatus'),
   cloudStatus: document.getElementById('cloudStatus'),
   cloudSyncBtn: document.getElementById('cloudSyncBtn'),
+  zurueckZuOrdnern: document.getElementById('zurueckZuOrdnern'),
+  zurueckZuNotizen: document.getElementById('zurueckZuNotizen'),
   vorlageTitel: document.getElementById('vorlageTitel'),
   vorlageCheck: document.getElementById('vorlageCheckliste'),
   vorlageInfo: document.getElementById('vorlageInfo'),
@@ -100,8 +102,36 @@ const zustand = {
   cloudIntervall: null,
   cloudVerfuegbar: true,
   userId: null,
-  laufenderCloudSync: false
+  laufenderCloudSync: false,
+  mobileSchritt: 'ordner'
 };
+
+function istMobilAnsicht() {
+  return window.innerWidth <= 768;
+}
+
+function setzeMobilSchritt(schritt) {
+  zustand.mobileSchritt = schritt;
+  aktualisiereMobileAnsicht();
+}
+
+function aktualisiereMobileAnsicht() {
+  const panels = {
+    ordner: document.querySelector('.ordner-panel'),
+    notizen: document.querySelector('.liste-panel'),
+    editor: document.querySelector('.editor-panel')
+  };
+
+  if (!istMobilAnsicht()) {
+    Object.values(panels).forEach((panel) => panel?.classList.add('mobile-sichtbar'));
+    return;
+  }
+
+  Object.entries(panels).forEach(([schritt, panel]) => {
+    if (!panel) return;
+    panel.classList.toggle('mobile-sichtbar', schritt === zustand.mobileSchritt);
+  });
+}
 
 function setzeCloudStatus(text) {
   if (elemente.cloudStatus) elemente.cloudStatus.textContent = text;
@@ -450,6 +480,7 @@ function holeGefilterteNotizen() {
 function setzeAktiveNotiz(notizId) {
   zustand.aktiveNotizId = notizId;
   renderAlles();
+  if (istMobilAnsicht()) setzeMobilSchritt('editor');
 }
 
 function gibAktiveNotiz() {
@@ -485,6 +516,7 @@ function renderOrdner() {
         zustand.aktiveNotizId = gefiltert[0]?.id || null;
       }
       renderAlles();
+      if (istMobilAnsicht()) setzeMobilSchritt('notizen');
     });
   });
 }
@@ -610,6 +642,7 @@ function notizErstellen() {
   zustand.aktiveNotizId = notiz.id;
   speichereDaten(false);
   renderAlles();
+  if (istMobilAnsicht()) setzeMobilSchritt('editor');
   elemente.titel.focus();
 }
 
@@ -665,64 +698,16 @@ function fuegeTextEin(vorlageText) {
   planeAutospeichern();
 }
 
-function setupMobilePanels() {
-  const panels = Array.from(document.querySelectorAll('[data-mobile-panel]'));
-  if (panels.length === 0) return;
-
-  const istMobil = window.innerWidth <= 768;
-
-  if (!istMobil) {
-    panels.forEach((panel) => {
-      panel.classList.remove('mobile-offen');
-      const toggle = panel.querySelector('[data-mobile-toggle]');
-      if (toggle) toggle.setAttribute('aria-expanded', 'false');
-    });
-    return;
-  }
-
-  let offenPanel = panels.find((panel) => panel.classList.contains('mobile-offen'));
-  if (!offenPanel) {
-    offenPanel = panels.find((panel) => panel.classList.contains('mobile-standard-offen')) || panels[0];
-  }
-
-  panels.forEach((panel) => {
-    const istOffen = panel === offenPanel;
-    panel.classList.toggle('mobile-offen', istOffen);
-    const toggle = panel.querySelector('[data-mobile-toggle]');
-    if (toggle) toggle.setAttribute('aria-expanded', istOffen ? 'true' : 'false');
-  });
-
-  panels.forEach((panel) => {
-    const toggle = panel.querySelector('[data-mobile-toggle]');
-    if (!toggle) return;
-
-    if (toggle._mobilePanelHandler) {
-      toggle.removeEventListener('click', toggle._mobilePanelHandler);
-    }
-
-    const handler = () => {
-      if (window.innerWidth > 768) return;
-
-      const istAktuellOffen = panel.classList.contains('mobile-offen');
-      panels.forEach((anderesPanel) => {
-        anderesPanel.classList.remove('mobile-offen');
-        const andererToggle = anderesPanel.querySelector('[data-mobile-toggle]');
-        if (andererToggle) andererToggle.setAttribute('aria-expanded', 'false');
-      });
-
-      if (!istAktuellOffen) {
-        panel.classList.add('mobile-offen');
-        toggle.setAttribute('aria-expanded', 'true');
-      }
-    };
-
-    toggle.addEventListener('click', handler);
-    toggle._mobilePanelHandler = handler;
-  });
-}
-
 function registriereEvents() {
-  setupMobilePanels();
+  aktualisiereMobileAnsicht();
+
+  elemente.zurueckZuOrdnern?.addEventListener('click', () => {
+    setzeMobilSchritt('ordner');
+  });
+
+  elemente.zurueckZuNotizen?.addEventListener('click', () => {
+    setzeMobilSchritt('notizen');
+  });
 
   elemente.notizAnlegen?.addEventListener('click', notizErstellen);
   elemente.ordnerAnlegen?.addEventListener('click', ordnerErstellen);
@@ -790,7 +775,7 @@ function registriereEvents() {
     stoppeAutoCloudSync();
   });
 
-  window.addEventListener('resize', setupMobilePanels);
+  window.addEventListener('resize', aktualisiereMobileAnsicht);
 
   supabase.auth.onAuthStateChange(async (_event, session) => {
     if (_event === 'INITIAL_SESSION' && !session?.user?.id && zustand.userId) {

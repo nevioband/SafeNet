@@ -55,7 +55,14 @@ body {
   margin-bottom: 12px;
 }
 
-.mobile-panel-toggle {
+.panel-titel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: auto;
+}
+
+.mobile-back-btn {
   display: none;
   width: 34px;
   height: 34px;
@@ -64,19 +71,8 @@ body {
   background: rgba(59, 130, 246, 0.16);
   color: var(--text);
   cursor: pointer;
-  align-items: center;
-  justify-content: center;
-}
-
-.mobile-panel-icon {
-  display: inline-block;
   font-size: 1.05rem;
   line-height: 1;
-  transition: transform 0.2s ease;
-}
-
-[data-mobile-panel].mobile-offen .mobile-panel-icon {
-  transform: rotate(180deg);
 }
 
 .notiz-mini-btn,
@@ -337,25 +333,27 @@ body {
   }
 
   .notizen-grid {
-    grid-template-columns: 1fr;
-    gap: 10px;
+    display: block;
   }
 
   .notizen-karte {
     min-height: 0;
     padding: 12px;
-  }
-
-  .mobile-panel-toggle {
-    display: inline-flex;
-  }
-
-  .mobile-panel-inhalt {
     display: none;
   }
 
-  [data-mobile-panel].mobile-offen .mobile-panel-inhalt {
+  .notizen-karte.mobile-sichtbar {
     display: block;
+  }
+
+  .mobile-panel-inhalt {
+    display: block;
+  }
+
+  .mobile-back-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .notizen-liste {
@@ -395,7 +393,7 @@ body {
   color: #475569;
 }
 
-[data-theme="light"] .mobile-panel-toggle {
+[data-theme="light"] .mobile-back-btn {
   color: #1e293b;
   background: rgba(59, 130, 246, 0.08);
 }
