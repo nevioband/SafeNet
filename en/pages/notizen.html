@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="/css/notizen.css" />
 
     <script type="module" src="/js/auth.js?v=7"></script>
-    <script type="module" src="/js/notizen.js?v=6" defer></script>
+    <script type="module" src="/js/notizen.js?v=11" defer></script>
   </head>
   <body>
     <div id="navbar"></div>
@@ -77,8 +77,13 @@
                 <button id="zurueckZuNotizen" class="mobile-back-btn" type="button" aria-label="Back to notes">←</button>
                 <h2>Editor</h2>
               </div>
-              <button id="cloudSyncBtn" class="notiz-aktion-btn" type="button">Cloud sync</button>
-              <button id="notizLoeschen" class="notiz-aktion-btn warnung" type="button">Delete</button>
+              <div class="editor-aktionen">
+                <button id="cloudSyncBtn" class="notiz-aktion-btn" type="button">Cloud sync</button>
+                <button id="notizenImportBtn" class="notiz-aktion-btn" type="button">Import</button>
+                <button id="notizenExportBtn" class="notiz-aktion-btn" type="button">Export</button>
+                <button id="notizLoeschen" class="notiz-aktion-btn warnung" type="button">Delete</button>
+                <input id="notizenImportDatei" type="file" accept="application/json,.json,text/plain,.txt" hidden />
+              </div>
             </div>
             <div class="mobile-panel-inhalt">
               <div class="editor-felder">
@@ -93,15 +98,28 @@
                     Pin note
                   </label>
                   <div class="editor-werkzeuge">
-                    <button id="vorlageTitel" class="notiz-aktion-btn" type="button">Heading</button>
-                    <button id="vorlageCheckliste" class="notiz-aktion-btn" type="button">Checklist</button>
-                    <button id="vorlageInfo" class="notiz-aktion-btn" type="button">Info Box</button>
+                    <button id="textFett" class="notiz-aktion-btn" type="button">Bold</button>
+                    <button id="textKursiv" class="notiz-aktion-btn" type="button">Italic</button>
+                    <button id="textUnterstrichen" class="notiz-aktion-btn" type="button">Underline</button>
+                    <div class="schriftgroesse-dropdown" id="schriftgroesseDropdown">
+                      <button id="schriftgroesseToggle" class="notiz-aktion-btn schriftgroesse-toggle" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="Select font size">
+                        <span id="schriftgroesseLabel">Medium</span>
+                        <span class="schriftgroesse-pfeil" aria-hidden="true">▾</span>
+                      </button>
+                      <div id="schriftgroesseMenue" class="schriftgroesse-menue" role="listbox" aria-label="Font size options" hidden>
+                        <button class="schriftgroesse-option" type="button" role="option" data-groesse="12">Very small</button>
+                        <button class="schriftgroesse-option" type="button" role="option" data-groesse="14">Small</button>
+                        <button class="schriftgroesse-option aktiv" type="button" role="option" data-groesse="18" aria-selected="true">Medium</button>
+                        <button class="schriftgroesse-option" type="button" role="option" data-groesse="24">Large</button>
+                        <button class="schriftgroesse-option" type="button" role="option" data-groesse="32">Very large</button>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
                 <div class="editor-feld">
                   <label for="notizInhalt">Content</label>
-                  <textarea id="notizInhalt" placeholder="Write your note here..."></textarea>
+                  <div id="notizInhalt" class="notiz-editor" contenteditable="true" role="textbox" aria-label="Note content" aria-multiline="true" data-placeholder="Write your note here..."></div>
                 </div>
               </div>
               <p id="cloudStatus" class="cloud-status">Cloud: checking ...</p>

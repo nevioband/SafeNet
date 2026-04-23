@@ -32,7 +32,21 @@ const texte = istEnglisch
       cloudManuellStart: 'Cloud: manual sync running ...',
       cloudManuellFertig: 'Cloud: manual sync completed',
       cloudOffline: 'Cloud: offline mode',
-      cloudTimeout: 'Cloud: timeout (please try manual sync)'
+      cloudTimeout: 'Cloud: timeout (please try manual sync)',
+      importieren: 'Import',
+      exportieren: 'Export',
+      schriftgroesseOhneAuswahl: 'Please select text first.',
+      textFormatOhneAuswahl: 'Please select text in the note first.',
+      importFehlerDatei: 'Import failed: file could not be read.',
+      importFehlerFormat: 'Import failed: invalid format.',
+      importErfolg: 'Import successful.',
+      exportDateiname: 'safenet-notes',
+      groesseSehrKlein: 'Very small',
+      groesseKlein: 'Small',
+      groesseMittel: 'Medium',
+      groesseGross: 'Large',
+      groesseSehrGross: 'Very large',
+      groesseGemischt: 'Mixed'
     }
   : {
       neueNotiz: 'Neue Notiz',
@@ -63,7 +77,21 @@ const texte = istEnglisch
       cloudManuellStart: 'Cloud: manueller Sync läuft ...',
       cloudManuellFertig: 'Cloud: manueller Sync abgeschlossen',
       cloudOffline: 'Cloud: Offline-Modus',
-      cloudTimeout: 'Cloud: Zeitüberschreitung (bitte manuell syncen)'
+      cloudTimeout: 'Cloud: Zeitüberschreitung (bitte manuell syncen)',
+      importieren: 'Import',
+      exportieren: 'Export',
+      schriftgroesseOhneAuswahl: 'Bitte markiere zuerst einen Text.',
+      textFormatOhneAuswahl: 'Bitte markiere zuerst einen Text in der Notiz.',
+      importFehlerDatei: 'Import fehlgeschlagen: Datei konnte nicht gelesen werden.',
+      importFehlerFormat: 'Import fehlgeschlagen: Ungültiges Format.',
+      importErfolg: 'Import erfolgreich.',
+      exportDateiname: 'safenet-notizen',
+      groesseSehrKlein: 'Sehr klein',
+      groesseKlein: 'Klein',
+      groesseMittel: 'Mittel',
+      groesseGross: 'Gross',
+      groesseSehrGross: 'Sehr gross',
+      groesseGemischt: 'Gemischt'
     };
 
 const speicherSchluessel = 'safenet_notizen_v1';
@@ -91,6 +119,16 @@ const elemente = {
   status: document.getElementById('speicherStatus'),
   cloudStatus: document.getElementById('cloudStatus'),
   cloudSyncBtn: document.getElementById('cloudSyncBtn'),
+  importBtn: document.getElementById('notizenImportBtn'),
+  exportBtn: document.getElementById('notizenExportBtn'),
+  importDatei: document.getElementById('notizenImportDatei'),
+  textFett: document.getElementById('textFett'),
+  textKursiv: document.getElementById('textKursiv'),
+  textUnterstrichen: document.getElementById('textUnterstrichen'),
+  schriftgroesseDropdown: document.getElementById('schriftgroesseDropdown'),
+  schriftgroesseToggle: document.getElementById('schriftgroesseToggle'),
+  schriftgroesseMenue: document.getElementById('schriftgroesseMenue'),
+  schriftgroesseLabel: document.getElementById('schriftgroesseLabel'),
   zurueckZuOrdnern: document.getElementById('zurueckZuOrdnern'),
   zurueckZuNotizen: document.getElementById('zurueckZuNotizen'),
   vorlageTitel: document.getElementById('vorlageTitel'),
@@ -112,8 +150,11 @@ const zustand = {
   userId: null,
   laufenderCloudSync: false,
   mobileSchritt: 'ordner',
-  zuletztGeaendertGlobal: Date.now()
+  zuletztGeaendertGlobal: Date.now(),
+  letzteEditorAuswahl: null
 };
+
+const schriftgroessenStufen = [12, 14, 18, 24, 32];
 
 function istMobilAnsicht() { return window.innerWidth <= 768; }
 function setzeCloudStatus(text) { if (elemente.cloudStatus) elemente.cloudStatus.textContent = text; }
@@ -169,6 +210,310 @@ function datenAusPayload(payload) {
   if (!payload || typeof payload !== 'object') return null;
   if (!Array.isArray(payload.ordner) || !Array.isArray(payload.notizen) || payload.ordner.length === 0) return null;
   return { ordner: payload.ordner, notizen: payload.notizen };
+}
+
+function inhaltAlsHtml(inhalt) {
+  const text = String(inhalt || '');
+  if (/<[^>]+>/.test(text)) return text;
+  return entitaetenSichern(text).replace(/\n/g, '<br>');
+}
+
+function htmlAlsText(html) {
+  const container = document.createElement('div');
+  container.innerHTML = String(html || '');
+  return container.textContent || container.innerText || '';
+}
+
+function speichereEditorAuswahl() {
+  const feld = elemente.inhalt;
+  const auswahl = window.getSelection();
+  if (!feld || !auswahl || auswahl.rangeCount === 0) return;
+  const range = auswahl.getRangeAt(0);
+  if (!feld.contains(range.commonAncestorContainer)) return;
+  zustand.letzteEditorAuswahl = range.cloneRange();
+}
+
+function stelleEditorAuswahlWiederHer() {
+  const feld = elemente.inhalt;
+  if (!feld || !zustand.letzteEditorAuswahl) return false;
+  const auswahl = window.getSelection();
+  feld.focus();
+  auswahl.removeAllRanges();
+  auswahl.addRange(zustand.letzteEditorAuswahl);
+  return true;
+}
+
+function bereiteEditorFormatierungVor() {
+  if (!stelleEditorAuswahlWiederHer()) {
+    window.alert(texte.textFormatOhneAuswahl);
+    return null;
+  }
+
+  const feld = elemente.inhalt;
+  const auswahl = window.getSelection();
+  if (!feld || !auswahl || auswahl.rangeCount === 0 || auswahl.isCollapsed) {
+    window.alert(texte.textFormatOhneAuswahl);
+    return null;
+  }
+
+  const range = auswahl.getRangeAt(0);
+  if (!feld.contains(range.commonAncestorContainer)) {
+    window.alert(texte.textFormatOhneAuswahl);
+    return null;
+  }
+
+  return { feld, auswahl, range };
+}
+
+function formatiereText(befehl) {
+  const vorbereitet = bereiteEditorFormatierungVor();
+  if (!vorbereitet) return;
+  document.execCommand(befehl, false, null);
+  speichereEditorAuswahl();
+  planeAutospeichern();
+}
+
+function normalisiereImportDaten(rohdaten) {
+  if (!rohdaten || typeof rohdaten !== 'object') return null;
+  const quelle = rohdaten?.daten && typeof rohdaten.daten === 'object' ? rohdaten.daten : rohdaten;
+  const daten = datenAusPayload(quelle);
+  if (!daten) return null;
+
+  const ordner = daten.ordner
+    .map((eintrag) => ({
+      id: String(eintrag?.id || erstelleId()),
+      name: String(eintrag?.name || texte.ordnerStandard).trim() || texte.ordnerStandard
+    }))
+    .filter((eintrag, index, arr) => eintrag.id && arr.findIndex((x) => x.id === eintrag.id) === index);
+
+  if (ordner.length === 0) return null;
+  const ordnerIds = new Set(ordner.map((eintrag) => eintrag.id));
+  const fallbackOrdnerId = ordner[0].id;
+
+  const notizen = daten.notizen
+    .map((eintrag) => {
+      const notizId = String(eintrag?.id || erstelleId());
+      const ordnerId = ordnerIds.has(String(eintrag?.ordnerId || '')) ? String(eintrag.ordnerId) : fallbackOrdnerId;
+      const zeit = jetztIso();
+      return {
+        id: notizId,
+        ordnerId,
+        titel: String(eintrag?.titel || texte.titelNeu).trim() || texte.titelNeu,
+        inhalt: String(eintrag?.inhalt || ''),
+        angepinnt: Boolean(eintrag?.angepinnt),
+        erstelltAm: eintrag?.erstelltAm || zeit,
+        geaendertAm: eintrag?.geaendertAm || zeit
+      };
+    })
+    .filter((eintrag, index, arr) => eintrag.id && arr.findIndex((x) => x.id === eintrag.id) === index);
+
+  return { ordner, notizen };
+}
+
+function exportiereNotizen() {
+  const ordnerMap = new Map(zustand.ordner.map((ordner) => [ordner.id, ordner.name]));
+  const zeilen = [];
+
+  zeilen.push('SafeNet Notizen Export');
+  zeilen.push(`Erstellt am: ${jetztIso()}`);
+  zeilen.push('');
+
+  zustand.notizen.forEach((notiz, index) => {
+    const ordnerName = ordnerMap.get(notiz.ordnerId) || texte.ordnerStandard;
+    zeilen.push(`Notiz ${index + 1}`);
+    zeilen.push(`Ordner: ${ordnerName}`);
+    zeilen.push(`Titel: ${notiz.titel || texte.titelNeu}`);
+    zeilen.push(`Angepinnt: ${notiz.angepinnt ? 'Ja' : 'Nein'}`);
+    zeilen.push(`Geaendert: ${notiz.geaendertAm || jetztIso()}`);
+    zeilen.push('Inhalt:');
+    zeilen.push(htmlAlsText(notiz.inhalt || ''));
+    zeilen.push('');
+    zeilen.push('----------------------------------------');
+    zeilen.push('');
+  });
+
+  const inhalt = zeilen.join('\n');
+  const blob = new Blob([inhalt], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  const datum = new Date().toISOString().slice(0, 10);
+
+  link.href = url;
+  link.download = `${texte.exportDateiname}-${datum}.txt`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+async function importiereNotizenDatei(event) {
+  const datei = event?.target?.files?.[0];
+  if (!datei) return;
+
+  try {
+    const text = await datei.text();
+    let daten = null;
+
+    try {
+      daten = normalisiereImportDaten(JSON.parse(text));
+    } catch {
+      const ordnerId = erstelleId();
+      const zeit = jetztIso();
+      daten = {
+        ordner: [{ id: ordnerId, name: texte.ordnerStandard }],
+        notizen: [{
+          id: erstelleId(),
+          ordnerId,
+          titel: (datei.name || texte.titelNeu).replace(/\.[^.]+$/, '') || texte.titelNeu,
+          inhalt: inhaltAlsHtml(text),
+          angepinnt: false,
+          erstelltAm: zeit,
+          geaendertAm: zeit
+        }]
+      };
+    }
+
+    if (!daten) {
+      window.alert(texte.importFehlerFormat);
+      return;
+    }
+
+    zustand.ordner = daten.ordner;
+    zustand.notizen = daten.notizen;
+    zustand.aktiverOrdner = 'alle';
+    zustand.aktiveNotizId = zustand.notizen[0]?.id || null;
+    markiereAenderung();
+    speichereDaten(false);
+    renderAlles();
+    window.alert(texte.importErfolg);
+  } catch {
+    window.alert(texte.importFehlerDatei);
+  } finally {
+    if (elemente.importDatei) elemente.importDatei.value = '';
+  }
+}
+
+function labelFuerGroesse(groesse) {
+  switch (Number(groesse)) {
+    case 12: return texte.groesseSehrKlein;
+    case 14: return texte.groesseKlein;
+    case 24: return texte.groesseGross;
+    case 32: return texte.groesseSehrGross;
+    default: return texte.groesseMittel;
+  }
+}
+
+function rundeAufBekannteGroesse(pxWert) {
+  if (!Number.isFinite(pxWert)) return 18;
+  return schriftgroessenStufen.reduce((naechste, groesse) => (
+    Math.abs(groesse - pxWert) < Math.abs(naechste - pxWert) ? groesse : naechste
+  ), 18);
+}
+
+function ermittleKnotenGroesse(node) {
+  if (!node) return null;
+  const element = node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
+  if (!element) return null;
+  const px = Number.parseFloat(window.getComputedStyle(element).fontSize);
+  return Number.isFinite(px) ? rundeAufBekannteGroesse(px) : null;
+}
+
+function setzeAktiveGroessenTaste(groesse, istGemischt = false) {
+  elemente.schriftgroesseMenue?.querySelectorAll('.schriftgroesse-option').forEach((taste) => {
+    const aktiv = !istGemischt && Number(taste.dataset.groesse) === Number(groesse);
+    taste.classList.toggle('aktiv', aktiv);
+    taste.setAttribute('aria-selected', aktiv ? 'true' : 'false');
+  });
+
+  if (elemente.schriftgroesseLabel) {
+    elemente.schriftgroesseLabel.textContent = istGemischt ? texte.groesseGemischt : labelFuerGroesse(groesse);
+  }
+}
+
+function oeffneSchriftgroessenMenue() {
+  if (!elemente.schriftgroesseDropdown || !elemente.schriftgroesseMenue || !elemente.schriftgroesseToggle) return;
+  elemente.schriftgroesseDropdown.classList.add('offen');
+  elemente.schriftgroesseMenue.hidden = false;
+  elemente.schriftgroesseToggle.setAttribute('aria-expanded', 'true');
+}
+
+function schliesseSchriftgroessenMenue() {
+  if (!elemente.schriftgroesseDropdown || !elemente.schriftgroesseMenue || !elemente.schriftgroesseToggle) return;
+  elemente.schriftgroesseDropdown.classList.remove('offen');
+  elemente.schriftgroesseMenue.hidden = true;
+  elemente.schriftgroesseToggle.setAttribute('aria-expanded', 'false');
+}
+
+function ermittleGroesseAusAuswahl() {
+  const feld = elemente.inhalt;
+  const auswahl = window.getSelection();
+  if (!feld || !auswahl || auswahl.rangeCount === 0) return null;
+
+  const range = auswahl.getRangeAt(0);
+  if (!feld.contains(range.commonAncestorContainer)) return null;
+
+  if (range.collapsed) {
+    return { groesse: ermittleKnotenGroesse(range.startContainer) || 18, gemischt: false };
+  }
+
+  const walker = document.createTreeWalker(
+    range.commonAncestorContainer,
+    NodeFilter.SHOW_TEXT,
+    {
+      acceptNode: (node) => {
+        if (!node.textContent || !node.textContent.trim()) return NodeFilter.FILTER_REJECT;
+        if (!feld.contains(node.parentElement)) return NodeFilter.FILTER_REJECT;
+        if (!range.intersectsNode(node)) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    }
+  );
+
+  const groessen = [];
+  while (walker.nextNode()) {
+    const groesse = ermittleKnotenGroesse(walker.currentNode);
+    if (groesse) groessen.push(groesse);
+  }
+
+  if (groessen.length === 0) {
+    return { groesse: ermittleKnotenGroesse(range.startContainer) || 18, gemischt: false };
+  }
+
+  const eindeutig = [...new Set(groessen)];
+  if (eindeutig.length > 1) return { groesse: 18, gemischt: true };
+  return { groesse: eindeutig[0], gemischt: false };
+}
+
+function aktualisiereSchriftgroessenAnzeigeAusAuswahl() {
+  const erkannt = ermittleGroesseAusAuswahl();
+  if (!erkannt) {
+    setzeAktiveGroessenTaste(18, false);
+    return;
+  }
+  setzeAktiveGroessenTaste(erkannt.groesse, erkannt.gemischt);
+}
+
+function wendeSchriftgroesseAn(groesse) {
+  const vorbereitet = bereiteEditorFormatierungVor();
+  if (!vorbereitet) return;
+
+  const zielGroesse = Number(groesse || 18);
+  const { auswahl, range } = vorbereitet;
+
+  const fragment = range.extractContents();
+  const span = document.createElement('span');
+  span.style.fontSize = `${zielGroesse}px`;
+  span.appendChild(fragment);
+  range.insertNode(span);
+
+  auswahl.removeAllRanges();
+  const neuerRange = document.createRange();
+  neuerRange.selectNodeContents(span);
+  auswahl.addRange(neuerRange);
+  setzeAktiveGroessenTaste(zielGroesse);
+  schliesseSchriftgroessenMenue();
+  speichereEditorAuswahl();
+  planeAutospeichern();
 }
 
 async function ladeUserSession() {
@@ -595,7 +940,7 @@ function renderNotizenListe() {
   }
 
   elemente.notizenListe.innerHTML = gefiltert.map((notiz) => {
-    const vorschau = (notiz.inhalt || '').replace(/\s+/g, ' ').trim().slice(0, 95);
+    const vorschau = htmlAlsText(notiz.inhalt || '').replace(/\s+/g, ' ').trim().slice(0, 95);
     return `
       <li data-notiz-id="${notiz.id}" class="${notiz.id === zustand.aktiveNotizId ? 'aktiv' : ''}">
         <p class="notiz-listen-titel"><span>${entitaetenSichern(notiz.titel || texte.titelNeu)}</span>${notiz.angepinnt ? '<span class="pin-symbol">📌</span>' : ''}</p>
@@ -618,15 +963,17 @@ function renderEditor() {
 
   if (!notiz) {
     elemente.titel.value = '';
-    elemente.inhalt.value = '';
+    elemente.inhalt.innerHTML = '';
     elemente.angepinnt.checked = false;
+    setzeAktiveGroessenTaste(18, false);
     if (elemente.status) elemente.status.textContent = texte.geradeJetzt;
     return;
   }
 
   elemente.titel.value = notiz.titel || '';
-  elemente.inhalt.value = notiz.inhalt || '';
+  elemente.inhalt.innerHTML = inhaltAlsHtml(notiz.inhalt || '');
   elemente.angepinnt.checked = Boolean(notiz.angepinnt);
+  setzeAktiveGroessenTaste(18, false);
   if (elemente.status) elemente.status.textContent = `${texte.gespeichert}: ${formatZeit(notiz.geaendertAm)}`;
 }
 
@@ -642,7 +989,7 @@ function aktualisiereAktiveNotizAusEditor() {
   if (!notiz) return;
 
   notiz.titel = (elemente.titel.value || '').trim() || texte.titelNeu;
-  notiz.inhalt = elemente.inhalt.value || '';
+  notiz.inhalt = elemente.inhalt.innerHTML || '';
   notiz.angepinnt = Boolean(elemente.angepinnt.checked);
   notiz.geaendertAm = jetztIso();
 
@@ -757,17 +1104,66 @@ function registriereEvents() {
     renderAlles();
   });
 
-  [elemente.titel, elemente.inhalt].forEach((feld) => feld?.addEventListener('input', planeAutospeichern));
+  elemente.titel?.addEventListener('input', planeAutospeichern);
+  elemente.inhalt?.addEventListener('input', planeAutospeichern);
+  elemente.inhalt?.addEventListener('keyup', () => {
+    speichereEditorAuswahl();
+    aktualisiereSchriftgroessenAnzeigeAusAuswahl();
+  });
+  elemente.inhalt?.addEventListener('mouseup', () => {
+    speichereEditorAuswahl();
+    aktualisiereSchriftgroessenAnzeigeAusAuswahl();
+  });
+  elemente.inhalt?.addEventListener('focus', () => {
+    speichereEditorAuswahl();
+    aktualisiereSchriftgroessenAnzeigeAusAuswahl();
+  });
 
   elemente.angepinnt?.addEventListener('change', () => {
     aktualisiereAktiveNotizAusEditor();
     renderAlles();
   });
 
-  elemente.vorlageTitel?.addEventListener('click', () => fuegeTextEin(texte.vorlageTitel));
-  elemente.vorlageCheck?.addEventListener('click', () => fuegeTextEin(texte.vorlageCheck));
-  elemente.vorlageInfo?.addEventListener('click', () => fuegeTextEin(texte.vorlageInfo));
   elemente.cloudSyncBtn?.addEventListener('click', () => fuehreCloudSyncAus(true));
+  elemente.importBtn?.addEventListener('click', () => elemente.importDatei?.click());
+  elemente.exportBtn?.addEventListener('click', exportiereNotizen);
+  elemente.importDatei?.addEventListener('change', importiereNotizenDatei);
+  elemente.textFett?.addEventListener('click', () => formatiereText('bold'));
+  elemente.textKursiv?.addEventListener('click', () => formatiereText('italic'));
+  elemente.textUnterstrichen?.addEventListener('click', () => formatiereText('underline'));
+  elemente.schriftgroesseToggle?.addEventListener('click', (event) => {
+    event.preventDefault();
+    if (elemente.schriftgroesseDropdown?.classList.contains('offen')) {
+      schliesseSchriftgroessenMenue();
+    } else {
+      oeffneSchriftgroessenMenue();
+    }
+  });
+
+  elemente.schriftgroesseMenue?.querySelectorAll('.schriftgroesse-option').forEach((taste) => {
+    taste.addEventListener('click', () => wendeSchriftgroesseAn(taste.dataset.groesse));
+  });
+
+  document.addEventListener('selectionchange', () => {
+    if (!elemente.inhalt) return;
+    const auswahl = window.getSelection();
+    if (!auswahl || auswahl.rangeCount === 0) return;
+    const range = auswahl.getRangeAt(0);
+    if (!elemente.inhalt.contains(range.commonAncestorContainer)) return;
+    aktualisiereSchriftgroessenAnzeigeAusAuswahl();
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!elemente.schriftgroesseDropdown) return;
+    if (elemente.schriftgroesseDropdown.contains(event.target)) return;
+    schliesseSchriftgroessenMenue();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') schliesseSchriftgroessenMenue();
+  });
+
+  setzeAktiveGroessenTaste(18, false);
 
   window.addEventListener('online', () => {
     if (zustand.userId) {
@@ -811,6 +1207,8 @@ async function init() {
   renderAlles();
 
   if (elemente.cloudSyncBtn) elemente.cloudSyncBtn.textContent = texte.cloudSync;
+  if (elemente.importBtn) elemente.importBtn.textContent = texte.importieren;
+  if (elemente.exportBtn) elemente.exportBtn.textContent = texte.exportieren;
   await initialisiereCloudSync();
 }
 
