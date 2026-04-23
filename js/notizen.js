@@ -67,9 +67,14 @@ const texte = istEnglisch
     };
 
 const speicherSchluessel = 'safenet_notizen_v1';
-const cloudTabelle = 'notizen_sync';
 const supabaseTokenKey = 'sb-dygrabyaiyessqmjdprc-auth-token';
 const cloudSyncIntervallMs = 20000;
+const cloudTabellen = {
+  ordner: 'notiz_ordner',
+  notizen: 'notiz_notizen',
+  titel: 'notiz_titel',
+  inhalt: 'notiz_inhalt'
+};
 
 const elemente = {
   ordnerListe: document.getElementById('ordnerListe'),
@@ -191,37 +196,60 @@ async function ladeCloudDaten() {
   if (!zustand.userId || !zustand.cloudVerfuegbar) return null;
 
   try {
-    const { data: rows, error } = await mitTimeout(
-      supabase
-        .from(cloudTabelle)
-        .select('ordner_id, ordner_name, notiz_id, titel, inhalt, angepinnt, erstellt_am, geaendert_am')
-        .eq('user_id', zustand.userId),
-      10000
-    );
+    const [{ data: ordnerRows, error: ordnerErr }, { data: notizRows, error: notizErr }] = await Promise.all([
+      mitTimeout(
+        supabase
+          .from(cloudTabellen.ordner)
+          .select('id, name')
+          .eq('user_id', zustand.userId),
+        10000
+      ),
+      mitTimeout(
+        supabase
+          .from(cloudTabellen.notizen)
+          .select('id, ordner_id, titel_id, inhalt_id, angepinnt, erstellt_am, geaendert_am')
+          .eq('user_id', zustand.userId),
+        10000
+      )
+    ]);
 
-    if (error) throw new Error('cloud-load-error');
-    if (!rows || rows.length === 0) return null;
+    if (ordnerErr || notizErr) throw new Error('cloud-load-error');
+    if (!ordnerRows || ordnerRows.length === 0) return null;
 
-    const ordnerMap = new Map();
-    const notizen = [];
+    const titelIds = [...new Set((notizRows || []).map((n) => n.titel_id).filter(Boolean))];
+    const inhaltIds = [...new Set((notizRows || []).map((n) => n.inhalt_id).filter(Boolean))];
 
-    rows.forEach((row) => {
-      if (row.ordner_id) ordnerMap.set(row.ordner_id, row.ordner_name || texte.ordnerStandard);
-      if (row.notiz_id) {
-        notizen.push({
-          id: row.notiz_id,
-          ordnerId: row.ordner_id,
-          titel: row.titel || texte.titelNeu,
-          inhalt: row.inhalt || '',
-          angepinnt: Boolean(row.angepinnt),
-          erstelltAm: row.erstellt_am || jetztIso(),
-          geaendertAm: row.geaendert_am || jetztIso()
-        });
-      }
-    });
+    const titelMap = new Map();
+    const inhaltMap = new Map();
 
-    const ordner = Array.from(ordnerMap.entries()).map(([id, name]) => ({ id, name }));
-    if (ordner.length === 0) ordner.push({ id: erstelleId(), name: texte.ordnerStandard });
+    if (titelIds.length > 0) {
+      const { data: titelRows, error: titelErr } = await mitTimeout(
+        supabase.from(cloudTabellen.titel).select('id, text').in('id', titelIds),
+        10000
+      );
+      if (titelErr) throw new Error('cloud-load-error');
+      (titelRows || []).forEach((row) => titelMap.set(row.id, row.text || ''));
+    }
+
+    if (inhaltIds.length > 0) {
+      const { data: inhaltRows, error: inhaltErr } = await mitTimeout(
+        supabase.from(cloudTabellen.inhalt).select('id, text').in('id', inhaltIds),
+        10000
+      );
+      if (inhaltErr) throw new Error('cloud-load-error');
+      (inhaltRows || []).forEach((row) => inhaltMap.set(row.id, row.text || ''));
+    }
+
+    const ordner = ordnerRows.map((row) => ({ id: row.id, name: row.name }));
+    const notizen = (notizRows || []).map((row) => ({
+      id: row.id,
+      ordnerId: row.ordner_id,
+      titel: titelMap.get(row.titel_id) || texte.titelNeu,
+      inhalt: inhaltMap.get(row.inhalt_id) || '',
+      angepinnt: Boolean(row.angepinnt),
+      erstelltAm: row.erstellt_am || jetztIso(),
+      geaendertAm: row.geaendert_am || jetztIso()
+    }));
 
     return {
       daten: {
@@ -246,45 +274,91 @@ async function speichereCloudDaten() {
   if (!zustand.userId || !zustand.cloudVerfuegbar || istOffline()) return false;
 
   try {
-    const ordnerMap = new Map(zustand.ordner.map((ordner) => [ordner.id, ordner.name]));
-
     const ordnerRows = zustand.ordner.map((ordner) => ({
+      id: ordner.id,
       user_id: zustand.userId,
-      ordner_id: ordner.id,
-      ordner_name: ordner.name,
-      notiz_id: null,
-      titel: null,
-      inhalt: null,
-      angepinnt: false,
-      erstellt_am: null,
-      geaendert_am: jetztIso()
+      name: ordner.name
+    }));
+
+    const titelRows = zustand.notizen.map((notiz) => ({
+      id: `${notiz.id}_titel`,
+      user_id: zustand.userId,
+      text: notiz.titel || texte.titelNeu,
+      geaendert_am: notiz.geaendertAm || jetztIso()
+    }));
+
+    const inhaltRows = zustand.notizen.map((notiz) => ({
+      id: `${notiz.id}_inhalt`,
+      user_id: zustand.userId,
+      text: notiz.inhalt || '',
+      geaendert_am: notiz.geaendertAm || jetztIso()
     }));
 
     const notizRows = zustand.notizen.map((notiz) => ({
+      id: notiz.id,
       user_id: zustand.userId,
       ordner_id: notiz.ordnerId,
-      ordner_name: ordnerMap.get(notiz.ordnerId) || texte.ordnerStandard,
-      notiz_id: notiz.id,
-      titel: notiz.titel || texte.titelNeu,
-      inhalt: notiz.inhalt || '',
+      titel_id: `${notiz.id}_titel`,
+      inhalt_id: `${notiz.id}_inhalt`,
       angepinnt: Boolean(notiz.angepinnt),
       erstellt_am: notiz.erstelltAm || jetztIso(),
       geaendert_am: notiz.geaendertAm || jetztIso()
     }));
 
-    const { error: delErr } = await mitTimeout(
-      supabase.from(cloudTabelle).delete().eq('user_id', zustand.userId),
+    const { error: delNotizErr } = await mitTimeout(
+      supabase.from(cloudTabellen.notizen).delete().eq('user_id', zustand.userId),
       10000
     );
-    if (delErr) throw new Error('cloud-save-error');
+    if (delNotizErr) throw new Error('cloud-save-error');
 
-    const rows = [...ordnerRows, ...notizRows];
-    if (rows.length > 0) {
-      const { error: insErr } = await mitTimeout(
-        supabase.from(cloudTabelle).insert(rows),
+    const { error: delTitelErr } = await mitTimeout(
+      supabase.from(cloudTabellen.titel).delete().eq('user_id', zustand.userId),
+      10000
+    );
+    if (delTitelErr) throw new Error('cloud-save-error');
+
+    const { error: delInhaltErr } = await mitTimeout(
+      supabase.from(cloudTabellen.inhalt).delete().eq('user_id', zustand.userId),
+      10000
+    );
+    if (delInhaltErr) throw new Error('cloud-save-error');
+
+    const { error: delOrdnerErr } = await mitTimeout(
+      supabase.from(cloudTabellen.ordner).delete().eq('user_id', zustand.userId),
+      10000
+    );
+    if (delOrdnerErr) throw new Error('cloud-save-error');
+
+    if (ordnerRows.length > 0) {
+      const { error: insOrdnerErr } = await mitTimeout(
+        supabase.from(cloudTabellen.ordner).insert(ordnerRows),
         10000
       );
-      if (insErr) throw new Error('cloud-save-error');
+      if (insOrdnerErr) throw new Error('cloud-save-error');
+    }
+
+    if (titelRows.length > 0) {
+      const { error: insTitelErr } = await mitTimeout(
+        supabase.from(cloudTabellen.titel).insert(titelRows),
+        10000
+      );
+      if (insTitelErr) throw new Error('cloud-save-error');
+    }
+
+    if (inhaltRows.length > 0) {
+      const { error: insInhaltErr } = await mitTimeout(
+        supabase.from(cloudTabellen.inhalt).insert(inhaltRows),
+        10000
+      );
+      if (insInhaltErr) throw new Error('cloud-save-error');
+    }
+
+    if (notizRows.length > 0) {
+      const { error: insNotizErr } = await mitTimeout(
+        supabase.from(cloudTabellen.notizen).insert(notizRows),
+        10000
+      );
+      if (insNotizErr) throw new Error('cloud-save-error');
     }
   } catch (error) {
     if (error?.message === 'timeout') {
