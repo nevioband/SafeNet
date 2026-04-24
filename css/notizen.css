@@ -583,6 +583,35 @@ body {
     padding: 16px 10px 28px;
   }
 
+  .editor-kopf {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .panel-titel {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .editor-aktionen {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 6px;
+  }
+
+  .editor-aktionen .notiz-aktion-btn,
+  .editor-aktionen .export-dropdown {
+    flex: 1 1 calc(50% - 6px);
+  }
+
+  .editor-aktionen .export-toggle {
+    width: 100%;
+  }
+
+  .editor-aktionen .notiz-aktion-btn.warnung {
+    flex-basis: 100%;
+  }
+
   .notizen-grid {
     display: block;
   }
@@ -622,9 +651,15 @@ body {
   }
 
   .export-menue {
-    left: 0;
-    right: auto;
-    min-width: 160px;
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    top: auto;
+    bottom: 10px;
+    min-width: 0;
+    max-height: min(56vh, 340px);
+    overflow-y: auto;
+    padding: 9px;
   }
 
   .editor-feld textarea {
