@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="/css/notizen.css" />
 
     <script type="module" src="/js/auth.js?v=7"></script>
-    <script type="module" src="/js/notizen.js?v=11" defer></script>
+    <script type="module" src="/js/notizen.js?v=12" defer></script>
   </head>
   <body>
     <div id="navbar"></div>
@@ -62,9 +62,10 @@
               <button id="notizAnlegen" class="notiz-haupt-btn" type="button">Neue Notiz</button>
               <input id="notizenSuche" class="notizen-suche" type="search" placeholder="Notizen durchsuchen..." />
               <div class="filter-reihe">
-                <label>
+                <label class="editor-tag editor-checkbox" for="nurAngepinnt">
                   <input id="nurAngepinnt" type="checkbox" />
-                  Nur angepinnte
+                  <span class="editor-checkbox-box" aria-hidden="true"></span>
+                  <span class="editor-checkbox-text">Nur angepinnte</span>
                 </label>
               </div>
               <div id="notizenListe" class="notizen-liste"></div>
@@ -80,7 +81,14 @@
               <div class="editor-aktionen">
                 <button id="cloudSyncBtn" class="notiz-aktion-btn" type="button">Cloud-Sync</button>
                 <button id="notizenImportBtn" class="notiz-aktion-btn" type="button">Import</button>
-                <button id="notizenExportBtn" class="notiz-aktion-btn" type="button">Export</button>
+                <div class="export-dropdown" id="exportDropdown">
+                  <button id="notizenExportBtn" class="notiz-aktion-btn export-toggle" type="button" aria-haspopup="listbox" aria-expanded="false">Export</button>
+                  <div id="exportMenue" class="export-menue" role="listbox" aria-label="Exportformat auswählen" hidden>
+                    <button class="export-option" type="button" role="option" data-export-format="txt">TXT</button>
+                    <button class="export-option" type="button" role="option" data-export-format="html">HTML</button>
+                    <button class="export-option" type="button" role="option" data-export-format="doc">Word (.doc)</button>
+                  </div>
+                </div>
                 <button id="notizLoeschen" class="notiz-aktion-btn warnung" type="button">Löschen</button>
                 <input id="notizenImportDatei" type="file" accept="application/json,.json,text/plain,.txt" hidden />
               </div>
@@ -93,9 +101,10 @@
                 </div>
 
                 <div class="editor-zeile">
-                  <label class="editor-tag">
+                  <label class="editor-tag editor-checkbox" for="notizAngepinnt">
                     <input id="notizAngepinnt" type="checkbox" />
-                    Notiz anpinnen
+                    <span class="editor-checkbox-box" aria-hidden="true"></span>
+                    <span class="editor-checkbox-text">Notiz anpinnen</span>
                   </label>
                   <div class="editor-werkzeuge">
                     <button id="textFett" class="notiz-aktion-btn" type="button">Fett</button>

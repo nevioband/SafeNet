@@ -46,7 +46,21 @@ const texte = istEnglisch
       groesseMittel: 'Medium',
       groesseGross: 'Large',
       groesseSehrGross: 'Very large',
-      groesseGemischt: 'Mixed'
+      groesseGemischt: 'Mixed',
+      angepinntStatus: 'Pinned',
+      nichtAngepinntStatus: 'Not pinned',
+      exportFormatTxt: 'Text (.txt)',
+      exportFormatHtml: 'HTML (.html)',
+      exportFormatDoc: 'Word (.doc)',
+      exportErstelltAm: 'Created on',
+      exportOrdner: 'Folder',
+      exportTitel: 'Title',
+      exportAngepinnt: 'Pinned',
+      exportGeaendert: 'Updated',
+      exportInhalt: 'Content',
+      exportJa: 'Yes',
+      exportNein: 'No',
+      exportDokumentTitel: 'SafeNet Notes Export'
     }
   : {
       neueNotiz: 'Neue Notiz',
@@ -91,7 +105,21 @@ const texte = istEnglisch
       groesseMittel: 'Mittel',
       groesseGross: 'Gross',
       groesseSehrGross: 'Sehr gross',
-      groesseGemischt: 'Gemischt'
+      groesseGemischt: 'Gemischt',
+      angepinntStatus: 'Angepinnt',
+      nichtAngepinntStatus: 'Nicht angepinnt',
+      exportFormatTxt: 'Text (.txt)',
+      exportFormatHtml: 'HTML (.html)',
+      exportFormatDoc: 'Word (.doc)',
+      exportErstelltAm: 'Erstellt am',
+      exportOrdner: 'Ordner',
+      exportTitel: 'Titel',
+      exportAngepinnt: 'Angepinnt',
+      exportGeaendert: 'Geändert',
+      exportInhalt: 'Inhalt',
+      exportJa: 'Ja',
+      exportNein: 'Nein',
+      exportDokumentTitel: 'SafeNet Notizen Export'
     };
 
 const speicherSchluessel = 'safenet_notizen_v1';
@@ -121,6 +149,8 @@ const elemente = {
   cloudSyncBtn: document.getElementById('cloudSyncBtn'),
   importBtn: document.getElementById('notizenImportBtn'),
   exportBtn: document.getElementById('notizenExportBtn'),
+  exportDropdown: document.getElementById('exportDropdown'),
+  exportMenue: document.getElementById('exportMenue'),
   importDatei: document.getElementById('notizenImportDatei'),
   textFett: document.getElementById('textFett'),
   textKursiv: document.getElementById('textKursiv'),
@@ -310,40 +340,178 @@ function normalisiereImportDaten(rohdaten) {
   return { ordner, notizen };
 }
 
-function exportiereNotizen() {
+function ladeDateiHerunter(dateiname, dateiendung, mimeType, inhalt) {
+  const blob = new Blob([inhalt], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+
+  link.href = url;
+  link.download = `${dateiname}.${dateiendung}`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+function erstelleExportText() {
   const ordnerMap = new Map(zustand.ordner.map((ordner) => [ordner.id, ordner.name]));
   const zeilen = [];
 
-  zeilen.push('SafeNet Notizen Export');
-  zeilen.push(`Erstellt am: ${jetztIso()}`);
+  zeilen.push(texte.exportDokumentTitel);
+  zeilen.push(`${texte.exportErstelltAm}: ${jetztIso()}`);
   zeilen.push('');
 
   zustand.notizen.forEach((notiz, index) => {
     const ordnerName = ordnerMap.get(notiz.ordnerId) || texte.ordnerStandard;
     zeilen.push(`Notiz ${index + 1}`);
-    zeilen.push(`Ordner: ${ordnerName}`);
-    zeilen.push(`Titel: ${notiz.titel || texte.titelNeu}`);
-    zeilen.push(`Angepinnt: ${notiz.angepinnt ? 'Ja' : 'Nein'}`);
-    zeilen.push(`Geaendert: ${notiz.geaendertAm || jetztIso()}`);
-    zeilen.push('Inhalt:');
+    zeilen.push(`${texte.exportOrdner}: ${ordnerName}`);
+    zeilen.push(`${texte.exportTitel}: ${notiz.titel || texte.titelNeu}`);
+    zeilen.push(`${texte.exportAngepinnt}: ${notiz.angepinnt ? texte.exportJa : texte.exportNein}`);
+    zeilen.push(`${texte.exportGeaendert}: ${notiz.geaendertAm || jetztIso()}`);
+    zeilen.push(`${texte.exportInhalt}:`);
     zeilen.push(htmlAlsText(notiz.inhalt || ''));
     zeilen.push('');
     zeilen.push('----------------------------------------');
     zeilen.push('');
   });
 
-  const inhalt = zeilen.join('\n');
-  const blob = new Blob([inhalt], { type: 'text/plain;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  const datum = new Date().toISOString().slice(0, 10);
+  return zeilen.join('\n');
+}
 
-  link.href = url;
-  link.download = `${texte.exportDateiname}-${datum}.txt`;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
+function erstelleExportDokument() {
+  const ordnerMap = new Map(zustand.ordner.map((ordner) => [ordner.id, ordner.name]));
+  const notizBloecke = zustand.notizen.map((notiz, index) => {
+    const ordnerName = ordnerMap.get(notiz.ordnerId) || texte.ordnerStandard;
+    return `
+      <section class="export-notiz">
+        <div class="export-inhalt">${inhaltAlsHtml(notiz.inhalt || '')}</div>
+        <div class="export-meta-block">
+          <div class="export-notiz-kopf">
+            <span class="export-index">Notiz ${index + 1}</span>
+            ${notiz.angepinnt ? `<span class="export-pin">${entitaetenSichern(texte.angepinntStatus)}</span>` : ''}
+          </div>
+          <div class="export-meta">
+            <span><strong>${entitaetenSichern(texte.exportTitel)}:</strong> ${entitaetenSichern(notiz.titel || texte.titelNeu)}</span>
+            <span><strong>${entitaetenSichern(texte.exportOrdner)}:</strong> ${entitaetenSichern(ordnerName)}</span>
+            <span><strong>${entitaetenSichern(texte.exportGeaendert)}:</strong> ${entitaetenSichern(formatZeit(notiz.geaendertAm || jetztIso()))}</span>
+          </div>
+        </div>
+      </section>`;
+  }).join('');
+
+  return `<!DOCTYPE html>
+<html lang="${istEnglisch ? 'en' : 'de'}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${entitaetenSichern(texte.exportDokumentTitel)}</title>
+    <style>
+      body {
+        font-family: Inter, Arial, sans-serif;
+        color: #0f172a;
+        background: #f8fbff;
+        margin: 0;
+        padding: 40px 28px;
+      }
+      .export-wrap {
+        max-width: 960px;
+        margin: 0 auto;
+      }
+      .export-notiz {
+        margin-bottom: 20px;
+        padding: 22px;
+        border-radius: 16px;
+        border: 1px solid rgba(148, 163, 184, 0.28);
+        background: #ffffff;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        break-inside: avoid;
+      }
+      .export-notiz-kopf {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 6px;
+      }
+      .export-index {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #475569;
+      }
+      .export-pin {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 700;
+        color: #7f1d1d;
+        background: rgba(248, 113, 113, 0.2);
+        border: 1px solid rgba(239, 68, 68, 0.28);
+      }
+      .export-meta-block {
+        margin-top: 18px;
+        padding-top: 12px;
+        border-top: 1px solid rgba(148, 163, 184, 0.22);
+      }
+      .export-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 14px;
+        margin-bottom: 0;
+        color: #475569;
+        font-size: 12px;
+      }
+      .export-dokument-meta {
+        margin-top: 20px;
+        padding-top: 12px;
+        border-top: 1px solid rgba(148, 163, 184, 0.22);
+        color: #64748b;
+        font-size: 11px;
+      }
+      .export-inhalt {
+        color: #0f172a;
+        line-height: 1.6;
+      }
+      .export-inhalt * {
+        max-width: 100%;
+      }
+      .export-inhalt p:first-child,
+      .export-inhalt h1:first-child,
+      .export-inhalt h2:first-child,
+      .export-inhalt h3:first-child {
+        margin-top: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="export-wrap">
+      ${notizBloecke}
+      <div class="export-dokument-meta">
+        <div><strong>${entitaetenSichern(texte.exportDokumentTitel)}</strong></div>
+        <div>${entitaetenSichern(texte.exportErstelltAm)}: ${entitaetenSichern(formatZeit(jetztIso()))}</div>
+      </div>
+    </div>
+  </body>
+</html>`;
+}
+
+function exportiereNotizen(format = 'txt') {
+  const datum = new Date().toISOString().slice(0, 10);
+  const basisDateiname = `${texte.exportDateiname}-${datum}`;
+
+  if (format === 'html') {
+    ladeDateiHerunter(basisDateiname, 'html', 'text/html;charset=utf-8', erstelleExportDokument());
+    return;
+  }
+
+  if (format === 'doc') {
+    ladeDateiHerunter(basisDateiname, 'doc', 'application/msword;charset=utf-8', erstelleExportDokument());
+    return;
+  }
+
+  ladeDateiHerunter(basisDateiname, 'txt', 'text/plain;charset=utf-8', erstelleExportText());
 }
 
 async function importiereNotizenDatei(event) {
@@ -442,6 +610,20 @@ function schliesseSchriftgroessenMenue() {
   elemente.schriftgroesseDropdown.classList.remove('offen');
   elemente.schriftgroesseMenue.hidden = true;
   elemente.schriftgroesseToggle.setAttribute('aria-expanded', 'false');
+}
+
+function oeffneExportMenue() {
+  if (!elemente.exportDropdown || !elemente.exportMenue || !elemente.exportBtn) return;
+  elemente.exportDropdown.classList.add('offen');
+  elemente.exportMenue.hidden = false;
+  elemente.exportBtn.setAttribute('aria-expanded', 'true');
+}
+
+function schliesseExportMenue() {
+  if (!elemente.exportDropdown || !elemente.exportMenue || !elemente.exportBtn) return;
+  elemente.exportDropdown.classList.remove('offen');
+  elemente.exportMenue.hidden = true;
+  elemente.exportBtn.setAttribute('aria-expanded', 'false');
 }
 
 function ermittleGroesseAusAuswahl() {
@@ -941,9 +1123,12 @@ function renderNotizenListe() {
 
   elemente.notizenListe.innerHTML = gefiltert.map((notiz) => {
     const vorschau = htmlAlsText(notiz.inhalt || '').replace(/\s+/g, ' ').trim().slice(0, 95);
+    const pinHinweis = notiz.angepinnt
+      ? `<span class="pin-symbol" aria-label="${entitaetenSichern(texte.angepinntStatus)}" title="${entitaetenSichern(texte.angepinntStatus)}"></span>`
+      : '';
     return `
       <li data-notiz-id="${notiz.id}" class="${notiz.id === zustand.aktiveNotizId ? 'aktiv' : ''}">
-        <p class="notiz-listen-titel"><span>${entitaetenSichern(notiz.titel || texte.titelNeu)}</span>${notiz.angepinnt ? '<span class="pin-symbol">📌</span>' : ''}</p>
+        <p class="notiz-listen-titel"><span>${entitaetenSichern(notiz.titel || texte.titelNeu)}</span>${pinHinweis}</p>
         <p class="notiz-listen-vorschau">${entitaetenSichern(vorschau || '...')}</p>
         <p class="notiz-listen-meta">${entitaetenSichern(formatZeit(notiz.geaendertAm))}</p>
       </li>`;
@@ -1127,8 +1312,21 @@ function registriereEvents() {
 
   elemente.cloudSyncBtn?.addEventListener('click', () => fuehreCloudSyncAus(true));
   elemente.importBtn?.addEventListener('click', () => elemente.importDatei?.click());
-  elemente.exportBtn?.addEventListener('click', exportiereNotizen);
+  elemente.exportBtn?.addEventListener('click', (event) => {
+    event.preventDefault();
+    if (elemente.exportDropdown?.classList.contains('offen')) {
+      schliesseExportMenue();
+    } else {
+      oeffneExportMenue();
+    }
+  });
   elemente.importDatei?.addEventListener('change', importiereNotizenDatei);
+  elemente.exportMenue?.querySelectorAll('.export-option').forEach((option) => {
+    option.addEventListener('click', () => {
+      exportiereNotizen(option.dataset.exportFormat || 'txt');
+      schliesseExportMenue();
+    });
+  });
   elemente.textFett?.addEventListener('click', () => formatiereText('bold'));
   elemente.textKursiv?.addEventListener('click', () => formatiereText('italic'));
   elemente.textUnterstrichen?.addEventListener('click', () => formatiereText('underline'));
@@ -1160,10 +1358,21 @@ function registriereEvents() {
     schliesseSchriftgroessenMenue();
   });
 
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') schliesseSchriftgroessenMenue();
+  document.addEventListener('click', (event) => {
+    if (!elemente.exportDropdown) return;
+    if (elemente.exportDropdown.contains(event.target)) return;
+    schliesseExportMenue();
   });
 
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      schliesseSchriftgroessenMenue();
+      schliesseExportMenue();
+    }
+  });
+
+  schliesseSchriftgroessenMenue();
+  schliesseExportMenue();
   setzeAktiveGroessenTaste(18, false);
 
   window.addEventListener('online', () => {
