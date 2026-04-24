@@ -2,6 +2,18 @@ body {
   min-height: 100vh;
 }
 
+html,
+body {
+  overflow-x: hidden;
+}
+
+.notizen-main,
+.notizen-main *,
+.notizen-main *::before,
+.notizen-main *::after {
+  box-sizing: border-box;
+}
+
 .notizen-main {
   padding: 24px 18px 40px;
 }
@@ -588,6 +600,7 @@ body {
 
   .notizen-seite {
     padding-inline: 2px;
+    overflow-x: clip;
   }
 
   .editor-kopf {
@@ -611,10 +624,12 @@ body {
   .editor-aktionen .notiz-aktion-btn,
   .editor-aktionen .export-dropdown {
     width: 100%;
+    box-sizing: border-box;
   }
 
   .editor-aktionen .export-toggle {
     width: 100%;
+    box-sizing: border-box;
   }
 
   .editor-aktionen .notiz-aktion-btn.warnung {
@@ -629,6 +644,7 @@ body {
     min-height: 0;
     padding: 12px;
     display: none;
+    overflow-x: hidden;
   }
 
   .notizen-karte.mobile-sichtbar {
@@ -673,6 +689,97 @@ body {
 
   .editor-feld textarea {
     min-height: 260px;
+  }
+
+  .editor-zeile {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .editor-checkbox {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .editor-werkzeuge {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .editor-werkzeuge .notiz-aktion-btn,
+  .editor-werkzeuge .schriftgroesse-dropdown {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .schriftgroesse-toggle {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .notiz-editor {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 420px) {
+  .notizen-main {
+    padding-left: calc(10px + env(safe-area-inset-left));
+    padding-right: calc(10px + env(safe-area-inset-right));
+  }
+
+  #navbar .navbar {
+    padding: 8px 8px;
+    gap: 6px;
+  }
+
+  #navbar .logo img {
+    height: 36px;
+  }
+
+  #navbar .user-menu {
+    margin-left: 4px;
+  }
+
+  #navbar .user-btn {
+    width: 34px;
+    height: 34px;
+  }
+
+  #navbar .menu-toggle {
+    font-size: 24px;
+    line-height: 1;
+    padding: 2px 4px;
+  }
+
+  .editor-aktionen {
+    grid-template-columns: 1fr;
+  }
+
+  .editor-aktionen .notiz-aktion-btn.warnung {
+    grid-column: 1;
+  }
+
+  .editor-werkzeuge {
+    grid-template-columns: 1fr;
+  }
+
+  .schriftgroesse-menue,
+  .export-menue {
+    max-width: calc(100vw - 24px);
+  }
+
+  .editor-feld input,
+  .notiz-editor {
+    width: 100%;
+    min-width: 0;
   }
 }
 
