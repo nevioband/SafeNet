@@ -49,9 +49,11 @@ const texte = istEnglisch
       groesseGemischt: 'Mixed',
       angepinntStatus: 'Pinned',
       nichtAngepinntStatus: 'Not pinned',
-      exportFormatTxt: 'Text (.txt)',
-      exportFormatHtml: 'HTML (.html)',
-      exportFormatDoc: 'Word (.doc)',
+      exportFormatTxt: 'Text',
+      exportFormatHtml: 'HTML',
+      exportFormatDoc: 'Word',
+      exportFormatPdf: 'PDF',
+      exportPdfPopupBlockiert: 'PDF export failed.',
       exportErstelltAm: 'Created on',
       exportOrdner: 'Folder',
       exportTitel: 'Title',
@@ -108,9 +110,11 @@ const texte = istEnglisch
       groesseGemischt: 'Gemischt',
       angepinntStatus: 'Angepinnt',
       nichtAngepinntStatus: 'Nicht angepinnt',
-      exportFormatTxt: 'Text (.txt)',
-      exportFormatHtml: 'HTML (.html)',
-      exportFormatDoc: 'Word (.doc)',
+      exportFormatTxt: 'Text',
+      exportFormatHtml: 'HTML',
+      exportFormatDoc: 'Word',
+      exportFormatPdf: 'PDF',
+      exportPdfPopupBlockiert: 'PDF-Export fehlgeschlagen.',
       exportErstelltAm: 'Erstellt am',
       exportOrdner: 'Ordner',
       exportTitel: 'Titel',
@@ -483,6 +487,42 @@ function erstelleExportDokument() {
       .export-inhalt h3:first-child {
         margin-top: 0;
       }
+      @page {
+        size: A4;
+        margin: 18mm 16mm;
+      }
+      @media print {
+        * {
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+        body {
+          background: #ffffff;
+          padding: 0;
+          font-size: 13px;
+        }
+        .export-wrap {
+          max-width: 100%;
+        }
+        .export-notiz {
+          box-shadow: none;
+          border: none;
+          border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+          border-radius: 0;
+          padding: 14px 0;
+          margin-bottom: 10px;
+          page-break-inside: avoid;
+        }
+        .export-meta-block {
+          border-top: 1px solid rgba(148, 163, 184, 0.25);
+          padding-top: 8px;
+          margin-top: 10px;
+        }
+        .export-dokument-meta {
+          border-top: 1px solid rgba(148, 163, 184, 0.35);
+          padding-top: 8px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -496,10 +536,55 @@ function erstelleExportDokument() {
   </body>
 </html>`;
 }
+function exportiereAlsPdf() {
+  const html = erstelleExportDokument();
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const blobUrl = URL.createObjectURL(blob);
+
+  const iframe = document.createElement('iframe');
+  // Ausreichend gross damit der Browser den Inhalt vollständig rendert,
+  // aber ausserhalb des sichtbaren Bereichs positioniert.
+  iframe.style.cssText = 'position:fixed;left:-9999px;top:0;width:900px;height:700px;border:0;';
+  iframe.setAttribute('aria-hidden', 'true');
+  iframe.setAttribute('tabindex', '-1');
+
+  iframe.onload = () => {
+    const fenster = iframe.contentWindow;
+    if (!fenster) {
+      iframe.remove();
+      URL.revokeObjectURL(blobUrl);
+      window.alert(texte.exportPdfPopupBlockiert);
+      return;
+    }
+
+    const aufraeumen = () => {
+      setTimeout(() => {
+        iframe.remove();
+        URL.revokeObjectURL(blobUrl);
+      }, 500);
+    };
+
+    fenster.addEventListener('afterprint', aufraeumen, { once: true });
+
+    // Warten bis CSS und Schriften geladen sind, dann drucken
+    setTimeout(() => {
+      fenster.focus();
+      fenster.print();
+    }, 600);
+  };
+
+  iframe.src = blobUrl;
+  document.body.appendChild(iframe);
+}
 
 function exportiereNotizen(format = 'txt') {
   const datum = new Date().toISOString().slice(0, 10);
   const basisDateiname = `${texte.exportDateiname}-${datum}`;
+
+  if (format === 'pdf') {
+    exportiereAlsPdf();
+    return;
+  }
 
   if (format === 'html') {
     ladeDateiHerunter(basisDateiname, 'html', 'text/html;charset=utf-8', erstelleExportDokument());
@@ -686,6 +771,13 @@ function wendeSchriftgroesseAn(groesse) {
   const span = document.createElement('span');
   span.style.fontSize = `${zielGroesse}px`;
   span.appendChild(fragment);
+
+  // Alle inneren font-size Stile entfernen damit keine gemischte Erkennung entsteht
+  span.querySelectorAll('[style]').forEach((el) => {
+    el.style.removeProperty('font-size');
+    if (!el.getAttribute('style')) el.removeAttribute('style');
+  });
+
   range.insertNode(span);
 
   auswahl.removeAllRanges();
@@ -1419,6 +1511,19 @@ async function init() {
   if (elemente.cloudSyncBtn) elemente.cloudSyncBtn.textContent = texte.cloudSync;
   if (elemente.importBtn) elemente.importBtn.textContent = texte.importieren;
   if (elemente.exportBtn) elemente.exportBtn.textContent = texte.exportieren;
+  if (elemente.exportMenue) {
+    const exportLabels = {
+      txt: texte.exportFormatTxt,
+      html: texte.exportFormatHtml,
+      doc: texte.exportFormatDoc,
+      pdf: texte.exportFormatPdf
+    };
+
+    elemente.exportMenue.querySelectorAll('.export-option').forEach((option) => {
+      const format = option.dataset.exportFormat || '';
+      if (exportLabels[format]) option.textContent = exportLabels[format];
+    });
+  }
   await initialisiereCloudSync();
 }
 
