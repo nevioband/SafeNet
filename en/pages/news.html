@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Security News – SafeNet Security</title>
-    <meta name="description" content="Latest known security vulnerabilities from the CISA Known Exploited Vulnerabilities Catalog – updated daily." />
+    <meta name="description" content="Latest cybersecurity news from trusted sources – The Hacker News, Bleeping Computer and Heise Security." />
     <link rel="canonical" href="https://safenet-security.ch/en/pages/news.html" />
     <link rel="alternate" hreflang="de" href="https://safenet-security.ch/de/pages/news.html" />
     <link rel="alternate" hreflang="en" href="https://safenet-security.ch/en/pages/news.html" />
@@ -20,80 +20,109 @@
     <div id="navbar"></div>
 
     <main class="news-main">
-      <h1>Security News</h1>
-      <p class="news-subtitle">Latest known vulnerabilities – Source: CISA KEV Catalog</p>
-
-      <div class="news-status-bar" id="news-status-bar" style="display:none">
-        <span class="news-source-tag">CISA KEV</span>
-        <span id="news-updated"></span>
+      <div class="np-masthead">
+        <h1>Security News</h1>
+        <p class="np-masthead-sub">Cybersecurity &middot; Updated Daily</p>
       </div>
-
+      <hr class="np-rule" />
       <div id="news-root">
-        <div class="news-loading" id="news-loading">
-          <div class="news-loading-pulse"></div>
-          <div class="news-loading-pulse"></div>
-          <div class="news-loading-pulse"></div>
-          <div class="news-loading-pulse"></div>
-          <div class="news-loading-pulse"></div>
-          <div class="news-loading-pulse"></div>
-        </div>
+        <p class="np-loading">Loading news…</p>
       </div>
     </main>
 
     <div id="footer"></div>
 
     <script>
-      function formatDateEN(dateStr) {
-        if (!dateStr) return '';
-        const d = new Date(dateStr + 'T00:00:00Z');
-        return d.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+      function formatDate(iso) {
+        if (!iso) return '';
+        try { return new Date(iso).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' }); }
+        catch { return ''; }
+      }
+
+      function escHtml(str) {
+        return String(str ?? '')
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+      }
+
+      function safeUrl(url) { return /^https?:\/\//.test(url ?? '') ? url : '#'; }
+
+      const SRC_CLASS = {
+        'The Hacker News': 'src-thn',
+        'Bleeping Computer': 'src-bc',
+        'Heise Security': 'src-heise',
+      };
+
+      function badge(s) {
+        return `<span class="np-source ${SRC_CLASS[s] || 'src-other'}">${escHtml(s)}</span>`;
+      }
+
+      function metaRow(item) {
+        return `<div class="np-meta">
+          <time class="np-date">${escHtml(formatDate(item.date))}</time>
+          <a href="${safeUrl(item.link)}" class="np-readmore" target="_blank" rel="noopener noreferrer">Read more →</a>
+        </div>`;
+      }
+
+      function renderFeatured(item) {
+        const desc = item.description || '';
+        return `<article class="np-featured">
+          ${badge(item.source)}
+          <h2 class="np-featured-title">${escHtml(item.title)}</h2>
+          ${desc ? `<p class="np-featured-desc">${escHtml(desc)}${desc.length >= 260 ? '…' : ''}</p>` : ''}
+          ${metaRow(item)}
+        </article>`;
+      }
+
+      function renderArticle(item) {
+        const desc = item.description || '';
+        const d = desc.slice(0, 200);
+        return `<article class="np-article">
+          ${badge(item.source)}
+          <h3 class="np-title">${escHtml(item.title)}</h3>
+          ${d ? `<p class="np-desc">${escHtml(d)}${desc.length > 200 ? '…' : ''}</p>` : ''}
+          ${metaRow(item)}
+        </article>`;
+      }
+
+      function renderCard(item) {
+        const desc = item.description || '';
+        const d = desc.slice(0, 130);
+        return `<article class="np-card">
+          ${badge(item.source)}
+          <h3 class="np-title">${escHtml(item.title)}</h3>
+          ${d ? `<p class="np-desc">${escHtml(d)}${desc.length > 130 ? '…' : ''}</p>` : ''}
+          ${metaRow(item)}
+        </article>`;
       }
 
       async function loadNews() {
         const root = document.getElementById('news-root');
         try {
-          const res  = await fetch('/api/news');
+          const res = await fetch('/api/news');
           if (!res.ok) throw new Error(`Server error ${res.status}`);
           const data = await res.json();
-
           if (data.error) throw new Error(data.error);
-          if (!data.items?.length) throw new Error('No entries received');
+          const items = data.items ?? [];
+          if (!items.length) throw new Error('No news received');
 
-          const bar = document.getElementById('news-status-bar');
-          const upEl = document.getElementById('news-updated');
-          if (data.updated) upEl.textContent = 'Updated: ' + formatDateEN(data.updated);
-          bar.style.display = 'flex';
+          const [top, ...rest] = items;
+          const secondary = rest.slice(0, 2);
+          const grid      = rest.slice(2);
 
-          root.innerHTML = `<div class="news-grid">${data.items.map(item => `
-            <article class="news-card">
-              <div class="news-badges">
-                <span class="news-cve">${escHtml(item.id)}</span>
-                ${item.ransomware ? '<span class="news-ransomware-badge">Ransomware</span>' : ''}
-              </div>
-              <h2 class="news-card-title">${escHtml(item.title)}</h2>
-              <p class="news-card-vendor">${escHtml(item.vendor)} · ${escHtml(item.product)}</p>
-              <p class="news-card-desc">${escHtml(item.description)}${item.description.length >= 220 ? '…' : ''}</p>
-              <div class="news-card-footer">
-                <span class="news-card-date">Added: ${formatDateEN(item.date)}</span>
-                <a class="news-card-link" href="${escAttr(item.link)}" target="_blank" rel="noopener noreferrer">NVD ↗</a>
-              </div>
-            </article>`).join('')}
-          </div>`;
+          let html = renderFeatured(top);
+          if (secondary.length) {
+            html += '<hr class="np-rule-thin" />';
+            html += `<div class="np-secondary">${secondary.map(renderArticle).join('')}</div>`;
+          }
+          if (grid.length) {
+            html += '<hr class="np-rule-thin" />';
+            html += `<div class="np-grid">${grid.map(renderCard).join('')}</div>`;
+          }
+          root.innerHTML = html;
         } catch (e) {
-          root.innerHTML = `<p class="news-error">Error loading news: ${escHtml(e.message)}</p>`;
+          root.innerHTML = `<p class="np-error">Error loading news: ${escHtml(e.message)}</p>`;
         }
-      }
-
-      function escHtml(str) {
-        return String(str ?? '')
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;')
-          .replace(/'/g, '&#39;');
-      }
-      function escAttr(url) {
-        return /^https:\/\/nvd\.nist\.gov\//.test(url) ? url : '#';
       }
 
       loadNews();
