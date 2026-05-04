@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Security News – SafeNet Security</title>
+    <meta name="description" content="Latest known security vulnerabilities from the CISA Known Exploited Vulnerabilities Catalog – updated daily." />
+    <link rel="canonical" href="https://safenet-security.ch/en/pages/news.html" />
+    <link rel="alternate" hreflang="de" href="https://safenet-security.ch/de/pages/news.html" />
+    <link rel="alternate" hreflang="en" href="https://safenet-security.ch/en/pages/news.html" />
+    <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png" />
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/shared.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/news.css" />
+    <script type="module" src="/js/auth.js?v=8"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <main class="news-main">
+      <h1>Security News</h1>
+      <p class="news-subtitle">Latest known vulnerabilities – Source: CISA KEV Catalog</p>
+
+      <div class="news-status-bar" id="news-status-bar" style="display:none">
+        <span class="news-source-tag">CISA KEV</span>
+        <span id="news-updated"></span>
+      </div>
+
+      <div id="news-root">
+        <div class="news-loading" id="news-loading">
+          <div class="news-loading-pulse"></div>
+          <div class="news-loading-pulse"></div>
+          <div class="news-loading-pulse"></div>
+          <div class="news-loading-pulse"></div>
+          <div class="news-loading-pulse"></div>
+          <div class="news-loading-pulse"></div>
+        </div>
+      </div>
+    </main>
+
+    <div id="footer"></div>
+
+    <script>
+      function formatDateEN(dateStr) {
+        if (!dateStr) return '';
+        const d = new Date(dateStr + 'T00:00:00Z');
+        return d.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+      }
+
+      async function loadNews() {
+        const root = document.getElementById('news-root');
+        try {
+          const res  = await fetch('/api/news');
+          if (!res.ok) throw new Error(`Server error ${res.status}`);
+          const data = await res.json();
+
+          if (data.error) throw new Error(data.error);
+          if (!data.items?.length) throw new Error('No entries received');
+
+          const bar = document.getElementById('news-status-bar');
+          const upEl = document.getElementById('news-updated');
+          if (data.updated) upEl.textContent = 'Updated: ' + formatDateEN(data.updated);
+          bar.style.display = 'flex';
+
+          root.innerHTML = `<div class="news-grid">${data.items.map(item => `
+            <article class="news-card">
+              <div class="news-badges">
+                <span class="news-cve">${escHtml(item.id)}</span>
+                ${item.ransomware ? '<span class="news-ransomware-badge">Ransomware</span>' : ''}
+              </div>
+              <h2 class="news-card-title">${escHtml(item.title)}</h2>
+              <p class="news-card-vendor">${escHtml(item.vendor)} · ${escHtml(item.product)}</p>
+              <p class="news-card-desc">${escHtml(item.description)}${item.description.length >= 220 ? '…' : ''}</p>
+              <div class="news-card-footer">
+                <span class="news-card-date">Added: ${formatDateEN(item.date)}</span>
+                <a class="news-card-link" href="${escAttr(item.link)}" target="_blank" rel="noopener noreferrer">NVD ↗</a>
+              </div>
+            </article>`).join('')}
+          </div>`;
+        } catch (e) {
+          root.innerHTML = `<p class="news-error">Error loading news: ${escHtml(e.message)}</p>`;
+        }
+      }
+
+      function escHtml(str) {
+        return String(str ?? '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+      function escAttr(url) {
+        return /^https:\/\/nvd\.nist\.gov\//.test(url) ? url : '#';
+      }
+
+      loadNews();
+
+      fetch('/en/partials/navbar.html').then(r => r.text()).then(d => {
+        document.getElementById('navbar').innerHTML = d;
+        const toggle   = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        const dropdowns = document.querySelectorAll('.dropdown');
+        if (toggle) {
+          toggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            toggle.setAttribute('aria-expanded', navLinks.classList.contains('active'));
+          });
+        }
+        dropdowns.forEach(dd => {
+          const link = dd.querySelector('.dropdown-link');
+          if (link) {
+            link.addEventListener('click', e => {
+              if (window.innerWidth <= 768) { e.preventDefault(); dd.classList.toggle('open'); }
+            });
+          }
+        });
+      });
+      fetch('/en/partials/footer.html').then(r => r.text()).then(d => { document.getElementById('footer').innerHTML = d; });
+    </script>
+  </body>
+</html>
