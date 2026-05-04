@@ -6,9 +6,11 @@ const CORS = {
 }
 
 const SOURCES = [
-  { name: 'The Hacker News', url: 'https://thehackernews.com/feeds/posts/default' },
-  { name: 'Bleeping Computer', url: 'https://www.bleepingcomputer.com/feed/' },
-  { name: 'Heise Security',    url: 'https://www.heise.de/security/rss/news-atom.xml' },
+  { name: 'The Hacker News',  url: 'https://thehackernews.com/feeds/posts/default' },
+  { name: 'Bleeping Computer',url: 'https://www.bleepingcomputer.com/feed/' },
+  { name: 'Krebs on Security',url: 'https://krebsonsecurity.com/feed/' },
+  { name: 'Ars Technica',     url: 'https://feeds.arstechnica.com/arstechnica/security' },
+  { name: 'SecurityWeek',     url: 'https://www.securityweek.com/feed/' },
 ]
 
 function cdataOrText(raw) {

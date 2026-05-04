@@ -48,9 +48,11 @@
       function safeUrl(url) { return /^https?:\/\//.test(url ?? '') ? url : '#'; }
 
       const SRC_CLASS = {
-        'The Hacker News': 'src-thn',
-        'Bleeping Computer': 'src-bc',
-        'Heise Security': 'src-heise',
+        'The Hacker News':  'src-thn',
+        'Bleeping Computer':'src-bc',
+        'Krebs on Security':'src-krebs',
+        'Ars Technica':     'src-ars',
+        'SecurityWeek':     'src-sw',
       };
 
       function badge(s) {
