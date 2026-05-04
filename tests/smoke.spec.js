@@ -57,4 +57,62 @@ test.describe('SafeNet Smoke', () => {
     await expect(page.locator('#email')).toBeVisible();
     await expect(page.locator('button[type="submit"]')).toBeVisible();
   });
+
+  test('DE Ransomware Demo laedt', async ({ page }) => {
+    await page.goto('/de/pages/ransomware.html');
+    await expect(page.locator('h1')).toBeVisible();
+    await expect(page.locator('#rw-start')).toBeVisible();
+  });
+
+  test('EN Ransomware Demo laedt', async ({ page }) => {
+    await page.goto('/en/pages/ransomware.html');
+    await expect(page.locator('h1')).toBeVisible();
+    await expect(page.locator('#rw-start')).toBeVisible();
+  });
+
+  test('DE MFA-Bypass Demo laedt', async ({ page }) => {
+    await page.goto('/de/pages/mfa-bypass.html');
+    await expect(page.locator('h1')).toBeVisible();
+    await expect(page.locator('#mfa-approve')).toBeVisible();
+    await expect(page.locator('#mfa-deny')).toBeVisible();
+  });
+
+  test('EN MFA-Bypass Demo laedt', async ({ page }) => {
+    await page.goto('/en/pages/mfa-bypass.html');
+    await expect(page.locator('h1')).toBeVisible();
+    await expect(page.locator('#mfa-approve')).toBeVisible();
+    await expect(page.locator('#mfa-deny')).toBeVisible();
+  });
+
+  test('DE Feedback Formular laedt', async ({ page }) => {
+    await page.goto('/de/pages/feedback.html');
+    await expect(page.locator('#feedback-form')).toBeVisible();
+    await expect(page.locator('button[type="submit"]')).toBeVisible();
+  });
+
+  test('EN Feedback Formular laedt', async ({ page }) => {
+    await page.goto('/en/pages/feedback.html');
+    await expect(page.locator('#feedback-form')).toBeVisible();
+    await expect(page.locator('button[type="submit"]')).toBeVisible();
+  });
+
+  test('DE News Seite laedt', async ({ page }) => {
+    await page.goto('/de/pages/news.html');
+    await expect(page.locator('h1')).toBeVisible();
+  });
+
+  test('EN News Seite laedt', async ({ page }) => {
+    await page.goto('/en/pages/news.html');
+    await expect(page.locator('h1')).toBeVisible();
+  });
+
+  test('DE Notizen Seite laedt', async ({ page }) => {
+    await page.goto('/de/pages/notizen.html');
+    await expect(page.locator('h1')).toBeVisible();
+  });
+
+  test('EN Notizen Seite laedt', async ({ page }) => {
+    await page.goto('/en/pages/notizen.html');
+    await expect(page.locator('h1')).toBeVisible();
+  });
 });
