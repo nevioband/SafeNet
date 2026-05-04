@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tutorials – SafeNet Security</title>
+    <meta name="description" content="Step-by-step tutorials on password security, phishing detection, 2FA setup and more." />
+    <link rel="canonical" href="https://safenet-security.ch/en/pages/tutorials.html" />
+    <link rel="alternate" hreflang="de" href="https://safenet-security.ch/de/pages/tutorials.html" />
+    <link rel="alternate" hreflang="en" href="https://safenet-security.ch/en/pages/tutorials.html" />
+    <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png" />
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/shared.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/tutorials.css" />
+    <script type="module" src="/js/auth.js?v=8"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <main class="tutorials-main">
+      <h1>Tutorials</h1>
+      <p class="tutorials-subtitle">Learn step by step how to protect yourself online.</p>
+
+      <div class="tutorials-list" id="tutorials-list">
+
+        <!-- Tutorial 1 -->
+        <div class="tutorial-card" data-id="1">
+          <button class="tutorial-header" aria-expanded="false">
+            <div class="tutorial-header-left">
+              <span class="tutorial-icon">🔑</span>
+              <div class="tutorial-title-wrap">
+                <span class="tutorial-title">Create a Strong Password</span>
+                <div class="tutorial-meta">
+                  <span class="tutorial-badge badge-easy">Easy</span>
+                  <span class="tutorial-progress-text" id="prog-text-1">0 / 5</span>
+                </div>
+              </div>
+            </div>
+            <div class="tutorial-header-right">
+              <div class="tutorial-progress-bar-track"><div class="tutorial-progress-bar-fill" id="prog-bar-1"></div></div>
+              <span class="tutorial-chevron">▾</span>
+            </div>
+          </button>
+          <div class="tutorial-body" id="body-1">
+            <ol class="tutorial-steps">
+              <li class="tutorial-step">
+                <input type="checkbox" class="step-cb" id="t1s0" data-tut="1" data-step="0" />
+                <span class="step-num">1</span>
+                <label for="t1s0" class="step-text">Choose at least <strong>12 characters</strong> – the longer, the better.</label>
+              </li>
+              <li class="tutorial-step">
+                <input type="checkbox" class="step-cb" id="t1s1" data-tut="1" data-step="1" />
+                <span class="step-num">2</span>
+                <label for="t1s1" class="step-text">Mix <strong>upper and lower case letters</strong>, numbers, and special characters (e.g. @, #, !).</label>
+              </li>
+              <li class="tutorial-step">
+                <input type="checkbox" class="step-cb" id="t1s2" data-tut="1" data-step="2" />
+                <span class="step-num">3</span>
+                <label for="t1s2" class="step-text">Avoid <strong>dictionary words</strong>, names, or dates of birth. <a href="/en/pages/wörterbuchangriff.html">What is a dictionary attack? →</a></label>
+              </li>
+              <li class="tutorial-step">
+                <input type="checkbox" class="step-cb" id="t1s3" data-tut="1" data-step="3" />
+                <span class="step-num">4</span>
+                <label for="t1s3" class="step-text">Test your password in the <a href="/en/pages/analysator.html">Analyzer</a> – aim for a green score.</label>
+              </li>
+              <li class="tutorial-step">
+                <input type="checkbox" class="step-cb" id="t1s4" data-tut="1" data-step="4" />
+                <span class="step-num">5</span>
+                <label for="t1s4" class="step-text">Use the <a href="/en/pages/generator.html">Password Generator</a> if you need help.</label>
+              </li>
+            </ol>
+            <button class="reset-btn" data-tut="1">Reset progress</button>
+          </div>
+        </div>
+
+        <!-- Tutorial 2 -->
+        <div class="tutorial-card" data-id="2">
+          <button class="tutorial-header" aria-expanded="false">
+            <div class="tutorial-header-left">
+              <span class="tutorial-icon">🎣</span>
+              <div class="tutorial-title-wrap">
+                <span class="tutorial-title">Recognise Phishing</span>
+                <div class="tutorial-meta">
+                  <span class="tutorial-badge badge-easy">Easy</span>
+                  <span class="tutorial-progress-text" id="prog-text-2">0 / 5</span>
+                </div>
+              </div>
+            </div>
+            <div class="tutorial-header-right">
+              <div class="tutorial-progress-bar-track"><div class="tutorial-progress-bar-fill" id="prog-bar-2"></div></div>
+              <span class="tutorial-chevron">▾</span>
+            </div>
+          </button>
+          <div class="tutorial-body" id="body-2">
+            <ol class="tutorial-steps">
+              <li class="tutorial-step">
+                <input type="checkbox" class="step-cb" id="t2s0" data-tut="2" data-step="0" />
+                <span class="step-num">1</span>
+                <label for="t2s0" class="step-text">Always check the <strong>sender address</strong> – not just the display name. <a href="/en/pages/phishing.html">Phishing examples →</a></label>
+              </li>
+              <li class="tutorial-step">
+                <input type="checkbox" class="step-cb" id="t2s1" data-tut="2" data-step="1" />
+                <span class="step-num">2</span>
+                <label for="t2s1" class="step-text">Hover over links before clicking – check the <strong>URL preview</strong>. <a href="/en/pages/phishing.html">More on phishing →</a></label>
+              </li>
+              <li class="tutorial-step">
+                <input type="checkbox" class="step-cb" id="t2s2" data-tut="2" data-step="2" />
+                <span class="step-num">3</span>
+                <label for="t2s2" class="step-text">Be suspicious of <strong>urgency</strong> ("Act now!") or unexpected attachments. <a href="/en/pages/socialengineering.html">Social Engineering →</a></label>
+              </li>
+              <li class="tutorial-step">
+                <input type="checkbox" class="step-cb" id="t2s3" data-tut="2" data-step="3" />
+                <span class="step-num">4</span>
+                <label for="t2s3" class="step-text">Navigate directly to the real website instead of following a link in the email. <a href="/en/pages/phishing.html">Recognise phishing →</a></label>
+              </li>
+              <li class="tutorial-step">
+                <input type="checkbox" class="step-cb" id="t2s4" data-tut="2" data-step="4" />
+                <span class="step-num">5</span>
+                <label for="t2s4" class="step-text">Read our <a href="/en/pages/phishing.html">phishing explanation page</a> for more examples.</label>
+              </li>
+            </ol>
+            <button class="reset-btn" data-tut="2">Reset progress</button>
+          </div>
+        </div>
+
+        <!-- Tutorial 3 -->
+        <div class="tutorial-card" data-id="3">
+          <button class="tutorial-header" aria-expanded="false">
+            <div class="tutorial-header-left">
+              <span class="tutorial-icon">🔐</span>
+              <div class="tutorial-title-wrap">
+                <span class="tutorial-title">Set Up Two-Factor Authentication</span>
+                <div class="tutorial-meta">
+                  <span class="tutorial-badge badge-medium">Medium</span>
+                  <span class="tutorial-progress-text" id="prog-text-3">0 / 5</span>
+                </div>
+              </div>
+            </div>
+            <div class="tutorial-header-right">
+              <div class="tutorial-progress-bar-track"><div class="tutorial-progress-bar-fill" id="prog-bar-3"></div></div>
+              <span class="tutorial-chevron">▾</span>
+            </div>
+          </button>
+          <div class="tutorial-body" id="body-3">
+            <ol class="tutorial-steps">
+              <li class="tutorial-step">
+                <input type="checkbox" class="step-cb" id="t3s0" data-tut="3" data-step="0" />
+                <span class="step-num">1</span>
+                <label for="t3s0" class="step-text">Download an authenticator app (e.g. <strong>Google Authenticator</strong> or <strong>Authy</strong>). <a href="/en/pages/2fa.html">What is 2FA? →</a></label>
+              </li>
+              <li class="tutorial-step">
+                <input type="checkbox" class="step-cb" id="t3s1" data-tut="3" data-step="1" />
+                <span class="step-num">2</span>
+                <label for="t3s1" class="step-text">Open the security settings of your account (email, social media, etc.). <a href="/en/pages/einstellungen.html">SafeNet Settings →</a></label>
+              </li>
+              <li class="tutorial-step">
+                <input type="checkbox" class="step-cb" id="t3s2" data-tut="3" data-step="2" />
+                <span class="step-num">3</span>
+                <label for="t3s2" class="step-text">Scan the <strong>QR code</strong> with the app or enter the key manually.</label>
+              </li>
+              <li class="tutorial-step">
+                <input type="checkbox" class="step-cb" id="t3s3" data-tut="3" data-step="3" />
+                <span class="step-num">4</span>
+                <label for="t3s3" class="step-text">Enter the 6-digit confirmation code and enable 2FA.</label>
+              </li>
+              <li class="tutorial-step">
+                <input type="checkbox" class="step-cb" id="t3s4" data-tut="3" data-step="4" />
+                <span class="step-num">5</span>
+                <label for="t3s4" class="step-text">Save your <strong>backup codes</strong> securely offline (e.g. in the vault). <a href="/en/pages/tresor.html">Go to Vault →</a></label>
+              </li>
+            </ol>
+            <button class="reset-btn" data-tut="3">Reset progress</button>
+          </div>
+        </div>
+
+        <!-- Tutorial 4 -->
+        <div class="tutorial-card" data-id="4">
+          <button class="tutorial-header" aria-expanded="false">
+            <div class="tutorial-header-left">
+              <span class="tutorial-icon">🗝️</span>
+              <div class="tutorial-title-wrap">
+                <span class="tutorial-title">Using a Password Manager Effectively</span>
+                <div class="tutorial-meta">
+                  <span class="tutorial-badge badge-medium">Medium</span>
+                  <span class="tutorial-progress-text" id="prog-text-4">0 / 5</span>
+                </div>
+              </div>
+            </div>
+            <div class="tutorial-header-right">
+              <div class="tutorial-progress-bar-track"><div class="tutorial-progress-bar-fill" id="prog-bar-4"></div></div>
+              <span class="tutorial-chevron">▾</span>
+            </div>
+          </button>
+          <div class="tutorial-body" id="body-4">
+            <ol class="tutorial-steps">
+              <li class="tutorial-step">
+                <input type="checkbox" class="step-cb" id="t4s0" data-tut="4" data-step="0" />
+                <span class="step-num">1</span>
+                <label for="t4s0" class="step-text">Sign in to SafeNet Security and open the <a href="/en/pages/tresor.html">Vault</a>.</label>
+              </li>
+              <li class="tutorial-step">
+                <input type="checkbox" class="step-cb" id="t4s1" data-tut="4" data-step="1" />
+                <span class="step-num">2</span>
+                <label for="t4s1" class="step-text">Add each of your existing passwords with a <strong>label and category</strong>. <a href="/en/pages/tresor.html">Open Vault →</a></label>
+              </li>
+              <li class="tutorial-step">
+                <input type="checkbox" class="step-cb" id="t4s2" data-tut="4" data-step="2" />
+                <span class="step-num">3</span>
+                <label for="t4s2" class="step-text">Replace weak passwords with generated ones – use the <a href="/en/pages/generator.html">Generator</a>.</label>
+              </li>
+              <li class="tutorial-step">
+                <input type="checkbox" class="step-cb" id="t4s3" data-tut="4" data-step="3" />
+                <span class="step-num">4</span>
+                <label for="t4s3" class="step-text">Regularly check your <a href="/en/pages/meine-stats.html">Security Overview</a> for weaknesses.</label>
+              </li>
+              <li class="tutorial-step">
+                <input type="checkbox" class="step-cb" id="t4s4" data-tut="4" data-step="4" />
+                <span class="step-num">5</span>
+                <label for="t4s4" class="step-text">Change passwords immediately after data breaches and update the entry in the vault. <a href="/en/pages/news.html">Latest vulnerabilities →</a></label>
+              </li>
+            </ol>
+            <button class="reset-btn" data-tut="4">Reset progress</button>
+          </div>
+        </div>
+
+        <!-- Tutorial 5 -->
+        <div class="tutorial-card" data-id="5">
+          <button class="tutorial-header" aria-expanded="false">
+            <div class="tutorial-header-left">
+              <span class="tutorial-icon">🚨</span>
+              <div class="tutorial-title-wrap">
+                <span class="tutorial-title">After a Hack – What to Do?</span>
+                <div class="tutorial-meta">
+                  <span class="tutorial-badge badge-hard">Hard</span>
+                  <span class="tutorial-progress-text" id="prog-text-5">0 / 5</span>
+                </div>
+              </div>
+            </div>
+            <div class="tutorial-header-right">
+              <div class="tutorial-progress-bar-track"><div class="tutorial-progress-bar-fill" id="prog-bar-5"></div></div>
+              <span class="tutorial-chevron">▾</span>
+            </div>
+          </button>
+          <div class="tutorial-body" id="body-5">
+            <ol class="tutorial-steps">
+              <li class="tutorial-step">
+                <input type="checkbox" class="step-cb" id="t5s0" data-tut="5" data-step="0" />
+                <span class="step-num">1</span>
+                <label for="t5s0" class="step-text"><strong>Change your password immediately</strong> – on the affected account and everywhere you used the same password. <a href="/en/pages/generator.html">Generate new password →</a></label>
+              </li>
+              <li class="tutorial-step">
+                <input type="checkbox" class="step-cb" id="t5s1" data-tut="5" data-step="1" />
+                <span class="step-num">2</span>
+                <label for="t5s1" class="step-text"><strong>Terminate all active sessions</strong> – look for "Devices" or "Sessions" in account settings.</label>
+              </li>
+              <li class="tutorial-step">
+                <input type="checkbox" class="step-cb" id="t5s2" data-tut="5" data-step="2" />
+                <span class="step-num">3</span>
+                <label for="t5s2" class="step-text"><strong>Enable 2FA</strong> if not already active – or reset your existing 2FA codes. <a href="/en/pages/2fa.html">2FA guide →</a></label>
+              </li>
+              <li class="tutorial-step">
+                <input type="checkbox" class="step-cb" id="t5s3" data-tut="5" data-step="3" />
+                <span class="step-num">4</span>
+                <label for="t5s3" class="step-text">Review <strong>connected apps</strong> and remove unknown third-party access. <a href="/en/pages/einstellungen.html">SafeNet Settings →</a></label>
+              </li>
+              <li class="tutorial-step">
+                <input type="checkbox" class="step-cb" id="t5s4" data-tut="5" data-step="4" />
+                <span class="step-num">5</span>
+                <label for="t5s4" class="step-text">Notify contacts if your account was used for <strong>spam or fraud</strong>.</label>
+              </li>
+            </ol>
+            <button class="reset-btn" data-tut="5">Reset progress</button>
+          </div>
+        </div>
+
+      </div><!-- /tutorials-list -->
+    </main>
+
+    <div id="footer"></div>
+
+    <script>
+      const STEPS = 5;
+      function lsKey(tut, step) { return `tut_${tut}_${step}`; }
+      function countDone(tutId) {
+        let n = 0;
+        for (let i = 0; i < STEPS; i++) if (localStorage.getItem(lsKey(tutId, i)) === '1') n++;
+        return n;
+      }
+      function updateProgress(tutId) {
+        const done = countDone(tutId);
+        const pct  = Math.round(done / STEPS * 100);
+        const bar  = document.getElementById(`prog-bar-${tutId}`);
+        const txt  = document.getElementById(`prog-text-${tutId}`);
+        if (bar) bar.style.width = pct + '%';
+        if (txt) txt.textContent = `${done} / ${STEPS}`;
+      }
+      function restoreCheckboxes(tutId) {
+        for (let i = 0; i < STEPS; i++) {
+          const cb = document.getElementById(`t${tutId}s${i}`);
+          if (!cb) continue;
+          cb.checked = localStorage.getItem(lsKey(tutId, i)) === '1';
+          const label = cb.nextElementSibling?.nextElementSibling;
+          if (label) label.classList.toggle('checked', cb.checked);
+        }
+        updateProgress(tutId);
+      }
+      document.querySelectorAll('.tutorial-header').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const card    = btn.closest('.tutorial-card');
+          const body    = document.getElementById('body-' + card.dataset.id);
+          const chevron = btn.querySelector('.tutorial-chevron');
+          const isOpen  = body.classList.contains('open');
+          document.querySelectorAll('.tutorial-body.open').forEach(b => {
+            b.classList.remove('open');
+            const otherBtn = b.previousElementSibling;
+            if (otherBtn) {
+              otherBtn.querySelector('.tutorial-chevron')?.classList.remove('open');
+              otherBtn.setAttribute('aria-expanded', 'false');
+            }
+          });
+          if (!isOpen) {
+            body.classList.add('open');
+            chevron?.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        });
+      });
+      document.querySelectorAll('.step-cb').forEach(cb => {
+        cb.addEventListener('change', () => {
+          const tutId = cb.dataset.tut;
+          localStorage.setItem(lsKey(tutId, cb.dataset.step), cb.checked ? '1' : '0');
+          const label = cb.nextElementSibling?.nextElementSibling;
+          if (label) label.classList.toggle('checked', cb.checked);
+          updateProgress(tutId);
+        });
+      });
+      document.querySelectorAll('.reset-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const tutId = btn.dataset.tut;
+          for (let i = 0; i < STEPS; i++) localStorage.removeItem(lsKey(tutId, i));
+          restoreCheckboxes(tutId);
+        });
+      });
+      [1, 2, 3, 4, 5].forEach(id => restoreCheckboxes(id));
+
+      fetch('/en/partials/navbar.html').then(r => r.text()).then(d => {
+        document.getElementById('navbar').innerHTML = d;
+        const toggle   = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        const dropdowns = document.querySelectorAll('.dropdown');
+        if (toggle) {
+          toggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            toggle.setAttribute('aria-expanded', navLinks.classList.contains('active'));
+          });
+        }
+        dropdowns.forEach(dd => {
+          const link = dd.querySelector('.dropdown-link');
+          if (link) {
+            link.addEventListener('click', e => {
+              if (window.innerWidth <= 768) { e.preventDefault(); dd.classList.toggle('open'); }
+            });
+          }
+        });
+      });
+      fetch('/en/partials/footer.html').then(r => r.text()).then(d => { document.getElementById('footer').innerHTML = d; });
+    </script>
+  </body>
+</html>

@@ -53,11 +53,22 @@ async function applyNavbarUser() {
             const settingsUrl   = isEnglish ? '/en/pages/einstellungen.html' : '/de/pages/einstellungen.html'
             const settingsLabel = isEnglish ? 'Settings' : 'Einstellungen'
             const signOutLabel  = isEnglish ? 'Sign out' : 'Abmelden'
+            const statsUrl      = isEnglish ? '/en/pages/meine-stats.html'    : '/de/pages/meine-stats.html'
+            const statsLabel    = isEnglish ? 'My Statistics'                  : 'Meine Statistiken'
+            const tutorialsUrl  = isEnglish ? '/en/pages/tutorials.html'       : '/de/pages/tutorials.html'
+            const tutorialsLabel = isEnglish ? 'Tutorials'                     : 'Tutorials'
+            const newsUrl       = isEnglish ? '/en/pages/news.html'            : '/de/pages/news.html'
+            const newsLabel     = isEnglish ? 'Security News'                  : 'Security-News'
 
             // Dropdown: Anzeigename oder E-Mail + Einstellungen-Link (sprachabhängig)
             dropdown.innerHTML = `
                 <li class="user-dropdown-name">${shownName}</li>
                 <li><a href="${settingsUrl}">${settingsLabel}</a></li>
+                <li><a href="${statsUrl}">${statsLabel}</a></li>
+                <li class="user-dropdown-divider"></li>
+                <li><a href="${tutorialsUrl}">${tutorialsLabel}</a></li>
+                <li><a href="${newsUrl}">${newsLabel}</a></li>
+                <li class="user-dropdown-divider"></li>
                 <li><a href="#" id="logoutBtn">${signOutLabel}</a></li>
             `
             dropdown.querySelector('#logoutBtn').addEventListener('click', async (e) => {

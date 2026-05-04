@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -27,7 +27,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
     <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png" />
-    <script type="module" src="/js/auth.js?v=5"></script>
+    <script type="module" src="/js/auth.js?v=8"></script>
   </head>
   <body>
     <div id="navbar"></div>
@@ -360,6 +360,64 @@
       </div>
     </section>
 
+    <!-- RANSOMWARE -->
+    <section class="info-section">
+      <div class="info-box">
+        <h2 class="section-title">
+          Ransomware
+          <span class="material-symbols-outlined">lock</span>
+        </h2>
+        <p>
+          <strong>What is Ransomware?</strong><br />
+          Ransomware is malicious software that encrypts all files on a computer and only releases them after payment of a ransom – usually in cryptocurrency. Even after paying, there is no guarantee of data recovery.
+        </p>
+        <p>
+          <strong>How does it work?</strong><br />
+          Infection usually occurs via phishing emails or insecure remote access. The malware explores the network, disables backups, then encrypts all reachable files. A ransom note then appears on the screen.
+        </p>
+        <p>
+          <strong>Well-known variants:</strong><br />
+          • <strong>WannaCry (2017):</strong> Infected over 200,000 computers in 150 countries within hours.<br />
+          • <strong>LockBit:</strong> Uses «double extortion» – data is stolen <em>and</em> encrypted.<br />
+          • <strong>RaaS:</strong> Ransomware-as-a-Service – criminals rent the infrastructure, no technical knowledge needed.
+        </p>
+        <p>
+          <strong>Protection:</strong><br />
+          → Regular offline backups (3-2-1 rule)<br />
+          → Keep software and operating systems up to date<br />
+          → Never pay the ransom<br />
+          → <a href="/en/pages/ransomware.html" style="color:#66d9ff;">Learn more: Ransomware →</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- MFA BYPASS -->
+    <section class="info-section">
+      <div class="info-box">
+        <h2 class="section-title">
+          MFA Bypass
+          <span class="material-symbols-outlined">phonelink_lock</span>
+        </h2>
+        <p>
+          <strong>What is MFA Bypass?</strong><br />
+          Multi-factor authentication protects accounts with a second factor. MFA bypass refers to techniques attackers use to specifically circumvent this protection – such as push bombing, SIM swapping, or real-time phishing.
+        </p>
+        <p>
+          <strong>Common techniques:</strong><br />
+          • <strong>MFA Fatigue:</strong> Attackers send dozens of push requests until the victim approves out of exhaustion.<br />
+          • <strong>SIM Swapping:</strong> The phone number is transferred to a foreign SIM – the attacker receives all SMS codes.<br />
+          • <strong>Session Token Theft:</strong> After login, malware steals the browser cookie and bypasses MFA entirely.
+        </p>
+        <p>
+          <strong>Protection:</strong><br />
+          → Use hardware keys (FIDO2/YubiKey) – phishing-resistant<br />
+          → Always deny unexpected push requests<br />
+          → Replace SMS-MFA with an authenticator app<br />
+          → <a href="/en/pages/mfa-bypass.html" style="color:#66d9ff;">Learn more: MFA Bypass →</a>
+        </p>
+      </div>
+    </section>
+
     <section class="info-section">
       <div class="info-box">
         <h2>Identify Attack Methods – Quiz</h2>
@@ -519,7 +577,6 @@
         ladeFrage();
       })();
     </script>
-
     <div id="footer"></div>
     <script>
       fetch("/en/partials/navbar.html").then(r=>r.text()).then(d=>{

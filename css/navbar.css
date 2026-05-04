@@ -283,6 +283,13 @@
   list-style: none;
 }
 
+.user-dropdown-divider {
+  height: 1px;
+  background: rgba(59, 130, 246, 0.15);
+  margin: 4px 0;
+  list-style: none;
+}
+
 .user-menu.open .user-dropdown {
   display: block;
 }

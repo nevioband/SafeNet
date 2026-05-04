@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="de">
   <head>
     <meta charset="UTF-8" />
@@ -36,7 +36,7 @@
       type="image/png"
       href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png"
     />
-    <script type="module" src="/js/auth.js?v=5"></script>
+    <script type="module" src="/js/auth.js?v=8"></script>
   </head>
   <body>
     <div id="navbar"></div>
@@ -393,6 +393,64 @@
       </div>
     </section>
 
+    <!-- RANSOMWARE -->
+    <section class="info-section">
+      <div class="info-box">
+        <h2 class="section-title">
+          Ransomware
+          <span class="material-symbols-outlined">lock</span>
+        </h2>
+        <p>
+          <strong>Was ist Ransomware?</strong><br />
+          Ransomware ist Schadsoftware, die alle Dateien auf einem Computer verschlüsselt und nur gegen Zahlung eines Lösegelds – meist in Kryptowährung – wieder freigibt. Selbst nach der Zahlung gibt es keine Garantie auf Wiederherstellung.
+        </p>
+        <p>
+          <strong>Wie funktioniert es?</strong><br />
+          Die Infektion erfolgt oft über Phishing-E-Mails oder unsichere Remote-Zugänge. Die Malware erkundet das Netzwerk, deaktiviert Backups und verschlüsselt dann alle erreichbaren Dateien. Anschliessend erscheint eine Lösegeldforderung.
+        </p>
+        <p>
+          <strong>Bekannte Varianten:</strong><br />
+          • <strong>WannaCry (2017):</strong> Befiel über 200'000 Computer in 150 Ländern in wenigen Stunden.<br />
+          • <strong>LockBit:</strong> Nutzt «doppelte Erpressung» – Daten werden gestohlen <em>und</em> verschlüsselt.<br />
+          • <strong>RaaS:</strong> Ransomware-as-a-Service – Kriminelle mieten die Infrastruktur, kein technisches Wissen nötig.
+        </p>
+        <p>
+          <strong>Schutz:</strong><br />
+          → Regelmässige Offline-Backups (3-2-1-Regel)<br />
+          → Software und Betriebssystem aktuell halten<br />
+          → Niemals Lösegeld zahlen<br />
+          → <a href="/de/pages/ransomware.html" style="color:#66d9ff;">Mehr erfahren: Ransomware →</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- MFA-BYPASS -->
+    <section class="info-section">
+      <div class="info-box">
+        <h2 class="section-title">
+          MFA-Bypass
+          <span class="material-symbols-outlined">phonelink_lock</span>
+        </h2>
+        <p>
+          <strong>Was ist MFA-Bypass?</strong><br />
+          Multi-Faktor-Authentifizierung schützt Konten durch einen zweiten Faktor. MFA-Bypass bezeichnet Techniken, mit denen Angreifer diesen Schutz gezielt umgehen – etwa durch Push-Bombing, SIM-Swapping oder Echtzeit-Phishing.
+        </p>
+        <p>
+          <strong>Häufige Techniken:</strong><br />
+          • <strong>MFA Fatigue:</strong> Angreifer senden Dutzende Push-Anfragen, bis das Opfer aus Erschöpfung bestätigt.<br />
+          • <strong>SIM-Swapping:</strong> Die Telefonnummer wird auf eine fremde SIM übertragen – der Angreifer empfängt alle SMS-Codes.<br />
+          • <strong>Session-Token-Diebstahl:</strong> Nach dem Login stiehlt Malware das Browser-Cookie und überspringt die MFA vollständig.
+        </p>
+        <p>
+          <strong>Schutz:</strong><br />
+          → Hardware-Schlüssel (FIDO2/YubiKey) verwenden – phishing-resistent<br />
+          → Unerwartete Push-Anfragen immer ablehnen<br />
+          → SMS-MFA durch Authenticator-App ersetzen<br />
+          → <a href="/de/pages/mfa-bypass.html" style="color:#66d9ff;">Mehr erfahren: MFA-Bypass →</a>
+        </p>
+      </div>
+    </section>
+
     <section class="info-section">
       <div class="info-box">
         <h2>Angriffsmethoden erkennen – Quiz</h2>
@@ -599,7 +657,6 @@
           });
         });
     </script>
-
     <div id="footer"></div>
     <script>
       fetch("/de/partials/footer.html")
