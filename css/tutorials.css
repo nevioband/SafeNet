@@ -44,6 +44,7 @@
   gap: 16px;
   padding: 22px 24px;
   cursor: pointer;
+  -webkit-user-select: none;
   user-select: none;
   background: none;
   border: none;
@@ -150,8 +151,8 @@
 
 .step-cb {
   flex-shrink: 0;
-  appearance: none;
   -webkit-appearance: none;
+  appearance: none;
   width: 20px;
   height: 20px;
   border: 2px solid rgba(51, 153, 255, 0.4);
