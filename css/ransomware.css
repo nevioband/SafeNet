@@ -163,3 +163,63 @@ h1 {
 [data-theme="light"] .rw-file.encrypted { background: rgba(239,68,68,0.06); color: #991b1b; }
 [data-theme="light"] .rw-ransom-note { background: rgba(239,68,68,0.05); color: #991b1b; }
 [data-theme="light"] .rw-ransom-note strong { color: #dc2626; }
+
+/* ── Demo-Abschnitt ── */
+.rw-demo-intro {
+    text-align: center;
+    color: #a0c4ff;
+    margin-bottom: 24px;
+}
+
+.rw-col-label {
+    font-size: 0.75rem;
+    text-align: center;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.rw-col-label-files { color: #64748b; }
+.rw-col-label-log   { color: #ef4444; }
+
+.rw-files-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.rw-log {
+    background: #130a0a;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 12px;
+    padding: 14px;
+    font-family: monospace;
+    font-size: 0.8rem;
+    color: #fca5a5;
+    min-height: 200px;
+    white-space: pre-wrap;
+    overflow-y: auto;
+    max-height: 250px;
+}
+
+.rw-demo-btns {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 18px;
+    flex-wrap: wrap;
+}
+
+.rw-btn-inline { width: auto; padding: 10px 24px; }
+
+.rw-btn-reset {
+    width: auto;
+    padding: 10px 24px;
+    background: rgba(51, 153, 255, 0.1);
+    border-color: rgba(51, 153, 255, 0.3);
+    color: #66d9ff;
+}
+
+.rw-ransom-danger { color: #ef4444; }
+.rw-ransom-code   { color: #fbbf24; font-size: 0.82rem; }
+.rw-ransom-meta   { opacity: 0.65; font-size: 0.82rem; }

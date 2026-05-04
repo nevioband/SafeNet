@@ -185,3 +185,44 @@ h1 {
 [data-theme="light"] .mfa-phone-card { background: #ffffff; border-color: rgba(59,130,246,0.2); }
 [data-theme="light"] .mfa-push-msg { background: #f8fafc; border-color: rgba(59,130,246,0.15); color: #1e293b; }
 [data-theme="light"] .mfa-attack-log { background: #fff5f5; color: #991b1b; border-color: rgba(239,68,68,0.3); }
+
+/* ── Demo-Abschnitt ── */
+.mfa-demo-intro {
+    text-align: center;
+    color: #a0c4ff;
+    margin-bottom: 24px;
+}
+
+.mfa-demo-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.mfa-col-label-log {
+    font-size: 0.75rem;
+    color: #ef4444;
+    text-align: center;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.mfa-push-highlight { color: #66d9ff; }
+
+.mfa-demo-btns {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 18px;
+}
+
+.mfa-btn-inline { width: auto; padding: 10px 24px; }
+
+.mfa-level-danger  { color: #ef4444; }
+.mfa-level-warning { color: #f59e0b; }
+.mfa-level-safe    { color: #86efac; }
+
+@media (max-width: 640px) {
+    .mfa-demo-layout { grid-template-columns: 1fr; }
+}

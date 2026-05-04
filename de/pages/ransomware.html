@@ -106,14 +106,14 @@
     <!-- Demo -->
     <div class="password-container">
       <h3>Ransomware Demo</h3>
-      <p style="text-align:center;color:#a0c4ff;margin-bottom:24px;">
+      <p class="rw-demo-intro">
         Klicke auf «Angriff starten» und beobachte, wie Ransomware Dateien nacheinander verschlüsselt – und anschliessend die Lösegeldforderung erscheint.
       </p>
 
       <div class="rw-demo-grid">
         <div>
-          <div style="font-size:0.75rem;color:#64748b;text-align:center;margin-bottom:10px;letter-spacing:1px;text-transform:uppercase;">Deine Dateien</div>
-          <div id="rw-files" style="display:flex;flex-direction:column;gap:8px;">
+          <div class="rw-col-label rw-col-label-files">Deine Dateien</div>
+          <div id="rw-files" class="rw-files-list">
             <div class="rw-file normal" data-name="urlaub_2024.jpg"><span class="rw-file-icon">🖼️</span><span class="rw-file-name">urlaub_2024.jpg</span><span class="rw-file-status">✓ Lesbar</span></div>
             <div class="rw-file normal" data-name="buchhaltung.xlsx"><span class="rw-file-icon">📊</span><span class="rw-file-name">buchhaltung.xlsx</span><span class="rw-file-status">✓ Lesbar</span></div>
             <div class="rw-file normal" data-name="passwörter.txt"><span class="rw-file-icon">📝</span><span class="rw-file-name">passwörter.txt</span><span class="rw-file-status">✓ Lesbar</span></div>
@@ -123,23 +123,23 @@
         </div>
 
         <div>
-          <div style="font-size:0.75rem;color:#ef4444;text-align:center;margin-bottom:10px;letter-spacing:1px;text-transform:uppercase;">Angreifer-Log</div>
-          <div id="rw-log" style="background:#130a0a;border:1px solid rgba(239,68,68,0.3);border-radius:12px;padding:14px;font-family:monospace;font-size:0.8rem;color:#fca5a5;min-height:200px;white-space:pre-wrap;overflow-y:auto;max-height:250px;">Warte auf Start…</div>
+          <div class="rw-col-label rw-col-label-log">Angreifer-Log</div>
+          <div id="rw-log" class="rw-log">Warte auf Start…</div>
         </div>
       </div>
 
       <div id="rw-ransom-note" class="rw-ransom-note">
         <strong>⚠️ DEINE DATEIEN WURDEN VERSCHLÜSSELT ⚠️</strong>
         Alle deine wichtigen Dateien wurden mit AES-256 + RSA-2048 verschlüsselt.<br><br>
-        Um deine Dateien zurückzubekommen, zahle <strong style="color:#ef4444;">0.05 BTC (~2'800 CHF)</strong> an:<br>
-        <code style="color:#fbbf24;font-size:0.82rem;">bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh</code><br><br>
-        Du hast <strong id="rw-countdown" style="color:#ef4444;">72:00:00</strong> Zeit – danach wird der Schlüssel gelöscht.<br>
-        <span style="opacity:0.65;font-size:0.82rem;">Kontakt: decrypt@onion.dark | Angriff-ID: RW-2026-CH-00441</span>
+        Um deine Dateien zurückzubekommen, zahle <strong class="rw-ransom-danger">0.05 BTC (~2'800 CHF)</strong> an:<br>
+        <code class="rw-ransom-code">bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh</code><br><br>
+        Du hast <strong id="rw-countdown" class="rw-ransom-danger">72:00:00</strong> Zeit – danach wird der Schlüssel gelöscht.<br>
+        <span class="rw-ransom-meta">Kontakt: decrypt@onion.dark | Angriff-ID: RW-2026-CH-00441</span>
       </div>
 
-      <div style="display:flex;gap:12px;justify-content:center;margin-top:18px;flex-wrap:wrap;">
-        <button id="rw-start" class="main-btn" style="width:auto;padding:10px 24px;">Angriff starten</button>
-        <button id="rw-reset" class="main-btn" style="width:auto;padding:10px 24px;background:rgba(51,153,255,0.1);border-color:rgba(51,153,255,0.3);color:#66d9ff;" disabled>Zurücksetzen</button>
+      <div class="rw-demo-btns">
+        <button id="rw-start" class="main-btn rw-btn-inline">Angriff starten</button>
+        <button id="rw-reset" class="main-btn rw-btn-reset" disabled>Zurücksetzen</button>
       </div>
     </div>
 

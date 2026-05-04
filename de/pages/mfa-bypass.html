@@ -80,11 +80,11 @@
     <!-- Demo: Push Fatigue -->
     <div class="password-container">
       <h3>Demo: MFA Fatigue Angriff</h3>
-      <p style="text-align:center;color:#a0c4ff;margin-bottom:24px;">
+      <p class="mfa-demo-intro">
         Der Angreifer kennt dein Passwort und bombardiert dich mit MFA-Anfragen. Klicke immer auf «Ablehnen» – oder beobachte, was passiert wenn du einmal «Bestätigen» tippst.
       </p>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+      <div class="mfa-demo-layout">
 
         <div>
           <div class="mfa-demo-panel">
@@ -99,8 +99,8 @@
               </div>
               <div class="mfa-push-msg" id="mfa-push-text">
                 Jemand versucht, sich mit deinem Konto anzumelden.<br>
-                <strong style="color:#66d9ff;">Standort:</strong> <span id="mfa-location">Moskau, RU</span><br>
-                <strong style="color:#66d9ff;">Gerät:</strong> Unbekannt
+                <strong class="mfa-push-highlight">Standort:</strong> <span id="mfa-location">Moskau, RU</span><br>
+                <strong class="mfa-push-highlight">Gerät:</strong> Unbekannt
               </div>
               <div class="mfa-push-btns">
                 <button id="mfa-approve">✓ Bestätigen</button>
@@ -112,7 +112,7 @@
         </div>
 
         <div>
-          <div style="font-size:0.75rem;color:#ef4444;text-align:center;margin-bottom:10px;letter-spacing:1px;text-transform:uppercase;">
+          <div class="mfa-col-label-log">
             Angreifer-Log <span id="mfa-attempt-badge" class="mfa-counter-badge">0 Versuche</span>
           </div>
           <div id="mfa-log" class="mfa-attack-log">Warte auf ersten Versuch…</div>
@@ -120,8 +120,8 @@
 
       </div>
 
-      <div style="display:flex;gap:12px;justify-content:center;margin-top:18px;">
-        <button id="mfa-reset" class="main-btn" style="width:auto;padding:10px 24px;">Demo zurücksetzen</button>
+      <div class="mfa-demo-btns">
+        <button id="mfa-reset" class="main-btn mfa-btn-inline">Demo zurücksetzen</button>
       </div>
     </div>
 
@@ -206,10 +206,10 @@
           Nicht alle MFA-Methoden bieten den gleichen Schutz. Von unsicher bis sicher:
         </p>
         <p>
-          <strong style="color:#ef4444;">Unsicher:</strong> SMS-Codes – anfällig für SIM-Swapping und SS7-Angriffe.<br /><br />
-          <strong style="color:#f59e0b;">Mittel:</strong> Authenticator-Apps (TOTP) – sicherer als SMS, aber anfällig für Echtzeit-Phishing.<br /><br />
-          <strong style="color:#86efac;">Sicher:</strong> Hardware-Sicherheitsschlüssel (FIDO2/WebAuthn wie YubiKey) – phishing-resistent, da der Schlüssel domain-gebunden ist.<br /><br />
-          <strong style="color:#86efac;">Sicher:</strong> Passkeys – ebenfalls phishing-resistent und ohne Passwort – die Zukunft der Authentifizierung.
+          <strong class="mfa-level-danger">Unsicher:</strong> SMS-Codes – anfällig für SIM-Swapping und SS7-Angriffe.<br /><br />
+          <strong class="mfa-level-warning">Mittel:</strong> Authenticator-Apps (TOTP) – sicherer als SMS, aber anfällig für Echtzeit-Phishing.<br /><br />
+          <strong class="mfa-level-safe">Sicher:</strong> Hardware-Sicherheitsschlüssel (FIDO2/WebAuthn wie YubiKey) – phishing-resistent, da der Schlüssel domain-gebunden ist.<br /><br />
+          <strong class="mfa-level-safe">Sicher:</strong> Passkeys – ebenfalls phishing-resistent und ohne Passwort – die Zukunft der Authentifizierung.
         </p>
       </div>
     </section>

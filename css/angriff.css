@@ -45,3 +45,14 @@ h1 {
     align-items: center;
     gap: 10px;
 }
+
+.inline-icon.warning { color: #ffb300; }
+
+.link-accent { color: #66d9ff; }
+
+.quiz-intro {
+    color: #cbd5e1;
+    margin-bottom: 20px;
+}
+
+.quiz-restart { margin-top: 16px; }
