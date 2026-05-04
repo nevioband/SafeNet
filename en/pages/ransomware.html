@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ransomware – SafeNet Security</title>
+    <meta name="description" content="What is ransomware? Learn how this extortion software works, what variants exist, and how to protect your data." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Ransomware – SafeNet Security" />
+    <meta property="og:description" content="What is ransomware? Learn how this extortion software works, what variants exist, and how to protect your data." />
+    <meta property="og:image" content="https://safenet-security.ch/images/SafeNet-Security-Logo/Withbg/ShieldWhiteName.png" />
+    <meta property="og:url" content="https://safenet-security.ch/en/pages/ransomware.html" />
+    <link rel="canonical" href="https://safenet-security.ch/en/pages/ransomware.html" />
+    <link rel="alternate" hreflang="de" href="https://safenet-security.ch/de/pages/ransomware.html" />
+    <link rel="alternate" hreflang="en" href="https://safenet-security.ch/en/pages/ransomware.html" />
+    <link rel="alternate" hreflang="x-default" href="https://safenet-security.ch/de/pages/ransomware.html" />
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/shared.css" />
+    <link rel="stylesheet" href="/css/infobox.css" />
+    <link rel="stylesheet" href="/css/hero.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/generator.css" />
+    <link rel="stylesheet" href="/css/ransomware.css" />
+    <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png" />
+    <script type="module" src="/js/auth.js?v=8"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <h1>Ransomware</h1>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>What is Ransomware?</h2>
+        <p>
+          Ransomware is malicious software that encrypts files on a computer or entire network, then demands a ransom payment in exchange for the decryption key. Attackers typically request cryptocurrency like Bitcoin to remain untraceable. Even after paying, there is no guarantee that the data will actually be restored.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>How does an attack unfold?</h2>
+        <div class="rw-timeline">
+          <div class="rw-step">
+            <div class="rw-dot">📧</div>
+            <div class="rw-step-body">
+              <h4>1. Infection</h4>
+              <p>Usually via phishing emails with malicious attachments or links, insecure remote access (RDP), or compromised software downloads.</p>
+            </div>
+          </div>
+          <div class="rw-step">
+            <div class="rw-dot">🔍</div>
+            <div class="rw-step-body">
+              <h4>2. Reconnaissance</h4>
+              <p>The malware explores the network, searching for additional systems and valuable data – often undetected for days.</p>
+            </div>
+          </div>
+          <div class="rw-step">
+            <div class="rw-dot">🔒</div>
+            <div class="rw-step-body">
+              <h4>3. Encryption</h4>
+              <p>All discovered files (documents, images, databases) are locked with strong encryption. Without the attacker's key, they are completely unreadable.</p>
+            </div>
+          </div>
+          <div class="rw-step">
+            <div class="rw-dot">💰</div>
+            <div class="rw-step-body">
+              <h4>4. Extortion</h4>
+              <p>A ransom note appears on screen – typically with a countdown timer and threats to destroy the key or publish the stolen data.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Variants</h2>
+        <div class="rw-variants">
+          <div class="rw-variant-card">
+            <div class="rw-icon">🔐</div>
+            <h4>Crypto Ransomware</h4>
+            <p>Encrypts files using AES/RSA. The most common and dangerous form – well-known examples: WannaCry, REvil, LockBit.</p>
+          </div>
+          <div class="rw-variant-card">
+            <div class="rw-icon">🖥️</div>
+            <h4>Locker Ransomware</h4>
+            <p>Locks the screen or the entire device without encrypting files. Generally easier to remove than crypto ransomware.</p>
+          </div>
+          <div class="rw-variant-card">
+            <div class="rw-icon">📤</div>
+            <h4>Double Extortion</h4>
+            <p>Data is not only encrypted but also stolen beforehand. Threat: data will be published if no ransom is paid.</p>
+          </div>
+          <div class="rw-variant-card">
+            <div class="rw-icon">☁️</div>
+            <h4>RaaS (Ransomware-as-a-Service)</h4>
+            <p>Attackers rent ransomware infrastructure, similar to legitimate software subscriptions. Dramatically lowers the technical barrier for criminals.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Demo -->
+    <div class="password-container">
+      <h3>Ransomware Demo</h3>
+      <p style="text-align:center;color:#a0c4ff;margin-bottom:24px;">
+        Click «Start Attack» and watch how ransomware encrypts files one by one – then the ransom note appears.
+      </p>
+
+      <div class="rw-demo-grid">
+        <div>
+          <div style="font-size:0.75rem;color:#64748b;text-align:center;margin-bottom:10px;letter-spacing:1px;text-transform:uppercase;">Your Files</div>
+          <div id="rw-files" style="display:flex;flex-direction:column;gap:8px;">
+            <div class="rw-file normal" data-name="vacation_2024.jpg"><span class="rw-file-icon">🖼️</span><span class="rw-file-name">vacation_2024.jpg</span><span class="rw-file-status">✓ Readable</span></div>
+            <div class="rw-file normal" data-name="accounting.xlsx"><span class="rw-file-icon">📊</span><span class="rw-file-name">accounting.xlsx</span><span class="rw-file-status">✓ Readable</span></div>
+            <div class="rw-file normal" data-name="passwords.txt"><span class="rw-file-icon">📝</span><span class="rw-file-name">passwords.txt</span><span class="rw-file-status">✓ Readable</span></div>
+            <div class="rw-file normal" data-name="diploma.pdf"><span class="rw-file-icon">📄</span><span class="rw-file-name">diploma.pdf</span><span class="rw-file-status">✓ Readable</span></div>
+            <div class="rw-file normal" data-name="customer_data.db"><span class="rw-file-icon">🗃️</span><span class="rw-file-name">customer_data.db</span><span class="rw-file-status">✓ Readable</span></div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size:0.75rem;color:#ef4444;text-align:center;margin-bottom:10px;letter-spacing:1px;text-transform:uppercase;">Attacker Log</div>
+          <div id="rw-log" style="background:#130a0a;border:1px solid rgba(239,68,68,0.3);border-radius:12px;padding:14px;font-family:monospace;font-size:0.8rem;color:#fca5a5;min-height:200px;white-space:pre-wrap;overflow-y:auto;max-height:250px;">Waiting for start…</div>
+        </div>
+      </div>
+
+      <div id="rw-ransom-note" class="rw-ransom-note">
+        <strong>⚠️ YOUR FILES HAVE BEEN ENCRYPTED ⚠️</strong>
+        All your important files have been encrypted with AES-256 + RSA-2048.<br><br>
+        To recover your files, send <strong style="color:#ef4444;">0.05 BTC (~$3,100 USD)</strong> to:<br>
+        <code style="color:#fbbf24;font-size:0.82rem;">bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh</code><br><br>
+        You have <strong id="rw-countdown" style="color:#ef4444;">72:00:00</strong> – after that the key will be destroyed.<br>
+        <span style="opacity:0.65;font-size:0.82rem;">Contact: decrypt@onion.dark | Attack ID: RW-2026-EN-00441</span>
+      </div>
+
+      <div style="display:flex;gap:12px;justify-content:center;margin-top:18px;flex-wrap:wrap;">
+        <button id="rw-start" class="main-btn" style="width:auto;padding:10px 24px;">Start Attack</button>
+        <button id="rw-reset" class="main-btn" style="width:auto;padding:10px 24px;background:rgba(51,153,255,0.1);border-color:rgba(51,153,255,0.3);color:#66d9ff;" disabled>Reset</button>
+      </div>
+    </div>
+
+    <script>
+    (function () {
+      const files   = Array.from(document.querySelectorAll('#rw-files .rw-file'));
+      const log     = document.getElementById('rw-log');
+      const note    = document.getElementById('rw-ransom-note');
+      const startBtn = document.getElementById('rw-start');
+      const resetBtn = document.getElementById('rw-reset');
+      let running = false;
+      let countdownInterval = null;
+
+      function addLog(msg) {
+        const now = new Date().toLocaleTimeString('en-GB', { hour12: false });
+        log.textContent += '[' + now + '] ' + msg + '\n';
+        log.scrollTop = log.scrollHeight;
+      }
+
+      function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+      async function runAttack() {
+        running = true;
+        startBtn.disabled = true;
+        resetBtn.disabled = true;
+        log.textContent = '';
+        note.style.display = 'none';
+
+        addLog('Connection established...');
+        await sleep(600);
+        addLog('Scanning network...');
+        await sleep(700);
+        addLog('Backup directories found – disabling...');
+        await sleep(800);
+        addLog('Encryption key generated: AES-256 + RSA-2048');
+        await sleep(500);
+        addLog('Starting encryption...\n');
+
+        for (const file of files) {
+          const name = file.dataset.name;
+          const enc  = name + '.locked';
+          addLog('Encrypting: ' + name + ' → ' + enc);
+          file.querySelector('.rw-file-name').textContent = enc;
+          file.querySelector('.rw-file-icon').textContent = '🔒';
+          file.querySelector('.rw-file-status').textContent = '✗ Locked';
+          file.classList.remove('normal');
+          file.classList.add('encrypted');
+          await sleep(550);
+        }
+
+        await sleep(400);
+        addLog('\nEncryption complete. Displaying ransom note.');
+        note.style.display = 'block';
+        resetBtn.disabled = false;
+        startCountdown();
+      }
+
+      function startCountdown() {
+        let secs = 72 * 3600;
+        const el = document.getElementById('rw-countdown');
+        countdownInterval = setInterval(() => {
+          secs--;
+          if (secs < 0) { clearInterval(countdownInterval); el.textContent = '00:00:00'; return; }
+          const h = String(Math.floor(secs / 3600)).padStart(2, '0');
+          const m = String(Math.floor((secs % 3600) / 60)).padStart(2, '0');
+          const s = String(secs % 60).padStart(2, '0');
+          el.textContent = h + ':' + m + ':' + s;
+        }, 1000);
+      }
+
+      function resetDemo() {
+        if (countdownInterval) { clearInterval(countdownInterval); countdownInterval = null; }
+        const origData = [
+          ['🖼️', 'vacation_2024.jpg', 'Readable'],
+          ['📊', 'accounting.xlsx', 'Readable'],
+          ['📝', 'passwords.txt', 'Readable'],
+          ['📄', 'diploma.pdf', 'Readable'],
+          ['🗃️', 'customer_data.db', 'Readable'],
+        ];
+        files.forEach((f, i) => {
+          f.querySelector('.rw-file-icon').textContent = origData[i][0];
+          f.querySelector('.rw-file-name').textContent = origData[i][1];
+          f.querySelector('.rw-file-status').textContent = '✓ ' + origData[i][2];
+          f.classList.remove('encrypted');
+          f.classList.add('normal');
+          f.dataset.name = origData[i][1];
+        });
+        log.textContent = 'Waiting for start…';
+        note.style.display = 'none';
+        startBtn.disabled = false;
+        resetBtn.disabled = true;
+        running = false;
+      }
+
+      startBtn.addEventListener('click', () => { if (!running) runAttack(); });
+      resetBtn.addEventListener('click', resetDemo);
+    })();
+    </script>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>How to protect yourself</h2>
+        <p>
+          <strong>1. Regular backups:</strong> Follow the 3-2-1 rule – 3 copies, on 2 different media, 1 stored offline. Offline backups are protected from ransomware.<br /><br />
+
+          <strong>2. Keep software updated:</strong> Many ransomware attacks exploit known vulnerabilities. Apply updates promptly to close these gaps.<br /><br />
+
+          <strong>3. Email caution:</strong> Never open attachments or links from unknown sources. Ransomware is frequently distributed via phishing emails.<br /><br />
+
+          <strong>4. Network segmentation:</strong> Separate critical systems from the rest of the network to prevent ransomware from spreading.<br /><br />
+
+          <strong>5. Antivirus & EDR:</strong> Modern endpoint security solutions can detect ransomware behavior and stop it before serious damage occurs.<br /><br />
+
+          <strong>6. Never pay the ransom:</strong> Paying funds further attacks and does not guarantee data recovery.
+        </p>
+      </div>
+    </section>
+
+    <div id="footer"></div>
+    <script>
+      fetch("/en/partials/footer.html").then(r => r.text()).then(d => { document.getElementById("footer").innerHTML = d; });
+    </script>
+    <script>
+      fetch("/en/partials/navbar.html").then(r => r.text()).then(d => {
+        document.getElementById("navbar").innerHTML = d;
+        const toggle = document.querySelector(".menu-toggle");
+        const navLinks = document.querySelector(".nav-links");
+        const dropdowns = document.querySelectorAll(".dropdown");
+        if (toggle) {
+          toggle.addEventListener("click", () => {
+            navLinks.classList.toggle("active");
+            toggle.setAttribute("aria-expanded", navLinks.classList.contains("active"));
+          });
+        }
+        dropdowns.forEach(dd => {
+          const link = dd.querySelector(".dropdown-link");
+          if (link) {
+            link.addEventListener("click", e => {
+              if (window.innerWidth <= 768) {
+                e.preventDefault();
+                dd.classList.toggle("open");
+              }
+            });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

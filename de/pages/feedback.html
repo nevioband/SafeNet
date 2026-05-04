@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Feedback – SafeNet Security</title>
+    <meta name="description" content="Teile deine Meinung zu SafeNet Security – Bewertung, Kategorie und optionaler Kommentar." />
+    <link rel="canonical" href="https://safenet-security.ch/de/pages/feedback.html" />
+    <link rel="alternate" hreflang="de" href="https://safenet-security.ch/de/pages/feedback.html" />
+    <link rel="alternate" hreflang="en" href="https://safenet-security.ch/en/pages/feedback.html" />
+    <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png" />
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/shared.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/feedback.css" />
+    <script type="module" src="/js/auth.js?v=8"></script>
+    <script type="module" src="/js/feedback.js"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <main class="feedback-main">
+      <div class="feedback-card">
+        <h1>Dein Feedback</h1>
+        <p class="feedback-subtitle">Hilf uns, SafeNet Security zu verbessern!</p>
+
+        <!-- Stern-Bewertung -->
+        <div class="star-group" role="radiogroup" aria-label="Bewertung">
+          <input type="radio" name="bewertung" id="stern5" value="5" />
+          <label for="stern5" title="Ausgezeichnet">★</label>
+          <input type="radio" name="bewertung" id="stern4" value="4" />
+          <label for="stern4" title="Gut">★</label>
+          <input type="radio" name="bewertung" id="stern3" value="3" />
+          <label for="stern3" title="In Ordnung">★</label>
+          <input type="radio" name="bewertung" id="stern2" value="2" />
+          <label for="stern2" title="Ausbaufähig">★</label>
+          <input type="radio" name="bewertung" id="stern1" value="1" />
+          <label for="stern1" title="Schlecht">★</label>
+        </div>
+        <p class="star-label" id="stern-text"></p>
+
+        <!-- Kategorie -->
+        <div class="kategorie-group" role="radiogroup" aria-label="Kategorie">
+          <input type="radio" name="kategorie" id="kat-lob" value="Lob" />
+          <label for="kat-lob">👍 Lob</label>
+          <input type="radio" name="kategorie" id="kat-feature" value="Feature-Wunsch" />
+          <label for="kat-feature">💡 Feature-Wunsch</label>
+          <input type="radio" name="kategorie" id="kat-bug" value="Bug-Meldung" />
+          <label for="kat-bug">🐛 Bug-Meldung</label>
+          <input type="radio" name="kategorie" id="kat-sonstiges" value="Sonstiges" />
+          <label for="kat-sonstiges">💬 Sonstiges</label>
+        </div>
+
+        <!-- Formular -->
+        <form id="feedback-form" class="feedback-form" novalidate>
+          <label class="field-label" for="nachricht">Kommentar <span style="opacity:.5;font-weight:400">(optional)</span></label>
+          <textarea id="nachricht" name="nachricht" maxlength="800"
+            placeholder="Was gefällt dir? Was könnten wir besser machen?"></textarea>
+          <p id="feedback-status" class="feedback-status" role="status"></p>
+          <button type="submit" class="btn-primary">Feedback absenden</button>
+        </form>
+      </div>
+    </main>
+
+    <div id="footer"></div>
+
+    <script>
+      fetch('/de/partials/navbar.html').then(r => r.text()).then(d => {
+        document.getElementById('navbar').innerHTML = d;
+        const toggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        const dropdowns = document.querySelectorAll('.dropdown');
+        if (toggle) {
+          toggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            toggle.setAttribute('aria-expanded', navLinks.classList.contains('active'));
+          });
+        }
+        dropdowns.forEach(dd => {
+          const link = dd.querySelector('.dropdown-link');
+          if (link) {
+            link.addEventListener('click', e => {
+              if (window.innerWidth <= 768) { e.preventDefault(); dd.classList.toggle('open'); }
+            });
+          }
+        });
+      });
+      fetch('/de/partials/footer.html').then(r => r.text()).then(d => { document.getElementById('footer').innerHTML = d; });
+    </script>
+  </body>
+</html>

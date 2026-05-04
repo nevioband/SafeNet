@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MFA-Bypass – SafeNet Security</title>
+    <meta name="description" content="Was ist MFA-Bypass? Lerne wie Angreifer Zwei-Faktor-Authentifizierung umgehen und wie du dich wirkungsvoll schützt." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MFA-Bypass – SafeNet Security" />
+    <meta property="og:description" content="Was ist MFA-Bypass? Lerne wie Angreifer Zwei-Faktor-Authentifizierung umgehen und wie du dich wirkungsvoll schützt." />
+    <meta property="og:image" content="https://safenet-security.ch/images/SafeNet-Security-Logo/Withbg/ShieldWhiteName.png" />
+    <meta property="og:url" content="https://safenet-security.ch/de/pages/mfa-bypass.html" />
+    <link rel="canonical" href="https://safenet-security.ch/de/pages/mfa-bypass.html" />
+    <link rel="alternate" hreflang="de" href="https://safenet-security.ch/de/pages/mfa-bypass.html" />
+    <link rel="alternate" hreflang="en" href="https://safenet-security.ch/en/pages/mfa-bypass.html" />
+    <link rel="alternate" hreflang="x-default" href="https://safenet-security.ch/de/pages/mfa-bypass.html" />
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/shared.css" />
+    <link rel="stylesheet" href="/css/infobox.css" />
+    <link rel="stylesheet" href="/css/hero.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/generator.css" />
+    <link rel="stylesheet" href="/css/mfa-bypass.css" />
+    <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png" />
+    <script type="module" src="/js/auth.js?v=8"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <h1>MFA-Bypass</h1>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Was ist MFA-Bypass?</h2>
+        <p>
+          Multi-Faktor-Authentifizierung (MFA) schützt Konten, indem neben dem Passwort ein zweiter Faktor verlangt wird – z. B. ein SMS-Code oder eine App-Bestätigung. MFA-Bypass bezeichnet Techniken, mit denen Angreifer diesen Schutz gezielt umgehen. Trotz aktivierter MFA können Konten kompromittiert werden, wenn die verwendete Methode oder das Nutzerverhalten Schwachstellen bietet.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Angriffstechniken</h2>
+        <div class="mfa-techniques">
+          <div class="mfa-technique-card">
+            <div class="mfa-technique-icon">😴</div>
+            <h4>MFA Fatigue (Push-Bombing)</h4>
+            <p>Der Angreifer kennt bereits Benutzername und Passwort und sendet automatisch Dutzende von MFA-Push-Anfragen. Das Ziel bestätigt irgendwann aus Versehen oder Erschöpfung.</p>
+          </div>
+          <div class="mfa-technique-card">
+            <div class="mfa-technique-icon">📡</div>
+            <h4>SIM-Swapping</h4>
+            <p>Der Angreifer überredet den Mobilfunkanbieter, die Telefonnummer des Opfers auf eine eigene SIM-Karte zu übertragen – und erhält damit alle SMS-Codes.</p>
+          </div>
+          <div class="mfa-technique-card">
+            <div class="mfa-technique-icon">🎣</div>
+            <h4>Real-Time Phishing (MITM)</h4>
+            <p>Eine gefälschte Webseite leitet die Anmeldedaten und den MFA-Code in Echtzeit weiter. Werkzeuge wie Evilginx machen dies automatisiert möglich.</p>
+          </div>
+          <div class="mfa-technique-card">
+            <div class="mfa-technique-icon">🔑</div>
+            <h4>Session-Token-Diebstahl</h4>
+            <p>Nach erfolgreicher MFA-Anmeldung stiehlt Malware das Browser-Cookie. Mit diesem Token kann der Angreifer die MFA-Abfrage vollständig überspringen.</p>
+          </div>
+          <div class="mfa-technique-card">
+            <div class="mfa-technique-icon">📞</div>
+            <h4>Social Engineering</h4>
+            <p>Der Angreifer ruft das Opfer an und gibt sich als IT-Support aus. Er bittet um Weitergabe des gerade empfangenen MFA-Codes – «zur Überprüfung».</p>
+          </div>
+          <div class="mfa-technique-card">
+            <div class="mfa-technique-icon">⚙️</div>
+            <h4>SS7-Angriff</h4>
+            <p>Schwachstellen im veralteten Telefonprotokoll SS7 ermöglichen das Abfangen von SMS-Nachrichten – ohne Zugriff auf das Gerät des Opfers.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Demo: Push Fatigue -->
+    <div class="password-container">
+      <h3>Demo: MFA Fatigue Angriff</h3>
+      <p style="text-align:center;color:#a0c4ff;margin-bottom:24px;">
+        Der Angreifer kennt dein Passwort und bombardiert dich mit MFA-Anfragen. Klicke immer auf «Ablehnen» – oder beobachte, was passiert wenn du einmal «Bestätigen» tippst.
+      </p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+
+        <div>
+          <div class="mfa-demo-panel">
+            <h4>Dein Smartphone</h4>
+            <div class="mfa-phone-card">
+              <div class="mfa-phone-header">
+                <div class="mfa-phone-icon">📱</div>
+                <div>
+                  <h5>Anmeldebestätigung</h5>
+                  <span>SafeNet Security App</span>
+                </div>
+              </div>
+              <div class="mfa-push-msg" id="mfa-push-text">
+                Jemand versucht, sich mit deinem Konto anzumelden.<br>
+                <strong style="color:#66d9ff;">Standort:</strong> <span id="mfa-location">Moskau, RU</span><br>
+                <strong style="color:#66d9ff;">Gerät:</strong> Unbekannt
+              </div>
+              <div class="mfa-push-btns">
+                <button id="mfa-approve">✓ Bestätigen</button>
+                <button id="mfa-deny">✗ Ablehnen</button>
+              </div>
+            </div>
+          </div>
+          <div id="mfa-result" class="mfa-result-banner"></div>
+        </div>
+
+        <div>
+          <div style="font-size:0.75rem;color:#ef4444;text-align:center;margin-bottom:10px;letter-spacing:1px;text-transform:uppercase;">
+            Angreifer-Log <span id="mfa-attempt-badge" class="mfa-counter-badge">0 Versuche</span>
+          </div>
+          <div id="mfa-log" class="mfa-attack-log">Warte auf ersten Versuch…</div>
+        </div>
+
+      </div>
+
+      <div style="display:flex;gap:12px;justify-content:center;margin-top:18px;">
+        <button id="mfa-reset" class="main-btn" style="width:auto;padding:10px 24px;">Demo zurücksetzen</button>
+      </div>
+    </div>
+
+    <script>
+    (function () {
+      const approveBtn = document.getElementById('mfa-approve');
+      const denyBtn    = document.getElementById('mfa-deny');
+      const resetBtn   = document.getElementById('mfa-reset');
+      const log        = document.getElementById('mfa-log');
+      const result     = document.getElementById('mfa-result');
+      const badge      = document.getElementById('mfa-attempt-badge');
+      const locEl      = document.getElementById('mfa-location');
+
+      const orte = ['Moskau, RU', 'Lagos, NG', 'Schanghai, CN', 'São Paulo, BR', 'Bukarest, RO'];
+      let versuche = 0;
+      let done = false;
+
+      function addLog(msg, color) {
+        const now = new Date().toLocaleTimeString('de-CH', { hour12: false });
+        const line = document.createElement('div');
+        line.style.color = color || '#fca5a5';
+        line.textContent = '[' + now + '] ' + msg;
+        if (log.textContent === 'Warte auf ersten Versuch…') log.textContent = '';
+        log.appendChild(line);
+        log.scrollTop = log.scrollHeight;
+      }
+
+      function updateBadge() {
+        badge.textContent = versuche + (versuche === 1 ? ' Versuch' : ' Versuche');
+      }
+
+      function nextLocation() {
+        locEl.textContent = orte[versuche % orte.length];
+      }
+
+      approveBtn.addEventListener('click', () => {
+        if (done) return;
+        done = true;
+        versuche++;
+        updateBadge();
+        addLog('Anmeldung BESTÄTIGT – Angreifer hat Zugriff!', '#ef4444');
+        result.className = 'mfa-result-banner fail';
+        result.textContent = '⚠️ Konto kompromittiert! Der Angreifer hat sich erfolgreich angemeldet.';
+        result.style.display = 'block';
+        approveBtn.disabled = true;
+        denyBtn.disabled = true;
+      });
+
+      denyBtn.addEventListener('click', () => {
+        if (done) return;
+        versuche++;
+        updateBadge();
+        addLog('Versuch ' + versuche + ' abgelehnt – neuer Versuch folgt...', '#94a3b8');
+        nextLocation();
+        if (versuche >= 12) {
+          addLog('Angreifer gibt nach 12 Versuchen auf.', '#86efac');
+          result.className = 'mfa-result-banner success';
+          result.textContent = '✓ Gut gemacht! Du hast alle Anfragen abgelehnt und den Angriff gestoppt.';
+          result.style.display = 'block';
+          approveBtn.disabled = true;
+          denyBtn.disabled = true;
+          done = true;
+        }
+      });
+
+      resetBtn.addEventListener('click', () => {
+        versuche = 0; done = false;
+        log.textContent = 'Warte auf ersten Versuch…';
+        badge.textContent = '0 Versuche';
+        result.style.display = 'none';
+        locEl.textContent = orte[0];
+        approveBtn.disabled = false;
+        denyBtn.disabled = false;
+      });
+    })();
+    </script>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Welche MFA-Methoden sind sicherer?</h2>
+        <p>
+          Nicht alle MFA-Methoden bieten den gleichen Schutz. Von unsicher bis sicher:
+        </p>
+        <p>
+          <strong style="color:#ef4444;">Unsicher:</strong> SMS-Codes – anfällig für SIM-Swapping und SS7-Angriffe.<br /><br />
+          <strong style="color:#f59e0b;">Mittel:</strong> Authenticator-Apps (TOTP) – sicherer als SMS, aber anfällig für Echtzeit-Phishing.<br /><br />
+          <strong style="color:#86efac;">Sicher:</strong> Hardware-Sicherheitsschlüssel (FIDO2/WebAuthn wie YubiKey) – phishing-resistent, da der Schlüssel domain-gebunden ist.<br /><br />
+          <strong style="color:#86efac;">Sicher:</strong> Passkeys – ebenfalls phishing-resistent und ohne Passwort – die Zukunft der Authentifizierung.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>So schützt du dich</h2>
+        <p>
+          <strong>1. Hardware-Schlüssel verwenden:</strong> Wenn möglich, nutze FIDO2-Sicherheitsschlüssel (z. B. YubiKey). Sie sind immun gegen Phishing und SIM-Swapping.<br /><br />
+
+          <strong>2. Push-Anfragen kritisch hinterfragen:</strong> Bestätige niemals eine MFA-Anfrage, die du nicht selbst ausgelöst hast. Eine unerwartete Anfrage bedeutet, dass jemand dein Passwort kennt.<br /><br />
+
+          <strong>3. SMS-MFA wenn möglich ersetzen:</strong> Wechsle zu einer Authenticator-App (Google Authenticator, Aegis, etc.) statt SMS-Codes zu verwenden.<br /><br />
+
+          <strong>4. Nummernabgleich aktivieren:</strong> Viele Authenticator-Apps zeigen eine Zahl an, die auch in der Anmeldemaske erscheinen muss – Push-Bombing wird damit deutlich schwerer.<br /><br />
+
+          <strong>5. Starkes, einzigartiges Passwort:</strong> MFA schützt nur, wenn das Passwort nicht der einzige Schwachpunkt ist. Kombiniere beides mit einem Passwort-Manager.
+        </p>
+      </div>
+    </section>
+
+    <div id="footer"></div>
+    <script>
+      fetch("/de/partials/footer.html").then(r => r.text()).then(d => { document.getElementById("footer").innerHTML = d; });
+    </script>
+    <script>
+      fetch("/de/partials/navbar.html").then(r => r.text()).then(d => {
+        document.getElementById("navbar").innerHTML = d;
+        const toggle = document.querySelector(".menu-toggle");
+        const navLinks = document.querySelector(".nav-links");
+        const dropdowns = document.querySelectorAll(".dropdown");
+        if (toggle) {
+          toggle.addEventListener("click", () => {
+            navLinks.classList.toggle("active");
+            toggle.setAttribute("aria-expanded", navLinks.classList.contains("active"));
+          });
+        }
+        dropdowns.forEach(dd => {
+          const link = dd.querySelector(".dropdown-link");
+          if (link) {
+            link.addEventListener("click", e => {
+              if (window.innerWidth <= 768) {
+                e.preventDefault();
+                dd.classList.toggle("open");
+              }
+            });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

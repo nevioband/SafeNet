@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MFA Bypass – SafeNet Security</title>
+    <meta name="description" content="What is MFA Bypass? Learn how attackers circumvent multi-factor authentication and how to protect yourself effectively." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MFA Bypass – SafeNet Security" />
+    <meta property="og:description" content="What is MFA Bypass? Learn how attackers circumvent multi-factor authentication and how to protect yourself effectively." />
+    <meta property="og:image" content="https://safenet-security.ch/images/SafeNet-Security-Logo/Withbg/ShieldWhiteName.png" />
+    <meta property="og:url" content="https://safenet-security.ch/en/pages/mfa-bypass.html" />
+    <link rel="canonical" href="https://safenet-security.ch/en/pages/mfa-bypass.html" />
+    <link rel="alternate" hreflang="de" href="https://safenet-security.ch/de/pages/mfa-bypass.html" />
+    <link rel="alternate" hreflang="en" href="https://safenet-security.ch/en/pages/mfa-bypass.html" />
+    <link rel="alternate" hreflang="x-default" href="https://safenet-security.ch/de/pages/mfa-bypass.html" />
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/shared.css" />
+    <link rel="stylesheet" href="/css/infobox.css" />
+    <link rel="stylesheet" href="/css/hero.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/generator.css" />
+    <link rel="stylesheet" href="/css/mfa-bypass.css" />
+    <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png" />
+    <script type="module" src="/js/auth.js?v=8"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <h1>MFA Bypass</h1>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>What is MFA Bypass?</h2>
+        <p>
+          Multi-Factor Authentication (MFA) protects accounts by requiring a second factor in addition to a password – such as an SMS code or an app confirmation. MFA bypass refers to techniques attackers use to specifically circumvent this protection. Even with MFA enabled, accounts can be compromised if the method used or the user's behavior contains weaknesses.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Attack Techniques</h2>
+        <div class="mfa-techniques">
+          <div class="mfa-technique-card">
+            <div class="mfa-technique-icon">😴</div>
+            <h4>MFA Fatigue (Push Bombing)</h4>
+            <p>The attacker already has the username and password and automatically sends dozens of MFA push requests. The victim eventually approves by accident or exhaustion.</p>
+          </div>
+          <div class="mfa-technique-card">
+            <div class="mfa-technique-icon">📡</div>
+            <h4>SIM Swapping</h4>
+            <p>The attacker convinces the mobile provider to transfer the victim's phone number to their own SIM card – and thus receives all SMS codes.</p>
+          </div>
+          <div class="mfa-technique-card">
+            <div class="mfa-technique-icon">🎣</div>
+            <h4>Real-Time Phishing (MITM)</h4>
+            <p>A fake website forwards login credentials and MFA codes in real time. Tools like Evilginx automate this process entirely.</p>
+          </div>
+          <div class="mfa-technique-card">
+            <div class="mfa-technique-icon">🔑</div>
+            <h4>Session Token Theft</h4>
+            <p>After a successful MFA login, malware steals the browser cookie. With this token, the attacker can skip the MFA challenge entirely.</p>
+          </div>
+          <div class="mfa-technique-card">
+            <div class="mfa-technique-icon">📞</div>
+            <h4>Social Engineering</h4>
+            <p>The attacker calls the victim and poses as IT support, asking them to share the MFA code they just received – «for verification purposes».</p>
+          </div>
+          <div class="mfa-technique-card">
+            <div class="mfa-technique-icon">⚙️</div>
+            <h4>SS7 Attack</h4>
+            <p>Vulnerabilities in the outdated SS7 telephone protocol allow SMS messages to be intercepted – without any access to the victim's device.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Demo: Push Fatigue -->
+    <div class="password-container">
+      <h3>Demo: MFA Fatigue Attack</h3>
+      <p style="text-align:center;color:#a0c4ff;margin-bottom:24px;">
+        The attacker knows your password and bombards you with MFA requests. Always click «Deny» – or see what happens if you tap «Approve» just once.
+      </p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+
+        <div>
+          <div class="mfa-demo-panel">
+            <h4>Your Smartphone</h4>
+            <div class="mfa-phone-card">
+              <div class="mfa-phone-header">
+                <div class="mfa-phone-icon">📱</div>
+                <div>
+                  <h5>Sign-in Request</h5>
+                  <span>SafeNet Security App</span>
+                </div>
+              </div>
+              <div class="mfa-push-msg" id="mfa-push-text">
+                Someone is trying to sign in to your account.<br>
+                <strong style="color:#66d9ff;">Location:</strong> <span id="mfa-location">Moscow, RU</span><br>
+                <strong style="color:#66d9ff;">Device:</strong> Unknown
+              </div>
+              <div class="mfa-push-btns">
+                <button id="mfa-approve">✓ Approve</button>
+                <button id="mfa-deny">✗ Deny</button>
+              </div>
+            </div>
+          </div>
+          <div id="mfa-result" class="mfa-result-banner"></div>
+        </div>
+
+        <div>
+          <div style="font-size:0.75rem;color:#ef4444;text-align:center;margin-bottom:10px;letter-spacing:1px;text-transform:uppercase;">
+            Attacker Log <span id="mfa-attempt-badge" class="mfa-counter-badge">0 attempts</span>
+          </div>
+          <div id="mfa-log" class="mfa-attack-log">Waiting for first attempt…</div>
+        </div>
+
+      </div>
+
+      <div style="display:flex;gap:12px;justify-content:center;margin-top:18px;">
+        <button id="mfa-reset" class="main-btn" style="width:auto;padding:10px 24px;">Reset Demo</button>
+      </div>
+    </div>
+
+    <script>
+    (function () {
+      const approveBtn = document.getElementById('mfa-approve');
+      const denyBtn    = document.getElementById('mfa-deny');
+      const resetBtn   = document.getElementById('mfa-reset');
+      const log        = document.getElementById('mfa-log');
+      const result     = document.getElementById('mfa-result');
+      const badge      = document.getElementById('mfa-attempt-badge');
+      const locEl      = document.getElementById('mfa-location');
+
+      const locations = ['Moscow, RU', 'Lagos, NG', 'Shanghai, CN', 'São Paulo, BR', 'Bucharest, RO'];
+      let attempts = 0;
+      let done = false;
+
+      function addLog(msg, color) {
+        const now = new Date().toLocaleTimeString('en-GB', { hour12: false });
+        const line = document.createElement('div');
+        line.style.color = color || '#fca5a5';
+        line.textContent = '[' + now + '] ' + msg;
+        if (log.textContent === 'Waiting for first attempt…') log.textContent = '';
+        log.appendChild(line);
+        log.scrollTop = log.scrollHeight;
+      }
+
+      function updateBadge() {
+        badge.textContent = attempts + (attempts === 1 ? ' attempt' : ' attempts');
+      }
+
+      approveBtn.addEventListener('click', () => {
+        if (done) return;
+        done = true;
+        attempts++;
+        updateBadge();
+        addLog('Login APPROVED – attacker has access!', '#ef4444');
+        result.className = 'mfa-result-banner fail';
+        result.textContent = '⚠️ Account compromised! The attacker successfully signed in.';
+        result.style.display = 'block';
+        approveBtn.disabled = true;
+        denyBtn.disabled = true;
+      });
+
+      denyBtn.addEventListener('click', () => {
+        if (done) return;
+        attempts++;
+        updateBadge();
+        addLog('Attempt ' + attempts + ' denied – retrying...', '#94a3b8');
+        locEl.textContent = locations[attempts % locations.length];
+        if (attempts >= 12) {
+          addLog('Attacker gives up after 12 attempts.', '#86efac');
+          result.className = 'mfa-result-banner success';
+          result.textContent = '✓ Well done! You denied all requests and stopped the attack.';
+          result.style.display = 'block';
+          approveBtn.disabled = true;
+          denyBtn.disabled = true;
+          done = true;
+        }
+      });
+
+      resetBtn.addEventListener('click', () => {
+        attempts = 0; done = false;
+        log.textContent = 'Waiting for first attempt…';
+        badge.textContent = '0 attempts';
+        result.style.display = 'none';
+        locEl.textContent = locations[0];
+        approveBtn.disabled = false;
+        denyBtn.disabled = false;
+      });
+    })();
+    </script>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Which MFA methods are more secure?</h2>
+        <p>
+          Not all MFA methods offer the same level of protection. From least to most secure:
+        </p>
+        <p>
+          <strong style="color:#ef4444;">Insecure:</strong> SMS codes – vulnerable to SIM swapping and SS7 attacks.<br /><br />
+          <strong style="color:#f59e0b;">Medium:</strong> Authenticator apps (TOTP) – more secure than SMS, but still vulnerable to real-time phishing.<br /><br />
+          <strong style="color:#86efac;">Secure:</strong> Hardware security keys (FIDO2/WebAuthn like YubiKey) – phishing-resistant, as the key is bound to the specific domain.<br /><br />
+          <strong style="color:#86efac;">Secure:</strong> Passkeys – also phishing-resistant and password-free – the future of authentication.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>How to protect yourself</h2>
+        <p>
+          <strong>1. Use hardware keys:</strong> Whenever possible, use FIDO2 security keys (e.g. YubiKey). They are immune to phishing and SIM swapping.<br /><br />
+
+          <strong>2. Question push requests critically:</strong> Never approve an MFA request you did not initiate yourself. An unexpected request means someone already has your password.<br /><br />
+
+          <strong>3. Replace SMS-MFA where possible:</strong> Switch to an authenticator app (Google Authenticator, Aegis, etc.) instead of relying on SMS codes.<br /><br />
+
+          <strong>4. Enable number matching:</strong> Many authenticator apps display a number that must match what's shown on the login screen – this makes push bombing significantly harder.<br /><br />
+
+          <strong>5. Strong, unique password:</strong> MFA only helps when the password is not the sole weak point. Combine both with a password manager.
+        </p>
+      </div>
+    </section>
+
+    <div id="footer"></div>
+    <script>
+      fetch("/en/partials/footer.html").then(r => r.text()).then(d => { document.getElementById("footer").innerHTML = d; });
+    </script>
+    <script>
+      fetch("/en/partials/navbar.html").then(r => r.text()).then(d => {
+        document.getElementById("navbar").innerHTML = d;
+        const toggle = document.querySelector(".menu-toggle");
+        const navLinks = document.querySelector(".nav-links");
+        const dropdowns = document.querySelectorAll(".dropdown");
+        if (toggle) {
+          toggle.addEventListener("click", () => {
+            navLinks.classList.toggle("active");
+            toggle.setAttribute("aria-expanded", navLinks.classList.contains("active"));
+          });
+        }
+        dropdowns.forEach(dd => {
+          const link = dd.querySelector(".dropdown-link");
+          if (link) {
+            link.addEventListener("click", e => {
+              if (window.innerWidth <= 768) {
+                e.preventDefault();
+                dd.classList.toggle("open");
+              }
+            });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
