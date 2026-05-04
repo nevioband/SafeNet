@@ -201,6 +201,20 @@
   text-decoration-color: rgba(255, 255, 255, 0.25);
 }
 
+.step-text a {
+  color: #60a5fa;
+  -webkit-text-fill-color: #60a5fa;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.15s;
+}
+
+.step-text a:hover {
+  color: #93c5fd;
+  -webkit-text-fill-color: #93c5fd;
+  text-decoration: underline;
+}
+
 .step-num {
   flex-shrink: 0;
   width: 24px;
