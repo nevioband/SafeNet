@@ -157,6 +157,7 @@
 
   .menu-toggle {
     display: flex;
+    margin-left: auto;
   }
 
   .nav-links {
@@ -352,7 +353,6 @@ html, body {
 @media (max-width: 768px) {
   .search-btn {
     display: flex;
-    margin-left: auto;
   }
 }
 
