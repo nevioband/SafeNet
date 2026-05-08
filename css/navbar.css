@@ -149,6 +149,11 @@
   .navbar {
     padding: 10px 15px;
     gap: 10px;
+    position: relative;
+  }
+
+  .logo {
+    flex: 1;
   }
 
   .logo img {
@@ -157,7 +162,10 @@
 
   .menu-toggle {
     display: flex;
-    margin-left: auto;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-left: 0;
   }
 
   .nav-links {
