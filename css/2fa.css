@@ -3,6 +3,14 @@
     margin: 60px auto;
     padding: 0 20px 60px;
 }
+
+/* QR-Bereich */
+#sectionOn { display: none; }
+.tfa-qr-hint { color: #cbd5e1; font-size: 14px; margin: 0 0 4px; }
+.tfa-qr-manual { color: #94a3b8; font-size: 13px; margin: 8px 0 0; text-align: center; }
+#secretText { color: #66d9ff; font-size: 13px; font-family: monospace; letter-spacing: 3px; text-align: center; word-break: break-all; margin: 6px 0 0; }
+.tfa-btn-mt { margin-top: 8px; }
+
 .tfa-card {
     background: #0d1117;
     border: 1px solid rgba(59,130,246,0.2);

@@ -86,10 +86,9 @@
       <h3>Bruteforce Demo</h3>
       <p class="demo-desc">Gib ein beliebiges Passwort ein – die Demo erkennt den Zeichensatz und berechnet, wie lange ein Bruteforce-Angriff dauern würde.</p>
 
-      <label style="font-size:0.95rem; color:#e8f3ff; margin-bottom:8px; display:block;">Zielpasswort (max. 20 Zeichen):</label>
+      <label class="bf-target-label">Zielpasswort (max. 20 Zeichen):</label>
       <div class="display-box">
-        <input id="bf-target" type="text" maxlength="20" placeholder="z.B. Mein$Passwort3" autocomplete="off"
-          style="width:100%; background:transparent; border:none; outline:none; color:#66d9ff; font-family:monospace; font-size:1.1rem; letter-spacing:1px; padding:6px 0;">
+        <input id="bf-target" type="text" maxlength="20" placeholder="z.B. Mein$Passwort3" autocomplete="off">
       </div>
 
       <div class="bf-info-row">
@@ -103,7 +102,7 @@
 
       <div id="bf-status" class="bf-status">Gib ein Passwort ein und starte den Angriff.</div>
 
-      <button id="bf-start" class="main-btn" style="margin-top:16px;">Angriff starten</button>
+      <button id="bf-start" class="main-btn">Angriff starten</button>
 
       <div id="bf-result" class="bf-result"></div>
     </div>

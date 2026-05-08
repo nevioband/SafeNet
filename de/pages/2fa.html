@@ -20,7 +20,7 @@
 <body>
     <div id="navbar"></div>
 
-    <h1 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap">Zwei-Faktor-Authentifizierung</h1>
+    <h1 class="sr-only">Zwei-Faktor-Authentifizierung</h1>
 
     <div class="tfa-container">
         <div class="tfa-card">
@@ -44,17 +44,17 @@
 
             <!-- QR-Code + Bestätigung -->
             <div id="qrSection">
-                <p style="color:#cbd5e1;font-size:14px;margin:0 0 4px;">Scanne diesen QR-Code mit deiner Authenticator-App:</p>
+                <p class="tfa-qr-hint">Scanne diesen QR-Code mit deiner Authenticator-App:</p>
                 <img id="qrImg" class="qr-img" width="200" height="200" alt="QR-Code" />
-                <p style="color:#94a3b8;font-size:13px;margin:8px 0 0;text-align:center;">Oder gib diesen Code manuell ein:</p>
-                <p id="secretText" style="color:#66d9ff;font-size:13px;font-family:monospace;letter-spacing:3px;text-align:center;word-break:break-all;margin:6px 0 0;"></p>
+                <p class="tfa-qr-manual">Oder gib diesen Code manuell ein:</p>
+                <p id="secretText"></p>
                 <input type="text" inputmode="numeric" maxlength="6" class="code-input" id="verifyCode" placeholder="123456">
                 <button class="tfa-btn tfa-btn-primary" id="verifyBtn">Bestätigen & aktivieren</button>
-                <button class="tfa-btn tfa-btn-secondary" id="cancelEnrollBtn" style="margin-top:8px;">Abbrechen</button>
+                <button class="tfa-btn tfa-btn-secondary tfa-btn-mt" id="cancelEnrollBtn">Abbrechen</button>
             </div>
 
             <!-- Status: aktiviert -->
-            <div id="sectionOn" style="display:none;">
+            <div id="sectionOn">
                 <button class="tfa-btn tfa-btn-danger" id="disableBtn">2FA deaktivieren</button>
             </div>
         </div>
