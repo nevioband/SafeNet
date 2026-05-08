@@ -345,7 +345,10 @@ html, body {
 .search-btn:hover { color: #66d9ff; }
 
 @media (max-width: 768px) {
-  .search-btn { display: none; }
+  .search-btn {
+    display: flex;
+    margin-left: auto;
+  }
 }
 
 /* ── Such-Overlay ────────────────────────────────── */
