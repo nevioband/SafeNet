@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -103,7 +103,7 @@
             if (!navLinks.classList.contains("active")) dropdown?.classList.remove("open");
           });
           dropdownLink?.addEventListener("click", e => {
-            if (window.innerWidth <= 768 && !dropdown.classList.contains("open")) {
+            if (window.innerWidth <= 1300 && !dropdown.classList.contains("open")) {
               e.preventDefault();
               dropdown.classList.add("open");
             }

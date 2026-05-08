@@ -1,4 +1,4 @@
-// --- Mobile Navbar Dropdown- und Menü-Handling ---
+﻿// --- Mobile Navbar Dropdown- und Menü-Handling ---
 // (wird wieder im jeweiligen Seiten-Script nach dem Laden der Navbar gesetzt)
 import { supabase } from './supabase.js'
 
@@ -136,7 +136,7 @@ function setupMobileNavbarEvents() {
     toggles.forEach((toggle) => {
         toggle.removeEventListener('click', toggle._dropdownHandler || (() => {}));
         const handler = function (e) {
-            if (window.innerWidth <= 768) {
+            if (window.innerWidth <= 1300) {
                 const parent = toggle.closest('.dropdown');
                 if (!parent) return;
                 const isOpen = parent.classList.contains('open');
@@ -160,6 +160,7 @@ function setupMobileNavbarEvents() {
         }
     });
 }
+
 
 // Automatisch ausführen sobald die Navbar in den DOM injiziert wird
 const observer = new MutationObserver(() => {

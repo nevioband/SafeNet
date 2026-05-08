@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="de">
   <head>
     <meta charset="UTF-8" />
@@ -215,7 +215,7 @@
           const dropdown = document.querySelector(".dropdown");
           toggle.addEventListener("click", () => { navLinks.classList.toggle("active"); });
           dropdownLink.addEventListener("click", (e) => {
-            if (window.innerWidth <= 768) {
+            if (window.innerWidth <= 1300) {
               e.preventDefault();
               dropdown.classList.toggle("open");
             }
