@@ -85,6 +85,12 @@
   border: none;
   color: var(--text);
   cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
 }
 
 .dropdown-menu {
@@ -151,7 +157,7 @@
   }
 
   .menu-toggle {
-    display: block;
+    display: flex;
   }
 
   .nav-links {
