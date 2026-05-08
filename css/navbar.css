@@ -161,9 +161,12 @@
 
   .menu-toggle {
     display: flex;
-    flex: 1;
-    justify-content: center;
-    margin-left: 0;
+    flex: 0 0 auto;
+    margin: 0 auto;
+  }
+
+  .search-btn {
+    flex-shrink: 0;
   }
 
   .nav-links {
@@ -225,6 +228,7 @@
 .user-menu {
   position: relative;
   margin-left: 10px;
+  flex-shrink: 0;
 }
 
 .user-btn {
