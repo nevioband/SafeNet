@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quishing (QR Code Phishing) – SafeNet Security</title>
+    <meta name="description" content="What is quishing? Learn how attackers use fake QR codes to steal data and how to protect yourself." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Quishing (QR Code Phishing) – SafeNet Security" />
+    <meta property="og:description" content="What is quishing? Learn how attackers use fake QR codes to steal data and how to protect yourself." />
+    <meta property="og:image" content="https://safenet-security.ch/images/SafeNet-Security-Logo/Withbg/ShieldWhiteName.png" />
+    <meta property="og:url" content="https://safenet-security.ch/en/pages/quishing.html" />
+    <link rel="canonical" href="https://safenet-security.ch/en/pages/quishing.html" />
+    <link rel="alternate" hreflang="de" href="https://safenet-security.ch/de/pages/quishing.html" />
+    <link rel="alternate" hreflang="en" href="https://safenet-security.ch/en/pages/quishing.html" />
+    <link rel="alternate" hreflang="x-default" href="https://safenet-security.ch/en/pages/quishing.html" />
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/shared.css" />
+    <link rel="stylesheet" href="/css/infobox.css" />
+    <link rel="stylesheet" href="/css/hero.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png" />
+    <script type="module" src="/js/auth.js?v=8"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <h1>Quishing</h1>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>What is Quishing?</h2>
+        <p>
+          Quishing combines "QR code" and "phishing" and refers to an attack method where cybercriminals use malicious QR codes to redirect victims to fake websites. Since QR codes are now everywhere – on menus, posters, tickets, and in emails – this method is becoming increasingly popular. Unlike classic phishing links, QR codes cannot be read by the human eye, making them much harder to detect.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>How does it work?</h2>
+        <p>
+          <strong>Physical QR codes:</strong> Attackers paste fake QR code stickers over real ones – for example on parking meters, restaurant tables, or advertising posters. Anyone who scans the code ends up on a phishing site instead of the real service.<br><br>
+
+          <strong>QR codes in emails:</strong> Instead of a clickable link, the phishing email only contains a QR code image. Many email security filters do not scan images and let the message through. The victim scans the code with their smartphone and lands on a fake login page.<br><br>
+
+          <strong>Fake documents:</strong> PDFs, invoices, or official letters contain QR codes that supposedly lead to payment or verification pages – in reality they steal credentials or initiate a payment to the attacker.<br><br>
+
+          <strong>Social media and messaging:</strong> QR codes are shared in direct messages or social media posts promising discounts, competitions, or exclusive content.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Risks and Consequences</h2>
+        <p>
+          Since smartphones are often less protected than desktop computers when scanning QR codes, the following risks can arise:
+          theft of login credentials and passwords on fake websites,
+          unwanted payments through manipulated payment pages,
+          malware installation via automatic app downloads,
+          takeover of social media or email accounts,
+          and access to further accounts through stolen session tokens.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>How to protect yourself</h2>
+        <p>
+          <strong>1. Check the URL before opening:</strong> Most QR scanners show the destination URL before opening it. Read the URL carefully: Is the domain correct? Does it match the expected service?<br><br>
+
+          <strong>2. Be critical of physical QR codes:</strong> Is there a sticker placed over an already printed code? Does the code look improvised? If so, don't scan it.<br><br>
+
+          <strong>3. Never log in after scanning a QR code without verification:</strong> If a page asks for your credentials after a QR code scan, be extra careful and double-check the URL.<br><br>
+
+          <strong>4. Use a secure QR scanner app:</strong> Some apps have built-in phishing detection and warn about suspicious URLs before opening them.<br><br>
+
+          <strong>5. When in doubt, type it manually:</strong> If you want to visit an official site (e.g. your bank), enter the URL directly in your browser rather than scanning a QR code.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Real-World Examples</h2>
+        <p>
+          <strong>Parking meter:</strong> You want to pay at a parking meter using a QR code. An attacker has placed a fake QR sticker over the real one. You are taken to a convincing payment page and enter your credit card details.<br><br>
+
+          <strong>Restaurant menu:</strong> The restaurant uses QR codes for their digital menu. An attacker sticks their own code on top. You are redirected to a phishing site asking for a "table reservation login."<br><br>
+
+          <strong>Phishing email:</strong> You receive an email supposedly from your bank asking you to scan a QR code to verify your account. The code leads to a perfectly replicated bank website – you enter your credentials and the attacker has them immediately.
+        </p>
+      </div>
+    </section>
+
+    <div id="footer"></div>
+    <script>
+      fetch("/en/partials/footer.html")
+        .then(res => res.text())
+        .then(data => { document.getElementById("footer").innerHTML = data; });
+    </script>
+    <script>
+      fetch("/en/partials/navbar.html")
+        .then(res => res.text())
+        .then(data => {
+          document.getElementById("navbar").innerHTML = data;
+          const toggle = document.querySelector(".menu-toggle");
+          const navLinks = document.querySelector(".nav-links");
+          toggle.addEventListener("click", () => {
+            navLinks.classList.toggle("active");
+          });
+        });
+    </script>
+  </body>
+</html>

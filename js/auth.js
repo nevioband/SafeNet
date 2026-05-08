@@ -298,3 +298,143 @@ function initScrollToTop() {
 }
 
 initScrollToTop()
+
+// ─── PWA ─────────────────────────────────────────────────
+function initPWA() {
+    if (!document.querySelector('link[rel="manifest"]')) {
+        const link = document.createElement('link')
+        link.rel = 'manifest'
+        link.href = '/manifest.json'
+        document.head.appendChild(link)
+    }
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch(() => {})
+    }
+}
+initPWA()
+
+// ─── Suche ───────────────────────────────────────────────
+const isEN = /^\/en(\/|$)/.test(window.location.pathname)
+
+const SUCHINDEX = isEN ? [
+    { titel: 'Home',               pfad: '/en/index.html',                      desc: 'SafeNet Security – Password security and cyber protection.' },
+    { titel: 'Password Generator', pfad: '/en/pages/generator.html',            desc: 'Generate secure random passwords.' },
+    { titel: 'Password Analysis',  pfad: '/en/pages/analysator.html',           desc: 'Analyse the strength of your password.' },
+    { titel: 'Vault',              pfad: '/en/pages/tresor.html',               desc: 'Encrypted password vault.' },
+    { titel: 'Notes',              pfad: '/en/pages/notizen.html',              desc: 'Encrypted secure notes.' },
+    { titel: 'Attack Methods',     pfad: '/en/pages/angriff.html',              desc: 'Overview of common cyber attack methods.' },
+    { titel: 'Phishing',           pfad: '/en/pages/phishing.html',             desc: 'How phishing attacks work and how to protect yourself.' },
+    { titel: 'Brute Force',        pfad: '/en/pages/bruteforce.html',           desc: 'Automated password guessing attacks.' },
+    { titel: 'Social Engineering', pfad: '/en/pages/socialengineering.html',    desc: 'Psychological manipulation in cyber attacks.' },
+    { titel: 'Keylogger',          pfad: '/en/pages/keylogger.html',            desc: 'Software that secretly records keystrokes.' },
+    { titel: 'Dictionary Attack',  pfad: '/en/pages/wörterbuchangriff.html',    desc: 'Attacks using lists of common passwords.' },
+    { titel: 'Ransomware',         pfad: '/en/pages/ransomware.html',           desc: 'Malware that encrypts your files for ransom.' },
+    { titel: 'MFA Bypass',         pfad: '/en/pages/mfa-bypass.html',           desc: 'How attackers bypass multi-factor authentication.' },
+    { titel: 'Man-in-the-Middle',  pfad: '/en/pages/mitm.html',                desc: 'Intercepting communication between two parties.' },
+    { titel: 'Quishing',           pfad: '/en/pages/quishing.html',             desc: 'QR code phishing attacks.' },
+    { titel: 'About SafeNet',      pfad: '/en/pages/übersns.html',              desc: 'About the SafeNet Security platform.' },
+    { titel: 'Security News',      pfad: '/en/pages/news.html',                 desc: 'Current cybersecurity news.' },
+    { titel: 'Tutorials',          pfad: '/en/pages/tutorials.html',            desc: 'Step-by-step security tutorials.' },
+    { titel: 'My Statistics',      pfad: '/en/pages/meine-stats.html',          desc: 'Your personal security statistics.' },
+    { titel: 'Settings',           pfad: '/en/pages/einstellungen.html',        desc: 'Account and appearance settings.' },
+    { titel: 'Contact',            pfad: '/en/pages/kontakt.html',              desc: 'Contact the SafeNet Security team.' },
+    { titel: 'Feedback',           pfad: '/en/pages/feedback.html',             desc: 'Send us your feedback.' },
+    { titel: '2FA Guide',          pfad: '/en/pages/2fa.html',                  desc: 'Two-factor authentication explained.' },
+] : [
+    { titel: 'Startseite',         pfad: '/de/index.html',                      desc: 'SafeNet Security – Passwortsicherheit und Cyberschutz.' },
+    { titel: 'Passwort-Generator', pfad: '/de/pages/generator.html',            desc: 'Sichere zufällige Passwörter generieren.' },
+    { titel: 'Passwort-Analyse',   pfad: '/de/pages/analysator.html',           desc: 'Stärke deines Passworts analysieren.' },
+    { titel: 'Tresor',             pfad: '/de/pages/tresor.html',               desc: 'Verschlüsselter Passwort-Tresor.' },
+    { titel: 'Notizen',            pfad: '/de/pages/notizen.html',              desc: 'Verschlüsselte sichere Notizen.' },
+    { titel: 'Angriffsmethoden',   pfad: '/de/pages/angriff.html',              desc: 'Übersicht gängiger Cyberangriffsmethoden.' },
+    { titel: 'Phishing',           pfad: '/de/pages/phishing.html',             desc: 'Wie Phishing-Angriffe funktionieren.' },
+    { titel: 'Bruteforce',         pfad: '/de/pages/bruteforce.html',           desc: 'Automatisiertes Erraten von Passwörtern.' },
+    { titel: 'Social Engineering', pfad: '/de/pages/socialengineering.html',    desc: 'Psychologische Manipulation bei Cyberangriffen.' },
+    { titel: 'Keylogger',          pfad: '/de/pages/keylogger.html',            desc: 'Software, die Tastatureingaben heimlich aufzeichnet.' },
+    { titel: 'Wörterbuchangriff',  pfad: '/de/pages/wörterbuchangriff.html',    desc: 'Angriffe mit Listen häufiger Passwörter.' },
+    { titel: 'Ransomware',         pfad: '/de/pages/ransomware.html',           desc: 'Schadsoftware, die Dateien für Lösegeld verschlüsselt.' },
+    { titel: 'MFA-Bypass',         pfad: '/de/pages/mfa-bypass.html',           desc: 'Wie Angreifer die Zwei-Faktor-Auth umgehen.' },
+    { titel: 'Man-in-the-Middle',  pfad: '/de/pages/mitm.html',                desc: 'Kommunikation zwischen zwei Parteien abfangen.' },
+    { titel: 'Quishing',           pfad: '/de/pages/quishing.html',             desc: 'QR-Code-Phishing-Angriffe.' },
+    { titel: 'Über SafeNet',       pfad: '/de/pages/übersns.html',              desc: 'Über die SafeNet Security Plattform.' },
+    { titel: 'Security-News',      pfad: '/de/pages/news.html',                 desc: 'Aktuelle Cybersicherheits-News.' },
+    { titel: 'Tutorials',          pfad: '/de/pages/tutorials.html',            desc: 'Schritt-für-Schritt Sicherheits-Tutorials.' },
+    { titel: 'Meine Statistiken',  pfad: '/de/pages/meine-stats.html',          desc: 'Deine persönlichen Sicherheitsstatistiken.' },
+    { titel: 'Einstellungen',      pfad: '/de/pages/einstellungen.html',        desc: 'Konto- und Darstellungseinstellungen.' },
+    { titel: 'Kontakt',            pfad: '/de/pages/kontakt.html',              desc: 'Das SafeNet Security Team kontaktieren.' },
+    { titel: 'Feedback',           pfad: '/de/pages/feedback.html',             desc: 'Feedback senden.' },
+    { titel: '2FA-Guide',          pfad: '/de/pages/2fa.html',                  desc: 'Zwei-Faktor-Authentifizierung erklärt.' },
+]
+
+function initSearch() {
+    const placeholder = isEN ? 'Search pages…' : 'Seiten durchsuchen…'
+    const noResult    = isEN ? 'No results found.' : 'Keine Ergebnisse gefunden.'
+
+    const overlay = document.createElement('div')
+    overlay.id = 'search-overlay'
+    overlay.setAttribute('role', 'dialog')
+    overlay.setAttribute('aria-modal', 'true')
+    overlay.innerHTML = `
+      <div class="search-box">
+        <div class="search-input-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="search-input" type="search" placeholder="${placeholder}" autocomplete="off">
+          <button id="search-close" aria-label="Schließen">✕</button>
+        </div>
+        <ul id="search-results" role="listbox"></ul>
+      </div>`
+    document.body.appendChild(overlay)
+
+    const input    = overlay.querySelector('#search-input')
+    const closeBtn = overlay.querySelector('#search-close')
+    const results  = overlay.querySelector('#search-results')
+
+    function suche(q) {
+        results.innerHTML = ''
+        if (!q.trim()) return
+        const hits = SUCHINDEX.filter(p =>
+            p.titel.toLowerCase().includes(q.toLowerCase()) ||
+            p.desc.toLowerCase().includes(q.toLowerCase())
+        )
+        if (!hits.length) {
+            results.innerHTML = `<li class="search-no-results">${noResult}</li>`
+            return
+        }
+        hits.forEach(p => {
+            const li = document.createElement('li')
+            li.setAttribute('role', 'option')
+            li.innerHTML = `<a href="${p.pfad}"><span class="search-result-title">${p.titel}</span><span class="search-result-desc">${p.desc}</span></a>`
+            results.appendChild(li)
+        })
+    }
+
+    function oeffnen() {
+        overlay.classList.add('open')
+        input.value = ''
+        results.innerHTML = ''
+        requestAnimationFrame(() => input.focus())
+    }
+    function schliessen() { overlay.classList.remove('open') }
+
+    input.addEventListener('input', () => suche(input.value))
+    input.addEventListener('keydown', ev => {
+        if (ev.key === 'Escape') schliessen()
+        if (ev.key === 'ArrowDown') results.children[0]?.querySelector('a')?.focus()
+    })
+    closeBtn.addEventListener('click', schliessen)
+    overlay.addEventListener('click', e => { if (e.target === overlay) schliessen() })
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') schliessen() })
+
+    // Button binden – Navbar wird per fetch injiziert
+    function bindBtn() {
+        const btn = document.getElementById('searchBtn')
+        if (btn && !btn._searchBound) {
+            btn.addEventListener('click', oeffnen)
+            btn._searchBound = true
+        }
+    }
+    bindBtn()
+    const obs = new MutationObserver(bindBtn)
+    obs.observe(document.body, { childList: true, subtree: true })
+}
+initSearch()

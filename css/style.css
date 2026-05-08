@@ -1,6 +1,6 @@
 :root {
-    --bg: #000000;
-    --bg-card: #0d1117;
+    --bg: #0f172a;
+    --bg-card: #172441;
     --text: #ffffff;
     --text-muted: rgba(255, 255, 255, 0.5);
     --border: rgba(59, 130, 246, 0.2);
@@ -518,7 +518,7 @@ h2 {
 }
 
 .stat-card {
-    background: var(--bg-card, #0d1117);
+    background: var(--bg-card, #172441);
     border: 1px solid rgba(51, 153, 255, 0.18);
     border-radius: 16px;
     padding: 28px 20px 22px;
