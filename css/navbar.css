@@ -80,17 +80,16 @@
 
 .menu-toggle {
   display: none;
-  font-size: 28px;
   background: none;
   border: none;
   color: var(--text);
   cursor: pointer;
-  line-height: 1;
   padding: 0;
   width: 36px;
   height: 36px;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .dropdown-menu {
