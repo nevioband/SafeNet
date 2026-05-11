@@ -136,7 +136,7 @@ function setupMobileNavbarEvents() {
     toggles.forEach((toggle) => {
         toggle.removeEventListener('click', toggle._dropdownHandler || (() => {}));
         const handler = function (e) {
-            if (window.innerWidth <= 1300) {
+            if (window.innerWidth <= 1600) {
                 const parent = toggle.closest('.dropdown');
                 if (!parent) return;
                 const isOpen = parent.classList.contains('open');

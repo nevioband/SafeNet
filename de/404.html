@@ -95,7 +95,7 @@
             if (!navLinks.classList.contains("active")) dropdown?.classList.remove("open");
           });
           dropdownLink?.addEventListener("click", e => {
-            if (window.innerWidth <= 1300 && !dropdown.classList.contains("open")) {
+            if (window.innerWidth <= 1600 && !dropdown.classList.contains("open")) {
               e.preventDefault();
               dropdown.classList.add("open");
             }

@@ -127,6 +127,8 @@
   font-weight: 600;
   margin-bottom: 14px;
   opacity: .9;
+  word-break: break-all;
+  overflow-wrap: break-word;
 }
 
 #suggestions {
