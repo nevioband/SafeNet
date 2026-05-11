@@ -126,6 +126,26 @@
     display: block;
   }
 }
+
+/* Mittlere Bildschirme: Nav-Links kompakter machen, damit nichts abgeschnitten wird */
+@media (min-width: 769px) and (max-width: 1100px) {
+  .navbar {
+    padding: 10px 20px;
+    gap: 8px;
+  }
+
+  .logo img {
+    height: 55px;
+  }
+
+  .nav-links {
+    gap: 14px;
+  }
+
+  .nav-links a {
+    font-size: 13px;
+  }
+}
 @media (max-width: 768px) {
   .dropdown.open .dropdown-menu {
     display: flex;
