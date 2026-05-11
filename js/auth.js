@@ -199,16 +199,48 @@ function initTheme() {
         lightBtn.style.borderColor= current === 'light' ? 'transparent' : ''
     }
 
-    function setTheme(next) {
-        document.documentElement.setAttribute('data-theme', next)
-        localStorage.setItem('theme', next)
-        updateBtns()
+    function setTheme(next, event) {
+        const applyTheme = () => {
+            document.documentElement.setAttribute('data-theme', next)
+            localStorage.setItem('theme', next)
+            updateBtns()
+        }
+
+        if (!document.startViewTransition) {
+            applyTheme()
+            return
+        }
+
+        const x = event?.clientX ?? window.innerWidth  / 2
+        const y = event?.clientY ?? window.innerHeight / 2
+        const endRadius = Math.hypot(
+            Math.max(x, window.innerWidth  - x),
+            Math.max(y, window.innerHeight - y)
+        )
+
+        const transition = document.startViewTransition(applyTheme)
+
+        transition.ready.then(() => {
+            document.documentElement.animate(
+                {
+                    clipPath: [
+                        `circle(0px at ${x}px ${y}px)`,
+                        `circle(${endRadius}px at ${x}px ${y}px)`
+                    ]
+                },
+                {
+                    duration: 600,
+                    easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                    pseudoElement: '::view-transition-new(root)'
+                }
+            )
+        })
     }
 
     document.addEventListener('DOMContentLoaded', () => {
         updateBtns()
-        document.getElementById('themeDarkBtn') ?.addEventListener('click', () => setTheme('dark'))
-        document.getElementById('themeLightBtn')?.addEventListener('click', () => setTheme('light'))
+        document.getElementById('themeDarkBtn') ?.addEventListener('click', (e) => setTheme('dark',  e))
+        document.getElementById('themeLightBtn')?.addEventListener('click', (e) => setTheme('light', e))
     })
 }
 
