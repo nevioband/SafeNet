@@ -199,48 +199,101 @@ function initTheme() {
         lightBtn.style.borderColor= current === 'light' ? 'transparent' : ''
     }
 
-    function setTheme(next, event) {
+    function spiralUebergang(applyTheme) {
+        const canvas = document.createElement('canvas')
+        canvas.style.cssText = 'position:fixed;inset:0;z-index:99999;pointer-events:none;'
+        canvas.width  = window.innerWidth
+        canvas.height = window.innerHeight
+        document.body.appendChild(canvas)
+
+        const ctx     = canvas.getContext('2d')
+        const cx      = canvas.width  / 2
+        const cy      = canvas.height / 2
+        const maxR    = Math.hypot(cx, cy) + 50
+        const TURNS   = 3
+        const SCHRITTE = 800
+        const PHASE_MS = 600
+        const ABSTAND  = maxR / TURNS
+
+        function getBg() {
+            return getComputedStyle(document.documentElement)
+                .getPropertyValue('--bg-card').trim() || '#1e293b'
+        }
+
+        function zeichneSpiral(fortschritt, farbe) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+            if (fortschritt <= 0) return
+
+            ctx.strokeStyle = farbe
+            ctx.lineCap     = 'round'
+            ctx.lineJoin    = 'round'
+            ctx.lineWidth   = ABSTAND * 1.15
+
+            ctx.beginPath()
+            const schritte = Math.ceil(SCHRITTE * fortschritt)
+            for (let i = 0; i <= schritte; i++) {
+                const frac   = i / SCHRITTE
+                const winkel = frac * TURNS * Math.PI * 2 - Math.PI / 2
+                const r      = frac * maxR
+                const px = cx + Math.cos(winkel) * r
+                const py = cy + Math.sin(winkel) * r
+                if (i === 0) ctx.moveTo(px, py)
+                else         ctx.lineTo(px, py)
+            }
+            ctx.stroke()
+
+            // Mittelpunkt füllen
+            ctx.fillStyle = farbe
+            ctx.beginPath()
+            ctx.arc(cx, cy, ABSTAND / 2, 0, Math.PI * 2)
+            ctx.fill()
+        }
+
+        function easeInOut(t) {
+            return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t
+        }
+
+        let phase     = 'einrollen'
+        let startZeit = null
+
+        function frame(jetzt) {
+            if (!startZeit) startZeit = jetzt
+            const t  = Math.min((jetzt - startZeit) / PHASE_MS, 1)
+            const tE = easeInOut(t)
+
+            if (phase === 'einrollen') {
+                zeichneSpiral(tE, getBg())
+                if (t >= 1) {
+                    applyTheme()
+                    phase     = 'ausrollen'
+                    startZeit = jetzt
+                }
+            } else {
+                zeichneSpiral(1 - tE, getBg())
+                if (t >= 1) {
+                    document.body.removeChild(canvas)
+                    return
+                }
+            }
+            requestAnimationFrame(frame)
+        }
+
+        requestAnimationFrame(frame)
+    }
+
+    function setTheme(next) {
         const applyTheme = () => {
             document.documentElement.setAttribute('data-theme', next)
             localStorage.setItem('theme', next)
             updateBtns()
         }
-
-        if (!document.startViewTransition) {
-            applyTheme()
-            return
-        }
-
-        const x = event?.clientX ?? window.innerWidth  / 2
-        const y = event?.clientY ?? window.innerHeight / 2
-        const endRadius = Math.hypot(
-            Math.max(x, window.innerWidth  - x),
-            Math.max(y, window.innerHeight - y)
-        )
-
-        const transition = document.startViewTransition(applyTheme)
-
-        transition.ready.then(() => {
-            document.documentElement.animate(
-                {
-                    clipPath: [
-                        `circle(0px at ${x}px ${y}px)`,
-                        `circle(${endRadius}px at ${x}px ${y}px)`
-                    ]
-                },
-                {
-                    duration: 600,
-                    easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
-                    pseudoElement: '::view-transition-new(root)'
-                }
-            )
-        })
+        spiralUebergang(applyTheme)
     }
 
     document.addEventListener('DOMContentLoaded', () => {
         updateBtns()
-        document.getElementById('themeDarkBtn') ?.addEventListener('click', (e) => setTheme('dark',  e))
-        document.getElementById('themeLightBtn')?.addEventListener('click', (e) => setTheme('light', e))
+        document.getElementById('themeDarkBtn') ?.addEventListener('click', () => setTheme('dark'))
+        document.getElementById('themeLightBtn')?.addEventListener('click', () => setTheme('light'))
     })
 }
 
