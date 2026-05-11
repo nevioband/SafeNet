@@ -10,7 +10,7 @@ h1 {
 }
 
 .mfa-technique-card {
-    background: rgba(10, 18, 35, 0.55);
+    background: var(--bg-card);
     border: 1px solid rgba(51, 153, 255, 0.2);
     border-radius: 14px;
     padding: 20px 22px;
@@ -44,7 +44,7 @@ h1 {
 
 /* Demo */
 .mfa-demo-panel {
-    background: #0d1929;
+    background: var(--bg-card);
     border: 1px solid rgba(51, 153, 255, 0.15);
     border-radius: 14px;
     padding: 20px;
@@ -60,7 +60,7 @@ h1 {
 }
 
 .mfa-phone-card {
-    background: #1a2540;
+    background: var(--bg-card);
     border: 1px solid rgba(59, 130, 246, 0.2);
     border-radius: 14px;
     padding: 20px 24px;
@@ -89,7 +89,7 @@ h1 {
 }
 
 .mfa-push-msg {
-    background: rgba(10, 18, 35, 0.6);
+    background: var(--bg);
     border: 1px solid rgba(59, 130, 246, 0.15);
     border-radius: 10px;
     padding: 14px 16px;
@@ -128,7 +128,7 @@ h1 {
 }
 
 .mfa-attack-log {
-    background: #130a0a;
+    background: var(--bg);
     border: 1px solid rgba(239, 68, 68, 0.3);
     border-radius: 12px;
     padding: 14px;

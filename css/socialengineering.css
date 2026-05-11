@@ -13,7 +13,7 @@ h1 {
 }
 
 .se-szenario {
-  background: rgba(10,18,35,.55);
+  background: var(--bg-card);
   border: 1px solid rgba(102,179,255,.18);
   border-radius: 10px;
   padding: 16px 18px;
@@ -31,7 +31,7 @@ h1 {
 }
 
 .se-option {
-  background: rgba(23,36,65,.7);
+  background: var(--bg-card);
   border: 1px solid rgba(102,179,255,.2);
   border-radius: 8px;
   color: #e2e8f0;

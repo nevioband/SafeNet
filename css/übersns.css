@@ -35,7 +35,7 @@
   padding: 0 20px;
 }
 .founder-card {
-  background: #1e293b;
+  background: var(--bg-card);
   border: 1px solid #334155;
   border-radius: 16px;
   padding: 40px;

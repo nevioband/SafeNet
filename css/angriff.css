@@ -10,7 +10,8 @@ h1 {
     font-size: 30px;
     vertical-align: middle;
     margin-left: 8px;
-    color: #172441;
+    color: #3399ff;
+    filter: drop-shadow(0 0 8px rgba(51, 153, 255, 0.6));
 }
 
 .inline-icon {
@@ -23,7 +24,7 @@ h1 {
     vertical-align: middle;
     margin-right: 6px;
     transform: translateY(-1px);
-    color: #172441;
+    color: #3399ff;
 }
 
 .icon-line {
@@ -35,9 +36,10 @@ h1 {
 
 .icon-line .material-symbols-outlined {
     font-size: 20px;
-    color: #172441;
+    color: #3399ff;
     margin-top: 2px;
     flex-shrink: 0;
+    filter: drop-shadow(0 0 6px rgba(51, 153, 255, 0.55));
 }
 
 .section-title span {

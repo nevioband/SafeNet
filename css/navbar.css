@@ -43,6 +43,11 @@
   height: 90px;
   width: auto;
   display: block;
+  transition: filter 0.3s ease;
+}
+
+.logo img:hover {
+  filter: drop-shadow(0 0 20px rgba(51, 153, 255, 0.75)) drop-shadow(0 0 40px rgba(102, 217, 255, 0.4));
 }
 
 .nav-links {

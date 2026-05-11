@@ -1,5 +1,5 @@
 body {
-  background: #0f172a;
+  background: var(--bg);
   color: #fff;
 }
 .kontakt-main {
@@ -10,7 +10,7 @@ body {
   padding: 40px 0 60px;
 }
 .kontakt-section {
-  background: #172441;
+  background: var(--bg-card);
   border-radius: 16px;
   box-shadow: 0 4px 24px rgba(0,0,0,0.18);
   padding: 36px 32px 32px 32px;
@@ -42,7 +42,7 @@ body {
 }
 .kontakt-form input,
 .kontakt-form textarea {
-  background: #22345c;
+  background: var(--bg);
   border: 1px solid #334366;
   color: #fff;
   border-radius: 6px;

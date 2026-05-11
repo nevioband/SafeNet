@@ -18,7 +18,7 @@
 .custom-select-wrapper { position: relative; min-width: 0; }
 .custom-select-btn {
     display: flex; align-items: center; justify-content: space-between; gap: 8px;
-    width: 100%; padding: 12px 14px; background: #0f172a;
+    width: 100%; padding: 12px 14px; background: var(--bg);
     border: 1px solid rgba(59,130,246,0.25); border-radius: 8px;
     color: white; font-size: 15px; font-family: Inter, sans-serif;
     cursor: pointer; white-space: nowrap; text-align: left; box-sizing: border-box;
@@ -28,7 +28,7 @@
 .custom-select-wrapper.open .cs-arrow { transform: rotate(180deg); }
 .custom-select-list {
     position: absolute; top: calc(100% + 6px); left: 0; right: 0;
-    background: #1e293b; border: 1px solid rgba(59,130,246,0.3); border-radius: 10px;
+    background: var(--bg-card); border: 1px solid rgba(59,130,246,0.3); border-radius: 10px;
     list-style: none; margin: 0; padding: 6px; z-index: 50000; display: none;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }

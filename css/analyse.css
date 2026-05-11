@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   padding: 120px 20px;
-  background: #0b1220;
+  background: var(--bg);
 }
 
 .analyser-box {
@@ -10,9 +10,7 @@
   width: 100%;
   padding: 32px;
   border-radius: 20px;
-  background: rgba(23, 36, 65, 0.78);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: var(--bg-card);
   border: 1px solid rgba(102, 179, 255, 0.18);
   box-shadow: 0 10px 35px rgba(0, 0, 0, 0.35), 0 0 30px rgba(51, 153, 255, 0.08);
   color: #ffffff;
@@ -45,7 +43,7 @@
   box-sizing: border-box;
   padding: 14px 48px 14px 14px;
   font-size: 1.1rem;
-  background: rgba(10, 18, 35, 0.9);
+  background: var(--bg);
   border: 1px solid rgba(102, 179, 255, 0.25);
   border-radius: 14px;
   color: #66d9ff;
@@ -136,7 +134,7 @@
   margin-top: 6px;
   text-align: left;
   padding: 16px 18px;
-  background: rgba(10, 18, 35, 0.6);
+  background: var(--bg-card);
   border: 1px solid rgba(102, 179, 255, 0.12);
   border-radius: 14px;
   color: #f2f7ff;

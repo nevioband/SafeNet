@@ -8,8 +8,8 @@
 ::view-transition-new(root) { z-index: 9999; }
 
 :root {
---bg: #0c0c0c;
---bg-card: #1e1e1e;
+--bg: #030303;
+--bg-card: #1a1a1a;
     /*
     --bg: #0f172a;
     --bg-card: #172441;
@@ -81,6 +81,7 @@ h1, h2, h3, h4{
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  filter: drop-shadow(0 0 18px rgba(51, 153, 255, 0.45));
 }
 h1 {
     font-size: 38px;
@@ -593,4 +594,16 @@ h2 {
 [data-theme="light"] .stat-source {
     color: #94a3b8;
     -webkit-text-fill-color: #94a3b8;
+}
+
+/* ===== CARD HOVER GLOW ===== */
+[class*="-card"]:hover,
+[class*="card-"]:hover,
+.vault-item:hover,
+.se-option:hover,
+.se-szenario:hover,
+.rec-item:hover,
+.mfa-technique-card:hover {
+    box-shadow: 0 0 28px rgba(51, 153, 255, 0.28), 0 8px 40px rgba(0, 0, 0, 0.45) !important;
+    transition: box-shadow 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
 }

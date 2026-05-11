@@ -23,7 +23,7 @@
     margin: 32px 0 10px;
 }
 .s-card {
-    background: #0d1117;
+    background: var(--bg-card);
     border: 1px solid rgba(59,130,246,0.2);
     border-radius: 14px;
     padding: 24px 28px;
@@ -92,7 +92,7 @@
 .form-group { margin-bottom: 16px; }
 .form-group label { display: block; font-size: 13px; color: #94a3b8; margin-bottom: 6px; }
 .form-input {
-    width: 100%; padding: 12px 14px; background: #0f172a;
+    width: 100%; padding: 12px 14px; background: var(--bg);
     border: 1px solid rgba(59,130,246,0.25); border-radius: 8px;
     color: white; font-size: 15px; font-family: Inter, sans-serif;
     box-sizing: border-box; outline: none;
@@ -107,7 +107,7 @@
     margin-bottom: 4px;
 }
 .stat-tile {
-    background: #0f172a;
+    background: var(--bg);
     border: 1px solid rgba(59,130,246,0.18);
     border-radius: 10px;
     padding: 16px 12px;
@@ -136,7 +136,7 @@
 #tfaQrSection { display: none; }
 .qr-img { display: block; margin: 12px auto; border-radius: 10px; background: white; padding: 12px; }
 .code-input {
-    width: 100%; padding: 14px; background: #0f172a;
+    width: 100%; padding: 14px; background: var(--bg);
     border: 1px solid rgba(59,130,246,0.25); border-radius: 8px;
 }
 

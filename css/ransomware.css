@@ -67,7 +67,7 @@ h1 {
 }
 
 .rw-variant-card {
-    background: rgba(10, 18, 35, 0.55);
+    background: var(--bg-card);
     border: 1px solid rgba(51, 153, 255, 0.2);
     border-radius: 12px;
     padding: 18px 20px;
@@ -189,7 +189,7 @@ h1 {
 }
 
 .rw-log {
-    background: #130a0a;
+    background: var(--bg);
     border: 1px solid rgba(239, 68, 68, 0.3);
     border-radius: 12px;
     padding: 14px;

@@ -7,7 +7,7 @@
 }
 
 .login-card {
-    background: #172441;
+    background: var(--bg-card);
     border: 1px solid rgba(59, 130, 246, 0.2);
     border-radius: 16px;
     padding: 48px 44px;
@@ -73,7 +73,7 @@
 .form-group input {
     width: 100%;
     padding: 12px 14px 12px 42px;
-    background: #0f172a;
+    background: var(--bg);
     border: 1px solid rgba(59, 130, 246, 0.25);
     border-radius: 8px;
     color: white;
@@ -404,7 +404,7 @@ a.login-btn {
 }
 
 .forgot-modal-inner {
-    background: #172441;
+    background: var(--bg-card);
     border: 1px solid rgba(59, 130, 246, 0.2);
     border-radius: 16px;
     padding: 36px 32px;
