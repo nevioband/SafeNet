@@ -13,11 +13,20 @@ p{
     font-size:18px;
 }
 
-#ausgabe{
-    margin-top:25px;
-    font-size:20px;
-    font-weight:bold;
-    color:#3b82f6;
+#ausgabe {
+    padding: 16px;
+    background: var(--bg-card);
+    border: 1px solid rgba(102, 179, 255, 0.25);
+    border-radius: 12px;
+    text-align: left;
+    color: #66d9ff;
+    font-family: monospace;
+    font-size: 1rem;
+    margin-top: 16px;
+    word-break: break-all;
+    min-height: 54px;
+    max-height: 140px;
+    overflow-y: auto;
 }
 
 #eingabe {
@@ -29,8 +38,158 @@ p{
     font-family: monospace;
     font-size: 1.1rem;
     letter-spacing: 1px;
-    padding: 0 6px;
+    padding: 6px 0;
+    margin: 0;
+    height: auto;
+    line-height: 1.5;
 }
 #eingabe::placeholder {
     color: rgba(255, 255, 255, 0.45);
+}
+
+/* Demo-Intro-Text */
+.kl-demo-intro {
+    text-align: center;
+    color: #a0c4ff;
+    margin-bottom: 24px;
+}
+
+/* Steuerleiste unter Demo-Output */
+.kl-controls-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    padding: 0 4px;
+}
+.kl-controls-row--demo2 {
+    margin-top: 12px;
+}
+
+#key-count,
+#kl2-count {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.88rem;
+}
+#kl2-count {
+    color: rgba(255, 255, 255, 0.45);
+}
+
+#key-clear,
+#kl2-clear {
+    width: auto;
+    padding: 8px 18px;
+    font-size: 0.9rem;
+    margin-top: 0;
+}
+
+/* Demo 2 – Grid */
+.kl2-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+@media (max-width: 768px) {
+    .kl2-grid { grid-template-columns: 1fr; }
+}
+#kl2-live-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: #ef4444;
+    border-radius: 50%;
+    transition: opacity 0.15s;
+}
+
+/* Panel-Beschriftung */
+.kl-panel-label {
+    font-size: 0.75rem;
+    color: #64748b;
+    text-align: center;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+.kl-panel-label--attacker {
+    color: #ef4444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+}
+
+/* Gefälschte Login-Karte */
+#kl2-login-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 12px;
+    padding: 24px;
+}
+.kl2-login-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 18px;
+}
+.kl2-label {
+    font-size: 13px;
+    color: #94a3b8;
+    display: block;
+    margin-bottom: 5px;
+}
+.kl2-input {
+    width: 100%;
+    padding: 10px 12px;
+    background: var(--bg);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 8px;
+    color: white;
+    font-size: 14px;
+    font-family: Inter, sans-serif;
+    box-sizing: border-box;
+    outline: none;
+    margin-bottom: 14px;
+}
+#kl2-pass {
+    margin-bottom: 20px;
+}
+.kl2-login-btn {
+    width: 100%;
+    padding: 11px;
+    background: linear-gradient(135deg, #3399ff, #66d9ff);
+    color: #0f172a;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: Inter, sans-serif;
+    cursor: default;
+}
+
+/* Angreifer-Panel */
+.kl2-attacker-panel {
+    background: #130a0a;
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    border-radius: 12px;
+    padding: 16px;
+    min-height: 210px;
+    display: flex;
+    flex-direction: column;
+}
+.kl2-attacker-header {
+    color: #ef4444;
+    font-family: monospace;
+    font-size: 0.72rem;
+    margin-bottom: 10px;
+}
+#kl2-log {
+    color: #fca5a5;
+    font-family: monospace;
+    font-size: 0.82rem;
+    line-height: 1.8;
+    word-break: break-all;
+    flex: 1;
+    overflow-y: auto;
+    max-height: 160px;
+    white-space: pre-wrap;
 }

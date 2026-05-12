@@ -104,6 +104,42 @@
     box-shadow: 0 0 26px rgba(255, 77, 77, 0.65), 0 0 48px rgba(255, 0, 0, 0.3);
 }
 
+/* Suchfeld */
+#vaultSearchContainer {
+    position: relative;
+    margin-bottom: 16px;
+    display: none;
+}
+#vaultSearchContainer .material-symbols-outlined {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #64748b;
+    font-size: 20px;
+    pointer-events: none;
+}
+#vaultSearch {
+    width: 100%;
+    padding: 11px 14px 11px 40px;
+    background: var(--bg);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 10px;
+    color: white;
+    font-size: 15px;
+    font-family: Inter, sans-serif;
+    box-sizing: border-box;
+    outline: none;
+}
+#csvFileInput {
+    display: none;
+}
+.vault-generator-link {
+    text-decoration: none;
+    width: 100%;
+    display: block;
+}
+
 /* Tresor button layout overrides */
 .settings.vault-buttons { margin-top: 20px; gap: 10px; }
 .main-btn.vault-action-btn { margin-top: 0; display: flex; align-items: center; justify-content: center; gap: 10px; }
@@ -125,6 +161,123 @@
 }
 .vault-icon-btn:hover { border-color: #3399ff; }
 .vault-icon-btn .material-symbols-outlined { font-size: 16px; }
+
+/* Manuelles Passwort Modal */
+#manualModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+.vault-modal-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 16px;
+    padding: 36px 32px;
+    width: 100%;
+    max-width: 400px;
+    margin: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+.vault-modal-title {
+    margin: 0 0 20px;
+    font-size: 18px;
+    background: linear-gradient(135deg, #3399ff, #66d9ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.vault-modal-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+.vault-modal-field--mb24 {
+    margin-bottom: 24px;
+}
+.vault-modal-label {
+    font-size: 14px;
+    color: #cbd5e1;
+    font-weight: 500;
+}
+.vault-modal-input {
+    width: 100%;
+    padding: 12px 14px;
+    background: var(--bg);
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    border-radius: 8px;
+    color: white;
+    font-size: 15px;
+    font-family: Inter, sans-serif;
+    box-sizing: border-box;
+    outline: none;
+}
+.vault-modal-input--pw {
+    padding: 12px 42px 12px 14px;
+}
+.vault-pw-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.vault-pw-toggle {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+}
+#manualKategorie-custom {
+    display: none;
+    width: 100%;
+    padding: 12px 14px;
+    background: var(--bg);
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    border-radius: 8px;
+    color: white;
+    font-size: 15px;
+    font-family: Inter, sans-serif;
+    box-sizing: border-box;
+    outline: none;
+    margin-top: 8px;
+}
+.vault-modal-save-btn {
+    width: 100%;
+    padding: 13px;
+    background: linear-gradient(135deg, #3399ff, #66d9ff);
+    color: #0f172a;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: Inter, sans-serif;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+.vault-modal-cancel-btn {
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    border-radius: 8px;
+    color: #94a3b8;
+    cursor: pointer;
+    font-family: Inter, sans-serif;
+    font-size: 14px;
+}
 
 /* --- RESPONSIVE DESIGN --- */
 

@@ -101,7 +101,7 @@
 
     <div class="password-container">
       <h3>Keylogger Demo</h3>
-      <p style="text-align: center; color: #a0c4ff; margin-bottom: 24px">
+      <p class="kl-demo-intro">
         Klicke ins Eingabefeld und tippe – alles wird aufgezeichnet, genau wie bei einem echten Keylogger.
       </p>
 
@@ -110,47 +110,16 @@
           id="eingabe"
           type="text"
           placeholder="Hier tippen..."
-          style="
-            width: 100%;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: #66d9ff;
-            font-family: monospace;
-            font-size: 1.1rem;
-            letter-spacing: 1px;
-            padding: 6px 0;
-            margin: 0;
-            height: auto;
-            line-height: 1.5;
-          "
         />
       </div>
 
-      <div
-        id="ausgabe"
-        style="
-          padding: 16px;
-          background: var(--bg-card);
-          border: 1px solid rgba(102, 179, 255, 0.25);
-          border-radius: 12px;
-          text-align: left;
-          color: #66d9ff;
-          font-family: monospace;
-          font-size: 1rem;
-          margin-top: 16px;
-          word-break: break-all;
-          min-height: 54px;
-          max-height: 140px;
-          overflow-y: auto;
-        "
-      >
+      <div id="ausgabe">
         Noch keine Taste erkannt.
       </div>
 
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; padding:0 4px;">
-        <span id="key-count" style="color:rgba(255,255,255,0.5); font-size:0.88rem;"></span>
-        <button id="key-clear" class="main-btn" style="width:auto; padding:8px 18px; font-size:0.9rem; margin-top:0;">
+      <div class="kl-controls-row">
+        <span id="key-count"></span>
+        <button id="key-clear" class="main-btn">
           Aufzeichnung löschen
         </button>
       </div>
@@ -189,15 +158,9 @@
     </script>
 
     <!-- ═══ Demo 2: Angreifer-Perspektive ═══ -->
-    <style>
-      .kl2-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-      @media (max-width: 768px) { .kl2-grid { grid-template-columns: 1fr; } }
-      #kl2-live-dot { display: inline-block; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; transition: opacity 0.15s; }
-    </style>
-
     <div class="password-container">
       <h3>Demo 2: Angreifer-Perspektive</h3>
-      <p style="text-align:center;color:#a0c4ff;margin-bottom:24px;">
+      <p class="kl-demo-intro">
         Melde dich auf der &laquo;sicheren&raquo; Login-Seite an – und sieh gleichzeitig, was ein Keylogger im Hintergrund an den Angreifer sendet. Das Passwort erscheint für dich als Punkte, der Angreifer liest jeden Buchstaben im Klartext.
       </p>
 
@@ -205,19 +168,17 @@
 
         <!-- Linke Seite: gefälschte Login-Seite (Nutzer-Perspektive) -->
         <div>
-          <div style="font-size:0.75rem;color:#64748b;text-align:center;margin-bottom:10px;letter-spacing:1px;text-transform:uppercase;">Deine Sicht</div>
-          <div id="kl2-login-card" style="background:var(--bg-card);border:1px solid rgba(59,130,246,0.2);border-radius:12px;padding:24px;">
-            <div style="font-size:0.95rem;font-weight:700;color:white;margin-bottom:18px;">🔒 Sicher einloggen</div>
+          <div class="kl-panel-label">Deine Sicht</div>
+          <div id="kl2-login-card">
+            <div class="kl2-login-title">🔒 Sicher einloggen</div>
 
-            <label style="font-size:13px;color:#94a3b8;display:block;margin-bottom:5px;">Benutzername</label>
-            <input type="text" id="kl2-user" placeholder="benutzername@email.ch" autocomplete="off"
-              style="width:100%;padding:10px 12px;background:var(--bg);border:1px solid rgba(59,130,246,0.2);border-radius:8px;color:white;font-size:14px;font-family:Inter,sans-serif;box-sizing:border-box;outline:none;margin-bottom:14px;">
+            <label class="kl2-label">Benutzername</label>
+            <input type="text" id="kl2-user" placeholder="benutzername@email.ch" autocomplete="off" class="kl2-input">
 
-            <label style="font-size:13px;color:#94a3b8;display:block;margin-bottom:5px;">Passwort</label>
-            <input type="password" id="kl2-pass" placeholder="••••••••" autocomplete="off"
-              style="width:100%;padding:10px 12px;background:var(--bg);border:1px solid rgba(59,130,246,0.2);border-radius:8px;color:white;font-size:14px;font-family:Inter,sans-serif;box-sizing:border-box;outline:none;margin-bottom:20px;">
+            <label class="kl2-label">Passwort</label>
+            <input type="password" id="kl2-pass" placeholder="••••••••" autocomplete="off" class="kl2-input">
 
-            <button style="width:100%;padding:11px;background:linear-gradient(135deg,#3399ff,#66d9ff);color:#0f172a;border:none;border-radius:8px;font-size:14px;font-weight:700;font-family:Inter,sans-serif;cursor:default;">
+            <button class="kl2-login-btn">
               Einloggen
             </button>
           </div>
@@ -225,21 +186,20 @@
 
         <!-- Rechte Seite: Angreifer-Panel -->
         <div>
-          <div style="font-size:0.75rem;color:#ef4444;text-align:center;margin-bottom:10px;letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:7px;">
+          <div class="kl-panel-label kl-panel-label--attacker">
             <span id="kl2-live-dot"></span> Angreifer-Panel
           </div>
-          <div style="background:#130a0a;border:1px solid rgba(239,68,68,0.35);border-radius:12px;padding:16px;min-height:210px;display:flex;flex-direction:column;">
-            <div style="color:#ef4444;font-family:monospace;font-size:0.72rem;margin-bottom:10px;">[KEYLOGGER v2.3 — Verbindung aktiv — Ziel: 192.168.1.42]</div>
-            <div id="kl2-log"
-              style="color:#fca5a5;font-family:monospace;font-size:0.82rem;line-height:1.8;word-break:break-all;flex:1;overflow-y:auto;max-height:160px;white-space:pre-wrap;">Warte auf Eingabe…</div>
+          <div class="kl2-attacker-panel">
+            <div class="kl2-attacker-header">[KEYLOGGER v2.3 — Verbindung aktiv — Ziel: 192.168.1.42]</div>
+            <div id="kl2-log">Warte auf Eingabe…</div>
           </div>
         </div>
 
       </div>
 
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding:0 4px;">
-        <span id="kl2-count" style="color:rgba(255,255,255,0.45);font-size:0.88rem;"></span>
-        <button id="kl2-clear" class="main-btn" style="width:auto;padding:8px 18px;font-size:0.9rem;margin-top:0;">
+      <div class="kl-controls-row kl-controls-row--demo2">
+        <span id="kl2-count"></span>
+        <button id="kl2-clear" class="main-btn">
           Zurücksetzen
         </button>
       </div>
