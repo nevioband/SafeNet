@@ -90,33 +90,7 @@ export default async function handler(req) {
     })
   }
 
-  // Serverseitiger Themenfilter – wird vor dem KI-Aufruf geprüft
-  const OFF_TOPIC = [
-    // Personen/Politik/Geschichte
-    'hitler','nazi','nsdap','drittes reich','holocaust','shoah','auschwitz','stalин','stalin','mao','mussolini','pol pot','genozid','völkermord',
-    'krieg','weltkrieg','bomben','atombombe','hiroshima','nagasaki','tschernobyl','fukushima',
-    // Religion/Extremismus
-    'allah','jihad','terror','anschlag','isis','al-qaida','kkk','rechtsextrem','linksextrem',
-    // Gewalt/Drogen
-    'mord','töten','umbringen','waffe','pistole','messer stechen','drogen','kokain','heroin',
-    // Sex/NSFW
-    'sex','porn','nackt','erotik',
-    // Nicht-IT Themen die oft getestet werden
-    'fussball','rezept','kochen','wetter','aktien','bitcoin kaufen','krypto kaufen',
-    'wer ist','was ist der unterschied zwischen mensch','wie macht man ein kind',
-  ]
-
-  const msgLower = message.toLowerCase()
-  if (OFF_TOPIC.some(w => msgLower.includes(w))) {
-    const reply = msgLower.includes('wer ist') || msgLower.includes('was ist') && OFF_TOPIC.some(w => msgLower.includes(w))
-      ? 'Dazu mache ich keine Aussagen. Ich helfe dir gerne bei Cybersicherheit oder der SafeNet Plattform!'
-      : 'Ich bin nur für Cybersicherheit und SafeNet zuständig. Stell mir eine Frage dazu!'
-    return new Response(JSON.stringify({ reply }), {
-      headers: { ...CORS, 'Content-Type': 'application/json' },
-    })
-  }
-
-  // Mistral API aufrufen
+  // KI-Classifier: prüft ob die Nachricht IT/Cybersicherheits-relevant ist
   const apiKey = process.env.MISTRAL_API_KEY
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'KI nicht konfiguriert' }), {
@@ -124,6 +98,32 @@ export default async function handler(req) {
       headers: { ...CORS, 'Content-Type': 'application/json' },
     })
   }
+
+  const classifyRes = await fetch('https://api.mistral.ai/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
+    body: JSON.stringify({
+      model: 'open-mistral-nemo',
+      messages: [
+        { role: 'system', content: 'Du bist ein strenger Themen-Filter. Antworte NUR mit dem Wort YES oder NO, ohne Erklärung. YES = die Nachricht ist eine Begrüssung ODER handelt von Cybersicherheit, IT, Passwörtern, Datenschutz, Hacking, Netzwerken, Software oder der SafeNet Security Webseite. NO = alles andere (Geschichte, Politik, Personen, Sport, Kochen, Mathematik, Unterhaltung usw.).' },
+        { role: 'user', content: message },
+      ],
+      max_tokens: 3,
+      temperature: 0,
+    }),
+  }).catch(() => null)
+
+  if (classifyRes?.ok) {
+    const classifyData = await classifyRes.json().catch(() => null)
+    const verdict = classifyData?.choices?.[0]?.message?.content?.trim().toUpperCase()
+    if (verdict === 'NO') {
+      return new Response(JSON.stringify({ reply: 'Ich bin nur für Cybersicherheit und SafeNet zuständig. Stell mir eine Frage dazu!' }), {
+        headers: { ...CORS, 'Content-Type': 'application/json' },
+      })
+    }
+  }
+
+  // Mistral API aufrufen
 
   // Nachrichten für Mistral (OpenAI-kompatibles Format)
   const messages = [
