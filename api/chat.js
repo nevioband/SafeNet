@@ -96,20 +96,8 @@ export default async function handler(req) {
     })
   }
 
-  // Gesprächsverlauf aufbauen (max. 10 vorherige Nachrichten)
-  const contents = []
-  for (const msg of history.slice(-10)) {
-    if (msg.role && typeof msg.text === 'string' && msg.text.length <= 2000) {
-      contents.push({
-        role: msg.role === 'user' ? 'user' : 'model',
-        parts: [{ text: msg.text }],
-      })
-    }
-  }
-  contents.push({ role: 'user', parts: [{ text: message }] })
-
-  // Gemini API aufrufen
-  const apiKey = process.env.GEMINI_API_KEY
+  // Groq API aufrufen
+  const apiKey = process.env.GROQ_API_KEY
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'KI nicht konfiguriert' }), {
       status: 500,
@@ -117,36 +105,45 @@ export default async function handler(req) {
     })
   }
 
-  try {
-    const geminiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ role: 'user', parts: [{ text: SYSTEM_PROMPT }] }, { role: 'model', parts: [{ text: 'Verstanden! Ich bin bereit zu helfen.' }] }, ...contents],
-          generationConfig: { maxOutputTokens: 600, temperature: 0.7 },
-        }),
-      }
-    )
+  // Nachrichten für Groq (OpenAI-kompatibles Format)
+  const messages = [
+    { role: 'system', content: SYSTEM_PROMPT },
+    ...history.slice(-10).map(m => ({ role: m.role === 'model' ? 'assistant' : 'user', content: m.text })),
+    { role: 'user', content: message },
+  ]
 
-    if (!geminiRes.ok) {
-      const errText = await geminiRes.text().catch(() => '')
-      console.error('[SafeNet Chat] Gemini Error', geminiRes.status, errText)
-      return new Response(JSON.stringify({ error: `Gemini ${geminiRes.status}: ${errText.slice(0, 200)}` }), {
+  try {
+    const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        messages,
+        max_tokens: 600,
+        temperature: 0.7,
+      }),
+    })
+
+    if (!groqRes.ok) {
+      const errText = await groqRes.text().catch(() => '')
+      console.error('[SafeNet Chat] Groq Error', groqRes.status, errText)
+      return new Response(JSON.stringify({ error: `Groq ${groqRes.status}: ${errText.slice(0, 200)}` }), {
         status: 502,
         headers: { ...CORS, 'Content-Type': 'application/json' },
       })
     }
 
-    const data = await geminiRes.json()
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text ?? 'Keine Antwort erhalten.'
+    const data = await groqRes.json()
+    const reply = data.choices?.[0]?.message?.content ?? 'Keine Antwort erhalten.'
 
     return new Response(JSON.stringify({ reply }), {
       headers: { ...CORS, 'Content-Type': 'application/json' },
     })
-  } catch {
-    return new Response(JSON.stringify({ error: 'Verbindungsfehler' }), {
+  } catch (e) {
+    return new Response(JSON.stringify({ error: 'Verbindungsfehler: ' + e.message }), {
       status: 502,
       headers: { ...CORS, 'Content-Type': 'application/json' },
     })
