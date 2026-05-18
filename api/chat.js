@@ -79,7 +79,7 @@ export default async function handler(req) {
     })
   }
 
-  const { message, history = [] } = body
+  const { message, history = [], lang = 'de' } = body
 
   if (!message || typeof message !== 'string' || message.length > 1000) {
     return new Response(JSON.stringify({ error: 'Ungültige Nachricht' }), {
@@ -115,7 +115,6 @@ export default async function handler(req) {
     const classifyData = await classifyRes.json().catch(() => null)
     const verdict = classifyData?.choices?.[0]?.message?.content?.trim().toUpperCase()
     if (verdict === 'NO') {
-      const lang = /^(hallo|hi|guten|wie|was|wer|warum|kannst|bitte|ich|du|das|ein|eine)/i.test(message) ? 'de' : 'en'
       const redirect = lang === 'en'
         ? "That's an interesting topic, but it falls outside what I can discuss here. I'm happy to help you with cybersecurity, password safety, or anything on the SafeNet platform!"
         : 'Das ist ein interessantes Thema, aber dazu kann ich hier keine Aussagen machen. Ich helfe dir gerne bei Cybersicherheit, Passwortsicherheit oder allem rund um die SafeNet Plattform!'
