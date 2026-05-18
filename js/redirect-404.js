@@ -1,0 +1,1 @@
+var path=window.location.pathname;path.startsWith("/de")?window.location.replace("/de/404.html"):window.location.replace("/en/404.html");

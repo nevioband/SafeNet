@@ -33,23 +33,22 @@
         <!-- Suchfeld -->
         <div id="vaultSearchContainer">
             <span class="material-symbols-outlined">search</span>
-            <input type="text" id="vaultSearch" placeholder="Passwort suchen…"
-                oninput="window.filterVault(this.value)">
+            <input type="text" id="vaultSearch" placeholder="Passwort suchen…">
         </div>
         
         <div id="saved-passwords-list" class="vault-list"></div>
 
         <div class="settings vault-buttons">
-            <button class="main-btn vault-action-btn" onclick="document.getElementById('manualModal').style.display='flex'">
+            <button id="btnOpenManual" class="main-btn vault-action-btn">
                 <span class="material-symbols-outlined">lock</span> Passwort manuell speichern
             </button>
 
-            <button class="main-btn-delete vault-action-btn" onclick="clearVault()">
+            <button id="btnClearVault" class="main-btn-delete vault-action-btn">
                 <span class="material-symbols-outlined">delete_sweep</span> Alle löschen
             </button>
 
             <!-- CSV Import -->
-            <input type="file" id="csvFileInput" accept=".csv" aria-label="CSV-Datei importieren" onchange="window.importCSV(this)">
+            <input type="file" id="csvFileInput" accept=".csv" aria-label="CSV-Datei importieren">
 
             <a href="/de/pages/generator.html" class="vault-generator-link">
                 <button class="main-btn vault-action-btn">
@@ -58,10 +57,10 @@
             </a>
 
             <div class="vault-import-export">
-                <button class="vault-icon-btn" onclick="document.getElementById('csvFileInput').click()">
+                <button id="btnImportCSV" class="vault-icon-btn">
                     <span class="material-symbols-outlined">upload_file</span> Importieren
                 </button>
-                <button class="vault-icon-btn" onclick="window.exportCSV()">
+                <button id="btnExportCSV" class="vault-icon-btn">
                     <span class="material-symbols-outlined">download</span> Exportieren
                 </button>
             </div>
@@ -82,7 +81,7 @@
                 <label class="vault-modal-label">Passwort</label>
                 <div class="vault-pw-wrapper">
                     <input type="password" id="manualPassword" placeholder="Dein Passwort eingeben" class="vault-modal-input vault-modal-input--pw">
-                    <button type="button" aria-label="Passwort anzeigen/verbergen" onclick="const i=document.getElementById('manualPassword');i.type=i.type==='password'?'text':'password'" class="vault-pw-toggle">
+                    <button id="btnPwToggle" type="button" aria-label="Passwort anzeigen/verbergen" class="vault-pw-toggle">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
                         </svg>
@@ -112,54 +111,17 @@
                 <input type="text" id="manualKategorie-custom" placeholder="Eigene Kategorie eingeben…">
             </div>
 
-            <button onclick="window.saveManual()" class="vault-modal-save-btn">
+            <button id="btnSaveManual" class="vault-modal-save-btn">
                 Speichern
             </button>
-            <button onclick="document.getElementById('manualModal').style.display='none'" class="vault-modal-cancel-btn">
+            <button id="btnCancelManual" class="vault-modal-cancel-btn">
                 Abbrechen
             </button>
         </div>
     </div>
     <div id="footer"></div>
-
-    <script>
-        // Navbar & Footer laden
-        fetch("/de/partials/navbar.html").then(res => res.text()).then(data => {
-            document.getElementById("navbar").innerHTML = data;
-            const toggle = document.querySelector(".menu-toggle");
-            const navLinks = document.querySelector(".nav-links");
-            if(toggle) toggle.addEventListener("click", () => { navLinks.classList.toggle("active"); });
-        });
-        fetch("/de/partials/footer.html").then(res => res.text()).then(data => {
-            document.getElementById("footer").innerHTML = data;
-        });
-        // Custom Select Dropdowns
-        (function initCustomSelects() {
-            document.querySelectorAll('.custom-select-wrapper').forEach(wrapper => {
-                const btn = wrapper.querySelector('.custom-select-btn');
-                const list = wrapper.querySelector('.custom-select-list');
-                const hidden = wrapper.querySelector('input[type="hidden"]');
-                const textEl = wrapper.querySelector('.cs-text');
-                btn.addEventListener('click', e => {
-                    e.stopPropagation();
-                    document.querySelectorAll('.custom-select-wrapper.open').forEach(w => { if (w !== wrapper) w.classList.remove('open'); });
-                    wrapper.classList.toggle('open');
-                });
-                list.querySelectorAll('li').forEach(li => {
-                    li.addEventListener('click', () => {
-                        hidden.value = li.dataset.value;
-                        textEl.textContent = li.textContent;
-                        list.querySelectorAll('li').forEach(l => l.classList.remove('cs-active'));
-                        li.classList.add('cs-active');
-                        wrapper.classList.remove('open');
-                        const ci = document.getElementById(hidden.id + '-custom');
-                        if (ci) { ci.style.display = li.dataset.value === 'sonstiges' ? 'block' : 'none'; if (li.dataset.value === 'sonstiges') ci.focus(); }
-                    });
-                });
-            });
-            document.addEventListener('click', () => { document.querySelectorAll('.custom-select-wrapper.open').forEach(w => w.classList.remove('open')); });
-        })();
-    </script>
     <script type="module" src="/js/tresor.js?v=10"></script>
-</body>
+    <script src="/js/navbar-loader.js"></script>
+    <script src="/js/custom-select.js"></script>
+  </body>
 </html>

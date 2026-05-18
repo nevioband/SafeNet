@@ -72,20 +72,6 @@
     <button
       class="user-btn"
       aria-label="Account"
-      onclick="
-        var m = this.closest('.user-menu');
-        if (m.classList.contains('open')) {
-          m.classList.remove('open');
-        } else {
-          m.classList.add('open');
-          setTimeout(function () {
-            document.addEventListener('click', function close() {
-              m.classList.remove('open');
-              document.removeEventListener('click', close);
-            });
-          }, 0);
-        }
-      "
     >
       <svg
         viewBox="0 0 24 24"

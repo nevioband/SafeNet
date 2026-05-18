@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -125,75 +125,7 @@
       </div>
     </div>
 
-    <script>
-    (function () {
-      const approveBtn = document.getElementById('mfa-approve');
-      const denyBtn    = document.getElementById('mfa-deny');
-      const resetBtn   = document.getElementById('mfa-reset');
-      const log        = document.getElementById('mfa-log');
-      const result     = document.getElementById('mfa-result');
-      const badge      = document.getElementById('mfa-attempt-badge');
-      const locEl      = document.getElementById('mfa-location');
-
-      const locations = ['Moscow, RU', 'Lagos, NG', 'Shanghai, CN', 'São Paulo, BR', 'Bucharest, RO'];
-      let attempts = 0;
-      let done = false;
-
-      function addLog(msg, color) {
-        const now = new Date().toLocaleTimeString('en-GB', { hour12: false });
-        const line = document.createElement('div');
-        line.style.color = color || '#fca5a5';
-        line.textContent = '[' + now + '] ' + msg;
-        if (log.textContent === 'Waiting for first attempt…') log.textContent = '';
-        log.appendChild(line);
-        log.scrollTop = log.scrollHeight;
-      }
-
-      function updateBadge() {
-        badge.textContent = attempts + (attempts === 1 ? ' attempt' : ' attempts');
-      }
-
-      approveBtn.addEventListener('click', () => {
-        if (done) return;
-        done = true;
-        attempts++;
-        updateBadge();
-        addLog('Login APPROVED – attacker has access!', '#ef4444');
-        result.className = 'mfa-result-banner fail';
-        result.textContent = '⚠️ Account compromised! The attacker successfully signed in.';
-        result.style.display = 'block';
-        approveBtn.disabled = true;
-        denyBtn.disabled = true;
-      });
-
-      denyBtn.addEventListener('click', () => {
-        if (done) return;
-        attempts++;
-        updateBadge();
-        addLog('Attempt ' + attempts + ' denied – retrying...', '#94a3b8');
-        locEl.textContent = locations[attempts % locations.length];
-        if (attempts >= 12) {
-          addLog('Attacker gives up after 12 attempts.', '#86efac');
-          result.className = 'mfa-result-banner success';
-          result.textContent = '✓ Well done! You denied all requests and stopped the attack.';
-          result.style.display = 'block';
-          approveBtn.disabled = true;
-          denyBtn.disabled = true;
-          done = true;
-        }
-      });
-
-      resetBtn.addEventListener('click', () => {
-        attempts = 0; done = false;
-        log.textContent = 'Waiting for first attempt…';
-        badge.textContent = '0 attempts';
-        result.style.display = 'none';
-        locEl.textContent = locations[0];
-        approveBtn.disabled = false;
-        denyBtn.disabled = false;
-      });
-    })();
-    </script>
+    <script src="/js/mfa-bypass-en.js"></script>
 
     <section class="info-section">
       <div class="info-box">
@@ -228,33 +160,6 @@
     </section>
 
     <div id="footer"></div>
-    <script>
-      fetch("/en/partials/footer.html").then(r => r.text()).then(d => { document.getElementById("footer").innerHTML = d; });
-    </script>
-    <script>
-      fetch("/en/partials/navbar.html").then(r => r.text()).then(d => {
-        document.getElementById("navbar").innerHTML = d;
-        const toggle = document.querySelector(".menu-toggle");
-        const navLinks = document.querySelector(".nav-links");
-        const dropdowns = document.querySelectorAll(".dropdown");
-        if (toggle) {
-          toggle.addEventListener("click", () => {
-            navLinks.classList.toggle("active");
-            toggle.setAttribute("aria-expanded", navLinks.classList.contains("active"));
-          });
-        }
-        dropdowns.forEach(dd => {
-          const link = dd.querySelector(".dropdown-link");
-          if (link) {
-            link.addEventListener("click", e => {
-              if (window.innerWidth <= 1600) {
-                e.preventDefault();
-                dd.classList.toggle("open");
-              }
-            });
-          }
-        });
-      });
-    </script>
+    <script src="/js/navbar-loader.js"></script>
   </body>
 </html>

@@ -3,7 +3,7 @@ export const config = { runtime: 'edge' }
 const SUPABASE_URL = 'https://dygrabyaiyessqmjdprc.supabase.co'
 
 const CORS = {
-  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Origin': 'https://safenet-security.ch',
   'Access-Control-Allow-Headers': 'authorization, content-type',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 }

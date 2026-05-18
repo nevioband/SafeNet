@@ -1,0 +1,1 @@
+var lang=(navigator.language||navigator.userLanguage||"en").toLowerCase();lang.startsWith("de")?window.location.replace("/de/index.html"):window.location.replace("/en/index.html");

@@ -1,7 +1,7 @@
 export const config = { runtime: 'edge' }
 
 const CORS = {
-  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Origin': 'https://safenet-security.ch',
   'Content-Type': 'application/json',
 }
 

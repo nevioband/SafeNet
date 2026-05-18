@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="de">
   <head>
     <meta charset="UTF-8" />
@@ -64,29 +64,6 @@
     </main>
 
     <div id="footer"></div>
-
-    <script>
-      fetch('/de/partials/navbar.html').then(r => r.text()).then(d => {
-        document.getElementById('navbar').innerHTML = d;
-        const toggle = document.querySelector('.menu-toggle');
-        const navLinks = document.querySelector('.nav-links');
-        const dropdowns = document.querySelectorAll('.dropdown');
-        if (toggle) {
-          toggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            toggle.setAttribute('aria-expanded', navLinks.classList.contains('active'));
-          });
-        }
-        dropdowns.forEach(dd => {
-          const link = dd.querySelector('.dropdown-link');
-          if (link) {
-            link.addEventListener('click', e => {
-              if (window.innerWidth <= 1600) { e.preventDefault(); dd.classList.toggle('open'); }
-            });
-          }
-        });
-      });
-      fetch('/de/partials/footer.html').then(r => r.text()).then(d => { document.getElementById('footer').innerHTML = d; });
-    </script>
+    <script src="/js/navbar-loader.js"></script>
   </body>
 </html>
