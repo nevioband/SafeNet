@@ -58,9 +58,17 @@ export default async function handler(req) {
   }
 
   // Token bei Supabase validieren
-  const userRes = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
-    headers: { Authorization: auth, apikey: SUPABASE_ANON_KEY },
-  })
+  let userRes
+  try {
+    userRes = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+      headers: { Authorization: auth, apikey: SUPABASE_ANON_KEY },
+    })
+  } catch {
+    return new Response(JSON.stringify({ error: 'Auth-Verbindungsfehler' }), {
+      status: 502,
+      headers: { ...CORS, 'Content-Type': 'application/json' },
+    })
+  }
   if (!userRes.ok) {
     return new Response(JSON.stringify({ error: 'Ungültige Sitzung' }), {
       status: 401,
