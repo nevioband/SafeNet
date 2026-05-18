@@ -22,8 +22,44 @@ const MIME = {
   xml: 'application/xml',
 };
 
+// ── Live-Reload via Server-Sent Events ─────────────────────────────────────
+const liveReloadClients = new Set();
+
+const LIVE_RELOAD_SCRIPT = `
+<script>
+(function(){
+  const es = new EventSource('/__livereload');
+  es.onmessage = () => location.reload();
+  es.onerror = () => { es.close(); setTimeout(() => location.reload(), 2000); };
+})();
+</script>
+</body>`;
+
+// Watch project files and notify all connected clients
+const IGNORE = /node_modules|\.git|playwright-report|test-results/;
+fs.watch(ROOT, { recursive: true }, (_, filename) => {
+  if (!filename || IGNORE.test(filename)) return;
+  for (const res of liveReloadClients) {
+    try { res.write('data: reload\n\n'); } catch (_) {}
+  }
+});
+
+// ── HTTP Server ────────────────────────────────────────────────────────────
 http.createServer((req, res) => {
   let urlPath = decodeURIComponent(req.url.split('?')[0]);
+
+  // Live-reload SSE endpoint
+  if (urlPath === '/__livereload') {
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive',
+    });
+    res.write(': connected\n\n');
+    liveReloadClients.add(res);
+    req.on('close', () => liveReloadClients.delete(res));
+    return;
+  }
 
   // Redirect / to /de/index.html (like Vercel)
   if (urlPath === '/') {
@@ -52,8 +88,19 @@ http.createServer((req, res) => {
   const ext = path.extname(filePath).slice(1).toLowerCase();
   const contentType = MIME[ext] || 'application/octet-stream';
 
+  // Inject live-reload script into HTML responses
+  if (ext === 'html') {
+    let html = fs.readFileSync(filePath, 'utf-8');
+    html = html.includes('</body>')
+      ? html.replace('</body>', LIVE_RELOAD_SCRIPT)
+      : html + LIVE_RELOAD_SCRIPT;
+    res.writeHead(200, { 'Content-Type': contentType });
+    res.end(html);
+    return;
+  }
+
   res.writeHead(200, { 'Content-Type': contentType });
   fs.createReadStream(filePath).pipe(res);
 }).listen(PORT, () => {
-  console.log('Local dev server running at http://localhost:' + PORT);
+  console.log(`\n  SafeNet Dev Server → http://localhost:${PORT}\n  Live-Reload aktiv – Dateien werden automatisch neu geladen.\n`);
 });

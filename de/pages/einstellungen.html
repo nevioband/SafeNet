@@ -115,6 +115,7 @@
                 <input type="password" id="confirmPassword" class="form-input" placeholder="Passwort wiederholen">
             </div>
             <button class="btn btn-primary" id="changePwBtn">Passwort ändern</button>
+            <a href="#" class="forgot-link-settings" id="forgotLinkSettings">Passwort vergessen?</a>
         </div>
 
         <!-- E-Mail ändern -->
@@ -477,6 +478,40 @@
                 document.getElementById('confirmPassword').value = ''
             })
 
+            // ── Passwort vergessen ─────────────────────────────────
+            document.getElementById('forgotLinkSettings').addEventListener('click', (e) => {
+                e.preventDefault()
+                document.getElementById('forgotEmailSettings').value = email
+                document.getElementById('forgotSuccessSettings').style.display = 'none'
+                showMsg('forgotErrorSettings', '', 'hide')
+                document.getElementById('forgotSendBtn').textContent = 'Link senden'
+                document.getElementById('forgotSendBtn').disabled = false
+                document.getElementById('forgotModalSettings').style.display = 'flex'
+            })
+            document.getElementById('forgotCloseSettings').addEventListener('click', () => {
+                document.getElementById('forgotModalSettings').style.display = 'none'
+            })
+            document.getElementById('forgotModalSettings').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('forgotModalSettings'))
+                    document.getElementById('forgotCloseSettings').click()
+            })
+            document.getElementById('forgotSendBtn').addEventListener('click', async () => {
+                const resetEmail = document.getElementById('forgotEmailSettings').value.trim()
+                if (!resetEmail) { showMsg('forgotErrorSettings', 'Bitte E-Mail eingeben.', 'error'); return }
+                const btn = document.getElementById('forgotSendBtn')
+                btn.textContent = 'Wird gesendet…'; btn.disabled = true
+                const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+                    redirectTo: 'https://safenet-security.ch/de/pages/reset-password.html'
+                })
+                if (error) {
+                    showMsg('forgotErrorSettings', 'Fehler: ' + error.message, 'error')
+                    btn.textContent = 'Link senden'; btn.disabled = false
+                } else {
+                    document.getElementById('forgotSuccessSettings').style.display = 'block'
+                    btn.textContent = 'Gesendet!'
+                }
+            })
+
             // ── Enter-Tasten ───────────────────────────────────────
             document.getElementById('displayName').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('saveNameBtn').click() })
             document.getElementById('verifyCode').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('verifyBtn').click() })
@@ -496,6 +531,22 @@
             }
         })()
     </script>
+
+    <!-- Passwort vergessen Modal -->
+    <div id="forgotModalSettings">
+        <div class="forgot-modal-inner-settings">
+            <h3>Passwort zurücksetzen</h3>
+            <p>Gib deine E-Mail ein. Du erhältst einen Reset-Link.</p>
+            <div class="form-group form-group-last">
+                <label for="forgotEmailSettings">E-Mail-Adresse</label>
+                <input type="email" id="forgotEmailSettings" class="form-input" placeholder="deine@email.com" autocomplete="email">
+            </div>
+            <div id="forgotErrorSettings" class="msg-box" style="display:none;"></div>
+            <div id="forgotSuccessSettings">E-Mail gesendet! Prüfe deinen Posteingang.</div>
+            <button class="btn btn-primary btn-full" id="forgotSendBtn" style="margin-bottom:10px;">Link senden</button>
+            <button class="btn btn-secondary btn-full" id="forgotCloseSettings">Schliessen</button>
+        </div>
+    </div>
 
     <!-- Profilbild Lightbox -->
     <div class="avatar-lightbox" id="avatarLightbox" role="dialog" aria-modal="true" aria-label="Profilbild vergrößert">
