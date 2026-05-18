@@ -98,19 +98,23 @@ export default async function handler(req) {
   ]
 
   try {
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), 10000)
     const mistralRes = await fetch('https://api.mistral.ai/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${apiKey}`,
       },
+      signal: controller.signal,
       body: JSON.stringify({
-        model: 'mistral-small-latest',
+        model: 'open-mistral-nemo',
         messages,
-        max_tokens: 600,
-        temperature: 0.7,
+        max_tokens: 250,
+        temperature: 0.5,
       }),
     })
+    clearTimeout(timer)
 
     if (!mistralRes.ok) {
       const errText = await mistralRes.text().catch(() => '')
