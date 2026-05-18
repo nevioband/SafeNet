@@ -97,25 +97,7 @@ export default async function handler(req) {
     })
   }
 
-  // Stufe 1: Keyword-Blockliste (zuverlässig, sofort)
-  const BLOCKED_KEYWORDS = [
-    'hitler', 'adolf hitler', 'nazi', 'nationalsozialismus', 'nationalsozialisten',
-    'holocaust', 'auschwitz', 'genozid', 'völkermord', 'drittes reich', 'drittes reich',
-    'stalin', 'pol pot', 'mussolini', 'mao zedong', 'idi amin',
-    'der führer', 'dem führer', 'waffen-ss', 'gestapo', 'nsdap',
-    'isis', 'al-qaida', 'al qaida', 'bin laden', 'terror anschlag',
-  ]
-  const msgLower = message.toLowerCase()
-  if (BLOCKED_KEYWORDS.some(k => msgLower.includes(k))) {
-    const reply = lang === 'en'
-      ? "That's a topic I can't discuss here. I'm happy to help you with cybersecurity or anything on the SafeNet platform!"
-      : 'Dazu kann ich hier keine Aussagen machen. Ich helfe dir gerne bei Cybersicherheit oder der SafeNet Plattform!'
-    return new Response(JSON.stringify({ reply }), {
-      headers: { ...CORS, 'Content-Type': 'application/json' },
-    })
-  }
-
-  // Stufe 2: KI-Filter für indirekte Umschreibungen
+  // Sicherheits-Filter: KI erkennt heikle Inhalte auch bei Umschreibungen
   const blockRes = await fetch('https://api.mistral.ai/v1/chat/completions', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
