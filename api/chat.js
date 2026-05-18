@@ -97,25 +97,43 @@ export default async function handler(req) {
     })
   }
 
-  // Sicherheits-Filter: blockiert nur eindeutig heikle Inhalte
+  // Stufe 1: Keyword-Blockliste (zuverlässig, sofort)
+  const BLOCKED_KEYWORDS = [
+    'hitler', 'adolf hitler', 'nazi', 'nationalsozialismus', 'nationalsozialisten',
+    'holocaust', 'auschwitz', 'genozid', 'völkermord', 'drittes reich', 'drittes reich',
+    'stalin', 'pol pot', 'mussolini', 'mao zedong', 'idi amin',
+    'der führer', 'dem führer', 'waffen-ss', 'gestapo', 'nsdap',
+    'isis', 'al-qaida', 'al qaida', 'bin laden', 'terror anschlag',
+  ]
+  const msgLower = message.toLowerCase()
+  if (BLOCKED_KEYWORDS.some(k => msgLower.includes(k))) {
+    const reply = lang === 'en'
+      ? "That's a topic I can't discuss here. I'm happy to help you with cybersecurity or anything on the SafeNet platform!"
+      : 'Dazu kann ich hier keine Aussagen machen. Ich helfe dir gerne bei Cybersicherheit oder der SafeNet Plattform!'
+    return new Response(JSON.stringify({ reply }), {
+      headers: { ...CORS, 'Content-Type': 'application/json' },
+    })
+  }
+
+  // Stufe 2: KI-Filter für indirekte Umschreibungen
   const blockRes = await fetch('https://api.mistral.ai/v1/chat/completions', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
     body: JSON.stringify({
       model: 'open-mistral-nemo',
       messages: [
-        { role: 'system', content: 'Du bist ein Sicherheits-Filter. Antworte ausschliesslich mit JA oder NEIN.\nJA = die Nachricht fragt – direkt oder indirekt oder durch Umschreibung – nach Informationen über: Nazi-Regime, Hitler, Stalin, Pol Pot, Holocaust, Genozid, Kriegsverbrecher, Diktatoren, islamistischer Terrorismus, rechtsextreme oder linksextreme Gewalt, Massenmorde oder deren Täter (Beispiele für Umschreibungen: "ein bestimmter Adolf", "der Führer", "WWII Anführer").\nNEIN = alles andere, inklusive normale Fragen zu Cybersicherheit, Alltag, Kochen, Sport, Geschichte ohne extremen Bezug, Mathematik usw.' },
+        { role: 'system', content: 'Du bist ein Sicherheits-Filter. Antworte ausschliesslich mit JA oder NEIN.\nJA = die Nachricht fragt – direkt oder indirekt oder durch Umschreibung – nach Informationen über: Nazi-Regime, Holocaust, Genozid, Kriegsverbrecher, Diktatoren des 20. Jahrhunderts, islamistischen Terrorismus, Massenmorde oder deren Täter. Beispiele die JA sind: "ein bestimmter Adolf", "der Führer", "WWII Anführer", "wer regierte Deutschland 1933".\nNEIN = alles andere.' },
         { role: 'user', content: message },
       ],
-      max_tokens: 3,
+      max_tokens: 5,
       temperature: 0,
     }),
   }).catch(() => null)
 
   if (blockRes?.ok) {
     const blockData = await blockRes.json().catch(() => null)
-    const verdict = blockData?.choices?.[0]?.message?.content?.trim().toUpperCase()
-    if (verdict === 'JA') {
+    const verdict = blockData?.choices?.[0]?.message?.content?.trim().toUpperCase() ?? ''
+    if (verdict.startsWith('JA')) {
       const reply = lang === 'en'
         ? "That's a topic I can't discuss here. I'm happy to help you with cybersecurity or anything on the SafeNet platform!"
         : 'Dazu kann ich hier keine Aussagen machen. Ich helfe dir gerne bei Cybersicherheit oder der SafeNet Plattform!'
