@@ -90,6 +90,32 @@ export default async function handler(req) {
     })
   }
 
+  // Serverseitiger Themenfilter – wird vor dem KI-Aufruf geprüft
+  const OFF_TOPIC = [
+    // Personen/Politik/Geschichte
+    'hitler','nazi','nsdap','drittes reich','holocaust','shoah','auschwitz','stalин','stalin','mao','mussolini','pol pot','genozid','völkermord',
+    'krieg','weltkrieg','bomben','atombombe','hiroshima','nagasaki','tschernobyl','fukushima',
+    // Religion/Extremismus
+    'allah','jihad','terror','anschlag','isis','al-qaida','kkk','rechtsextrem','linksextrem',
+    // Gewalt/Drogen
+    'mord','töten','umbringen','waffe','pistole','messer stechen','drogen','kokain','heroin',
+    // Sex/NSFW
+    'sex','porn','nackt','erotik',
+    // Nicht-IT Themen die oft getestet werden
+    'fussball','rezept','kochen','wetter','aktien','bitcoin kaufen','krypto kaufen',
+    'wer ist','was ist der unterschied zwischen mensch','wie macht man ein kind',
+  ]
+
+  const msgLower = message.toLowerCase()
+  if (OFF_TOPIC.some(w => msgLower.includes(w))) {
+    const reply = msgLower.includes('wer ist') || msgLower.includes('was ist') && OFF_TOPIC.some(w => msgLower.includes(w))
+      ? 'Dazu mache ich keine Aussagen. Ich helfe dir gerne bei Cybersicherheit oder der SafeNet Plattform!'
+      : 'Ich bin nur für Cybersicherheit und SafeNet zuständig. Stell mir eine Frage dazu!'
+    return new Response(JSON.stringify({ reply }), {
+      headers: { ...CORS, 'Content-Type': 'application/json' },
+    })
+  }
+
   // Mistral API aufrufen
   const apiKey = process.env.MISTRAL_API_KEY
   if (!apiKey) {
