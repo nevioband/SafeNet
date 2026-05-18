@@ -96,8 +96,8 @@ export default async function handler(req) {
     })
   }
 
-  // Groq API aufrufen
-  const apiKey = process.env.GROQ_API_KEY
+  // Mistral API aufrufen
+  const apiKey = process.env.MISTRAL_API_KEY
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'KI nicht konfiguriert' }), {
       status: 500,
@@ -105,7 +105,7 @@ export default async function handler(req) {
     })
   }
 
-  // Nachrichten für Groq (OpenAI-kompatibles Format)
+  // Nachrichten für Mistral (OpenAI-kompatibles Format)
   const messages = [
     { role: 'system', content: SYSTEM_PROMPT },
     ...history.slice(-10).map(m => ({ role: m.role === 'model' ? 'assistant' : 'user', content: m.text })),
@@ -113,30 +113,30 @@ export default async function handler(req) {
   ]
 
   try {
-    const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    const mistralRes = await fetch('https://api.mistral.ai/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
+        model: 'mistral-small-latest',
         messages,
         max_tokens: 600,
         temperature: 0.7,
       }),
     })
 
-    if (!groqRes.ok) {
-      const errText = await groqRes.text().catch(() => '')
-      console.error('[SafeNet Chat] Groq Error', groqRes.status, errText)
-      return new Response(JSON.stringify({ error: `Groq ${groqRes.status}: ${errText.slice(0, 200)}` }), {
+    if (!mistralRes.ok) {
+      const errText = await mistralRes.text().catch(() => '')
+      console.error('[SafeNet Chat] Mistral Error', mistralRes.status, errText)
+      return new Response(JSON.stringify({ error: `Mistral ${mistralRes.status}: ${errText.slice(0, 200)}` }), {
         status: 502,
         headers: { ...CORS, 'Content-Type': 'application/json' },
       })
     }
 
-    const data = await groqRes.json()
+    const data = await mistralRes.json()
     const reply = data.choices?.[0]?.message?.content ?? 'Keine Antwort erhalten.'
 
     return new Response(JSON.stringify({ reply }), {
