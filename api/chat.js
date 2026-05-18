@@ -105,7 +105,7 @@ export default async function handler(req) {
     body: JSON.stringify({
       model: 'open-mistral-nemo',
       messages: [
-        { role: 'system', content: 'Du bist ein strenger Themen-Filter. Antworte NUR mit dem Wort YES oder NO, ohne Erklärung. YES = die Nachricht ist eine Begrüssung ODER handelt von Cybersicherheit, IT, Passwörtern, Datenschutz, Hacking, Netzwerken, Software oder der SafeNet Security Webseite. NO = alles andere (Geschichte, Politik, Personen, Sport, Kochen, Mathematik, Unterhaltung usw.).' },
+        { role: 'system', content: 'Du bist ein strenger Themen-Filter. Antworte NUR mit dem Wort YES oder NO, ohne Erklärung. YES = die Nachricht ist eine Begrüssung, eine Frage über den Assistenten selbst (z.B. was er kann, wie er funktioniert, warum er etwas nicht beantwortet), oder handelt von Cybersicherheit, IT, Passwörtern, Datenschutz, Hacking, Netzwerken, Software oder der SafeNet Security Webseite. NO = alles andere (Geschichte, Politik, Personen, Sport, Kochen, Mathematik, Unterhaltung usw.).' },
         { role: 'user', content: message },
       ],
       max_tokens: 3,
