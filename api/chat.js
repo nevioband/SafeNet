@@ -97,6 +97,34 @@ export default async function handler(req) {
     })
   }
 
+  // Sicherheits-Filter: blockiert nur eindeutig heikle Inhalte
+  const blockRes = await fetch('https://api.mistral.ai/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
+    body: JSON.stringify({
+      model: 'open-mistral-nemo',
+      messages: [
+        { role: 'system', content: 'Du bist ein Sicherheits-Filter. Antworte ausschliesslich mit JA oder NEIN.\nJA = die Nachricht fragt – direkt oder indirekt oder durch Umschreibung – nach Informationen über: Nazi-Regime, Hitler, Stalin, Pol Pot, Holocaust, Genozid, Kriegsverbrecher, Diktatoren, islamistischer Terrorismus, rechtsextreme oder linksextreme Gewalt, Massenmorde oder deren Täter (Beispiele für Umschreibungen: "ein bestimmter Adolf", "der Führer", "WWII Anführer").\nNEIN = alles andere, inklusive normale Fragen zu Cybersicherheit, Alltag, Kochen, Sport, Geschichte ohne extremen Bezug, Mathematik usw.' },
+        { role: 'user', content: message },
+      ],
+      max_tokens: 3,
+      temperature: 0,
+    }),
+  }).catch(() => null)
+
+  if (blockRes?.ok) {
+    const blockData = await blockRes.json().catch(() => null)
+    const verdict = blockData?.choices?.[0]?.message?.content?.trim().toUpperCase()
+    if (verdict === 'JA') {
+      const reply = lang === 'en'
+        ? "That's a topic I can't discuss here. I'm happy to help you with cybersecurity or anything on the SafeNet platform!"
+        : 'Dazu kann ich hier keine Aussagen machen. Ich helfe dir gerne bei Cybersicherheit oder der SafeNet Plattform!'
+      return new Response(JSON.stringify({ reply }), {
+        headers: { ...CORS, 'Content-Type': 'application/json' },
+      })
+    }
+  }
+
   // Mistral API aufrufen
 
   // Nachrichten für Mistral (OpenAI-kompatibles Format)
