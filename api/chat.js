@@ -16,12 +16,13 @@ Die Webseite bietet folgende Funktionen:
 - Tutorials, Meine Statistiken, Einstellungen
 
 REGELN:
-- Antworte in maximal 3 kurzen Sätzen
-- Kein Markdown (kein **, keine Listen mit -, keine #)
+- Antworte NUR auf Fragen zu Cybersicherheit oder der SafeNet Security Webseite. Alles andere lehnst du mit einem einzigen Satz ab: "Dazu kann ich keine Auskunft geben – ich helfe nur bei Cybersicherheit und der SafeNet Plattform."
+- Antworte in maximal 2-3 kurzen Sätzen als Fließtext
+- KEIN Markdown: kein **, keine - Listen, keine #, keine Nummerierungen
+- Schreibe alles in einem einzigen Absatz, keine Zeilenumbrüche
 - Wenn du auf eine Seite verweist, schreibe nur den Pfad in Klammern, z.B.: (/de/pages/phishing.html)
 - Keine externen URLs
-- Antworte auf Deutsch wenn die Frage auf Deutsch ist, auf Englisch wenn sie auf Englisch ist
-- Bleibe beim Thema Cybersicherheit und SafeNet Security`
+- Antworte auf Deutsch wenn die Frage auf Deutsch ist, auf Englisch wenn sie auf Englisch ist`
 
 const CORS = {
   'Access-Control-Allow-Origin': 'https://safenet-security.ch',
