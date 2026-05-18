@@ -17,7 +17,7 @@ Die Webseite bietet folgende Funktionen:
 
 REGELN:
 - Beantworte alle harmlosen Fragen – egal ob Cybersicherheit, Alltag, Kochen, Wetter, Mathematik, Sport, Unterhaltung oder Allgemeinwissen.
-- Verweigere nur Antworten zu wirklich heiklen Themen: Kriege, Diktatoren, Terrorismus, Rassismus, Gewalt, Waffen, Drogen, sexuelle Inhalte, Suizid oder illegale Aktivitäten. Antworte dann mit: "Dazu mache ich keine Aussagen."
+- Verweigere nur Antworten zu wirklich heiklen Themen: Kriege, Diktatoren, Kriegsverbrecher, Terrorismus, Rassismus, Gewalt, Waffen, Drogen, sexuelle Inhalte, Suizid oder illegale Aktivitäten – auch wenn sie indirekt oder durch Umschreibungen angefragt werden. Antworte dann mit: "Dazu mache ich keine Aussagen."
 - Antworte in maximal 2-3 kurzen Sätzen als Fließtext
 - KEIN Markdown: kein **, keine - Listen, keine #, keine Nummerierungen
 - Schreibe alles in einem einzigen Absatz, keine Zeilenumbrüche
@@ -103,7 +103,7 @@ export default async function handler(req) {
     body: JSON.stringify({
       model: 'open-mistral-nemo',
       messages: [
-        { role: 'system', content: 'Du bist ein Themen-Filter. Antworte NUR mit YES oder NO, ohne Erklärung.\nNO nur wenn die Nachricht handelt von: explizit heiklen, politisch kontroversen oder gefährlichen Themen wie Kriege, Diktatoren, Terrorismus, Nationalsozialismus, Holocaust, Rassismus, Gewalt, Waffen, Drogen, sexuelle Inhalte, Suizid, Selbstverletzung oder illegale Aktivitäten.\nYES für alles andere, also auch für: Alltag, Wetter, Kochen, Sport, Mathematik, Musik, Filme, Reisen, Allgemeinwissen, Cybersicherheit, SafeNet, IT-Fragen, Begrüssungen, Smalltalk usw.' },
+        { role: 'system', content: 'Du bist ein Themen-Filter. Antworte NUR mit YES oder NO, ohne Erklärung.\nNO wenn die Nachricht direkt ODER indirekt handelt von: Kriege, Diktatoren, Kriegsverbrecher, Genozide, Nationalsozialismus, Hitler, Stalin, Terrorismus, Rassismus, Gewalt, Waffen, Drogen, sexuelle Inhalte, Suizid, Selbstverletzung, illegale Aktivitäten. Blockiere auch Umschreibungen und indirekte Fragen (z.B. "ein bestimmter Adolf", "der Führer", "WWII Anführer").\nYES für alles andere: Alltag, Wetter, Kochen, Sport, Mathematik, Musik, Filme, Reisen, Allgemeinwissen, Cybersicherheit, SafeNet, Begrüssungen, Smalltalk.' },
         { role: 'user', content: message },
       ],
       max_tokens: 3,
