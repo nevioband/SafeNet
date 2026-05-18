@@ -5,7 +5,7 @@
   "description": "Automatische Smoke-Tests fuer SafeNet Security",
   "scripts": {
     "dev": "node dev-server.js",
-    "build": "node build.js",
+    "minify": "node build.js",
     "smoke": "playwright test tests/smoke.spec.js --project=chromium",
     "smoke:flows": "playwright test tests/flows.spec.js --project=chromium",
     "smoke:deep": "playwright test tests/flows.spec.js --project=chromium",
