@@ -1,0 +1,224 @@
+/* ─── Chat FAB (Floating Action Button) ─────────────────────────── */
+#sn-chat-fab {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3399ff, #66d9ff);
+  color: #0f172a;
+  border: none;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9998;
+  box-shadow: 0 4px 20px rgba(51, 153, 255, 0.45);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#sn-chat-fab.visible {
+  display: flex;
+}
+
+#sn-chat-fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 28px rgba(51, 153, 255, 0.65);
+}
+
+/* ─── Chat Widget ────────────────────────────────────────────────── */
+#sn-chat-widget {
+  position: fixed;
+  bottom: 98px;
+  right: 28px;
+  width: 360px;
+  background: #1e293b;
+  border: 1px solid rgba(51, 153, 255, 0.2);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  z-index: 9999;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  transform: translateY(12px) scale(0.97);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.22s ease, opacity 0.22s ease;
+}
+
+#sn-chat-widget.open {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* ─── Header ─────────────────────────────────────────────────────── */
+#sn-chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  background: linear-gradient(135deg, rgba(51, 153, 255, 0.12), rgba(102, 217, 255, 0.06));
+  border-radius: 16px 16px 0 0;
+  flex-shrink: 0;
+}
+
+#sn-chat-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: #fff;
+}
+
+#sn-chat-title svg {
+  color: #3399ff;
+  flex-shrink: 0;
+}
+
+#sn-chat-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  font-size: 1.5rem;
+  line-height: 1;
+  padding: 0 4px;
+  border-radius: 4px;
+  transition: color 0.15s;
+  display: flex;
+  align-items: center;
+}
+
+#sn-chat-close:hover {
+  color: #fff;
+}
+
+/* ─── Messages ───────────────────────────────────────────────────── */
+#sn-chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 220px;
+  max-height: 340px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(51, 153, 255, 0.3) transparent;
+}
+
+#sn-chat-messages::-webkit-scrollbar {
+  width: 4px;
+}
+
+#sn-chat-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#sn-chat-messages::-webkit-scrollbar-thumb {
+  background: rgba(51, 153, 255, 0.3);
+  border-radius: 2px;
+}
+
+.sn-msg {
+  max-width: 86%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.sn-msg-user {
+  align-self: flex-end;
+  background: linear-gradient(135deg, #3399ff, #1e7fd4);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+
+.sn-msg-bot {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.88);
+  border-bottom-left-radius: 4px;
+}
+
+.sn-msg-typing {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.45);
+  border-bottom-left-radius: 4px;
+  font-style: italic;
+}
+
+/* ─── Footer / Input ─────────────────────────────────────────────── */
+#sn-chat-footer {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  flex-shrink: 0;
+}
+
+#sn-chat-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.875rem;
+  padding: 9px 13px;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.15s;
+}
+
+#sn-chat-input:focus {
+  border-color: rgba(51, 153, 255, 0.6);
+}
+
+#sn-chat-input::placeholder {
+  color: rgba(255, 255, 255, 0.32);
+}
+
+#sn-chat-send {
+  background: linear-gradient(135deg, #3399ff, #1e7fd4);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  padding: 9px 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+
+#sn-chat-send:hover {
+  opacity: 0.85;
+}
+
+#sn-chat-send:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+/* ─── Mobile ─────────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  #sn-chat-widget {
+    right: 12px;
+    left: 12px;
+    width: auto;
+    bottom: 88px;
+  }
+
+  #sn-chat-fab {
+    bottom: 20px;
+    right: 20px;
+  }
+}
