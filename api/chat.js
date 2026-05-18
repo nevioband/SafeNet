@@ -88,40 +88,13 @@ export default async function handler(req) {
     })
   }
 
-  // KI-Classifier: prüft ob die Nachricht IT/Cybersicherheits-relevant ist
+  // API Key prüfen
   const apiKey = process.env.MISTRAL_API_KEY
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'KI nicht konfiguriert' }), {
       status: 500,
       headers: { ...CORS, 'Content-Type': 'application/json' },
     })
-  }
-
-  const classifyRes = await fetch('https://api.mistral.ai/v1/chat/completions', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
-    body: JSON.stringify({
-      model: 'open-mistral-nemo',
-      messages: [
-        { role: 'system', content: 'Du bist ein Themen-Filter. Antworte NUR mit YES oder NO, ohne Erklärung.\nNO wenn die Nachricht direkt ODER indirekt handelt von: Kriege, Diktatoren, Kriegsverbrecher, Genozide, Nationalsozialismus, Hitler, Stalin, Terrorismus, Rassismus, Gewalt, Waffen, Drogen, sexuelle Inhalte, Suizid, Selbstverletzung, illegale Aktivitäten. Blockiere auch Umschreibungen und indirekte Fragen (z.B. "ein bestimmter Adolf", "der Führer", "WWII Anführer").\nYES für alles andere: Alltag, Wetter, Kochen, Sport, Mathematik, Musik, Filme, Reisen, Allgemeinwissen, Cybersicherheit, SafeNet, Begrüssungen, Smalltalk.' },
-        { role: 'user', content: message },
-      ],
-      max_tokens: 3,
-      temperature: 0,
-    }),
-  }).catch(() => null)
-
-  if (classifyRes?.ok) {
-    const classifyData = await classifyRes.json().catch(() => null)
-    const verdict = classifyData?.choices?.[0]?.message?.content?.trim().toUpperCase()
-    if (verdict === 'NO') {
-      const redirect = lang === 'en'
-        ? "That's an interesting topic, but it falls outside what I can discuss here. I'm happy to help you with cybersecurity, password safety, or anything on the SafeNet platform!"
-        : 'Das ist ein interessantes Thema, aber dazu kann ich hier keine Aussagen machen. Ich helfe dir gerne bei Cybersicherheit, Passwortsicherheit oder allem rund um die SafeNet Plattform!'
-      return new Response(JSON.stringify({ reply: redirect }), {
-        headers: { ...CORS, 'Content-Type': 'application/json' },
-      })
-    }
   }
 
   // Mistral API aufrufen
