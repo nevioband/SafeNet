@@ -119,7 +119,7 @@ export default async function handler(req) {
 
   try {
     const geminiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -132,7 +132,9 @@ export default async function handler(req) {
     )
 
     if (!geminiRes.ok) {
-      return new Response(JSON.stringify({ error: 'KI-Fehler, bitte erneut versuchen' }), {
+      const errText = await geminiRes.text().catch(() => '')
+      console.error('[SafeNet Chat] Gemini Error', geminiRes.status, errText)
+      return new Response(JSON.stringify({ error: `Gemini ${geminiRes.status}: ${errText.slice(0, 200)}` }), {
         status: 502,
         headers: { ...CORS, 'Content-Type': 'application/json' },
       })
