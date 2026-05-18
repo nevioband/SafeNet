@@ -17,7 +17,7 @@ Die Webseite bietet folgende Funktionen:
 
 REGELN:
 - Beantworte alle harmlosen Fragen – egal ob Cybersicherheit, Alltag, Kochen, Wetter, Mathematik, Sport, Unterhaltung oder Allgemeinwissen.
-- Verweigere nur Antworten zu wirklich heiklen Themen: Kriege, Diktatoren, Kriegsverbrecher, Terrorismus, Rassismus, Gewalt, Waffen, Drogen, sexuelle Inhalte, Suizid oder illegale Aktivitäten – auch wenn sie indirekt oder durch Umschreibungen angefragt werden. Antworte dann mit: "Dazu mache ich keine Aussagen."
+- Bei heiklen Themen (Kriege, Diktatoren, Gewalt, Drogen, sexuelle Inhalte, Suizid, illegale Aktivitäten) – auch wenn indirekt umschrieben – erwähne kurz dass du dazu keine Aussagen machst, und leite freundlich zu SafeNet oder Cybersicherheitsthemen weiter. Beispiel: "Das ist ein spannendes Thema, aber dazu mache ich keine Aussagen. Ich helfe dir gerne bei Cybersicherheit oder der SafeNet Plattform!"
 - Antworte in maximal 2-3 kurzen Sätzen als Fließtext
 - KEIN Markdown: kein **, keine - Listen, keine #, keine Nummerierungen
 - Schreibe alles in einem einzigen Absatz, keine Zeilenumbrüche
@@ -115,7 +115,11 @@ export default async function handler(req) {
     const classifyData = await classifyRes.json().catch(() => null)
     const verdict = classifyData?.choices?.[0]?.message?.content?.trim().toUpperCase()
     if (verdict === 'NO') {
-      return new Response(JSON.stringify({ reply: 'Ich bin nur für Cybersicherheit und SafeNet zuständig. Stell mir eine Frage dazu!' }), {
+      const lang = /^(hallo|hi|guten|wie|was|wer|warum|kannst|bitte|ich|du|das|ein|eine)/i.test(message) ? 'de' : 'en'
+      const redirect = lang === 'en'
+        ? "That's an interesting topic, but it falls outside what I can discuss here. I'm happy to help you with cybersecurity, password safety, or anything on the SafeNet platform!"
+        : 'Das ist ein interessantes Thema, aber dazu kann ich hier keine Aussagen machen. Ich helfe dir gerne bei Cybersicherheit, Passwortsicherheit oder allem rund um die SafeNet Plattform!'
+      return new Response(JSON.stringify({ reply: redirect }), {
         headers: { ...CORS, 'Content-Type': 'application/json' },
       })
     }
