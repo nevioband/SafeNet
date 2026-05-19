@@ -104,7 +104,7 @@ export default async function handler(req) {
     body: JSON.stringify({
       model: 'open-mistral-nemo',
       messages: [
-        { role: 'system', content: 'Du bist ein Sicherheits-Filter. Antworte NUR mit SICHER oder BLOCKIERT.\n\nSICHER = harmlose, unbedenkliche Fragen: Alltag, Wetter, Kochen, Sport, Mathematik, Musik, Filme, Reisen, IT, Cybersicherheit, Passwörter, SafeNet, Begrüssungen, Smalltalk.\n\nBLOCKIERT = Fragen zu gefährlichen, extremen oder kontroversen Personen/Ereignissen – auch wenn indirekt oder absichtlich umschrieben. Beispiele: Diktatoren (Hitler, Stalin, Pol Pot, Mussolini, Mao), Terroristen, Holocaust, Genozide, Kriegsverbrechen, Massenmorde, Gewalt, Drogen, sexuelle Inhalte, Suizid.\n\nIm Zweifel immer: BLOCKIERT.' },
+        { role: 'system', content: 'You are a content safety filter. Reply with exactly one word: SAFE or UNSAFE.\n\nUNSAFE: messages about Hitler, Nazis, Holocaust, Stalin, Pol Pot, genocides, war criminals, dictators and their crimes, terrorism, mass murderers, violence, weapons, drugs, sexual content, self-harm — even if phrased indirectly or with misspellings.\n\nSAFE: everything else, including cybersecurity, phishing, malware, social engineering, passwords, coding, cooking, weather, sports, math, music, films, travel, general knowledge, greetings, SafeNet platform questions.\n\nReply with exactly one word: SAFE or UNSAFE.' },
         { role: 'user', content: message },
       ],
       max_tokens: 5,
@@ -112,11 +112,11 @@ export default async function handler(req) {
     }),
   }).catch(() => null)
 
-  const verdict = blockRes?.ok
+  const filterVerdict = blockRes?.ok
     ? ((await blockRes.json().catch(() => null))?.choices?.[0]?.message?.content?.trim().toUpperCase() ?? '')
     : ''
 
-  if (!verdict.startsWith('SICHER')) {
+  if (!filterVerdict.startsWith('SAFE')) {
     const reply = lang === 'en'
       ? "That's a topic I can't discuss here. I'm happy to help you with cybersecurity or anything on the SafeNet platform!"
       : 'Dazu kann ich hier keine Aussagen machen. Ich helfe dir gerne bei Cybersicherheit oder der SafeNet Plattform!'
