@@ -33,14 +33,14 @@
                     <span id="avatarInitial">?</span>
                 </div>
                 <div class="profile-meta">
-                    <div class="name-val" id="profileDisplayName" style="display:none;"></div>
+                    <div class="name-val" id="profileDisplayName"></div>
                     <div class="email-lbl">Email address</div>
                     <div class="email-val" id="profileEmail">–</div>
                     <button id="avatarUploadBtn" class="btn btn-secondary">Upload / change picture</button>
-                    <input type="file" id="avatarInput" accept="image/*" style="display:none">
+                    <input type="file" id="avatarInput" accept="image/*" aria-label="Upload profile picture">
                 </div>
             </div>
-            <div id="avatarMsg" class="msg-box" style="margin-top:16px;margin-bottom:0;"></div>
+            <div id="avatarMsg" class="msg-box avatar-msg-box"></div>
         </div>
 
         <!-- Display name -->
@@ -59,11 +59,11 @@
         <div class="s-card">
             <h3>Color scheme</h3>
             <p class="s-card-desc">Switch between light and dark design.</p>
-            <div style="display:flex;gap:12px;flex-wrap:wrap;">
-                <button id="themeDarkBtn" class="btn btn-secondary" style="display:flex;align-items:center;gap:8px;font-size:15px;padding:10px 20px;">
+            <div class="theme-btn-row">
+                <button id="themeDarkBtn" class="btn btn-secondary theme-btn">
                     🌙 Dark mode
                 </button>
-                <button id="themeLightBtn" class="btn btn-secondary" style="display:flex;align-items:center;gap:8px;font-size:15px;padding:10px 20px;">
+                <button id="themeLightBtn" class="btn btn-secondary theme-btn">
                     ☀️ Light mode
                 </button>
             </div>
@@ -83,16 +83,16 @@
             </div>
 
             <div id="tfaQrSection">
-                <p style="color:#cbd5e1;font-size:14px;margin:0 0 4px;">Scan this QR code with your authenticator app:</p>
+                <p class="qr-label">Scan this QR code with your authenticator app:</p>
                 <img id="qrImg" class="qr-img" width="180" height="180" alt="QR Code">
-                <p style="color:#94a3b8;font-size:13px;margin:8px 0 0;text-align:center;">Or enter this code manually:</p>
-                <p id="secretText" style="color:#66d9ff;font-size:13px;font-family:monospace;letter-spacing:3px;text-align:center;word-break:break-all;margin:6px 0 0;"></p>
+                <p class="qr-manual">Or enter this code manually:</p>
+                <p id="secretText" class="secret-code"></p>
                 <input type="text" inputmode="numeric" maxlength="6" class="code-input" id="verifyCode" placeholder="123456">
                 <button class="btn btn-primary btn-full" id="verifyBtn">Confirm &amp; activate</button>
-                <button class="btn btn-secondary btn-full" id="cancelEnrollBtn" style="margin-top:8px;">Cancel</button>
+                <button class="btn btn-secondary btn-full" id="cancelEnrollBtn">Cancel</button>
             </div>
 
-            <div id="tfaSectionOn" style="display:none;">
+            <div id="tfaSectionOn">
                 <button class="btn btn-danger btn-full" id="disableBtn">Disable 2FA</button>
             </div>
         </div>
@@ -161,13 +161,13 @@
             <h3>Delete account</h3>
             <p class="s-card-desc">Your account and all saved data will be permanently deleted. This action cannot be undone.</p>
             <div id="deleteMsg" class="msg-box"></div>
-            <div id="deleteConfirmSection" style="display:none;">
+            <div id="deleteConfirmSection">
                 <div class="form-group form-group-last">
-                    <label for="deleteConfirmInput">Type <strong style="color:#f87171;">DELETE</strong> to confirm</label>
+                    <label for="deleteConfirmInput">Type <strong class="text-danger">DELETE</strong> to confirm</label>
                     <input type="text" id="deleteConfirmInput" class="form-input" placeholder="DELETE">
                 </div>
                 <button class="btn btn-danger" id="confirmDeleteBtn">Permanently delete account</button>
-                <button class="btn btn-secondary" id="cancelDeleteBtn" style="margin-left:10px;">Cancel</button>
+                <button class="btn btn-secondary" id="cancelDeleteBtn">Cancel</button>
             </div>
             <button class="btn btn-danger" id="deleteAccountBtn">Delete account</button>
         </div>
@@ -183,9 +183,9 @@
                 <label for="forgotEmailSettings">Email address</label>
                 <input type="email" id="forgotEmailSettings" class="form-input" placeholder="your@email.com" autocomplete="email">
             </div>
-            <div id="forgotErrorSettings" class="msg-box" style="display:none;"></div>
+            <div id="forgotErrorSettings" class="msg-box"></div>
             <div id="forgotSuccessSettings">Email sent! Check your inbox.</div>
-            <button class="btn btn-primary btn-full" id="forgotSendBtn" style="margin-bottom:10px;">Send link</button>
+            <button class="btn btn-primary btn-full" id="forgotSendBtn">Send link</button>
             <button class="btn btn-secondary btn-full" id="forgotCloseSettings">Close</button>
         </div>
     </div>

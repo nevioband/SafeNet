@@ -106,8 +106,6 @@
   gap: 10px;
   min-height: 220px;
   max-height: 340px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(51, 153, 255, 0.3) transparent;
 }
 
 #sn-chat-messages::-webkit-scrollbar {

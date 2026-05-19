@@ -260,3 +260,21 @@
 .forgot-link-settings:hover {
     text-decoration: underline;
 }
+
+/* Aus HTML ausgelagerte Inline-Styles */
+#profileDisplayName  { display: none; }
+#avatarInput         { display: none; }
+#tfaSectionOn        { display: none; }
+#deleteConfirmSection { display: none; }
+#forgotErrorSettings { display: none; }
+
+.avatar-msg-box { margin-top: 16px; margin-bottom: 0; }
+.theme-btn-row  { display: flex; gap: 12px; flex-wrap: wrap; }
+.theme-btn      { display: flex; align-items: center; gap: 8px; font-size: 15px; padding: 10px 20px; }
+.qr-label       { color: #cbd5e1; font-size: 14px; margin: 0 0 4px; }
+.qr-manual      { color: #94a3b8; font-size: 13px; margin: 8px 0 0; text-align: center; }
+.secret-code    { color: #66d9ff; font-size: 13px; font-family: monospace; letter-spacing: 3px; text-align: center; word-break: break-all; margin: 6px 0 0; }
+.text-danger    { color: #f87171; }
+#cancelEnrollBtn { margin-top: 8px; }
+#cancelDeleteBtn { margin-left: 10px; }
+#forgotSendBtn   { margin-bottom: 10px; }
