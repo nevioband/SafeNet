@@ -8,7 +8,7 @@
 ::view-transition-new(root) { z-index: 9999; }
 
 :root {
---bg: #dbbcbc;
+--bg: #030303;
 --bg-card: #161616;
     /*
     --bg: #0f172a;
