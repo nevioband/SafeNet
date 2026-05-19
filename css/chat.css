@@ -249,7 +249,7 @@
   }
 
   #sn-chat-input {
-    font-size: 0.82rem;
+    font-size: 1rem; /* mind. 16px – verhindert iOS-Auto-Zoom */
     padding: 8px 11px;
   }
 
