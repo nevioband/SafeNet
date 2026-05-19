@@ -1,3 +1,55 @@
+/* ─── Custom Toast (ersetzt window.alert) ────────────────────────── */
+#sn-toast {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #1e293b;
+  border: 1px solid rgba(51, 153, 255, 0.4);
+  border-left: 3px solid #3399ff;
+  border-radius: 10px;
+  padding: 13px 16px;
+  color: #e2e8f0;
+  font-family: Inter, sans-serif;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  max-width: 340px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  animation: sn-toast-in 0.22s ease;
+}
+
+.sn-toast-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0 0 0 6px;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.sn-toast-close:hover { color: #fff; }
+
+@keyframes sn-toast-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 480px) {
+  #sn-toast {
+    top: auto;
+    bottom: 88px;
+    left: 12px;
+    right: 12px;
+    max-width: none;
+  }
+}
+
 /* Screenreader-only (visuell versteckt) */
 .sr-only {
     position: absolute;
