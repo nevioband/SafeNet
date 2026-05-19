@@ -4,3 +4,5 @@ Reflexion_SafeNet.docx
 .github/copilot-instructions.md
 .vercel
 .env*.local
+node_modules/
+dist/

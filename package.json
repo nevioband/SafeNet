@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "description": "Automatische Smoke-Tests fuer SafeNet Security",
   "scripts": {
+    "start": "electron .",
     "dev": "node dev-server.js",
     "minify": "node build.js",
     "smoke": "playwright test tests/smoke.spec.js --project=chromium",
@@ -16,6 +17,7 @@
   "devDependencies": {
     "@playwright/test": "^1.54.2",
     "electron": "^42.1.0",
+    "electron-packager": "^17.1.2",
     "terser": "^5.47.1"
   },
   "main": "main.js",
