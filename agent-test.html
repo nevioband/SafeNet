@@ -70,7 +70,7 @@
       const loading = addMsg('Denkt nach…', 'bot loading')
 
       try {
-        const res = await fetch('/api/chat-agent', {
+        const res = await fetch('/api/agent', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message: msg, history: history })
