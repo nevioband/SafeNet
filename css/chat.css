@@ -330,3 +330,25 @@
     font-size: 0.82rem;
   }
 }
+
+/* Gast-Variante (kein Pfeil, klickbar → Register) */
+#sn-chat-hint.sn-chat-hint-guest {
+  bottom: 28px;
+  right: 28px;
+  cursor: pointer;
+  border-color: rgba(102, 217, 255, 0.4);
+  max-width: 230px;
+}
+
+#sn-chat-hint.sn-chat-hint-guest::before,
+#sn-chat-hint.sn-chat-hint-guest::after {
+  display: none;
+}
+
+.sn-hint-reg-link {
+  display: block;
+  margin-top: 6px;
+  color: #66d9ff;
+  font-weight: 600;
+  font-size: 0.82rem;
+}

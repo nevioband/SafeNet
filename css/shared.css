@@ -1,3 +1,89 @@
+/* ─── Auth Gate Overlay ──────────────────────────────────────────── */
+#sn-auth-gate {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 9990;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.sn-auth-gate-box {
+  background: #1e293b;
+  border: 1px solid rgba(51, 153, 255, 0.25);
+  border-radius: 20px;
+  padding: 44px 36px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+}
+
+.sn-auth-gate-icon {
+  color: #3399ff;
+  margin-bottom: 20px;
+}
+
+.sn-auth-gate-box h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #3399ff, #66d9ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.sn-auth-gate-box p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  margin-bottom: 28px;
+}
+
+.sn-auth-gate-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sn-auth-gate-btn {
+  display: block;
+  padding: 14px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.sn-auth-gate-btn.primary {
+  background: linear-gradient(135deg, #3399ff, #1e7fd4);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(51, 153, 255, 0.4);
+}
+
+.sn-auth-gate-btn.primary:hover {
+  transform: translateY(-1px);
+  opacity: 0.9;
+}
+
+.sn-auth-gate-secondary {
+  display: block;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.sn-auth-gate-secondary:hover {
+  color: #66d9ff;
+}
+
 /* ─── Custom Toast (ersetzt window.alert) ────────────────────────── */
 #sn-toast {
   position: fixed;
