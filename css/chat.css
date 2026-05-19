@@ -140,9 +140,46 @@
 
 .sn-msg-bot {
   align-self: flex-start;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  max-width: 92%;
+  padding: 0;
+  background: none;
+  border-radius: 0;
+}
+
+.sn-bot-avatar {
+  position: relative;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+}
+
+.sn-bot-avatar-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.sn-bot-avatar-badge {
+  position: absolute;
+  bottom: -2px;
+  left: -2px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 1.5px solid #0f172a;
+}
+
+.sn-bot-bubble {
   background: rgba(255, 255, 255, 0.08);
   color: rgba(255, 255, 255, 0.88);
+  border-radius: 14px;
   border-bottom-left-radius: 4px;
+  padding: 10px 14px;
 }
 
 .sn-msg-typing {
