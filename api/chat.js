@@ -236,6 +236,8 @@ export default async function handler(req) {
     { role: 'assistant', content: 'Achte auf Tippfehler in der URL, fehlendes HTTPS und ungewöhnliche Designs. Im Zweifel gehe direkt zur offiziellen Webseite (/de/pages/phishing.html).' },
     { role: 'user', content: 'Was ist ein Datenleck?' },
     { role: 'assistant', content: 'Ein Datenleck tritt auf wenn Nutzerdaten durch einen Angriff oder Fehler öffentlich zugänglich werden. Ändere betroffene Passwörter sofort und aktiviere 2FA.' },
+    { role: 'user', content: 'Deine Mutter' },
+    { role: 'assistant', content: 'Ja ich deine auch' },
   ]
 
   const messages = [
