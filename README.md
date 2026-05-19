@@ -1,33 +1,41 @@
 # SafeNet Security
 
-**SafeNet Security** ist eine deutschsprachige Sicherheits-Lernplattform im Browser. Sie bietet Passwortanalyse, Passwort-Generator, einen verschlüsselten Tresor und Informationsseiten zu Angriffsmethoden (Phishing, Bruteforce, Social Engineering, Keylogger, Wörterbuchangriff).
+**SafeNet Security** ist eine deutschsprachige Lernplattform rund um Passwortsicherheit und digitale Angriffe. Die Plattform läuft komplett im Browser und bietet Tools, Wissen und praktische Übungen für mehr digitale Sicherheit.
 
-## Features
-- Passwort-Analyse & Generator
-- Verschlüsselter Passwort-Tresor
-- Tutorials & Infos zu Angriffsmethoden
-- Supabase-Integration (Auth, DB, Storage)
-- Moderne UI (Vanilla JS, HTML, CSS)
+## Funktionen
+- **Passwort-Analyse:** Stärke von Passwörtern prüfen und verbessern
+- **Passwort-Generator:** Sichere Passwörter nach eigenen Vorgaben erstellen
+- **Verschlüsselter Tresor:** Passwörter und Notizen sicher speichern (clientseitig verschlüsselt)
+- **Angriffs-Infos:** Erklärungen zu Phishing, Bruteforce, Social Engineering, Keyloggern und Wörterbuchangriffen
+- **Tutorials & News:** Aktuelle Sicherheitstipps und Schritt-für-Schritt-Anleitungen
 
-## Projektstruktur
+## Technik
+- **Frontend:** HTML5, CSS3, Vanilla JavaScript (ohne Frameworks)
+- **Backend:** Supabase (Auth, Datenbank, Storage)
+- **Hosting:** Vercel
+- **Design:** Responsive, Dark-Theme, moderne UI
+
+## Projektstruktur (Auszug)
 - `index.html` – Startseite
-- `pages/` – Unterseiten
-- `css/` – Modulare CSS-Dateien
-- `js/` – JavaScript-Module
-- `partials/` – Navbar & Footer
-- `images/` – Logos & Assets
+- `pages/` – Unterseiten (z. B. analysator.html, bruteforce.html)
+- `css/` – Modulare Styles pro Seite
+- `js/` – JavaScript-Module (z. B. analyse.js, tresor.js)
+- `partials/` – Navbar und Footer (per JS geladen)
+- `images/` – Logos und Illustrationen
 
-## Entwicklung
-1. Node.js installieren (empfohlen: portable Version)
-2. Im Projektordner:
-   ```
-   node build.js
-   ```
-3. Änderungen mit Git committen und pushen
+## Mitmachen & Entwicklung
+1. Projekt lokal klonen
+2. Node.js installieren (für Build-Skripte)
+3. Im Projektordner `node build.js` ausführen, um statische Assets zu generieren
+4. Änderungen per Pull Request vorschlagen
 
-## Deployment
-- Gehostet auf [Vercel](https://vercel.com/neviobands-projects)
-- Datenbank: [Supabase](https://supabase.com/dashboard/org/asniauogqeryomotegje)
+## Datenschutz & Sicherheit
+- Keine sensiblen Daten im Frontend-Code
+- Alle Benutzereingaben werden validiert
+- Keine Speicherung von Passwörtern im Klartext
 
 ## Lizenz
 MIT License
+
+---
+Mehr Infos und die Live-Version findest du auf der offiziellen Website.
