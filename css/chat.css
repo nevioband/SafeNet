@@ -160,17 +160,12 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
+  background: rgba(255,255,255,0.08);
+  padding: 4px;
 }
 
-.sn-bot-avatar-badge {
-  position: absolute;
-  bottom: -3px;
-  left: -3px;
-  width: 20px;
-  height: auto;
-}
 
 .sn-bot-bubble {
   background: rgba(255, 255, 255, 0.08);
