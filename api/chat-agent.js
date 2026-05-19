@@ -44,7 +44,7 @@ export default async function handler(req) {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${apiKey}`
       },
-      body: JSON.stringify({ agent_id: AGENT_ID, agent_version: 0, inputs }),
+      body: JSON.stringify({ agent_id: AGENT_ID, agent_version: 0, inputs, stream: false }),
       signal: controller.signal
     })
     clearTimeout(timeout)
