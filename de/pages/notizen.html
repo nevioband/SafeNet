@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Notizen â€“ SafeNet Security</title>
+    <title>Notizen – SafeNet Security</title>
     <meta name="description" content="Erstelle strukturierte Notizen mit Ordnern, Tags und Checklisten direkt in SafeNet Security." />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Notizen â€“ SafeNet Security" />
+    <meta property="og:title" content="Notizen – SafeNet Security" />
     <meta property="og:description" content="Erstelle strukturierte Notizen mit Ordnern, Tags und Checklisten direkt in SafeNet Security." />
     <meta property="og:image" content="https://safenet-security.ch/images/SafeNet-Security-Logo/Withbg/ShieldWhiteName.png" />
     <meta property="og:url" content="https://safenet-security.ch/de/pages/notizen.html" />
@@ -41,8 +41,8 @@
                 <h2>Ordner</h2>
               </div>
               <div class="ordner-aktionen">
-                <button id="ordnerLoeschen" class="notiz-mini-btn warnung-mini" type="button" aria-label="Ordner lÃ¶schen">âˆ’</button>
-                <button id="ordnerAnlegen" class="notiz-mini-btn" type="button" aria-label="Ordner hinzufÃ¼gen">+</button>
+                <button id="ordnerLoeschen" class="notiz-mini-btn warnung-mini" type="button" aria-label="Ordner löschen">−</button>
+                <button id="ordnerAnlegen" class="notiz-mini-btn" type="button" aria-label="Ordner hinzufügen">+</button>
               </div>
             </div>
             <div class="mobile-panel-inhalt">
@@ -53,7 +53,7 @@
           <section class="notizen-karte liste-panel" data-mobile-panel>
             <div class="liste-kopf">
               <div class="panel-titel">
-                <button id="zurueckZuOrdnern" class="mobile-back-btn" type="button" aria-label="ZurÃ¼ck zu Ordnern">â†</button>
+                <button id="zurueckZuOrdnern" class="mobile-back-btn" type="button" aria-label="Zurück zu Ordnern">←</button>
                 <h2>Notizen</h2>
               </div>
             </div>
@@ -74,7 +74,7 @@
           <section class="notizen-karte editor-panel" data-mobile-panel>
             <div class="editor-kopf">
               <div class="panel-titel">
-                <button id="zurueckZuNotizen" class="mobile-back-btn" type="button" aria-label="ZurÃ¼ck zu Notizen">â†</button>
+                <button id="zurueckZuNotizen" class="mobile-back-btn" type="button" aria-label="Zurück zu Notizen">←</button>
                 <h2>Editor</h2>
               </div>
               <div class="editor-aktionen">
@@ -82,14 +82,14 @@
                 <button id="notizenImportBtn" class="notiz-aktion-btn" type="button">Import</button>
                 <div class="export-dropdown" id="exportDropdown">
                   <button id="notizenExportBtn" class="notiz-aktion-btn export-toggle" type="button" aria-haspopup="listbox" aria-expanded="false">Export</button>
-                  <div id="exportMenue" class="export-menue" role="listbox" aria-label="Exportformat auswÃ¤hlen" hidden>
+                  <div id="exportMenue" class="export-menue" role="listbox" aria-label="Exportformat auswählen" hidden>
                     <button class="export-option" type="button" role="option" data-export-format="txt">TXT</button>
                     <button class="export-option" type="button" role="option" data-export-format="html">HTML</button>
                     <button class="export-option" type="button" role="option" data-export-format="doc">Word</button>
                     <button class="export-option" type="button" role="option" data-export-format="pdf">PDF</button>
                   </div>
                 </div>
-                <button id="notizLoeschen" class="notiz-aktion-btn warnung" type="button">LÃ¶schen</button>
+                <button id="notizLoeschen" class="notiz-aktion-btn warnung" type="button">Löschen</button>
                 <input id="notizenImportDatei" type="file" accept="application/json,.json,text/plain,.txt" hidden />
               </div>
             </div>
@@ -111,11 +111,11 @@
                     <button id="textKursiv" class="notiz-aktion-btn" type="button">Kursiv</button>
                     <button id="textUnterstrichen" class="notiz-aktion-btn" type="button">Unterstrichen</button>
                     <div class="schriftgroesse-dropdown" id="schriftgroesseDropdown">
-                      <button id="schriftgroesseToggle" class="notiz-aktion-btn schriftgroesse-toggle" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="SchriftgrÃ¶ÃŸe auswÃ¤hlen">
+                      <button id="schriftgroesseToggle" class="notiz-aktion-btn schriftgroesse-toggle" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="Schriftgröße auswählen">
                         <span id="schriftgroesseLabel">Mittel</span>
-                        <span class="schriftgroesse-pfeil" aria-hidden="true">â–¾</span>
+                        <span class="schriftgroesse-pfeil" aria-hidden="true">▾</span>
                       </button>
-                      <div id="schriftgroesseMenue" class="schriftgroesse-menue" role="listbox" aria-label="SchriftgrÃ¶ÃŸe Optionen" hidden>
+                      <div id="schriftgroesseMenue" class="schriftgroesse-menue" role="listbox" aria-label="Schriftgröße Optionen" hidden>
                         <button class="schriftgroesse-option" type="button" role="option" data-groesse="12">Sehr klein</button>
                         <button class="schriftgroesse-option" type="button" role="option" data-groesse="14">Klein</button>
                         <button class="schriftgroesse-option aktiv" type="button" role="option" data-groesse="18" aria-selected="true">Mittel</button>
@@ -131,7 +131,7 @@
                   <div id="notizInhalt" class="notiz-editor" contenteditable="true" role="textbox" aria-label="Notizinhalt" aria-multiline="true" data-placeholder="Schreibe hier deine Notiz..."></div>
                 </div>
               </div>
-              <p id="cloudStatus" class="cloud-status">Cloud: wird geprÃ¼ft ...</p>
+              <p id="cloudStatus" class="cloud-status">Cloud: wird geprüft ...</p>
               <p id="speicherStatus" class="speicher-status">Gerade eben</p>
             </div>
           </section>
