@@ -50,8 +50,8 @@
   }
 }
 
-/* ─── Custom Confirm Modal (ersetzt window.confirm) ─────────────────── */
-#sn-confirm {
+/* ─── Custom Confirm / Prompt Modal ─────────────────────────────────── */
+#sn-confirm, #sn-prompt {
   position: fixed;
   inset: 0;
   z-index: 100000;
@@ -119,6 +119,29 @@
 }
 
 .sn-confirm-ok:hover { opacity: 0.85; }
+
+.sn-confirm-ok.sn-ok-save {
+  background: linear-gradient(135deg, #3399ff, #66d9ff);
+}
+
+.sn-prompt-input {
+  width: 100%;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(51, 153, 255, 0.35);
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-family: Inter, sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+  margin-bottom: 18px;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+
+.sn-prompt-input:focus {
+  border-color: #3399ff;
+}
 
 /* Screenreader-only (visuell versteckt) */
 .sr-only {
