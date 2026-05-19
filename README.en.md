@@ -1,5 +1,7 @@
 # SafeNet Security
 
+[Deutsches README](README.md)
+
 SafeNet Security is a German-language web platform for learning about password security and digital attack methods. The site offers various tools and information to help users understand and improve their digital safety.
 
 ## Features
