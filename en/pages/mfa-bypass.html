@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MFA Bypass – SafeNet Security</title>
+    <title>MFA Bypass â€“ SafeNet Security</title>
     <meta name="description" content="What is MFA Bypass? Learn how attackers circumvent multi-factor authentication and how to protect yourself effectively." />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="MFA Bypass – SafeNet Security" />
+    <meta property="og:title" content="MFA Bypass â€“ SafeNet Security" />
     <meta property="og:description" content="What is MFA Bypass? Learn how attackers circumvent multi-factor authentication and how to protect yourself effectively." />
     <meta property="og:image" content="https://safenet-security.ch/images/SafeNet-Security-Logo/Withbg/ShieldWhiteName.png" />
     <meta property="og:url" content="https://safenet-security.ch/en/pages/mfa-bypass.html" />
@@ -34,7 +34,7 @@
       <div class="info-box">
         <h2>What is MFA Bypass?</h2>
         <p>
-          Multi-Factor Authentication (MFA) protects accounts by requiring a second factor in addition to a password – such as an SMS code or an app confirmation. MFA bypass refers to techniques attackers use to specifically circumvent this protection. Even with MFA enabled, accounts can be compromised if the method used or the user's behavior contains weaknesses.
+          Multi-Factor Authentication (MFA) protects accounts by requiring a second factor in addition to a password â€“ such as an SMS code or an app confirmation. MFA bypass refers to techniques attackers use to specifically circumvent this protection. Even with MFA enabled, accounts can be compromised if the method used or the user's behavior contains weaknesses.
         </p>
       </div>
     </section>
@@ -44,34 +44,34 @@
         <h2>Attack Techniques</h2>
         <div class="mfa-techniques">
           <div class="mfa-technique-card">
-            <div class="mfa-technique-icon">😴</div>
+            <div class="mfa-technique-icon">ðŸ˜´</div>
             <h4>MFA Fatigue (Push Bombing)</h4>
             <p>The attacker already has the username and password and automatically sends dozens of MFA push requests. The victim eventually approves by accident or exhaustion.</p>
           </div>
           <div class="mfa-technique-card">
-            <div class="mfa-technique-icon">📡</div>
+            <div class="mfa-technique-icon">ðŸ“¡</div>
             <h4>SIM Swapping</h4>
-            <p>The attacker convinces the mobile provider to transfer the victim's phone number to their own SIM card – and thus receives all SMS codes.</p>
+            <p>The attacker convinces the mobile provider to transfer the victim's phone number to their own SIM card â€“ and thus receives all SMS codes.</p>
           </div>
           <div class="mfa-technique-card">
-            <div class="mfa-technique-icon">🎣</div>
+            <div class="mfa-technique-icon">ðŸŽ£</div>
             <h4>Real-Time Phishing (MITM)</h4>
             <p>A fake website forwards login credentials and MFA codes in real time. Tools like Evilginx automate this process entirely.</p>
           </div>
           <div class="mfa-technique-card">
-            <div class="mfa-technique-icon">🔑</div>
+            <div class="mfa-technique-icon">ðŸ”‘</div>
             <h4>Session Token Theft</h4>
             <p>After a successful MFA login, malware steals the browser cookie. With this token, the attacker can skip the MFA challenge entirely.</p>
           </div>
           <div class="mfa-technique-card">
-            <div class="mfa-technique-icon">📞</div>
+            <div class="mfa-technique-icon">ðŸ“ž</div>
             <h4>Social Engineering</h4>
-            <p>The attacker calls the victim and poses as IT support, asking them to share the MFA code they just received – «for verification purposes».</p>
+            <p>The attacker calls the victim and poses as IT support, asking them to share the MFA code they just received â€“ Â«for verification purposesÂ».</p>
           </div>
           <div class="mfa-technique-card">
-            <div class="mfa-technique-icon">⚙️</div>
+            <div class="mfa-technique-icon">âš™ï¸</div>
             <h4>SS7 Attack</h4>
-            <p>Vulnerabilities in the outdated SS7 telephone protocol allow SMS messages to be intercepted – without any access to the victim's device.</p>
+            <p>Vulnerabilities in the outdated SS7 telephone protocol allow SMS messages to be intercepted â€“ without any access to the victim's device.</p>
           </div>
         </div>
       </div>
@@ -81,7 +81,7 @@
     <div class="password-container">
       <h3>Demo: MFA Fatigue Attack</h3>
       <p class="mfa-demo-intro">
-        The attacker knows your password and bombards you with MFA requests. Always click «Deny» – or see what happens if you tap «Approve» just once.
+        The attacker knows your password and bombards you with MFA requests. Always click Â«DenyÂ» â€“ or see what happens if you tap Â«ApproveÂ» just once.
       </p>
 
       <div class="mfa-demo-layout">
@@ -91,7 +91,7 @@
             <h4>Your Smartphone</h4>
             <div class="mfa-phone-card">
               <div class="mfa-phone-header">
-                <div class="mfa-phone-icon">📱</div>
+                <div class="mfa-phone-icon">ðŸ“±</div>
                 <div>
                   <h5>Sign-in Request</h5>
                   <span>SafeNet Security App</span>
@@ -103,8 +103,8 @@
                 <strong class="mfa-push-highlight">Device:</strong> Unknown
               </div>
               <div class="mfa-push-btns">
-                <button id="mfa-approve">✓ Approve</button>
-                <button id="mfa-deny">✗ Deny</button>
+                <button id="mfa-approve">âœ“ Approve</button>
+                <button id="mfa-deny">âœ— Deny</button>
               </div>
             </div>
           </div>
@@ -115,7 +115,7 @@
           <div class="mfa-col-label-log">
             Attacker Log <span id="mfa-attempt-badge" class="mfa-counter-badge">0 attempts</span>
           </div>
-          <div id="mfa-log" class="mfa-attack-log">Waiting for first attempt…</div>
+          <div id="mfa-log" class="mfa-attack-log">Waiting for first attemptâ€¦</div>
         </div>
 
       </div>
@@ -134,10 +134,10 @@
           Not all MFA methods offer the same level of protection. From least to most secure:
         </p>
         <p>
-          <strong class="mfa-level-danger">Insecure:</strong> SMS codes – vulnerable to SIM swapping and SS7 attacks.<br /><br />
-          <strong class="mfa-level-warning">Medium:</strong> Authenticator apps (TOTP) – more secure than SMS, but still vulnerable to real-time phishing.<br /><br />
-          <strong class="mfa-level-safe">Secure:</strong> Hardware security keys (FIDO2/WebAuthn like YubiKey) – phishing-resistant, as the key is bound to the specific domain.<br /><br />
-          <strong class="mfa-level-safe">Secure:</strong> Passkeys – also phishing-resistant and password-free – the future of authentication.
+          <strong class="mfa-level-danger">Insecure:</strong> SMS codes â€“ vulnerable to SIM swapping and SS7 attacks.<br /><br />
+          <strong class="mfa-level-warning">Medium:</strong> Authenticator apps (TOTP) â€“ more secure than SMS, but still vulnerable to real-time phishing.<br /><br />
+          <strong class="mfa-level-safe">Secure:</strong> Hardware security keys (FIDO2/WebAuthn like YubiKey) â€“ phishing-resistant, as the key is bound to the specific domain.<br /><br />
+          <strong class="mfa-level-safe">Secure:</strong> Passkeys â€“ also phishing-resistant and password-free â€“ the future of authentication.
         </p>
       </div>
     </section>
@@ -152,7 +152,7 @@
 
           <strong>3. Replace SMS-MFA where possible:</strong> Switch to an authenticator app (Google Authenticator, Aegis, etc.) instead of relying on SMS codes.<br /><br />
 
-          <strong>4. Enable number matching:</strong> Many authenticator apps display a number that must match what's shown on the login screen – this makes push bombing significantly harder.<br /><br />
+          <strong>4. Enable number matching:</strong> Many authenticator apps display a number that must match what's shown on the login screen â€“ this makes push bombing significantly harder.<br /><br />
 
           <strong>5. Strong, unique password:</strong> MFA only helps when the password is not the sole weak point. Combine both with a password manager.
         </p>

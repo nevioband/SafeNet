@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Einstellungen – SafeNet Security</title>    <meta name="description" content="Verwalte dein SafeNet Security Konto – ändere Profilbild, Passwort und Sicherheitseinstellungen." />
+    <title>Einstellungen â€“ SafeNet Security</title>    <meta name="description" content="Verwalte dein SafeNet Security Konto â€“ Ã¤ndere Profilbild, Passwort und Sicherheitseinstellungen." />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Einstellungen – SafeNet Security" />
-    <meta property="og:description" content="Verwalte dein SafeNet Security Konto – ändere Profilbild, Passwort und Sicherheitseinstellungen." />
+    <meta property="og:title" content="Einstellungen â€“ SafeNet Security" />
+    <meta property="og:description" content="Verwalte dein SafeNet Security Konto â€“ Ã¤ndere Profilbild, Passwort und Sicherheitseinstellungen." />
     <meta property="og:image" content="https://safenet-security.ch/images/SafeNet-Security-Logo/Withbg/ShieldWhiteName.png" />
     <link rel="stylesheet" href="/css/navbar.css">
     <link rel="stylesheet" href="/css/style.css">
@@ -23,7 +23,7 @@
         <h1 class="settings-page-title">Einstellungen</h1>
         <p class="settings-page-sub">Verwalte dein Profil und deine Sicherheitseinstellungen.</p>
 
-        <!-- ── PROFIL ──────────────────────────────── -->
+        <!-- â”€â”€ PROFIL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
         <div class="settings-section-label">Profil</div>
         <div class="s-card">
             <h3>Profilbild &amp; Konto</h3>
@@ -35,8 +35,8 @@
                 <div class="profile-meta">
                     <div class="name-val" id="profileDisplayName" style="display:none;"></div>
                     <div class="email-lbl">E-Mail-Adresse</div>
-                    <div class="email-val" id="profileEmail">–</div>
-                    <button id="avatarUploadBtn" class="btn btn-secondary">Bild hochladen / ändern</button>
+                    <div class="email-val" id="profileEmail">â€“</div>
+                    <button id="avatarUploadBtn" class="btn btn-secondary">Bild hochladen / Ã¤ndern</button>
                     <input type="file" id="avatarInput" accept="image/*" style="display:none">
                 </div>
             </div>
@@ -61,10 +61,10 @@
             <p class="s-card-desc">Wechsle zwischen hellem und dunklem Design.</p>
             <div style="display:flex;gap:12px;flex-wrap:wrap;">
                 <button id="themeDarkBtn" class="btn btn-secondary" style="display:flex;align-items:center;gap:8px;font-size:15px;padding:10px 20px;">
-                    🌙 Dunkles Design
+                    ðŸŒ™ Dunkles Design
                 </button>
                 <button id="themeLightBtn" class="btn btn-secondary" style="display:flex;align-items:center;gap:8px;font-size:15px;padding:10px 20px;">
-                    ☀️ Helles Design
+                    â˜€ï¸ Helles Design
                 </button>
             </div>
         </div>
@@ -74,7 +74,7 @@
         <!-- 2FA -->
         <div class="s-card">
             <h3>Zwei-Faktor-Authentifizierung</h3>
-            <p class="s-card-desc">Schütze dein Konto mit einem einmaligen Code aus deiner Authenticator-App (z.&nbsp;B. Google Authenticator, Authy).</p>
+            <p class="s-card-desc">SchÃ¼tze dein Konto mit einem einmaligen Code aus deiner Authenticator-App (z.&nbsp;B. Google Authenticator, Authy).</p>
 
             <div id="tfaMsg" class="msg-box"></div>
 
@@ -88,7 +88,7 @@
                 <p style="color:#94a3b8;font-size:13px;margin:8px 0 0;text-align:center;">Oder gib diesen Code manuell ein:</p>
                 <p id="secretText" style="color:#66d9ff;font-size:13px;font-family:monospace;letter-spacing:3px;text-align:center;word-break:break-all;margin:6px 0 0;"></p>
                 <input type="text" inputmode="numeric" maxlength="6" class="code-input" id="verifyCode" placeholder="123456">
-                <button class="btn btn-primary btn-full" id="verifyBtn">Bestätigen &amp; aktivieren</button>
+                <button class="btn btn-primary btn-full" id="verifyBtn">BestÃ¤tigen &amp; aktivieren</button>
                 <button class="btn btn-secondary btn-full" id="cancelEnrollBtn" style="margin-top:8px;">Abbrechen</button>
             </div>
 
@@ -97,10 +97,10 @@
             </div>
         </div>
 
-        <!-- Passwort ändern -->
+        <!-- Passwort Ã¤ndern -->
         <div class="s-card">
-            <h3>Passwort ändern</h3>
-            <p class="s-card-desc">Wähle ein starkes, einzigartiges Passwort für dein Konto.</p>
+            <h3>Passwort Ã¤ndern</h3>
+            <p class="s-card-desc">WÃ¤hle ein starkes, einzigartiges Passwort fÃ¼r dein Konto.</p>
             <div id="pwMsg" class="msg-box"></div>
             <div class="form-group">
                 <label for="currentPassword">Aktuelles Passwort</label>
@@ -111,17 +111,17 @@
                 <input type="password" id="newPassword" class="form-input" placeholder="Mindestens 8 Zeichen">
             </div>
             <div class="form-group form-group-last">
-                <label for="confirmPassword">Passwort bestätigen</label>
+                <label for="confirmPassword">Passwort bestÃ¤tigen</label>
                 <input type="password" id="confirmPassword" class="form-input" placeholder="Passwort wiederholen">
             </div>
-            <button class="btn btn-primary" id="changePwBtn">Passwort ändern</button>
+            <button class="btn btn-primary" id="changePwBtn">Passwort Ã¤ndern</button>
             <a href="#" class="forgot-link-settings" id="forgotLinkSettings">Passwort vergessen?</a>
         </div>
 
-        <!-- E-Mail ändern -->
+        <!-- E-Mail Ã¤ndern -->
         <div class="s-card">
-            <h3>E-Mail-Adresse ändern</h3>
-            <p class="s-card-desc">An die neue Adresse wird eine Bestätigungsmail gesendet. Die Änderung wird erst nach dem Klick auf den Link aktiv.</p>
+            <h3>E-Mail-Adresse Ã¤ndern</h3>
+            <p class="s-card-desc">An die neue Adresse wird eine BestÃ¤tigungsmail gesendet. Die Ã„nderung wird erst nach dem Klick auf den Link aktiv.</p>
             <div id="emailMsg" class="msg-box"></div>
             <div class="form-group">
                 <label for="oldEmail">Aktuelle E-Mail-Adresse</label>
@@ -135,10 +135,10 @@
                 <label for="newEmail">Neue E-Mail-Adresse</label>
                 <input type="email" id="newEmail" class="form-input" placeholder="neue@email.ch">
             </div>
-            <button class="btn btn-primary" id="changeEmailBtn">Bestätigungsmail senden</button>
+            <button class="btn btn-primary" id="changeEmailBtn">BestÃ¤tigungsmail senden</button>
         </div>
 
-        <!-- ── DATEN ────────────────────── -->
+        <!-- â”€â”€ DATEN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
         <div class="settings-section-label">Daten</div>
 
         <!-- Tresor-Statistiken -->
@@ -146,30 +146,30 @@
             <h3>Tresor-Statistiken</h3>
             <p class="s-card-desc">Auswertung deines gespeicherten Passworttresors.</p>
             <div class="stat-grid">
-                <div class="stat-tile"><div class="stat-num" id="statTotal">–</div><div class="stat-lbl">Gesamt</div></div>
-                <div class="stat-tile"><div class="stat-num warn" id="statDuplicates">–</div><div class="stat-lbl">Duplikate</div></div>
-                <div class="stat-tile"><div class="stat-num danger" id="statWeak">–</div><div class="stat-lbl">Schwach (&lt;8)</div></div>
-                <div class="stat-tile"><div class="stat-num" id="statStrong">–</div><div class="stat-lbl">Stark (≥12)</div></div>
+                <div class="stat-tile"><div class="stat-num" id="statTotal">â€“</div><div class="stat-lbl">Gesamt</div></div>
+                <div class="stat-tile"><div class="stat-num warn" id="statDuplicates">â€“</div><div class="stat-lbl">Duplikate</div></div>
+                <div class="stat-tile"><div class="stat-num danger" id="statWeak">â€“</div><div class="stat-lbl">Schwach (&lt;8)</div></div>
+                <div class="stat-tile"><div class="stat-num" id="statStrong">â€“</div><div class="stat-lbl">Stark (â‰¥12)</div></div>
             </div>
         </div>
 
-        <!-- ── GEFAHRENZONE ──────────────── -->
+        <!-- â”€â”€ GEFAHRENZONE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
         <div class="settings-section-label label-danger">Gefahrenzone</div>
 
-        <!-- Konto löschen -->
+        <!-- Konto lÃ¶schen -->
         <div class="s-card danger-card">
-            <h3>Konto löschen</h3>
-            <p class="s-card-desc">Dein Konto und alle gespeicherten Daten werden unwiderruflich gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.</p>
+            <h3>Konto lÃ¶schen</h3>
+            <p class="s-card-desc">Dein Konto und alle gespeicherten Daten werden unwiderruflich gelÃ¶scht. Diese Aktion kann nicht rÃ¼ckgÃ¤ngig gemacht werden.</p>
             <div id="deleteMsg" class="msg-box"></div>
             <div id="deleteConfirmSection" style="display:none;">
                 <div class="form-group form-group-last">
-                    <label for="deleteConfirmInput">Gib zur Bestätigung <strong style="color:#f87171;">LÖSCHEN</strong> ein</label>
-                    <input type="text" id="deleteConfirmInput" class="form-input" placeholder="LÖSCHEN">
+                    <label for="deleteConfirmInput">Gib zur BestÃ¤tigung <strong style="color:#f87171;">LÃ–SCHEN</strong> ein</label>
+                    <input type="text" id="deleteConfirmInput" class="form-input" placeholder="LÃ–SCHEN">
                 </div>
-                <button class="btn btn-danger" id="confirmDeleteBtn">Konto endgültig löschen</button>
+                <button class="btn btn-danger" id="confirmDeleteBtn">Konto endgÃ¼ltig lÃ¶schen</button>
                 <button class="btn btn-secondary" id="cancelDeleteBtn" style="margin-left:10px;">Abbrechen</button>
             </div>
-            <button class="btn btn-danger" id="deleteAccountBtn">Konto löschen</button>
+            <button class="btn btn-danger" id="deleteAccountBtn">Konto lÃ¶schen</button>
         </div>
     </div>
     <div id="footer"></div>
@@ -177,22 +177,22 @@
     <!-- Passwort vergessen Modal -->
     <div id="forgotModalSettings">
         <div class="forgot-modal-inner-settings">
-            <h3>Passwort zurücksetzen</h3>
-            <p>Gib deine E-Mail ein. Du erhältst einen Reset-Link.</p>
+            <h3>Passwort zurÃ¼cksetzen</h3>
+            <p>Gib deine E-Mail ein. Du erhÃ¤ltst einen Reset-Link.</p>
             <div class="form-group form-group-last">
                 <label for="forgotEmailSettings">E-Mail-Adresse</label>
                 <input type="email" id="forgotEmailSettings" class="form-input" placeholder="deine@email.com" autocomplete="email">
             </div>
             <div id="forgotErrorSettings" class="msg-box" style="display:none;"></div>
-            <div id="forgotSuccessSettings">E-Mail gesendet! Prüfe deinen Posteingang.</div>
+            <div id="forgotSuccessSettings">E-Mail gesendet! PrÃ¼fe deinen Posteingang.</div>
             <button class="btn btn-primary btn-full" id="forgotSendBtn" style="margin-bottom:10px;">Link senden</button>
             <button class="btn btn-secondary btn-full" id="forgotCloseSettings">Schliessen</button>
         </div>
     </div>
 
     <!-- Profilbild Lightbox -->
-    <div class="avatar-lightbox" id="avatarLightbox" role="dialog" aria-modal="true" aria-label="Profilbild vergrößert">
-        <button class="avatar-lightbox-schliessen" id="avatarLightboxSchliessen" aria-label="Schließen">&#x2715;</button>
+    <div class="avatar-lightbox" id="avatarLightbox" role="dialog" aria-modal="true" aria-label="Profilbild vergrÃ¶ÃŸert">
+        <button class="avatar-lightbox-schliessen" id="avatarLightboxSchliessen" aria-label="SchlieÃŸen">&#x2715;</button>
         <div id="avatarLightboxInhalt"></div>
     </div>
     <script src="/js/navbar-loader.js"></script>

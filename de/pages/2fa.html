@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zwei-Faktor-Authentifizierung – SafeNet Security</title>    <meta name="description" content="Richte die Zwei-Faktor-Authentifizierung (2FA) bei SafeNet Security ein und schütze dein Konto zusätzlich ab." />
+    <title>Zwei-Faktor-Authentifizierung â€“ SafeNet Security</title>    <meta name="description" content="Richte die Zwei-Faktor-Authentifizierung (2FA) bei SafeNet Security ein und schÃ¼tze dein Konto zusÃ¤tzlich ab." />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Zwei-Faktor-Authentifizierung – SafeNet Security" />
-    <meta property="og:description" content="Richte die Zwei-Faktor-Authentifizierung (2FA) bei SafeNet Security ein und schütze dein Konto zusätzlich ab." />
+    <meta property="og:title" content="Zwei-Faktor-Authentifizierung â€“ SafeNet Security" />
+    <meta property="og:description" content="Richte die Zwei-Faktor-Authentifizierung (2FA) bei SafeNet Security ein und schÃ¼tze dein Konto zusÃ¤tzlich ab." />
     <meta property="og:image" content="https://safenet-security.ch/images/SafeNet-Security-Logo/Withbg/ShieldWhiteName.png" />
     <link rel="stylesheet" href="/css/navbar.css">
     <link rel="stylesheet" href="/css/style.css">
@@ -25,16 +25,16 @@
     <div class="tfa-container">
         <div class="tfa-card">
             <h2>Zwei-Faktor-Authentifizierung</h2>
-            <p class="tfa-subtitle">Schütze dein Konto mit einem zweiten Sicherheitsfaktor.</p>
+            <p class="tfa-subtitle">SchÃ¼tze dein Konto mit einem zweiten Sicherheitsfaktor.</p>
 
             <div id="statusBadge" class="status-badge status-off">
-                <span>●</span> <span id="statusText">Wird geladen…</span>
+                <span>â—</span> <span id="statusText">Wird geladenâ€¦</span>
             </div>
 
             <div id="msgBox" class="msg-box"></div>
 
             <div class="tfa-info" id="infoText">
-                Mit 2FA musst du beim Login zusätzlich einen 6-stelligen Code aus einer Authenticator-App eingeben (z.B. Google Authenticator, Authy).
+                Mit 2FA musst du beim Login zusÃ¤tzlich einen 6-stelligen Code aus einer Authenticator-App eingeben (z.B. Google Authenticator, Authy).
             </div>
 
             <!-- Status: deaktiviert -->
@@ -42,14 +42,14 @@
                 <button class="tfa-btn tfa-btn-primary" id="enableBtn">2FA aktivieren</button>
             </div>
 
-            <!-- QR-Code + Bestätigung -->
+            <!-- QR-Code + BestÃ¤tigung -->
             <div id="qrSection">
                 <p class="tfa-qr-hint">Scanne diesen QR-Code mit deiner Authenticator-App:</p>
                 <img id="qrImg" class="qr-img" width="200" height="200" alt="QR-Code" />
                 <p class="tfa-qr-manual">Oder gib diesen Code manuell ein:</p>
                 <p id="secretText"></p>
                 <input type="text" inputmode="numeric" maxlength="6" class="code-input" id="verifyCode" placeholder="123456">
-                <button class="tfa-btn tfa-btn-primary" id="verifyBtn">Bestätigen & aktivieren</button>
+                <button class="tfa-btn tfa-btn-primary" id="verifyBtn">BestÃ¤tigen & aktivieren</button>
                 <button class="tfa-btn tfa-btn-secondary tfa-btn-mt" id="cancelEnrollBtn">Abbrechen</button>
             </div>
 

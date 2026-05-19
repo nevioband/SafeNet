@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Man-in-the-Middle – SafeNet Security</title>
-    <meta name="description" content="Was ist ein Man-in-the-Middle-Angriff? Erfahre wie Angreifer Kommunikation abfangen und wie du dich mit HTTPS und VPN schützt." />
+    <title>Man-in-the-Middle â€“ SafeNet Security</title>
+    <meta name="description" content="Was ist ein Man-in-the-Middle-Angriff? Erfahre wie Angreifer Kommunikation abfangen und wie du dich mit HTTPS und VPN schÃ¼tzt." />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Man-in-the-Middle – SafeNet Security" />
-    <meta property="og:description" content="Was ist ein Man-in-the-Middle-Angriff? Erfahre wie Angreifer Kommunikation abfangen und wie du dich mit HTTPS und VPN schützt." />
+    <meta property="og:title" content="Man-in-the-Middle â€“ SafeNet Security" />
+    <meta property="og:description" content="Was ist ein Man-in-the-Middle-Angriff? Erfahre wie Angreifer Kommunikation abfangen und wie du dich mit HTTPS und VPN schÃ¼tzt." />
     <meta property="og:image" content="https://safenet-security.ch/images/SafeNet-Security-Logo/Withbg/ShieldWhiteName.png" />
     <meta property="og:url" content="https://safenet-security.ch/de/pages/mitm.html" />
     <link rel="canonical" href="https://safenet-security.ch/de/pages/mitm.html" />
@@ -32,7 +32,7 @@
       <div class="info-box">
         <h2>Was ist ein Man-in-the-Middle-Angriff?</h2>
         <p>
-          Bei einem Man-in-the-Middle-Angriff (MITM) schaltet sich ein Angreifer unbemerkt zwischen zwei kommunizierende Parteien – zum Beispiel zwischen dich und deine Bank-Website. Er kann die Kommunikation abhören, verändern oder sogar eigene Inhalte einspeisen, ohne dass du oder dein Gegenüber es merkt. Der Name kommt daher, dass der Angreifer buchstäblich „in der Mitte" sitzt.
+          Bei einem Man-in-the-Middle-Angriff (MITM) schaltet sich ein Angreifer unbemerkt zwischen zwei kommunizierende Parteien â€“ zum Beispiel zwischen dich und deine Bank-Website. Er kann die Kommunikation abhÃ¶ren, verÃ¤ndern oder sogar eigene Inhalte einspeisen, ohne dass du oder dein GegenÃ¼ber es merkt. Der Name kommt daher, dass der Angreifer buchstÃ¤blich â€žin der Mitte" sitzt.
         </p>
       </div>
     </section>
@@ -41,15 +41,15 @@
       <div class="info-box">
         <h2>Wie funktioniert es?</h2>
         <p>
-          Es gibt verschiedene Techniken, mit denen Angreifer einen MITM-Angriff durchführen:<br><br>
+          Es gibt verschiedene Techniken, mit denen Angreifer einen MITM-Angriff durchfÃ¼hren:<br><br>
 
-          <strong>ARP-Spoofing:</strong> Im lokalen Netzwerk (z. B. dein Heim-WLAN) sendet der Angreifer gefälschte ARP-Pakete. Dadurch denken dein Computer und der Router, der Angreifer sei jeweils das andere Gerät – der gesamte Datenverkehr läuft über ihn.<br><br>
+          <strong>ARP-Spoofing:</strong> Im lokalen Netzwerk (z. B. dein Heim-WLAN) sendet der Angreifer gefÃ¤lschte ARP-Pakete. Dadurch denken dein Computer und der Router, der Angreifer sei jeweils das andere GerÃ¤t â€“ der gesamte Datenverkehr lÃ¤uft Ã¼ber ihn.<br><br>
 
-          <strong>Evil-Twin-WLAN:</strong> Der Angreifer erstellt einen gefälschten WLAN-Hotspot mit einem vertrauten Namen (z. B. „Starbucks_Free_WiFi"). Du verbindest dich, und alle deine Daten laufen durch das Gerät des Angreifers.<br><br>
+          <strong>Evil-Twin-WLAN:</strong> Der Angreifer erstellt einen gefÃ¤lschten WLAN-Hotspot mit einem vertrauten Namen (z. B. â€žStarbucks_Free_WiFi"). Du verbindest dich, und alle deine Daten laufen durch das GerÃ¤t des Angreifers.<br><br>
 
-          <strong>SSL-Stripping:</strong> Wenn du eine Verbindung über HTTP statt HTTPS aufbaust, kann der Angreifer die Verschlüsselung entfernen. Du siehst kein Schloss im Browser, merkst aber oft nicht, dass etwas nicht stimmt.<br><br>
+          <strong>SSL-Stripping:</strong> Wenn du eine Verbindung Ã¼ber HTTP statt HTTPS aufbaust, kann der Angreifer die VerschlÃ¼sselung entfernen. Du siehst kein Schloss im Browser, merkst aber oft nicht, dass etwas nicht stimmt.<br><br>
 
-          <strong>DNS-Poisoning:</strong> Der Angreifer manipuliert DNS-Antworten, sodass dein Browser statt der echten Website eine gefälschte Seite lädt – obwohl du die richtige Adresse eingegeben hast.
+          <strong>DNS-Poisoning:</strong> Der Angreifer manipuliert DNS-Antworten, sodass dein Browser statt der echten Website eine gefÃ¤lschte Seite lÃ¤dt â€“ obwohl du die richtige Adresse eingegeben hast.
         </p>
       </div>
     </section>
@@ -59,28 +59,28 @@
         <h2>Risiken und Folgen</h2>
         <p>
           Ein erfolgreicher MITM-Angriff kann schwerwiegende Folgen haben:
-          Der Angreifer kann Login-Daten, Passwörter und Session-Tokens abgreifen,
+          Der Angreifer kann Login-Daten, PasswÃ¶rter und Session-Tokens abgreifen,
           Bankdaten und Kreditkarteninformationen stehlen,
-          verschlüsselte Kommunikation entschlüsseln und mitlesen,
-          Inhalte in Webseiten einschleusen (z. B. Schadcode oder gefälschte Formulare),
-          sowie deine Identität für weitere Angriffe nutzen.
+          verschlÃ¼sselte Kommunikation entschlÃ¼sseln und mitlesen,
+          Inhalte in Webseiten einschleusen (z. B. Schadcode oder gefÃ¤lschte Formulare),
+          sowie deine IdentitÃ¤t fÃ¼r weitere Angriffe nutzen.
         </p>
       </div>
     </section>
 
     <section class="info-section">
       <div class="info-box">
-        <h2>So schützt du dich</h2>
+        <h2>So schÃ¼tzt du dich</h2>
         <p>
-          <strong>1. Nutze immer HTTPS:</strong> Achte auf das Schloss-Symbol im Browser. Besuche nur Websites mit HTTPS-Verbindung, besonders beim Online-Banking oder bei Logins. Browser-Erweiterungen wie HTTPS Everywhere können helfen.<br><br>
+          <strong>1. Nutze immer HTTPS:</strong> Achte auf das Schloss-Symbol im Browser. Besuche nur Websites mit HTTPS-Verbindung, besonders beim Online-Banking oder bei Logins. Browser-Erweiterungen wie HTTPS Everywhere kÃ¶nnen helfen.<br><br>
 
-          <strong>2. Vermeide öffentliche WLANs für sensible Aktivitäten:</strong> In Cafés, Hotels oder Flughäfen ist das WLAN unsicher. Vermeide dort Logins bei Banken oder E-Mail-Konten.<br><br>
+          <strong>2. Vermeide Ã¶ffentliche WLANs fÃ¼r sensible AktivitÃ¤ten:</strong> In CafÃ©s, Hotels oder FlughÃ¤fen ist das WLAN unsicher. Vermeide dort Logins bei Banken oder E-Mail-Konten.<br><br>
 
-          <strong>3. Nutze ein VPN:</strong> Ein Virtual Private Network verschlüsselt deinen gesamten Datenverkehr, bevor er das Gerät verlässt. Selbst in einem kompromittierten Netzwerk kann der Angreifer die Daten nicht lesen.<br><br>
+          <strong>3. Nutze ein VPN:</strong> Ein Virtual Private Network verschlÃ¼sselt deinen gesamten Datenverkehr, bevor er das GerÃ¤t verlÃ¤sst. Selbst in einem kompromittierten Netzwerk kann der Angreifer die Daten nicht lesen.<br><br>
 
-          <strong>4. Überprüfe SSL-Zertifikate:</strong> Klicke auf das Schloss-Symbol im Browser und prüfe, ob das Zertifikat zur Website passt. Ein falsches Zertifikat kann auf einen MITM-Angriff hinweisen.<br><br>
+          <strong>4. ÃœberprÃ¼fe SSL-Zertifikate:</strong> Klicke auf das Schloss-Symbol im Browser und prÃ¼fe, ob das Zertifikat zur Website passt. Ein falsches Zertifikat kann auf einen MITM-Angriff hinweisen.<br><br>
 
-          <strong>5. Aktiviere 2FA:</strong> Selbst wenn Angreifer dein Passwort abfangen, schützt die Zwei-Faktor-Authentifizierung dein Konto vor unbefugtem Zugriff.
+          <strong>5. Aktiviere 2FA:</strong> Selbst wenn Angreifer dein Passwort abfangen, schÃ¼tzt die Zwei-Faktor-Authentifizierung dein Konto vor unbefugtem Zugriff.
         </p>
       </div>
     </section>
@@ -89,11 +89,11 @@
       <div class="info-box">
         <h2>Beispiele aus dem Alltag</h2>
         <p>
-          <strong>Café-WLAN:</strong> Du verbindest dich mit dem WLAN eines Cafés. Ein Angreifer am Nebentisch hat einen gefälschten Hotspot mit dem gleichen Namen erstellt. Alle deine Daten – Passwörter, E-Mails, Bankzugriffe – laufen über sein Gerät.<br><br>
+          <strong>CafÃ©-WLAN:</strong> Du verbindest dich mit dem WLAN eines CafÃ©s. Ein Angreifer am Nebentisch hat einen gefÃ¤lschten Hotspot mit dem gleichen Namen erstellt. Alle deine Daten â€“ PasswÃ¶rter, E-Mails, Bankzugriffe â€“ laufen Ã¼ber sein GerÃ¤t.<br><br>
 
           <strong>Hotel-Netzwerk:</strong> Im Hotelzimmer loggst du dich in dein E-Mail-Konto ein. Das Hotelnetzwerk ist schlecht gesichert, ein Angreifer betreibt ARP-Spoofing und liest deinen Login-Token mit. Damit kann er deine E-Mails lesen, ohne dein Passwort zu kennen.<br><br>
 
-          <strong>Online-Banking:</strong> Dein Computer ist mit Malware infiziert, die DNS-Einträge manipuliert. Du tippst die URL deiner Bank ein, wirst aber auf eine täuschend echte Fälschung weitergeleitet. Du gibst deine Zugangsdaten ein – der Angreifer hat sie sofort.
+          <strong>Online-Banking:</strong> Dein Computer ist mit Malware infiziert, die DNS-EintrÃ¤ge manipuliert. Du tippst die URL deiner Bank ein, wirst aber auf eine tÃ¤uschend echte FÃ¤lschung weitergeleitet. Du gibst deine Zugangsdaten ein â€“ der Angreifer hat sie sofort.
         </p>
       </div>
     </section>
