@@ -50,6 +50,76 @@
   }
 }
 
+/* ─── Custom Confirm Modal (ersetzt window.confirm) ─────────────────── */
+#sn-confirm {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: sn-toast-in 0.18s ease;
+}
+
+.sn-confirm-box {
+  background: #1e293b;
+  border: 1px solid rgba(51, 153, 255, 0.35);
+  border-radius: 14px;
+  padding: 28px 24px 20px;
+  max-width: 380px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.sn-confirm-text {
+  color: #e2e8f0;
+  font-family: Inter, sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  margin: 0 0 22px;
+  white-space: pre-line;
+}
+
+.sn-confirm-btns {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.sn-confirm-cancel {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #94a3b8;
+  border-radius: 8px;
+  padding: 9px 20px;
+  font-size: 0.88rem;
+  cursor: pointer;
+  font-family: Inter, sans-serif;
+  transition: all 0.15s;
+}
+
+.sn-confirm-cancel:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #e2e8f0;
+}
+
+.sn-confirm-ok {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  border: none;
+  color: #fff;
+  border-radius: 8px;
+  padding: 9px 20px;
+  font-size: 0.88rem;
+  cursor: pointer;
+  font-family: Inter, sans-serif;
+  font-weight: 600;
+  transition: opacity 0.15s;
+}
+
+.sn-confirm-ok:hover { opacity: 0.85; }
+
 /* Screenreader-only (visuell versteckt) */
 .sr-only {
     position: absolute;
