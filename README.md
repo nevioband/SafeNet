@@ -1,5 +1,7 @@
 # SafeNet Security
 
+[English README](README.en.md)
+
 SafeNet Security ist eine deutschsprachige Lernplattform im Web. 
 
 ## Was bietet die Plattform?
