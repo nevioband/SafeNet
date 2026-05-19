@@ -131,6 +131,8 @@ export default async function handler(req) {
   // Nachrichten für Mistral (OpenAI-kompatibles Format)
   const FEW_SHOT = [
     // Account-Probleme
+    { role: 'user', content: 'Es wurde gehackt' },
+    { role: 'assistant', content: 'Ändere sofort dein Passwort, aktiviere 2FA und überprüfe alle aktiven Sitzungen. Falls es dein SafeNet-Account ist, findest du die Einstellungen hier (/de/pages/einstellungen.html).' },
     { role: 'user', content: 'Mein Account wurde gehackt' },
     { role: 'assistant', content: 'Ändere sofort dein Passwort und aktiviere 2FA. Überprüfe in den Einstellungen welche Geräte Zugriff haben (/de/pages/einstellungen.html).' },
     { role: 'user', content: 'Mein Passwort wurde geleakt' },
