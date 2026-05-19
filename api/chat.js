@@ -104,7 +104,7 @@ export default async function handler(req) {
     body: JSON.stringify({
       model: 'open-mistral-nemo',
       messages: [
-        { role: 'system', content: 'You are a content safety filter. Reply with exactly one word: SAFE or UNSAFE.\n\nUNSAFE: messages about Hitler, Nazis, Holocaust, Stalin, Pol Pot, genocides, war criminals, dictators and their crimes, terrorism, mass murderers, violence, weapons, drugs, sexual content, self-harm — even if phrased indirectly or with misspellings.\n\nSAFE: everything else, including cybersecurity, phishing, malware, social engineering, passwords, coding, cooking, weather, sports, math, music, films, travel, general knowledge, greetings, SafeNet platform questions.\n\nReply with exactly one word: SAFE or UNSAFE.' },
+        { role: 'system', content: 'You are a content safety filter. Reply with exactly one word: SAFE or UNSAFE.\n\nUNSAFE only for: Hitler, Nazis, Holocaust, Stalin, Pol Pot, genocides, war criminals, dictators and their crimes, terrorism, mass murderers, violence, weapons, drugs, sexual content, self-harm — even if phrased indirectly.\n\nSAFE for everything else, including: cybersecurity, hacking, account problems, passwords, phishing, malware, social engineering, data breaches, IT help, coding, cooking, weather, sports, math, music, films, travel, greetings, SafeNet platform, and ALL questions in German or any other language about these topics. Examples that are SAFE: "Mein Account wurde gehackt", "Ich habe ein Problem", "Was ist Phishing", "Wie sicher ist mein Passwort".\n\nReply with exactly one word: SAFE or UNSAFE.' },
         { role: 'user', content: message },
       ],
       max_tokens: 5,
