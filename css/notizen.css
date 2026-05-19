@@ -42,6 +42,7 @@ body {
   grid-template-columns: 250px 360px minmax(0, 1fr);
   gap: 14px;
   align-items: stretch;
+  margin-bottom: 80px;
 }
 
 .notizen-karte {
