@@ -30,13 +30,18 @@
   <div id="chat">
     <div class="msg bot">Hallo! Ich bin der Mistral Agent. Stell mir eine Frage.</div>
   </div>
-  <form id="form">
+  <form id="form" onsubmit="return false">
     <button type="button" id="clear">Löschen</button>
     <input id="input" type="text" placeholder="Nachricht eingeben..." autocomplete="off" maxlength="1000">
-    <button type="submit" id="send">Senden</button>
+    <button type="button" id="send">Senden</button>
   </form>
 
-  <script type="module">
+  <script>
+    window.onerror = function(msg, src, line) {
+      document.getElementById('chat').insertAdjacentHTML('beforeend',
+        `<div class="msg bot" style="border-color:#ef4444;color:#ef4444">JS-Fehler: ${msg} (Zeile ${line})</div>`)
+    }
+
     const chat = document.getElementById('chat')
     const form = document.getElementById('form')
     const input = document.getElementById('input')
@@ -47,15 +52,14 @@
 
     function addMsg(text, role) {
       const div = document.createElement('div')
-      div.className = `msg ${role}`
+      div.className = 'msg ' + role
       div.textContent = text
       chat.appendChild(div)
       chat.scrollTop = chat.scrollHeight
       return div
     }
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault()
+    sendBtn.addEventListener('click', async function() {
       const msg = input.value.trim()
       if (!msg) return
 
@@ -69,18 +73,24 @@
         const res = await fetch('/api/chat-agent', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: msg, history })
+          body: JSON.stringify({ message: msg, history: history })
         })
-        const data = await res.json()
-        const reply = data.reply || data.error || 'Keine Antwort.'
+        const text = await res.text()
+        let reply
+        try {
+          const data = JSON.parse(text)
+          reply = data.reply || data.error || 'Keine Antwort.'
+        } catch {
+          reply = 'Antwort-Fehler: ' + text.slice(0, 200)
+        }
 
         loading.textContent = reply
         loading.classList.remove('loading')
 
         history.push({ role: 'user', content: msg })
         history.push({ role: 'assistant', content: reply })
-      } catch {
-        loading.textContent = 'Fehler bei der Verbindung.'
+      } catch (e) {
+        loading.textContent = 'Verbindungsfehler: ' + e.message
         loading.classList.remove('loading')
       }
 
@@ -88,9 +98,13 @@
       input.focus()
     })
 
-    clearBtn.addEventListener('click', () => {
+    clearBtn.addEventListener('click', function() {
       history = []
       chat.innerHTML = '<div class="msg bot">Hallo! Ich bin der Mistral Agent. Stell mir eine Frage.</div>'
+    })
+
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') sendBtn.click()
     })
   </script>
 </body>
