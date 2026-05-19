@@ -97,14 +97,14 @@ export default async function handler(req) {
     })
   }
 
-  // Sicherheits-Filter: KI erkennt heikle Inhalte auch bei Umschreibungen
+  // Sicherheits-Filter: nur explizit sichere Anfragen kommen durch
   const blockRes = await fetch('https://api.mistral.ai/v1/chat/completions', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
     body: JSON.stringify({
       model: 'open-mistral-nemo',
       messages: [
-        { role: 'system', content: 'Du bist ein Sicherheits-Filter. Antworte ausschliesslich mit JA oder NEIN.\nJA = die Nachricht fragt – direkt oder indirekt oder durch Umschreibung – nach Informationen über: Nazi-Regime, Holocaust, Genozid, Kriegsverbrecher, Diktatoren des 20. Jahrhunderts, islamistischen Terrorismus, Massenmorde oder deren Täter. Beispiele die JA sind: "ein bestimmter Adolf", "der Führer", "WWII Anführer", "wer regierte Deutschland 1933".\nNEIN = alles andere.' },
+        { role: 'system', content: 'Du bist ein Sicherheits-Filter. Antworte NUR mit SICHER oder BLOCKIERT.\n\nSICHER = harmlose, unbedenkliche Fragen: Alltag, Wetter, Kochen, Sport, Mathematik, Musik, Filme, Reisen, IT, Cybersicherheit, Passwörter, SafeNet, Begrüssungen, Smalltalk.\n\nBLOCKIERT = Fragen zu gefährlichen, extremen oder kontroversen Personen/Ereignissen – auch wenn indirekt oder absichtlich umschrieben. Beispiele: Diktatoren (Hitler, Stalin, Pol Pot, Mussolini, Mao), Terroristen, Holocaust, Genozide, Kriegsverbrechen, Massenmorde, Gewalt, Drogen, sexuelle Inhalte, Suizid.\n\nIm Zweifel immer: BLOCKIERT.' },
         { role: 'user', content: message },
       ],
       max_tokens: 5,
@@ -112,17 +112,17 @@ export default async function handler(req) {
     }),
   }).catch(() => null)
 
-  if (blockRes?.ok) {
-    const blockData = await blockRes.json().catch(() => null)
-    const verdict = blockData?.choices?.[0]?.message?.content?.trim().toUpperCase() ?? ''
-    if (verdict.startsWith('JA')) {
-      const reply = lang === 'en'
-        ? "That's a topic I can't discuss here. I'm happy to help you with cybersecurity or anything on the SafeNet platform!"
-        : 'Dazu kann ich hier keine Aussagen machen. Ich helfe dir gerne bei Cybersicherheit oder der SafeNet Plattform!'
-      return new Response(JSON.stringify({ reply }), {
-        headers: { ...CORS, 'Content-Type': 'application/json' },
-      })
-    }
+  const verdict = blockRes?.ok
+    ? ((await blockRes.json().catch(() => null))?.choices?.[0]?.message?.content?.trim().toUpperCase() ?? '')
+    : ''
+
+  if (!verdict.startsWith('SICHER')) {
+    const reply = lang === 'en'
+      ? "That's a topic I can't discuss here. I'm happy to help you with cybersecurity or anything on the SafeNet platform!"
+      : 'Dazu kann ich hier keine Aussagen machen. Ich helfe dir gerne bei Cybersicherheit oder der SafeNet Plattform!'
+    return new Response(JSON.stringify({ reply }), {
+      headers: { ...CORS, 'Content-Type': 'application/json' },
+    })
   }
 
   // Mistral API aufrufen
