@@ -65,6 +65,60 @@ export default async function handler(req) {
 
   const userAgent = req.headers.get('user-agent') ?? 'Unbekannt'
 
+  // User-Agent parsen
+  function parseUserAgent(ua) {
+    let os = 'Unbekannt'
+    if (/Windows NT 10|Windows NT 11/.test(ua))        os = 'Windows 10/11'
+    else if (/Windows NT 6\.3/.test(ua))               os = 'Windows 8.1'
+    else if (/Macintosh.*Mac OS X/.test(ua)) {
+      const m = ua.match(/Mac OS X ([\d_]+)/)
+      os = 'macOS' + (m ? ' ' + m[1].replace(/_/g, '.') : '')
+    }
+    else if (/iPhone/.test(ua))   os = 'iPhone (iOS)'
+    else if (/iPad/.test(ua))     os = 'iPad (iPadOS)'
+    else if (/Android/.test(ua)) {
+      const m = ua.match(/Android ([\d.]+)/)
+      os = 'Android' + (m ? ' ' + m[1] : '')
+    }
+    else if (/Linux/.test(ua))    os = 'Linux'
+
+    let browser = 'Unbekannt'
+    if (/Edg\//.test(ua))         { const m = ua.match(/Edg\/([\d]+)/);     browser = 'Microsoft Edge ' + (m ? m[1] : '') }
+    else if (/OPR\//.test(ua))    { const m = ua.match(/OPR\/([\d]+)/);     browser = 'Opera ' + (m ? m[1] : '') }
+    else if (/Chrome\//.test(ua)) { const m = ua.match(/Chrome\/([\d]+)/);  browser = 'Chrome ' + (m ? m[1] : '') }
+    else if (/Firefox\//.test(ua)){ const m = ua.match(/Firefox\/([\d]+)/); browser = 'Firefox ' + (m ? m[1] : '') }
+    else if (/Safari\//.test(ua)) browser = 'Safari'
+
+    const isMobile = /Mobile|Android|iPhone/.test(ua) && !/iPad/.test(ua)
+    const isTablet = /iPad|Tablet/.test(ua)
+    const device   = isTablet ? 'Tablet' : isMobile ? 'Smartphone' : 'Desktop'
+
+    return { browser, os, device }
+  }
+
+  const { browser, os, device } = parseUserAgent(userAgent)
+
+  // IP-Geolocation (ip-api.com – kostenlos, kein Key nötig)
+  let standort = '–'
+  let anbieter = '–'
+  try {
+    const isPrivate = !ip || ip === 'Unbekannt' ||
+      ip.startsWith('127.') || ip.startsWith('10.') ||
+      ip.startsWith('192.168.') || ip === '::1'
+    if (!isPrivate) {
+      const geoRes = await fetch(`https://ip-api.com/json/${ip}?fields=status,city,country,org&lang=de`, {
+        signal: AbortSignal.timeout(3000),
+      })
+      if (geoRes.ok) {
+        const geo = await geoRes.json()
+        if (geo.status === 'success') {
+          standort = `${geo.city}, ${geo.country}`
+          anbieter = geo.org || '–'
+        }
+      }
+    }
+  } catch { /* Geolocation nicht kritisch */ }
+
   const emailBody = {
     from: 'SafeNet Security <info@safenet-security.ch>',
     to: [user.email],
@@ -89,8 +143,12 @@ export default async function handler(req) {
           <table class="details" role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#172441;border-radius:12px;margin-bottom:28px;"><tr><td style="padding:20px;">
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
               <tr><td style="font-size:13px;color:#94a3b8;font-family:Arial,sans-serif;padding-bottom:10px;">Zeitpunkt</td><td align="right" style="font-size:13px;color:#e2e8f0;font-family:Arial,sans-serif;padding-bottom:10px;">${zeitstempel}</td></tr>
+              <tr><td style="font-size:13px;color:#94a3b8;font-family:Arial,sans-serif;padding-bottom:10px;">Standort</td><td align="right" style="font-size:13px;color:#e2e8f0;font-family:Arial,sans-serif;padding-bottom:10px;">${standort}</td></tr>
               <tr><td style="font-size:13px;color:#94a3b8;font-family:Arial,sans-serif;padding-bottom:10px;">IP-Adresse</td><td align="right" style="font-size:13px;color:#e2e8f0;font-family:Arial,sans-serif;padding-bottom:10px;">${ip}</td></tr>
-              <tr><td style="font-size:13px;color:#94a3b8;font-family:Arial,sans-serif;">Browser</td><td align="right" style="font-size:13px;color:#e2e8f0;font-family:Arial,sans-serif;">${userAgent.split(' ').slice(0,3).join(' ')}</td></tr>
+              <tr><td style="font-size:13px;color:#94a3b8;font-family:Arial,sans-serif;padding-bottom:10px;">Netzanbieter</td><td align="right" style="font-size:13px;color:#e2e8f0;font-family:Arial,sans-serif;padding-bottom:10px;">${anbieter}</td></tr>
+              <tr><td style="font-size:13px;color:#94a3b8;font-family:Arial,sans-serif;padding-bottom:10px;">Browser</td><td align="right" style="font-size:13px;color:#e2e8f0;font-family:Arial,sans-serif;padding-bottom:10px;">${browser}</td></tr>
+              <tr><td style="font-size:13px;color:#94a3b8;font-family:Arial,sans-serif;padding-bottom:10px;">Betriebssystem</td><td align="right" style="font-size:13px;color:#e2e8f0;font-family:Arial,sans-serif;padding-bottom:10px;">${os}</td></tr>
+              <tr><td style="font-size:13px;color:#94a3b8;font-family:Arial,sans-serif;">Ger&auml;t</td><td align="right" style="font-size:13px;color:#e2e8f0;font-family:Arial,sans-serif;">${device}</td></tr>
             </table>
           </td></tr></table>
 
