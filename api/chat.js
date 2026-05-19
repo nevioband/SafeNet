@@ -21,6 +21,7 @@ REGELN:
 - Antworte in maximal 2-3 kurzen Sätzen als Fließtext
 - KEIN Markdown: kein **, keine - Listen, keine #, keine Nummerierungen
 - Schreibe alles in einem einzigen Absatz, keine Zeilenumbrüche
+- Stelle KEINE Rückfragen. Wenn eine Nachricht unklar ist, gib sofort eine hilfreiche Antwort basierend auf der wahrscheinlichsten Bedeutung.
 - Wenn du auf eine SafeNet-Seite verweist, schreibe nur den Pfad in Klammern, z.B.: (/de/pages/phishing.html)
 - Keine externen URLs
 - Antworte auf Deutsch wenn die Frage auf Deutsch ist, auf Englisch wenn sie auf Englisch ist`
@@ -104,7 +105,7 @@ export default async function handler(req) {
     body: JSON.stringify({
       model: 'open-mistral-nemo',
       messages: [
-        { role: 'system', content: 'You are a content safety filter. Reply with exactly one word: SAFE or UNSAFE.\n\nUNSAFE only for: Hitler, Nazis, Holocaust, Stalin, Pol Pot, genocides, war criminals, dictators and their crimes, terrorism, mass murderers, violence, weapons, drugs, sexual content, self-harm — even if phrased indirectly.\n\nSAFE for everything else, including: cybersecurity, hacking, account problems, passwords (including actual password values shared for security help), phishing, malware, social engineering, data breaches, IT help, coding, cooking, weather, sports, math, music, films, travel, greetings, SafeNet platform, and ALL questions in German or any other language about these topics. Examples that are SAFE: "Mein Account wurde gehackt", "Ich habe ein Problem", "Was ist Phishing", "Wie sicher ist mein Passwort", "Mein Passwort ist Passwort123 und wurde gehackt", "My password abc123 was leaked".\n\nReply with exactly one word: SAFE or UNSAFE.' },
+        { role: 'system', content: 'You are a content safety filter. Reply with exactly one word: SAFE or UNSAFE.\n\nUNSAFE only for: Hitler, Nazis, Holocaust, Stalin, Pol Pot, genocides, war criminals, dictators and their crimes, terrorism, mass murderers, violence, weapons, drugs, sexual content, self-harm — even if phrased indirectly.\n\nSAFE for everything else, including: cybersecurity, hacking, account problems, passwords (including actual password values shared for security help), phishing, malware, social engineering, data breaches, IT help, coding, cooking, weather, sports, math, music, films, travel, greetings, SafeNet platform, short replies like "ja", "nein", "ok", "meiner", "Account", "nein meiner", single words, and ALL questions or answers in German or any other language about these topics. Examples that are SAFE: "Mein Account wurde gehackt", "Ich habe ein Problem", "Was ist Phishing", "Wie sicher ist mein Passwort", "Mein Passwort ist Passwort123 und wurde gehackt", "My password abc123 was leaked", "Nein", "Ja", "Account", "Nein meiner".\n\nReply with exactly one word: SAFE or UNSAFE.' },
         { role: 'user', content: message },
       ],
       max_tokens: 5,
