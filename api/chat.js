@@ -128,8 +128,40 @@ export default async function handler(req) {
   // Mistral API aufrufen
 
   // Nachrichten für Mistral (OpenAI-kompatibles Format)
+  const FEW_SHOT = [
+    { role: 'user', content: 'Mein Account wurde gehackt' },
+    { role: 'assistant', content: 'Ändere sofort dein Passwort und aktiviere die Zwei-Faktor-Authentifizierung. Überprüfe in den Einstellungen welche Geräte Zugriff haben (/de/pages/einstellungen.html).' },
+    { role: 'user', content: 'Was ist Phishing?' },
+    { role: 'assistant', content: 'Phishing ist ein Angriff bei dem Betrüger gefälschte E-Mails oder Webseiten nutzen um deine Zugangsdaten zu stehlen. Mehr dazu findest du hier (/de/pages/phishing.html).' },
+    { role: 'user', content: 'Wie erstelle ich ein sicheres Passwort?' },
+    { role: 'assistant', content: 'Ein sicheres Passwort hat mindestens 16 Zeichen, Gross- und Kleinbuchstaben, Zahlen und Sonderzeichen. Nutze unseren Passwort-Generator (/de/pages/generator.html).' },
+    { role: 'user', content: 'Was ist 2FA?' },
+    { role: 'assistant', content: 'Zwei-Faktor-Authentifizierung (2FA) schützt deinen Account mit einem zweiten Schritt nach dem Passwort, z.B. einem Code per App oder SMS. Details findest du hier (/de/pages/2fa.html).' },
+    { role: 'user', content: 'Was ist Social Engineering?' },
+    { role: 'assistant', content: 'Social Engineering ist eine Manipulationsmethode bei der Angreifer Menschen täuschen statt Technik zu hacken, z.B. durch gefälschte Anrufe oder E-Mails. Mehr dazu (/de/pages/socialengineering.html).' },
+    { role: 'user', content: 'Was ist Ransomware?' },
+    { role: 'assistant', content: 'Ransomware ist Schadsoftware die deine Dateien verschlüsselt und Lösegeld fordert. Sichere regelmässig deine Daten und öffne keine unbekannten Anhänge (/de/pages/ransomware.html).' },
+    { role: 'user', content: 'Was ist ein Keylogger?' },
+    { role: 'assistant', content: 'Ein Keylogger zeichnet alle Tastatureingaben auf und kann so Passwörter und sensible Daten stehlen. Halte dein System und Antivirenprogramm aktuell (/de/pages/keylogger.html).' },
+    { role: 'user', content: 'Was ist ein Bruteforce-Angriff?' },
+    { role: 'assistant', content: 'Bei einem Bruteforce-Angriff probiert ein Programm automatisch millionen Passwortkombinationen aus. Lange und komplexe Passwörter sowie 2FA schützen davor (/de/pages/bruteforce.html).' },
+    { role: 'user', content: 'Was ist Man-in-the-Middle?' },
+    { role: 'assistant', content: 'Bei einem Man-in-the-Middle-Angriff schaltet sich ein Angreifer unbemerkt zwischen dich und eine Webseite und liest den Datenverkehr mit. Nutze immer HTTPS und kein öffentliches WLAN ohne VPN (/de/pages/mitm.html).' },
+    { role: 'user', content: 'Wie funktioniert der Tresor?' },
+    { role: 'assistant', content: 'Der SafeNet Tresor speichert deine Passwörter verschlüsselt direkt in deinem Account. Nur du hast Zugriff über dein Master-Passwort (/de/pages/tresor.html).' },
+    { role: 'user', content: 'Was ist Quishing?' },
+    { role: 'assistant', content: 'Quishing ist Phishing über QR-Codes. Scanne nur QR-Codes aus vertrauenswürdigen Quellen und prüfe die URL nach dem Scannen (/de/pages/quishing.html).' },
+    { role: 'user', content: 'Wie sicher ist mein Passwort?' },
+    { role: 'assistant', content: 'Das kannst du mit unserem Passwort-Analysator direkt testen (/de/pages/analysator.html). Er zeigt dir wie lange ein Angriff brauchen würde und gibt Verbesserungsvorschläge.' },
+    { role: 'user', content: 'Was ist MFA-Bypass?' },
+    { role: 'assistant', content: 'MFA-Bypass ist eine Angriffsmethode um die Zwei-Faktor-Authentifizierung zu umgehen, z.B. durch SIM-Swapping oder Phishing-Kits die den 2FA-Code abfangen (/de/pages/mfa-bypass.html).' },
+    { role: 'user', content: 'Mein Passwort wurde geleakt' },
+    { role: 'assistant', content: 'Ändere das Passwort sofort auf allen Diensten wo du es verwendet hast und aktiviere 2FA. Prüfe ob weitere Accounts betroffen sind und nutze für jeden Dienst ein einzigartiges Passwort.' },
+  ]
+
   const messages = [
     { role: 'system', content: SYSTEM_PROMPT },
+    ...FEW_SHOT,
     ...history.slice(-10).map(m => ({ role: m.role === 'model' ? 'assistant' : 'user', content: m.text })),
     { role: 'user', content: message },
   ]
