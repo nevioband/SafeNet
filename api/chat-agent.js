@@ -27,8 +27,8 @@ export default async function handler(req) {
     return new Response(JSON.stringify({ error: 'KI nicht konfiguriert' }), { status: 500, headers: CORS })
   }
 
-  // Messages aufbauen: bisherige History + neue Nachricht
-  const messages = [
+  // Inputs aufbauen: bisherige History + neue Nachricht
+  const inputs = [
     ...history.slice(-10).map(m => ({ role: m.role, content: m.content })),
     { role: 'user', content: message }
   ]
@@ -38,13 +38,13 @@ export default async function handler(req) {
 
   let reply
   try {
-    const res = await fetch('https://api.mistral.ai/v1/agents/completions', {
+    const res = await fetch('https://api.mistral.ai/v1/conversations', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${apiKey}`
       },
-      body: JSON.stringify({ agent_id: AGENT_ID, messages }),
+      body: JSON.stringify({ agent_id: AGENT_ID, agent_version: 0, inputs }),
       signal: controller.signal
     })
     clearTimeout(timeout)
@@ -55,7 +55,17 @@ export default async function handler(req) {
     }
 
     const data = JSON.parse(raw)
-    reply = data.choices?.[0]?.message?.content || `Unbekanntes Format: ${raw.slice(0, 300)}`
+    // Response: { outputs: [{role:"assistant", content:"..."}] }
+    const output = data.outputs?.find(o => o.role === 'assistant') || data.outputs?.[0]
+    if (output) {
+      reply = typeof output.content === 'string'
+        ? output.content
+        : Array.isArray(output.content)
+          ? output.content.map(c => c.text || c.content || '').join('')
+          : `Unbekanntes Format: ${raw.slice(0, 300)}`
+    } else {
+      reply = `Keine Ausgabe: ${raw.slice(0, 300)}`
+    }
   } catch (e) {
     clearTimeout(timeout)
     return new Response(JSON.stringify({ error: `Fehler: ${e.message}` }), { status: 504, headers: CORS })
