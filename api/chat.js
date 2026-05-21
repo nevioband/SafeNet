@@ -125,7 +125,11 @@ export default async function handler(req) {
     : ''
 
   if (!filterVerdict.startsWith('SAFE')) {
-    const reply = lang === 'en'
+    // Sprache der Nachricht erkennen (Nachricht-Sprache hat Vorrang vor UI-Sprache)
+    const msgIsEnglish = !/[äöüÄÖÜß]/.test(message) &&
+      /\b(is|are|the|who|what|how|why|when|where|admin|from|this|that|my|your|can|please|help|and|not|have|has|tell|me|a|an)\b/i.test(message)
+    const replyLang = msgIsEnglish ? 'en' : lang
+    const reply = replyLang === 'en'
       ? "That's a topic I can't discuss here. I'm happy to help you with cybersecurity or anything on the SafeNet platform!"
       : 'Dazu kann ich hier keine Aussagen machen. Ich helfe dir gerne bei Cybersicherheit oder der SafeNet Plattform!'
     return new Response(JSON.stringify({ reply }), {
