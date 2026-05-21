@@ -105,6 +105,11 @@ export default async function handler(req) {
     })
   }
 
+  // Sprache der Nachricht erkennen (übersteuert UI-Sprache falls Nutzer andere Sprache schreibt)
+  const msgIsEnglish = !/[äöüÄÖÜß]/.test(message) &&
+    /\b(is|are|the|who|what|how|why|when|where|admin|from|this|that|my|your|can|please|help|and|not|have|has|tell|me|a|an|i|im|dont|speak|english|hello|hi|understand|understand|problem|question|want|need)/i.test(message)
+  const effectiveLang = msgIsEnglish ? 'en' : lang
+
   // Sicherheits-Filter: nur explizit sichere Anfragen kommen durch
   const blockRes = await fetch('https://api.mistral.ai/v1/chat/completions', {
     method: 'POST',
@@ -125,11 +130,7 @@ export default async function handler(req) {
     : ''
 
   if (!filterVerdict.startsWith('SAFE')) {
-    // Sprache der Nachricht erkennen (Nachricht-Sprache hat Vorrang vor UI-Sprache)
-    const msgIsEnglish = !/[äöüÄÖÜß]/.test(message) &&
-      /\b(is|are|the|who|what|how|why|when|where|admin|from|this|that|my|your|can|please|help|and|not|have|has|tell|me|a|an)\b/i.test(message)
-    const replyLang = msgIsEnglish ? 'en' : lang
-    const reply = replyLang === 'en'
+    const reply = effectiveLang === 'en'
       ? "That's a topic I can't discuss here. I'm happy to help you with cybersecurity or anything on the SafeNet platform!"
       : 'Dazu kann ich hier keine Aussagen machen. Ich helfe dir gerne bei Cybersicherheit oder der SafeNet Plattform!'
     return new Response(JSON.stringify({ reply }), {
@@ -250,8 +251,8 @@ export default async function handler(req) {
   ]
 
   const messages = [
-    { role: 'system', content: buildSystemPrompt(lang) },
-    ...(lang === 'de' ? FEW_SHOT : []),
+    { role: 'system', content: buildSystemPrompt(effectiveLang) },
+    ...(effectiveLang === 'de' ? FEW_SHOT : []),
     ...history.slice(-10).map(m => ({ role: m.role === 'model' ? 'assistant' : 'user', content: m.text })),
     { role: 'user', content: message },
   ]
