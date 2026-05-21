@@ -384,3 +384,79 @@
   font-weight: 600;
   font-size: 0.82rem;
 }
+
+/* ─── Licht-Modus (helle Seiten) ───────────────────────────────── */
+#sn-chat-widget.sn-light {
+  background: #eef5ff;
+  border-color: rgba(51, 153, 255, 0.25);
+  box-shadow: 0 12px 40px rgba(51, 153, 255, 0.18);
+}
+
+#sn-chat-widget.sn-light #sn-chat-header {
+  background: linear-gradient(135deg, rgba(51, 153, 255, 0.1), rgba(102, 217, 255, 0.05));
+  border-bottom-color: rgba(51, 153, 255, 0.15);
+}
+
+#sn-chat-widget.sn-light #sn-chat-title {
+  color: #1a2e4a;
+}
+
+#sn-chat-widget.sn-light #sn-chat-close {
+  color: rgba(0, 0, 0, 0.38);
+}
+
+#sn-chat-widget.sn-light #sn-chat-close:hover {
+  color: #1a2e4a;
+}
+
+#sn-chat-widget.sn-light .sn-bot-bubble {
+  background: rgba(51, 153, 255, 0.1);
+  color: #1a2e4a;
+}
+
+#sn-chat-widget.sn-light .sn-msg-typing {
+  background: rgba(51, 153, 255, 0.07);
+  color: rgba(0, 0, 0, 0.45);
+}
+
+#sn-chat-widget.sn-light #sn-chat-footer {
+  border-top-color: rgba(51, 153, 255, 0.15);
+}
+
+#sn-chat-widget.sn-light #sn-chat-input {
+  background: #fff;
+  border-color: rgba(51, 153, 255, 0.25);
+  color: #1a2e4a;
+}
+
+#sn-chat-widget.sn-light #sn-chat-input::placeholder {
+  color: rgba(0, 0, 0, 0.3);
+}
+
+#sn-chat-widget.sn-light #sn-chat-messages::-webkit-scrollbar-thumb {
+  background: rgba(51, 153, 255, 0.25);
+}
+
+/* Hint-Bubble Licht-Modus */
+#sn-chat-hint.sn-light {
+  background: #eef5ff;
+  border-color: rgba(51, 153, 255, 0.3);
+  color: #1a2e4a;
+  box-shadow: 0 8px 24px rgba(51, 153, 255, 0.18);
+}
+
+#sn-chat-hint.sn-light strong {
+  color: #1a80e0;
+}
+
+#sn-chat-hint.sn-light::after {
+  border-top-color: #eef5ff;
+}
+
+#sn-chat-hint.sn-light::before {
+  border-top-color: rgba(51, 153, 255, 0.3);
+}
+
+#sn-chat-hint.sn-light .sn-hint-reg-link {
+  color: #1a80e0;
+}
