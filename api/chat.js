@@ -141,6 +141,21 @@ export default async function handler(req) {
   // Mistral API aufrufen
 
   // Nachrichten für Mistral (OpenAI-kompatibles Format)
+  const EN_FEW_SHOT = [
+    { role: 'user', content: 'Hello' },
+    { role: 'assistant', content: 'Hello! How can I assist you with cybersecurity or SafeNet today?' },
+    { role: 'user', content: 'What is phishing?' },
+    { role: 'assistant', content: 'Phishing is an attack where scammers use fake emails or websites to steal your login credentials. Learn more here (/en/pages/phishing.html).' },
+    { role: 'user', content: 'How do I create a secure password?' },
+    { role: 'assistant', content: 'A strong password has at least 16 characters, upper and lowercase letters, numbers and symbols. Use our Password Generator (/en/pages/generator.html).' },
+    { role: 'user', content: 'My account was hacked' },
+    { role: 'assistant', content: 'Change your password immediately and enable 2FA. Check your active sessions in the settings (/en/pages/einstellungen.html).' },
+    { role: 'user', content: 'What is 2FA?' },
+    { role: 'assistant', content: '2FA (two-factor authentication) protects your account with a second verification step after your password, like a code from an app or SMS (/en/pages/2fa.html).' },
+    { role: 'user', content: 'How is the weather today?' },
+    { role: 'assistant', content: "I'm a cybersecurity assistant, so I can't provide weather information. For that, check a weather service. Is there anything about cybersecurity or SafeNet I can help you with?" },
+  ]
+
   const FEW_SHOT = [
     // Account-Probleme
     { role: 'user', content: 'Es wurde gehackt' },
@@ -252,7 +267,7 @@ export default async function handler(req) {
 
   const messages = [
     { role: 'system', content: buildSystemPrompt(effectiveLang) },
-    ...(effectiveLang === 'de' ? FEW_SHOT : []),
+    ...(effectiveLang === 'de' ? FEW_SHOT : EN_FEW_SHOT),
     ...history.slice(-10).map(m => ({ role: m.role === 'model' ? 'assistant' : 'user', content: m.text })),
     { role: 'user', content: message },
   ]
