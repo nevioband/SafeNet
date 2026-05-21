@@ -91,32 +91,3 @@
     </ul>
   </div>
 </nav>
-
-<!-- Desktop App Download-Banner -->
-<div id="desktop-banner" style="
-  position:fixed;top:80px;right:24px;z-index:9999;
-  background:linear-gradient(135deg,#1e3a5f,#0f172a);
-  border:1px solid #3399ff44;
-  border-radius:14px;padding:14px 18px;
-  display:flex;align-items:center;gap:14px;
-  box-shadow:0 4px 24px #0008;
-  max-width:340px;animation:bannerIn .4s ease;
-  font-family:Inter,sans-serif;
-">
-  <span style="font-size:1.5rem">🖥️</span>
-  <div style="flex:1">
-    <div style="color:#fff;font-weight:600;font-size:.95rem">SafeNet als Desktop App</div>
-    <a href="/de/pages/desktop.html" style="color:#66d9ff;font-size:.82rem;text-decoration:none">Jetzt herunterladen →</a>
-  </div>
-  <button onclick="document.getElementById('desktop-banner').style.display='none';sessionStorage.setItem('bannerClosed','1')" style="background:none;border:none;color:#aaa;font-size:1.2rem;cursor:pointer;line-height:1" aria-label="Schliessen">✕</button>
-</div>
-<style>
-  @keyframes bannerIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-</style>
-<script>
-  (function(){
-    if(sessionStorage.getItem('bannerClosed')) return;
-    var b=document.getElementById('desktop-banner');
-    setTimeout(function(){if(b)b.style.display='none';},9000);
-  })();
-</script>
