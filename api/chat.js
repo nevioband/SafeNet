@@ -251,7 +251,7 @@ export default async function handler(req) {
 
   const messages = [
     { role: 'system', content: buildSystemPrompt(lang) },
-    ...FEW_SHOT,
+    ...(lang === 'de' ? FEW_SHOT : []),
     ...history.slice(-10).map(m => ({ role: m.role === 'model' ? 'assistant' : 'user', content: m.text })),
     { role: 'user', content: message },
   ]
