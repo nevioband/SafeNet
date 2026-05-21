@@ -212,6 +212,8 @@ export default async function handler(req) {
     { role: 'assistant', content: 'You can find the SafeNet Privacy Policy here (/en/pages/datenschutzerklärung.html).' },
     { role: 'user', content: 'Where is the imprint?' },
     { role: 'assistant', content: 'The imprint is available here (/en/pages/impressum.html).' },
+    { role: 'user', content: 'Where are the Terms of Service?' },
+    { role: 'assistant', content: 'SafeNet does not have separate Terms of Service. For legal information, see the Privacy Policy (/en/pages/datenschutzerklärung.html) and the Imprint (/en/pages/impressum.html).' },
     { role: 'user', content: 'How can I contact you?' },
     { role: 'assistant', content: 'You can reach us via the contact page (/en/pages/kontakt.html).' },
     { role: 'user', content: 'Hello' },
@@ -333,6 +335,8 @@ export default async function handler(req) {
     { role: 'assistant', content: 'Du kannst uns über die Kontaktseite erreichen (/de/pages/kontakt.html).' },
     { role: 'user', content: 'Was ist der Haftungsausschluss?' },
     { role: 'assistant', content: 'Den Haftungsausschluss von SafeNet findest du hier (/de/pages/haftungsausschluss.html).' },
+    { role: 'user', content: 'Wo finde ich die AGB?' },
+    { role: 'assistant', content: 'SafeNet hat keine separaten AGB. Für rechtliche Informationen stehen die Datenschutzerklärung (/de/pages/datenschutzerklärung.html) und das Impressum (/de/pages/impressum.html) zur Verfügung.' },
     { role: 'user', content: 'Was ist SafeNet?' },
     { role: 'assistant', content: 'Mehr über SafeNet Security erfährst du auf der Über-uns-Seite (/de/pages/übersns.html).' },
     // Allgemeine Sicherheitstipps
