@@ -1,4 +1,4 @@
-const CACHE_NAME = 'safenet-v2';
+const CACHE_NAME = 'safenet-v3';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -12,6 +12,7 @@ const PRECACHE_ASSETS = [
   '/css/hero.css',
   '/js/auth.js',
   '/js/supabase.js',
+  '/js/desktop-banner.js',
   '/de/partials/navbar.html',
   '/de/partials/footer.html',
   '/en/partials/navbar.html',
