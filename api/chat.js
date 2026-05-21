@@ -139,7 +139,7 @@ export default async function handler(req) {
     body: JSON.stringify({
       model: 'open-mistral-nemo',
       messages: [
-        { role: 'system', content: 'You are a content safety filter. Reply with exactly one word: SAFE or UNSAFE.\n\nUNSAFE only for: Hitler, Nazis, Holocaust, Stalin, Pol Pot, genocides, war criminals, dictators and their crimes, terrorism, mass murderers, violence, weapons, drugs, sexual content, self-harm — even if phrased indirectly.\n\nSAFE for everything else, including: cybersecurity, hacking, account problems, passwords (including actual password values shared for security help), phishing, malware, social engineering, data breaches, IT help, coding, cooking, weather, sports, math, music, films, travel, greetings, SafeNet platform, short replies like "ja", "nein", "ok", "meiner", "Account", "nein meiner", single words, and ALL questions or answers in German or any other language about these topics. Examples that are SAFE: "Mein Account wurde gehackt", "Ich habe ein Problem", "Was ist Phishing", "Wie sicher ist mein Passwort", "Mein Passwort ist Passwort123 und wurde gehackt", "My password abc123 was leaked", "Nein", "Ja", "Account", "Nein meiner".\n\nReply with exactly one word: SAFE or UNSAFE.' },
+        { role: 'system', content: 'You are a content safety filter. Reply with exactly one word: SAFE or UNSAFE.\n\nUNSAFE only for: Hitler, Nazis, Holocaust, Stalin, Pol Pot, genocides, war criminals, dictators and their crimes, terrorism, mass murderers, violence, weapons, drugs, sexual content, self-harm, suicide — even if phrased indirectly.\n\nSAFE for absolutely everything else, especially: cybersecurity, hacking, being hacked, account problems, passwords, phishing, malware, social engineering, data breaches, IT help, coding, cooking, weather, sports, math, music, films, travel, greetings, general questions, SafeNet platform topics, and any short or vague messages.\n\nExamples that are SAFE: "My password is hacked", "I was hacked", "My account got hacked", "Someone hacked me", "My password is leaked", "My password abc123 was leaked", "Mein Account wurde gehackt", "Ich habe ein Problem", "Was ist Phishing", "Wie sicher ist mein Passwort", "Mein Passwort ist Passwort123 und wurde gehackt", "Nein", "Ja", "Account", "Help", "Hello", "I need help", "What is phishing?"\n\nWhen in doubt, reply SAFE.\n\nReply with exactly one word: SAFE or UNSAFE.' },
         { role: 'user', content: message },
       ],
       max_tokens: 5,
@@ -151,7 +151,7 @@ export default async function handler(req) {
     ? ((await blockRes.json().catch(() => null))?.choices?.[0]?.message?.content?.trim().toUpperCase() ?? '')
     : ''
 
-  if (!filterVerdict.startsWith('SAFE')) {
+  if (filterVerdict.startsWith('UNSAFE')) {
     const reply = effectiveLang === 'en'
       ? "That's a topic I can't discuss here. I'm happy to help you with cybersecurity or anything on the SafeNet platform!"
       : 'Dazu kann ich hier keine Aussagen machen. Ich helfe dir gerne bei Cybersicherheit oder der SafeNet Plattform!'
