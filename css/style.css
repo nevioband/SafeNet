@@ -75,6 +75,7 @@ body{
     margin:0;
     background-color: var(--bg);
     color: var(--text);
+    overflow-x: hidden;
 }
 h1, h2, h3, h4{
   background: linear-gradient(135deg, #3399ff, #66d9ff);
@@ -121,6 +122,11 @@ h2 {
         height: 150px;
     }
 }
+
+@media (max-width: 360px) {
+    h1 { font-size: 26px; }
+    h2 { font-size: 20px; }
+}
 * {
       font-family: 'Inter', sans-serif;
 }
@@ -129,6 +135,7 @@ h2 {
 
 /* Logo */
 .logo img.logo-light { display: none; }
+.logo .logo-icon { display: none; }
 [data-theme="light"] .logo img.logo-dark  { display: none; }
 [data-theme="light"] .logo img.logo-light { display: block; }
 

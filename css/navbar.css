@@ -46,6 +46,13 @@
   transition: filter 0.3s ease;
 }
 
+/* Logo-Icon (nur Schild, kein Text) – standardmässig versteckt */
+.logo .logo-icon {
+  display: none;
+  height: 36px;
+  width: auto;
+}
+
 .logo img:hover {
   filter: drop-shadow(0 0 20px rgba(51, 153, 255, 0.75)) drop-shadow(0 0 40px rgba(102, 217, 255, 0.4));
 }
@@ -390,6 +397,39 @@ html, body {
   flex-shrink: 0;
 }
 .search-btn:hover { color: #66d9ff; }
+
+/* ===== Sehr schmale Bildschirme (≤ 360px): Nur Schild-Icon ===== */
+@media (max-width: 360px) {
+  .navbar {
+    padding: 8px 8px;
+    gap: 4px;
+  }
+
+  /* Vollständige Logos (mit Text) ausblenden */
+  .logo img.logo-dark,
+  .logo img.logo-light {
+    display: none !important;
+  }
+
+  /* Nur Schild-Icon zeigen */
+  .logo .logo-icon {
+    display: block !important;
+  }
+
+  .menu-toggle {
+    width: 30px;
+    height: 30px;
+  }
+
+  .user-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .search-btn {
+    padding: 4px;
+  }
+}
 
 @media (max-width: 768px) {
   .search-btn {
