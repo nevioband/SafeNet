@@ -87,17 +87,11 @@ h1, h2, h3, h4{
 h1 {
     font-size: clamp(20px, 5vw, 38px);
     overflow-wrap: break-word;
-    word-break: break-word;
-    hyphens: auto;
-    -webkit-hyphens: auto;
     max-width: 100%;
 }
 h2 {
     font-size: clamp(17px, 4vw, 28px);
     overflow-wrap: break-word;
-    word-break: break-word;
-    hyphens: auto;
-    -webkit-hyphens: auto;
     max-width: 100%;
 }
 .T1 {
@@ -138,15 +132,23 @@ h2 {
     h4 { font-size: clamp(13px, 3vw, 16px); }
     h1, h2, h3, h4, p {
         overflow-wrap: break-word;
-        word-break: break-word;
-        hyphens: auto;
-        -webkit-hyphens: auto;
     }
 }
 
-/* ===== Aggressiver Padding-Reset auf ultra-schmalen Screens ===== */
 @media (max-width: 400px) {
-    section, main, .hero, .features, .info-section {
+    h1, h2, .T1 {
+        font-size: clamp(1.2rem, 6vw, 1.8rem) !important;
+        line-height: 1.2 !important;
+        text-align: center;
+        hyphens: none !important;
+        word-break: normal !important;
+        -webkit-hyphens: none !important;
+    }
+    .hero, .features {
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+    }
+    section, main, .info-section {
         padding-left: 8px !important;
         padding-right: 8px !important;
     }
