@@ -43,6 +43,21 @@
   }
 }
 
+@media (max-width: 360px) {
+  .hero {
+    padding: 20px 12px;
+  }
+
+  .hero h1 {
+    font-size: 20px;
+    letter-spacing: 0;
+  }
+
+  .hero p {
+    font-size: 13px;
+  }
+}
+
 .hero-content {
   max-width: 900px;
 }
@@ -55,6 +70,8 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   letter-spacing: -0.5px;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .hero p {

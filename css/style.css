@@ -126,6 +126,10 @@ h2 {
 @media (max-width: 360px) {
     h1 { font-size: 26px; }
     h2 { font-size: 20px; }
+    h1, h2, h3, h4 {
+        overflow-wrap: break-word;
+        word-break: break-word;
+    }
 }
 * {
       font-family: 'Inter', sans-serif;

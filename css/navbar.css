@@ -402,7 +402,8 @@ html, body {
 @media (max-width: 360px) {
   .navbar {
     padding: 8px 8px;
-    gap: 4px;
+    gap: 2px;
+    justify-content: space-between;
   }
 
   /* Vollständige Logos (mit Text) ausblenden */
@@ -416,9 +417,19 @@ html, body {
     display: block !important;
   }
 
+  /* Hamburger mittig zwischen Logo und Buttons */
   .menu-toggle {
-    width: 30px;
+    margin: 0 !important;   /* Override: 768px-Regel setzt margin: 0 auto */
+    flex: 1;
+    justify-content: center;
+    width: auto;
     height: 30px;
+  }
+
+  /* Konto-Button MUSS immer sichtbar sein */
+  .user-menu {
+    flex-shrink: 0;
+    margin-left: 0;
   }
 
   .user-btn {
@@ -427,7 +438,8 @@ html, body {
   }
 
   .search-btn {
-    padding: 4px;
+    padding: 2px;
+    flex-shrink: 0;
   }
 }
 
