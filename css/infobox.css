@@ -154,3 +154,34 @@
 @media (max-width: 768px) {
 
 }
+
+@media (max-width: 360px) {
+  .features {
+    padding: 20px 12px 40px;
+    gap: 16px;
+  }
+
+  .feature-card {
+    padding: 16px 12px;
+  }
+
+  .feature-card h3 {
+    font-size: 16px;
+  }
+
+  .feature-card p {
+    font-size: 13px;
+  }
+
+  .info-box {
+    padding: 20px 14px;
+  }
+
+  .info-box h2 {
+    font-size: 22px;
+  }
+
+  .info-box p {
+    font-size: 14px;
+  }
+}

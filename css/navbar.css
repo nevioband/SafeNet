@@ -385,7 +385,7 @@
 }
 
 html, body {
-  overflow-x: visible;
+  overflow-x: hidden;
 }
 
 /* Avatar / Initialen im User-Button */
