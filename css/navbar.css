@@ -25,6 +25,30 @@
   height: 22px;
 }
 
+/* Suche im Hamburger-Menü – standardmässig versteckt */
+.nav-search-item {
+  display: none !important;
+}
+
+.sn-search-trigger {
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 15px;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 0;
+  width: 100%;
+}
+
+.sn-search-trigger:hover {
+  color: #3b82f6;
+}
+
 .lang-item {
   display: none !important;
 }
@@ -437,9 +461,14 @@ html, body {
     height: 32px;
   }
 
+  /* Lupe aus der Navbar ausblenden – ist jetzt im Hamburger-Menü */
   .search-btn {
-    padding: 2px;
-    flex-shrink: 0;
+    display: none;
+  }
+
+  /* Suchen-Eintrag im Hamburger-Menü einblenden */
+  .nav-search-item {
+    display: flex !important;
   }
 }
 
