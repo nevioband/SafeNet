@@ -217,12 +217,22 @@
 
   .menu-toggle {
     display: flex;
-    flex: 0 0 auto;
-    margin: 0 auto;
+    flex: 1;
+    justify-content: center;
+    margin: 0 !important;
+  }
+
+  .user-menu {
+    flex-shrink: 0;
+    margin-left: 0;
   }
 
   .search-btn {
-    flex-shrink: 0;
+    display: none;
+  }
+
+  .nav-search-item {
+    display: flex !important;
   }
 
   .nav-links {
@@ -461,22 +471,10 @@ html, body {
     height: 32px;
   }
 
-  /* Lupe aus der Navbar ausblenden – ist jetzt im Hamburger-Menü */
-  .search-btn {
-    display: none;
-  }
-
-  /* Suchen-Eintrag im Hamburger-Menü einblenden */
-  .nav-search-item {
-    display: flex !important;
-  }
+  /* Suche ist bereits bei ≤768px ins Hamburger-Menü verschoben */
 }
 
-@media (max-width: 768px) {
-  .search-btn {
-    display: flex;
-  }
-}
+/* .search-btn wird bei ≤768px im 768px-Block auf display:none gesetzt */
 
 /* -- Such-Overlay ---------------------------------- */
 #search-overlay {

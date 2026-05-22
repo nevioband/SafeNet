@@ -85,10 +85,14 @@ h1, h2, h3, h4{
   filter: drop-shadow(0 0 18px rgba(51, 153, 255, 0.45));
 }
 h1 {
-    font-size: 38px;
+    font-size: clamp(20px, 5vw, 38px);
+    overflow-wrap: break-word;
+    max-width: 100%;
 }
 h2 {
-    font-size: 28px;
+    font-size: clamp(17px, 4vw, 28px);
+    overflow-wrap: break-word;
+    max-width: 100%;
 }
 .T1 {
     text-align: center;
@@ -124,8 +128,8 @@ h2 {
 }
 
 @media (max-width: 360px) {
-    h1 { font-size: 26px; }
-    h2 { font-size: 20px; }
+    h3 { font-size: clamp(15px, 4vw, 20px); }
+    h4 { font-size: clamp(14px, 3.5vw, 18px); }
     h1, h2, h3, h4 {
         overflow-wrap: break-word;
     }
