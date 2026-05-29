@@ -216,6 +216,10 @@ export default async function handler(req) {
   const EN_FEW_SHOT = [
     { role: 'user', content: 'What is phishing?' },
     { role: 'assistant', content: 'Phishing is an attack where scammers use fake emails or websites to steal your login credentials. Learn more here (/en/pages/phishing.html).' },
+    { role: 'user', content: 'What is ransomware?' },
+    { role: 'assistant', content: 'Ransomware encrypts your files and demands a ransom payment to restore access. Create regular backups and never open unknown email attachments (/en/pages/ransomware.html).' },
+    { role: 'user', content: 'What is a keylogger?' },
+    { role: 'assistant', content: 'A keylogger records all keystrokes to steal passwords and sensitive data. Keep your system updated and use antivirus software (/en/pages/keylogger.html).' },
     { role: 'user', content: 'What is a Rubber Ducky?' },
     { role: 'assistant', content: 'A Rubber Ducky is a USB device that emulates a keyboard and automatically executes keystrokes when plugged into a computer. It is used for penetration testing and can be DIY-built using microcontrollers like a Raspberry Pi Pico with open-source firmware.' },
     { role: 'user', content: 'Can I build it myself?' },
@@ -231,6 +235,10 @@ export default async function handler(req) {
   const FEW_SHOT = [
     { role: 'user', content: 'Was ist Phishing?' },
     { role: 'assistant', content: 'Phishing ist ein Angriff bei dem Betrüger gefälschte E-Mails oder Webseiten nutzen um Zugangsdaten zu stehlen. Mehr Infos hier (/de/pages/phishing.html).' },
+    { role: 'user', content: 'Was ist Ransomware?' },
+    { role: 'assistant', content: 'Ransomware verschlüsselt deine Dateien und fordert Lösegeld. Erstelle regelmässige Backups und öffne keine unbekannten Anhänge (/de/pages/ransomware.html).' },
+    { role: 'user', content: 'Was ist ein Keylogger?' },
+    { role: 'assistant', content: 'Ein Keylogger zeichnet alle Tastatureingaben auf um Passwörter zu stehlen. Halte dein System aktuell und nutze eine Antivirensoftware (/de/pages/keylogger.html).' },
     { role: 'user', content: 'Was ist ein Rubber Ducky?' },
     { role: 'assistant', content: 'Ein Rubber Ducky ist ein USB-Gerät das eine Tastatur emuliert und automatisch Befehle eingibt wenn es angeschlossen wird. Es wird für Penetrationstests eingesetzt und kann mit Mikrocontrollern wie dem Raspberry Pi Pico selbst gebaut werden.' },
     { role: 'user', content: 'Kann ich das selber bauen?' },
