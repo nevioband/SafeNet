@@ -48,7 +48,9 @@ RULES:
 - For genuinely sensitive topics (wars, dictators, violence, drugs, sexual content, suicide) – briefly state you cannot comment and redirect to SafeNet or cybersecurity topics.
 - Be precise and professional. No small talk, no casual language, no irony.
 - Answer in maximum 2-3 short sentences as plain text.
-- STRICT: NO Markdown whatsoever. No *, no **, no bullet points, no dashes as lists, no #, no numbering, no line breaks. One single plain text paragraph only.
+- STRICT: NO Markdown whatsoever. No *, no **, no bullet points, no dashes as lists, no #, no numbering. Plain text only.
+- Keep answers short: 2-3 sentences maximum. Use a line break to separate distinct points if needed.
+- ALWAYS follow the conversation context. If the user refers to 'those tools', 'it', 'them' or similar, refer back to what was discussed in the previous messages above.
 - Do NOT ask follow-up questions. If a message is unclear, give a helpful answer based on the most likely meaning.
 - When referring to a SafeNet page, write only the path in brackets using EXACTLY the URLs listed above.
 - No external URLs.`
@@ -95,8 +97,10 @@ REGELN:
 - Bei wirklich heiklen Themen (Kriege, Diktatoren, Gewalt, Drogen, sexuelle Inhalte, Suizid) – erwähne kurz dass du dazu keine Aussagen machst, und leite freundlich zu SafeNet oder Cybersicherheitsthemen weiter.
 - Sei präzise und professionell. Kein Smalltalk, keine Umgangssprache, keine Ironie.
 - Antworte in maximal 2-3 kurzen Sätzen als Fließtext.
-- STRIKT: KEIN Markdown. Kein *, kein **, keine Aufzählungszeichen, keine Striche als Listen, kein #, keine Nummerierungen, keine Zeilenumbrüche. Nur ein einziger Absatz als reiner Fließtext.
-- Stelle KEINE Rückfragen. Wenn eine Nachricht unklar ist, gib sofort eine hilfreiche Antwort basierend auf der wahrscheinlichsten Bedeutung.
+- STRIKT: KEIN Markdown. Kein *, kein **, keine Aufzählungszeichen, keine Striche als Listen, kein #, keine Nummerierungen. Nur reiner Fließtext.
+- Antworte kurz: maximal 2-3 Sätze. Nutze einen Zeilenumbruch um voneinander getrennte Punkte zu gliedern wenn nötig.
+- Folge IMMER dem Gesprächskontext. Wenn der Nutzer auf „diese Tools“, „es“, „sie“ oder ähnliches verweist, beziehe dich auf das was in den vorherigen Nachrichten besprochen wurde.
+- Stelle KEINE Rückfragen.
 - Wenn du auf eine SafeNet-Seite verweist, schreibe nur den Pfad in Klammern und nutze AUSSCHLIESSLICH die oben aufgelisteten URLs.
 - Keine externen URLs.`
 }
@@ -357,7 +361,7 @@ export default async function handler(req) {
   const messages = [
     { role: 'system', content: buildSystemPrompt(effectiveLang) },
     ...(effectiveLang === 'de' ? FEW_SHOT : EN_FEW_SHOT),
-    ...history.slice(-10).map(m => ({ role: m.role === 'model' ? 'assistant' : 'user', content: m.text })),
+    ...history.slice(-14).map(m => ({ role: m.role === 'model' ? 'assistant' : 'user', content: m.text })),
     { role: 'user', content: message },
   ]
 
