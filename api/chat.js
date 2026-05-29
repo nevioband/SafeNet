@@ -52,7 +52,7 @@ RULES:
 - Keep answers short: 2-3 sentences maximum. Use a line break to separate distinct points if needed.
 - ALWAYS follow the conversation context. If the user refers to 'those tools', 'it', 'them' or similar, refer back to what was discussed in the previous messages above.
 - Do NOT ask follow-up questions. If a message is unclear, give a helpful answer based on the most likely meaning.
-- Only link to a SafeNet page when the exact topic is directly covered there (e.g. Phishing → phishing.html, Bruteforce → bruteforce.html). Do NOT add a link if the topic is only loosely related or no dedicated SafeNet page exists for it. Write the path in brackets and use ONLY the URLs listed above.
+- Only link to a SafeNet page for these exact topics (strict mapping): Password analysis → analysator.html, Password generator → generator.html, Vault/storing passwords → tresor.html, Notes → notizen.html, Tutorials → tutorials.html, Statistics → meine-stats.html, Settings/account → einstellungen.html, Phishing/Spear-Phishing → phishing.html, Quishing → quishing.html, Bruteforce → bruteforce.html, Social Engineering → socialengineering.html, Keylogger → keylogger.html, Dictionary attack → wörterbuchangriff.html, Ransomware → ransomware.html, MFA Bypass → mfa-bypass.html, 2FA/Two-factor → 2fa.html, Man-in-the-Middle → mitm.html, Login/Register → login.html or register.html, Contact → kontakt.html, Privacy → datenschutzerklärung.html, Imprint → impressum.html, About SafeNet → übersns.html. For all other topics (e.g. Rubber Ducky, Bash Bunny, Flipper Zero, Kali Linux, etc.) there is NO dedicated SafeNet page – do NOT insert a link.
 - No external URLs.`
   }
   return `Du bist der SafeNet Assistent – der eingebaute KI-Helfer der Webseite SafeNet Security (safenet-security.ch). Du bist DIREKT AUF DIESER WEBSEITE eingebettet und kennst sie genau.
@@ -101,7 +101,7 @@ REGELN:
 - Antworte kurz: maximal 2-3 Sätze. Nutze einen Zeilenumbruch um voneinander getrennte Punkte zu gliedern wenn nötig.
 - Folge IMMER dem Gesprächskontext. Wenn der Nutzer auf „diese Tools“, „es“, „sie“ oder ähnliches verweist, beziehe dich auf das was in den vorherigen Nachrichten besprochen wurde.
 - Stelle KEINE Rückfragen.
-- Verweise auf eine SafeNet-Seite NUR wenn das genaue Thema dort direkt behandelt wird (z.B. Phishing → phishing.html, Bruteforce → bruteforce.html). Füge KEINEN Link ein wenn das Thema nur entfernt verwandt ist oder keine dedizierte SafeNet-Seite dazu existiert. Schreibe dann den Pfad in Klammern und nutze AUSSCHLIESSLICH die oben aufgelisteten URLs.
+- Verweise auf eine SafeNet-Seite NUR für folgende Themen (exakte Zuordnung): Passwort-Analyse → analysator.html, Passwort-Generator → generator.html, Tresor/Passwörter speichern → tresor.html, Notizen → notizen.html, Tutorials → tutorials.html, Statistiken → meine-stats.html, Einstellungen/Account → einstellungen.html, Phishing/Spear-Phishing/Quishing → phishing.html oder quishing.html, Bruteforce → bruteforce.html, Social Engineering → socialengineering.html, Keylogger → keylogger.html, Wörterbuchangriff → wörterbuchangriff.html, Ransomware → ransomware.html, MFA-Bypass → mfa-bypass.html, 2FA/Zwei-Faktor → 2fa.html, Man-in-the-Middle → mitm.html, Login/Registrierung → login.html oder register.html, Kontakt → kontakt.html, Datenschutz → datenschutzerklärung.html, Impressum → impressum.html, Über SafeNet → übersns.html. Für alle anderen Themen (z.B. Rubber Ducky, Bash Bunny, Flipper Zero, Kali Linux usw.) gibt es KEINE SafeNet-Seite – füge dort KEINEN Link ein.
 - Keine externen URLs.`
 }
 
