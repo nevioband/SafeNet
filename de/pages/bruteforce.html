@@ -44,12 +44,38 @@
     <section class="info-section">
       <div class="info-box">
         <h2>Wie funktioniert es?</h2>
-        <p>
-          Eine Software oder ein Skript generiert automatisch Passwort-Kombinationen und versucht, sich damit anzumelden. 
-          Bei Online-Angriffen wird zunächst ein bekannter Benutzername (z.B. E-Mail-Adresse) verwendet. 
-          Der Computer versucht dann, sich mit verschiedenen Passwörtern anzumelden, bis der Zugang gewährt wird. 
-          Bei Offline-Attacken auf verschlüsselte Daten läuft dieser Prozess ohne Verzögerungen ab und ist daher noch schneller.
-        </p>
+        <div class="technique-grid">
+          <div class="technique-card">
+            <div class="technique-icon">🎯</div>
+            <h4>Ziel identifizieren</h4>
+            <p>Der Angreifer kennt den Benutzernamen oder die E-Mail-Adresse des Opfers und nutzt ihn als Ausgangspunkt.</p>
+          </div>
+          <div class="technique-card">
+            <div class="technique-icon">⚙️</div>
+            <h4>Zeichensatz definieren</h4>
+            <p>Die Angriffssoftware kombiniert systematisch Buchstaben, Zahlen und Sonderzeichen zu möglichen Passwörtern.</p>
+          </div>
+          <div class="technique-card">
+            <div class="technique-icon">🤖</div>
+            <h4>Automatisierter Angriff</h4>
+            <p>Millionen Kombinationen werden pro Sekunde getestet – moderne Hardware schafft bis zu 10 Milliarden Versuche/Sekunde.</p>
+          </div>
+          <div class="technique-card">
+            <div class="technique-icon">⏱️</div>
+            <h4>Zeit vs. Komplexität</h4>
+            <p>Ein 6-stelliges Passwort fällt in Sekunden. Ein 12-stelliges mit Sonderzeichen würde Jahrhunderte dauern.</p>
+          </div>
+          <div class="technique-card">
+            <div class="technique-icon">🔓</div>
+            <h4>Zugang erlangt</h4>
+            <p>Sobald die richtige Kombination gefunden ist, öffnet sich der Zugang – Konto, Datei oder System ist kompromittiert.</p>
+          </div>
+          <div class="technique-card">
+            <div class="technique-icon">🛡️</div>
+            <h4>Rate-Limiting</h4>
+            <p>Online-Systeme verlangsamen und sperren Angreifer nach zu vielen Fehlversuchen – offline gibt es diese Hürde nicht.</p>
+          </div>
+        </div>
       </div>
     </section>
 

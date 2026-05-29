@@ -53,16 +53,38 @@
     <section class="info-section">
       <div class="info-box">
         <h2>Wie funktioniert es?</h2>
-        <p>
-          Der Angreifer lädt eine Wörterbuch-Datei herunter, die Tausende oder
-          Millionen von häufig verwendeten Passwörtern enthält (z.B.
-          "password123", "letmein", "admin", "123456" oder sogar Namen und
-          Wörter in verschiedenen Sprachen). Ein Skript oder Programm versucht
-          dann systematisch, sich mit jedem Wort aus dem Wörterbuch anzumelden.
-          Wenn das Passwort in der Liste vorhanden ist, wird der Zugang gewährt.
-          Viele Angreifer nutzen auch Variationen, wie das Anhängen von Zahlen
-          oder Sonderzeichen an Wörter.
-        </p>
+        <div class="technique-grid">
+          <div class="technique-card">
+            <div class="technique-icon">📚</div>
+            <h4>Wörterliste laden</h4>
+            <p>Der Angreifer nutzt Listen mit Millionen realer Passwörter aus Datenlecks sowie häufig verwendete Wörter und Phrasen.</p>
+          </div>
+          <div class="technique-card">
+            <div class="technique-icon">🔄</div>
+            <h4>Varianten bilden</h4>
+            <p>Software ersetzt automatisch Buchstaben (a→@, e→3) und hängt typische Endungen an: „password" wird zu „P@ssw0rd1!".</p>
+          </div>
+          <div class="technique-card">
+            <div class="technique-icon">🤖</div>
+            <h4>Automatischer Test</h4>
+            <p>Jeder Eintrag der Liste wird systematisch gegen das Zielkonto oder die verschlüsselte Datei getestet.</p>
+          </div>
+          <div class="technique-card">
+            <div class="technique-icon">💥</div>
+            <h4>Treffer bei schwachen Passwörtern</h4>
+            <p>„password123", „sommer2024" oder „Max123456" – solche Passwörter fallen in Millisekunden.</p>
+          </div>
+          <div class="technique-card">
+            <div class="technique-icon">📊</div>
+            <h4>Effizienter als Bruteforce</h4>
+            <p>Statt alle möglichen Zeichenkombinationen zu testen, werden nur realistische Kandidaten geprüft – viel schneller.</p>
+          </div>
+          <div class="technique-card">
+            <div class="technique-icon">🔑</div>
+            <h4>Datenlecks als Quelle</h4>
+            <p>Gestohlene Passwortlisten aus Hackerangriffen (z.B. RockYou, LinkedIn) enthalten Milliarden realer Passwörter.</p>
+          </div>
+        </div>
       </div>
     </section>
 

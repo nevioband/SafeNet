@@ -47,15 +47,38 @@
     <section class="info-section">
       <div class="info-box">
         <h2>How Does It Work?</h2>
-        <p>
-          The attacker downloads a dictionary file containing thousands or
-          millions of commonly used passwords (e.g. "password123", "letmein",
-          "admin", "123456" or even names and words in various languages). A
-          script or program then systematically tries to log in with each word
-          from the dictionary. If the password is in the list, access is
-          granted. Many attackers also use variations, such as appending numbers
-          or special characters to words.
-        </p>
+        <div class="technique-grid">
+          <div class="technique-card">
+            <div class="technique-icon">📚</div>
+            <h4>Load Wordlist</h4>
+            <p>The attacker uses lists of millions of real passwords from data breaches plus commonly used words and phrases.</p>
+          </div>
+          <div class="technique-card">
+            <div class="technique-icon">🔄</div>
+            <h4>Generate Variants</h4>
+            <p>Software auto-replaces characters (a→@, e→3) and appends typical suffixes: "password" becomes "P@ssw0rd1!".</p>
+          </div>
+          <div class="technique-card">
+            <div class="technique-icon">🤖</div>
+            <h4>Automated Testing</h4>
+            <p>Each entry in the list is systematically tested against the target account or encrypted file.</p>
+          </div>
+          <div class="technique-card">
+            <div class="technique-icon">💥</div>
+            <h4>Weak Passwords Fall Fast</h4>
+            <p>"password123", "summer2024" or "Max123456" – such passwords are cracked in milliseconds.</p>
+          </div>
+          <div class="technique-card">
+            <div class="technique-icon">📊</div>
+            <h4>More Efficient Than Bruteforce</h4>
+            <p>Instead of testing all possible character combinations, only realistic candidates are checked – much faster.</p>
+          </div>
+          <div class="technique-card">
+            <div class="technique-icon">🔑</div>
+            <h4>Data Leaks as Source</h4>
+            <p>Stolen password lists from hacks (e.g. RockYou, LinkedIn) contain billions of real passwords used as input.</p>
+          </div>
+        </div>
       </div>
     </section>
 

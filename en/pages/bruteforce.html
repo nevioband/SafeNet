@@ -46,14 +46,38 @@
     <section class="info-section">
       <div class="info-box">
         <h2>How Does It Work?</h2>
-        <p>
-          Software or a script automatically generates password combinations and
-          tries to log in with them. In online attacks, a known username (e.g.
-          email address) is used first. The computer then tries to log in with
-          different passwords until access is granted. In offline attacks on
-          encrypted data, this process runs without any delays and is therefore
-          even faster.
-        </p>
+        <div class="technique-grid">
+          <div class="technique-card">
+            <div class="technique-icon">🎯</div>
+            <h4>Identify Target</h4>
+            <p>The attacker knows the victim's username or email address and uses it as the starting point for the attack.</p>
+          </div>
+          <div class="technique-card">
+            <div class="technique-icon">⚙️</div>
+            <h4>Define Character Set</h4>
+            <p>Attack software systematically combines letters, numbers and special characters into possible password candidates.</p>
+          </div>
+          <div class="technique-card">
+            <div class="technique-icon">🤖</div>
+            <h4>Automated Attack</h4>
+            <p>Millions of combinations are tested per second – modern hardware handles up to 10 billion attempts per second.</p>
+          </div>
+          <div class="technique-card">
+            <div class="technique-icon">⏱️</div>
+            <h4>Time vs. Complexity</h4>
+            <p>A 6-character password falls in seconds. A 12-character one with symbols would take centuries to crack.</p>
+          </div>
+          <div class="technique-card">
+            <div class="technique-icon">🔓</div>
+            <h4>Access Gained</h4>
+            <p>Once the correct combination is found, the account, file or system is immediately compromised.</p>
+          </div>
+          <div class="technique-card">
+            <div class="technique-icon">🛡️</div>
+            <h4>Rate-Limiting</h4>
+            <p>Online systems slow down and lock out attackers after too many failed attempts – this barrier doesn't exist offline.</p>
+          </div>
+        </div>
       </div>
     </section>
 
