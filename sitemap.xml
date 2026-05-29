@@ -96,6 +96,16 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://safenet-security.ch/de/pages/rubber-ducky.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://safenet-security.ch/en/pages/rubber-ducky.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://safenet-security.ch/de/pages/phishing.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

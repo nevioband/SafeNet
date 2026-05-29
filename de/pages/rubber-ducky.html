@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rubber Ducky – SafeNet Security</title>
+    <meta name="description" content="Was ist ein USB Rubber Ducky? Lerne wie Angreifer mit manipulierten USB-Sticks in Sekunden Schadsoftware einschleusen und wie du dich schützt." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Rubber Ducky – SafeNet Security" />
+    <meta property="og:description" content="Was ist ein USB Rubber Ducky? Lerne wie Angreifer mit manipulierten USB-Sticks in Sekunden Schadsoftware einschleusen und wie du dich schützt." />
+    <meta property="og:image" content="https://safenet-security.ch/images/SafeNet-Security-Logo/Withbg/ShieldWhiteName.png" />
+    <meta property="og:url" content="https://safenet-security.ch/de/pages/rubber-ducky.html" />
+    <link rel="canonical" href="https://safenet-security.ch/de/pages/rubber-ducky.html" />
+    <link rel="alternate" hreflang="de" href="https://safenet-security.ch/de/pages/rubber-ducky.html" />
+    <link rel="alternate" hreflang="en" href="https://safenet-security.ch/en/pages/rubber-ducky.html" />
+    <link rel="alternate" hreflang="x-default" href="https://safenet-security.ch/de/pages/rubber-ducky.html" />
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/shared.css" />
+    <link rel="stylesheet" href="/css/infobox.css" />
+    <link rel="stylesheet" href="/css/hero.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/generator.css" />
+    <link rel="stylesheet" href="/css/rubber-ducky.css" />
+    <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png" />
+    <script type="module" src="/js/auth.js?v=9"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <h1>USB Rubber Ducky</h1>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Was ist ein USB Rubber Ducky?</h2>
+        <p>
+          Ein USB Rubber Ducky ist ein Angriffswerkzeug, das wie ein gewöhnlicher USB-Stick aussieht, sich gegenüber dem Computer jedoch als <strong>Tastatur</strong> ausgibt. Sobald er eingesteckt wird, führt er automatisch eine vorprogrammierte Abfolge von Tastatureingaben aus – so schnell, dass ein Mensch es nicht verhindern kann. In weniger als 60 Sekunden kann damit Schadsoftware installiert, ein Backdoor geöffnet oder sensible Daten gestohlen werden. Das Gerät wurde ursprünglich von Hak5 als Penetrationstest-Werkzeug entwickelt und kostet weniger als 70 CHF.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Wie funktioniert der Angriff?</h2>
+        <div class="rd-techniques">
+          <div class="rd-technique-card">
+            <div class="rd-technique-icon">🦆</div>
+            <h4>Schritt 1 – Vorbereitung</h4>
+            <p>Der Angreifer programmiert den Rubber Ducky mit einer Skriptsprache (DuckyScript). Das Skript enthält eine präzise Folge von Tastatureingaben, die einen Angriff ausführen.</p>
+          </div>
+          <div class="rd-technique-card">
+            <div class="rd-technique-icon">🔌</div>
+            <h4>Schritt 2 – Einstecken</h4>
+            <p>Das Gerät wird an einen unbeaufsichtigten Computer angesteckt – z. B. in einem Büro, einer Bibliothek oder einem Hotel. Windows erkennt es sofort als Tastatur und vertraut ihm.</p>
+          </div>
+          <div class="rd-technique-card">
+            <div class="rd-technique-icon">⚡</div>
+            <h4>Schritt 3 – Injektion</h4>
+            <p>Der Rubber Ducky führt das Skript in Millisekunden aus: öffnet PowerShell, lädt Schadsoftware herunter und startet sie – alles automatisch und ohne sichtbare Benutzerinteraktion.</p>
+          </div>
+          <div class="rd-technique-card">
+            <div class="rd-technique-icon">🚪</div>
+            <h4>Schritt 4 – Backdoor</h4>
+            <p>Nach erfolgreicher Injektion hat der Angreifer dauerhaften Zugriff auf das System – auch wenn der USB-Stick längst wieder entfernt wurde.</p>
+          </div>
+          <div class="rd-technique-card">
+            <div class="rd-technique-icon">🕵️</div>
+            <h4>Variante: Daten stehlen</h4>
+            <p>Anstatt Schadsoftware einzuschleusen, können auch gespeicherte Passwörter, Browser-Cookies oder Dokumente in Sekunden auf das USB-Gerät kopiert werden.</p>
+          </div>
+          <div class="rd-technique-card">
+            <div class="rd-technique-icon">🎭</div>
+            <h4>Variante: Social Engineering</h4>
+            <p>Angreifer lassen manipulierte USB-Sticks absichtlich auf Parkplätzen oder in Lobbys liegen. Neugierige Mitarbeitende stecken sie ein – und lösen damit den Angriff aus.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Demo -->
+    <div class="password-container">
+      <h3>Demo: Rubber Ducky Angriff</h3>
+      <p class="mfa-demo-intro">
+        Simuliere, was passiert, wenn ein Rubber Ducky an einen Computer eingesteckt wird. Klicke auf «USB einstecken» und beobachte, wie der Angriff in Sekunden abläuft.
+      </p>
+
+      <div class="rd-demo-layout">
+
+        <div>
+          <div class="rd-usb-panel">
+            <h4>Zielcomputer</h4>
+            <div class="rd-usb-visual">
+              <div class="rd-usb-icon">🖥️</div>
+              <div class="rd-usb-status">
+                <strong id="rd-usb-status-text">Kein USB-Gerät</strong>
+                Betriebssystem: Windows 11<br />
+                Benutzer: Mitarbeiter (Standard)
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+              <span style="font-size:1.3rem;">🦆</span>
+              <span id="rd-usb-badge" class="rd-usb-badge idle">Nicht eingesteckt</span>
+            </div>
+            <button id="rd-plug-btn" class="rd-plug-btn">🔌 USB einstecken</button>
+          </div>
+          <div id="rd-result" class="rd-result-banner"></div>
+        </div>
+
+        <div class="rd-terminal">
+          <div class="rd-terminal-bar">
+            <div class="rd-terminal-dot"></div>
+            <div class="rd-terminal-dot"></div>
+            <div class="rd-terminal-dot"></div>
+            <span class="rd-terminal-title">PowerShell – Administrator</span>
+          </div>
+          <div class="rd-terminal-body" id="rd-terminal-body">
+            <span class="rd-cursor"></span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="rd-demo-btns">
+        <button id="rd-reset-btn" class="main-btn">Demo zurücksetzen</button>
+      </div>
+    </div>
+
+    <script src="/js/rubber-ducky-de.js"></script>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Warum ist das so gefährlich?</h2>
+        <p>
+          <strong>Kein Betriebssystem schützt davor:</strong> Da sich der Rubber Ducky als Tastatur ausgibt, vertraut das Betriebssystem ihm blind. Antiviren-Software kann eine Tastatur nicht blockieren.<br /><br />
+          <strong>Kein technisches Wissen nötig:</strong> Fertige Skripte sind frei im Internet verfügbar. Jeder kann einen Angriff durchführen.<br /><br />
+          <strong>Extrem schnell:</strong> Ein professionell programmierter Rubber Ducky benötigt unter 30 Sekunden, um ein System zu kompromittieren.<br /><br />
+          <strong>Physischer Zugang genügt:</strong> Auch kurzer, unbeobachteter Zugang zu einem Computer reicht – etwa während einer Kaffeepause.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>So schützt du dich</h2>
+        <p>
+          <strong>1. Unbekannte USB-Geräte nie einstecken:</strong> Stecke niemals einen USB-Stick ein, dessen Herkunft du nicht kennst – auch nicht, wenn er auf dem Büroparkplatz liegt.<br /><br />
+          <strong>2. USB-Ports deaktivieren:</strong> In sicherheitskritischen Umgebungen können USB-Ports per Gruppenrichtlinie oder physisch gesperrt werden, sodass nur genehmigte Geräte funktionieren.<br /><br />
+          <strong>3. Computer nie unbeaufsichtigt lassen:</strong> Sperr deinen Computer immer, wenn du deinen Arbeitsplatz verlässt (Windows-Taste + L). Ein Rubber-Ducky-Angriff braucht nur Sekunden.<br /><br />
+          <strong>4. USB-Gerätekontrolle einsetzen:</strong> Unternehmens-Software wie USB-Device-Control erlaubt nur vorab genehmigte Geräte an firmeneigenen Computern.<br /><br />
+          <strong>5. Mitarbeitende sensibilisieren:</strong> Awareness-Training ist der wichtigste Schutz. Wer die Bedrohung kennt, steckt keinen fremden USB-Stick ein.
+        </p>
+      </div>
+    </section>
+
+    <div id="footer"></div>
+    <script src="/js/navbar-loader.js"></script>
+  </body>
+</html>

@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rubber Ducky – SafeNet Security</title>
+    <meta name="description" content="What is a USB Rubber Ducky? Learn how attackers use rogue USB devices to inject malicious keystrokes in seconds and how to protect yourself." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Rubber Ducky – SafeNet Security" />
+    <meta property="og:description" content="What is a USB Rubber Ducky? Learn how attackers use rogue USB devices to inject malicious keystrokes in seconds and how to protect yourself." />
+    <meta property="og:image" content="https://safenet-security.ch/images/SafeNet-Security-Logo/Withbg/ShieldWhiteName.png" />
+    <meta property="og:url" content="https://safenet-security.ch/en/pages/rubber-ducky.html" />
+    <link rel="canonical" href="https://safenet-security.ch/en/pages/rubber-ducky.html" />
+    <link rel="alternate" hreflang="de" href="https://safenet-security.ch/de/pages/rubber-ducky.html" />
+    <link rel="alternate" hreflang="en" href="https://safenet-security.ch/en/pages/rubber-ducky.html" />
+    <link rel="alternate" hreflang="x-default" href="https://safenet-security.ch/de/pages/rubber-ducky.html" />
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/shared.css" />
+    <link rel="stylesheet" href="/css/infobox.css" />
+    <link rel="stylesheet" href="/css/hero.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/generator.css" />
+    <link rel="stylesheet" href="/css/rubber-ducky.css" />
+    <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png" />
+    <script type="module" src="/js/auth.js?v=9"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <h1>USB Rubber Ducky</h1>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>What is a USB Rubber Ducky?</h2>
+        <p>
+          A USB Rubber Ducky is an attack tool that looks like an ordinary USB flash drive but identifies itself to the computer as a <strong>keyboard</strong>. Once plugged in, it automatically executes a pre-programmed sequence of keystrokes – faster than any human can react. In less than 60 seconds, malware can be installed, a backdoor opened, or sensitive data stolen. The device was originally developed by Hak5 as a penetration testing tool and costs less than $80.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>How does the attack work?</h2>
+        <div class="rd-techniques">
+          <div class="rd-technique-card">
+            <div class="rd-technique-icon">🦆</div>
+            <h4>Step 1 – Preparation</h4>
+            <p>The attacker programs the Rubber Ducky using a scripting language called DuckyScript. The script contains a precise sequence of keystrokes designed to carry out an attack.</p>
+          </div>
+          <div class="rd-technique-card">
+            <div class="rd-technique-icon">🔌</div>
+            <h4>Step 2 – Plug In</h4>
+            <p>The device is plugged into an unattended computer – e.g. in an office, library, or hotel. Windows immediately recognizes it as a trusted keyboard and grants it full input privileges.</p>
+          </div>
+          <div class="rd-technique-card">
+            <div class="rd-technique-icon">⚡</div>
+            <h4>Step 3 – Injection</h4>
+            <p>The Rubber Ducky executes the script in milliseconds: opens PowerShell, downloads malware and launches it – entirely automatically with no visible user interaction.</p>
+          </div>
+          <div class="rd-technique-card">
+            <div class="rd-technique-icon">🚪</div>
+            <h4>Step 4 – Backdoor</h4>
+            <p>After successful injection, the attacker has persistent access to the system – even after the USB device has long since been removed.</p>
+          </div>
+          <div class="rd-technique-card">
+            <div class="rd-technique-icon">🕵️</div>
+            <h4>Variant: Data Theft</h4>
+            <p>Instead of deploying malware, saved passwords, browser cookies, or documents can be copied to the USB device in a matter of seconds.</p>
+          </div>
+          <div class="rd-technique-card">
+            <div class="rd-technique-icon">🎭</div>
+            <h4>Variant: Social Engineering</h4>
+            <p>Attackers deliberately leave rogue USB sticks in parking lots or lobbies. Curious employees plug them in – and unknowingly trigger the attack.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Demo -->
+    <div class="password-container">
+      <h3>Demo: Rubber Ducky Attack</h3>
+      <p class="mfa-demo-intro">
+        Simulate what happens when a Rubber Ducky is plugged into a computer. Click «Plug in USB» and watch how the attack unfolds in seconds.
+      </p>
+
+      <div class="rd-demo-layout">
+
+        <div>
+          <div class="rd-usb-panel">
+            <h4>Target Computer</h4>
+            <div class="rd-usb-visual">
+              <div class="rd-usb-icon">🖥️</div>
+              <div class="rd-usb-status">
+                <strong id="rd-usb-status-text">No USB device</strong>
+                Operating System: Windows 11<br />
+                User: Employee (Standard)
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+              <span style="font-size:1.3rem;">🦆</span>
+              <span id="rd-usb-badge" class="rd-usb-badge idle">Not plugged in</span>
+            </div>
+            <button id="rd-plug-btn" class="rd-plug-btn">🔌 Plug in USB</button>
+          </div>
+          <div id="rd-result" class="rd-result-banner"></div>
+        </div>
+
+        <div class="rd-terminal">
+          <div class="rd-terminal-bar">
+            <div class="rd-terminal-dot"></div>
+            <div class="rd-terminal-dot"></div>
+            <div class="rd-terminal-dot"></div>
+            <span class="rd-terminal-title">PowerShell – Administrator</span>
+          </div>
+          <div class="rd-terminal-body" id="rd-terminal-body">
+            <span class="rd-cursor"></span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="rd-demo-btns">
+        <button id="rd-reset-btn" class="main-btn">Reset Demo</button>
+      </div>
+    </div>
+
+    <script src="/js/rubber-ducky-en.js"></script>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Why is this so dangerous?</h2>
+        <p>
+          <strong>No operating system is immune:</strong> Because the Rubber Ducky identifies itself as a keyboard, the OS trusts it completely. Antivirus software cannot block a keyboard.<br /><br />
+          <strong>No technical knowledge required:</strong> Ready-made scripts are freely available online. Anyone can launch an attack.<br /><br />
+          <strong>Extremely fast:</strong> A professionally programmed Rubber Ducky needs less than 30 seconds to compromise a system.<br /><br />
+          <strong>Brief access is enough:</strong> Even a short, unobserved moment of physical access is sufficient – such as during a coffee break.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>How to protect yourself</h2>
+        <p>
+          <strong>1. Never plug in unknown USB devices:</strong> Never insert a USB stick whose origin you don't know – even if it's found in the office parking lot.<br /><br />
+          <strong>2. Disable USB ports:</strong> In security-critical environments, USB ports can be locked via group policy or physically, so only approved devices function.<br /><br />
+          <strong>3. Never leave your computer unattended:</strong> Always lock your computer when you leave your workstation (Windows key + L). A Rubber Ducky attack takes only seconds.<br /><br />
+          <strong>4. Use USB device control software:</strong> Enterprise solutions allow only pre-approved devices to connect to company computers.<br /><br />
+          <strong>5. Security awareness training:</strong> Awareness training is the most important protection. Those who know the threat won't plug in a random USB device.
+        </p>
+      </div>
+    </section>
+
+    <div id="footer"></div>
+    <script src="/js/navbar-loader.js"></script>
+  </body>
+</html>
