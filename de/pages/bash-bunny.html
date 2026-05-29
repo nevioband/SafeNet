@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bash Bunny – SafeNet Security</title>
+    <meta name="description" content="Was ist ein Bash Bunny? Lerne wie dieser USB-Angriffsstick Netzwerkzugangsdaten in Sekunden stiehlt und wie du dich schützt." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Bash Bunny – SafeNet Security" />
+    <meta property="og:description" content="Was ist ein Bash Bunny? Lerne wie dieser USB-Angriffsstick Netzwerkzugangsdaten in Sekunden stiehlt und wie du dich schützt." />
+    <meta property="og:image" content="https://safenet-security.ch/images/SafeNet-Security-Logo/Withbg/ShieldWhiteName.png" />
+    <meta property="og:url" content="https://safenet-security.ch/de/pages/bash-bunny.html" />
+    <link rel="canonical" href="https://safenet-security.ch/de/pages/bash-bunny.html" />
+    <link rel="alternate" hreflang="de" href="https://safenet-security.ch/de/pages/bash-bunny.html" />
+    <link rel="alternate" hreflang="en" href="https://safenet-security.ch/en/pages/bash-bunny.html" />
+    <link rel="alternate" hreflang="x-default" href="https://safenet-security.ch/de/pages/bash-bunny.html" />
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/shared.css" />
+    <link rel="stylesheet" href="/css/infobox.css" />
+    <link rel="stylesheet" href="/css/hero.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/generator.css" />
+    <link rel="stylesheet" href="/css/bash-bunny.css" />
+    <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png" />
+    <script type="module" src="/js/auth.js?v=9"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <h1>Bash Bunny</h1>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Was ist ein Bash Bunny?</h2>
+        <p>
+          Der Bash Bunny ist ein fortgeschrittenes USB-Angriffswerkzeug von Hak5, das wie ein gewöhnlicher USB-Stick aussieht. Im Gegensatz zum einfacheren Rubber Ducky kann er sich gleichzeitig als <strong>mehrere Geräte</strong> ausgeben: Tastatur, Netzwerkadapter und USB-Speicher. Über einen physischen Schalter am Gerät können bis zu zwei Angriffs-Payloads vorgeladen und blitzschnell aktiviert werden. Besonders gefährlich: Als Netzwerkadapter kann er Windows dazu bringen, Zugangsdaten automatisch zu übermitteln – ohne dass der Benutzer etwas bemerkt.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Angriffstechniken</h2>
+        <div class="hw-techniques">
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">🌐</div>
+            <h4>NTLM-Credential-Harvest</h4>
+            <p>Der Bash Bunny gibt sich als Ethernet-Adapter aus. Windows versucht automatisch, sich im Netzwerk zu authentifizieren und sendet dabei den NTLM-Passwort-Hash – den der Angreifer abfängt.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">⌨️</div>
+            <h4>HID-Injektion (BadUSB)</h4>
+            <p>Gleichzeitig oder alternativ kann er als Tastatur agieren und Befehle injizieren – genau wie ein Rubber Ducky, aber mit mehr Kontrolle und Kombinations-Payloads.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">💾</div>
+            <h4>Daten-Exfiltration</h4>
+            <p>Als USB-Speicher kann er Dateien, Browser-Passwörter oder SSH-Keys vom Zielrechner kopieren – ebenfalls vollautomatisch beim Einstecken.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">🔄</div>
+            <h4>Kombinations-Angriffe</h4>
+            <p>Die Stärke des Bash Bunny liegt in der Kombination: Netzwerkadapter + Tastatur gleichzeitig erlaubt komplexe Angriffe, die einfache Geräte nicht ausführen können.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">⚙️</div>
+            <h4>Community-Payloads</h4>
+            <p>Auf GitHub gibt es Hunderte fertiger Payloads für den Bash Bunny – von Passwort-Dumps bis zu Backdoor-Installationen. Kein Programmierwissen nötig.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">🔀</div>
+            <h4>Arming Mode</h4>
+            <p>Im dritten Schalterstand wechselt das Gerät in den Entwicklungsmodus und erscheint als normales Laufwerk – so können Payloads einfach aufgespielt werden.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Demo -->
+    <div class="password-container">
+      <h3>Demo: NTLM-Credential-Harvest</h3>
+      <p class="mfa-demo-intro">
+        Simuliere wie der Bash Bunny als Netzwerkadapter Windows-Zugangsdaten abfängt. Stecke das Gerät ein und beobachte den Angriff.
+      </p>
+
+      <div class="hw-demo-layout">
+        <div>
+          <div class="hw-panel">
+            <h4>Zielcomputer</h4>
+            <div class="hw-visual">
+              <div class="hw-icon">🐇</div>
+              <div class="hw-status">
+                <strong id="bb-status-text">Kein Gerät</strong>
+                Windows erkennt: USB-Ethernet-Adapter<br />
+                Betriebssystem: Windows 11 Pro
+              </div>
+            </div>
+            <div style="margin-bottom:14px;">
+              <span id="bb-badge" class="hw-badge idle">Nicht eingesteckt</span>
+            </div>
+            <button id="bb-start-btn" class="hw-action-btn">🔌 Bash Bunny einstecken</button>
+          </div>
+          <div id="bb-result" class="hw-result-banner"></div>
+        </div>
+
+        <div class="hw-terminal">
+          <div class="hw-terminal-bar">
+            <div class="hw-terminal-dot"></div>
+            <div class="hw-terminal-dot"></div>
+            <div class="hw-terminal-dot"></div>
+            <span class="hw-terminal-title">Responder – Hash Capture</span>
+          </div>
+          <div class="hw-terminal-body" id="bb-terminal-body">
+            <span class="hw-cursor"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hw-demo-btns">
+        <button id="bb-reset-btn" class="main-btn">Demo zurücksetzen</button>
+      </div>
+    </div>
+
+    <script src="/js/bash-bunny-de.js"></script>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Warum ist das so gefährlich?</h2>
+        <p>
+          <strong>Automatische Windows-Authentifizierung:</strong> Windows versucht bei jedem neuen Netzwerkadapter automatisch, sich zu authentifizieren. Dieser Mechanismus wurde nicht für Sicherheit, sondern für Benutzerfreundlichkeit entwickelt.<br /><br />
+          <strong>Hash = Passwort-Ersatz:</strong> Ein abgefangener NTLM-Hash kann direkt für Pass-the-Hash-Angriffe verwendet werden – ohne das Passwort im Klartext zu kennen.<br /><br />
+          <strong>Keine Benutzerinteraktion nötig:</strong> Der Angriff läuft vollautomatisch. Der Benutzer muss nichts klicken, nichts bestätigen.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>So schützt du dich</h2>
+        <p>
+          <strong>1. Unbekannte USB-Geräte nie einstecken:</strong> Keine fremden USB-Geräte, auch keine, die wie normale USB-Sticks aussehen.<br /><br />
+          <strong>2. USB-Ports sperren:</strong> Gerätekontrolle über Windows-Gruppenrichtlinien oder Endpoint-Security-Software.<br /><br />
+          <strong>3. NTLM deaktivieren (Enterprise):</strong> In modernen Windows-Umgebungen kann NTLM zugunsten von Kerberos deaktiviert werden.<br /><br />
+          <strong>4. Netzwerk-Segmentierung:</strong> Gestohlene Hashes sind weniger wertvoll, wenn das Netzwerk segmentiert und der Zugriff eingeschränkt ist.<br /><br />
+          <strong>5. Computer sperren:</strong> Der Angriff braucht physischen Zugang. Immer sperren, wenn du den Platz verlässt.
+        </p>
+      </div>
+    </section>
+
+    <div id="footer"></div>
+    <script src="/js/navbar-loader.js"></script>
+  </body>
+</html>

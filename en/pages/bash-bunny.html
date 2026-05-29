@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bash Bunny – SafeNet Security</title>
+    <meta name="description" content="What is a Bash Bunny? Learn how this USB attack stick steals network credentials in seconds and how to protect yourself." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Bash Bunny – SafeNet Security" />
+    <meta property="og:description" content="What is a Bash Bunny? Learn how this USB attack stick steals network credentials in seconds and how to protect yourself." />
+    <meta property="og:image" content="https://safenet-security.ch/images/SafeNet-Security-Logo/Withbg/ShieldWhiteName.png" />
+    <meta property="og:url" content="https://safenet-security.ch/en/pages/bash-bunny.html" />
+    <link rel="canonical" href="https://safenet-security.ch/en/pages/bash-bunny.html" />
+    <link rel="alternate" hreflang="de" href="https://safenet-security.ch/de/pages/bash-bunny.html" />
+    <link rel="alternate" hreflang="en" href="https://safenet-security.ch/en/pages/bash-bunny.html" />
+    <link rel="alternate" hreflang="x-default" href="https://safenet-security.ch/de/pages/bash-bunny.html" />
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/shared.css" />
+    <link rel="stylesheet" href="/css/infobox.css" />
+    <link rel="stylesheet" href="/css/hero.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/generator.css" />
+    <link rel="stylesheet" href="/css/bash-bunny.css" />
+    <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png" />
+    <script type="module" src="/js/auth.js?v=9"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <h1>Bash Bunny</h1>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>What is a Bash Bunny?</h2>
+        <p>
+          The Bash Bunny is an advanced USB attack tool from Hak5 that looks like an ordinary USB stick. Unlike the simpler Rubber Ducky, it can simultaneously impersonate <strong>multiple devices</strong>: keyboard, network adapter, and USB storage. A physical switch on the device lets you preload up to two attack payloads and activate them instantly. Particularly dangerous: as a network adapter, it can trick Windows into automatically transmitting credentials – without the user noticing anything.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Attack Techniques</h2>
+        <div class="hw-techniques">
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">🌐</div>
+            <h4>NTLM Credential Harvest</h4>
+            <p>The Bash Bunny poses as an Ethernet adapter. Windows automatically tries to authenticate on the network and sends the NTLM password hash – which the attacker intercepts.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">⌨️</div>
+            <h4>HID Injection (BadUSB)</h4>
+            <p>Simultaneously or alternatively, it can act as a keyboard and inject commands – just like a Rubber Ducky, but with more control and combination payloads.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">💾</div>
+            <h4>Data Exfiltration</h4>
+            <p>As USB storage, it can copy files, browser passwords, or SSH keys from the target machine – fully automatically upon insertion.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">🔄</div>
+            <h4>Combination Attacks</h4>
+            <p>The Bash Bunny's strength lies in combination: network adapter + keyboard simultaneously allows complex attacks that simpler devices cannot perform.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">⚙️</div>
+            <h4>Community Payloads</h4>
+            <p>Hundreds of ready-made payloads are available on GitHub – from password dumps to backdoor installations. No programming knowledge required.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">🔀</div>
+            <h4>Arming Mode</h4>
+            <p>In the third switch position, the device enters development mode and appears as a normal drive – making it easy to upload new payloads.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Demo -->
+    <div class="password-container">
+      <h3>Demo: NTLM Credential Harvest</h3>
+      <p class="mfa-demo-intro">
+        Simulate how the Bash Bunny intercepts Windows credentials as a network adapter. Plug in the device and watch the attack unfold.
+      </p>
+
+      <div class="hw-demo-layout">
+        <div>
+          <div class="hw-panel">
+            <h4>Target Computer</h4>
+            <div class="hw-visual">
+              <div class="hw-icon">🐇</div>
+              <div class="hw-status">
+                <strong id="bb-status-text">No device</strong>
+                Windows recognizes: USB Ethernet Adapter<br />
+                Operating System: Windows 11 Pro
+              </div>
+            </div>
+            <div style="margin-bottom:14px;">
+              <span id="bb-badge" class="hw-badge idle">Not plugged in</span>
+            </div>
+            <button id="bb-start-btn" class="hw-action-btn">🔌 Plug in Bash Bunny</button>
+          </div>
+          <div id="bb-result" class="hw-result-banner"></div>
+        </div>
+
+        <div class="hw-terminal">
+          <div class="hw-terminal-bar">
+            <div class="hw-terminal-dot"></div>
+            <div class="hw-terminal-dot"></div>
+            <div class="hw-terminal-dot"></div>
+            <span class="hw-terminal-title">Responder – Hash Capture</span>
+          </div>
+          <div class="hw-terminal-body" id="bb-terminal-body">
+            <span class="hw-cursor"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hw-demo-btns">
+        <button id="bb-reset-btn" class="main-btn">Reset Demo</button>
+      </div>
+    </div>
+
+    <script src="/js/bash-bunny-en.js"></script>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Why is this so dangerous?</h2>
+        <p>
+          <strong>Automatic Windows authentication:</strong> Windows automatically tries to authenticate with every new network adapter. This mechanism was designed for convenience, not security.<br /><br />
+          <strong>Hash = password substitute:</strong> A captured NTLM hash can be used directly for Pass-the-Hash attacks – without knowing the plaintext password.<br /><br />
+          <strong>No user interaction required:</strong> The attack runs fully automatically. The user needs to click nothing, confirm nothing.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>How to protect yourself</h2>
+        <p>
+          <strong>1. Never plug in unknown USB devices:</strong> No foreign USB devices, even those that look like normal sticks.<br /><br />
+          <strong>2. Lock USB ports:</strong> Device control via Windows Group Policy or endpoint security software.<br /><br />
+          <strong>3. Disable NTLM (Enterprise):</strong> In modern Windows environments, NTLM can be disabled in favor of Kerberos.<br /><br />
+          <strong>4. Network segmentation:</strong> Stolen hashes are less valuable when the network is segmented and access is restricted.<br /><br />
+          <strong>5. Lock your computer:</strong> The attack requires physical access. Always lock when you leave your workstation.
+        </p>
+      </div>
+    </section>
+
+    <div id="footer"></div>
+    <script src="/js/navbar-loader.js"></script>
+  </body>
+</html>

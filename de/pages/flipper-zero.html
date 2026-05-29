@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flipper Zero – SafeNet Security</title>
+    <meta name="description" content="Was ist ein Flipper Zero? Lerne wie dieses Multi-Tool RFID-Karten klont, Sub-GHz-Signale kopiert und wie du dich schützt." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Flipper Zero – SafeNet Security" />
+    <meta property="og:description" content="Was ist ein Flipper Zero? Lerne wie dieses Multi-Tool RFID-Karten klont, Sub-GHz-Signale kopiert und wie du dich schützt." />
+    <meta property="og:image" content="https://safenet-security.ch/images/SafeNet-Security-Logo/Withbg/ShieldWhiteName.png" />
+    <meta property="og:url" content="https://safenet-security.ch/de/pages/flipper-zero.html" />
+    <link rel="canonical" href="https://safenet-security.ch/de/pages/flipper-zero.html" />
+    <link rel="alternate" hreflang="de" href="https://safenet-security.ch/de/pages/flipper-zero.html" />
+    <link rel="alternate" hreflang="en" href="https://safenet-security.ch/en/pages/flipper-zero.html" />
+    <link rel="alternate" hreflang="x-default" href="https://safenet-security.ch/de/pages/flipper-zero.html" />
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/shared.css" />
+    <link rel="stylesheet" href="/css/infobox.css" />
+    <link rel="stylesheet" href="/css/hero.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/generator.css" />
+    <link rel="stylesheet" href="/css/flipper-zero.css" />
+    <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png" />
+    <script type="module" src="/js/auth.js?v=9"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <h1>Flipper Zero</h1>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Was ist ein Flipper Zero?</h2>
+        <p>
+          Der Flipper Zero ist ein quelloffenes, tragbares Multi-Tool für Sicherheitsforschung. Er kombiniert in einem handlichen Gerät zahlreiche Funk- und Kommunikationstechnologien: <strong>Sub-GHz-Radio</strong> (für Garagentore, Autoschlüssel, Alarmanlagen), <strong>RFID und NFC</strong> (für Zugangskarten), <strong>Infrarot</strong> (für TVs, Klimaanlagen), <strong>Bluetooth</strong> und <strong>BadUSB</strong>. Obwohl er als Lernwerkzeug vermarktet wird, kann er in falschen Händen verwendet werden, um Zugangssysteme zu überlisten und drahtlose Signale zu klonen oder abzuspielen.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Angriffstechniken</h2>
+        <div class="hw-techniques">
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">🪪</div>
+            <h4>RFID-Karten-Klon</h4>
+            <p>Der Flipper Zero liest RFID-Zugangskarten (z. B. Büroausweise) und speichert deren Daten. Anschliessend kann er die Karte emulieren und Türen öffnen – ohne die originale Karte.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">🚗</div>
+            <h4>Sub-GHz Replay-Angriff</h4>
+            <p>Er kann Funksignale von Garagentoren, Autoschlüsseln oder Alarmsystemen aufzeichnen und wiedergeben. Ältere Systeme ohne Rolling-Code-Schutz sind direkt angreifbar.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">📡</div>
+            <h4>NFC-Angriffe</h4>
+            <p>NFC-Karten (kontaktlose Kreditkarten, Hotel-Schlüsselkarten) können gescannt, analysiert und teilweise emuliert werden.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">📺</div>
+            <h4>Infrarot-Chaos</h4>
+            <p>Mit der integrierten IR-Datenbank kann der Flipper Zero praktisch jedes Gerät steuern – TVs ausschalten, Klimaanlagen verstellen, Projektoren in Präsentationen stören.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">⌨️</div>
+            <h4>BadUSB (Tastaturemulation)</h4>
+            <p>Genau wie der Rubber Ducky kann der Flipper Zero als Tastatur fungieren und beim Anschluss an einen Computer Befehle injizieren.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">📶</div>
+            <h4>Bluetooth-Spam</h4>
+            <p>Er kann massenhaft gefälschte Bluetooth-Verbindungsanfragen senden und Smartphones mit Benachrichtigungen überfluten (iOS/Android Pairing-Spam).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Demo: RFID-Klon -->
+    <div class="password-container">
+      <h3>Demo: RFID-Zugangskarte klonen</h3>
+      <p class="mfa-demo-intro">
+        Simuliere den dreistufigen Klon-Angriff: Karte scannen → Klon erstellen → Tür öffnen. Genau so einfach funktioniert es in der Realität.
+      </p>
+
+      <div class="fz-demo-layout">
+        <div>
+          <div class="fz-panel">
+            <h4>Flipper Zero Display</h4>
+            <div class="fz-device-visual">
+              <div class="fz-device-icon">🐬</div>
+              <div class="fz-screen" id="fz-screen">Bereit.
+
+Drücke «Karte scannen»
+um zu beginnen.</div>
+            </div>
+            <div class="fz-step-indicator">
+              <div class="fz-step">1</div>
+              <div class="fz-step">2</div>
+              <div class="fz-step">3</div>
+              <div class="fz-step">✓</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <button id="fz-scan-btn" class="fz-action-btn">📡 Karte scannen</button>
+              <button id="fz-clone-btn" class="fz-action-btn" disabled>💾 Karte klonen</button>
+              <button id="fz-use-btn" class="fz-action-btn" disabled>📲 Klon verwenden</button>
+            </div>
+          </div>
+          <div id="fz-result" class="fz-result-banner"></div>
+        </div>
+
+        <div class="fz-door-panel">
+          <div style="font-size:0.85rem;color:rgba(255,255,255,0.4);">Zutrittskontrolle</div>
+          <div class="fz-door" id="fz-door">🔒</div>
+          <div class="fz-door-status" id="fz-door-status">Türe gesperrt</div>
+        </div>
+      </div>
+
+      <div class="hw-demo-btns">
+        <button id="fz-reset-btn" class="main-btn">Demo zurücksetzen</button>
+      </div>
+    </div>
+
+    <script src="/js/flipper-zero-de.js"></script>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Was ist sicher, was nicht?</h2>
+        <p>
+          <strong>Unsicher:</strong> Ältere RFID-Karten (Mifare Classic, EM4100) – weit verbreitet in Bürogebäuden, Fitnessstudios, Hotels.<br /><br />
+          <strong>Teilweise sicher:</strong> NFC-Kreditkarten – können gelesen werden, aber Zahlungen erfordern weitere Daten (CVV, PIN).<br /><br />
+          <strong>Sicher gegen Replay:</strong> Moderne Autoschlüssel mit Rolling-Code und Garagentore mit AES-Verschlüsselung sind gegen einfache Replay-Angriffe geschützt.<br /><br />
+          <strong>Sicher:</strong> FIDO2/WebAuthn-Schlüssel, kryptografisch gesicherte Zugangssysteme.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>So schützt du dich</h2>
+        <p>
+          <strong>1. Moderne RFID-Karten einsetzen:</strong> Wechsle auf Karten mit kryptografischer Authentifizierung (MIFARE DESFire, MIFARE Plus) statt veralteten EM4100-Karten.<br /><br />
+          <strong>2. RFID-Abschirmhülle:</strong> Kreditkarten und Zugangskarten in RFID-blockierenden Hüllen aufbewahren, verhindert kontaktloses Auslesen.<br /><br />
+          <strong>3. Mehrfaktorauthentifizierung bei Zutritt:</strong> Kombiniere Karte + PIN für physische Zugangskontrolle.<br /><br />
+          <strong>4. Karte nicht unbeaufsichtigt lassen:</strong> Für einen Klon-Angriff reicht ein kurzer Moment in unmittelbarer Nähe (wenige Zentimeter).<br /><br />
+          <strong>5. System regelmässig auditieren:</strong> Überprüfe regelmässig welche Karten Zugang haben und deaktiviere nicht mehr genutzte.
+        </p>
+      </div>
+    </section>
+
+    <div id="footer"></div>
+    <script src="/js/navbar-loader.js"></script>
+  </body>
+</html>

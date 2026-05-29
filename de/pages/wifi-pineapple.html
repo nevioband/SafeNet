@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WiFi Pineapple – SafeNet Security</title>
+    <meta name="description" content="Was ist ein WiFi Pineapple? Lerne wie Angreifer mit diesem Gerät gefälschte WLAN-Hotspots erstellen und den gesamten Datenverkehr abfangen." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="WiFi Pineapple – SafeNet Security" />
+    <meta property="og:description" content="Was ist ein WiFi Pineapple? Lerne wie Angreifer mit diesem Gerät gefälschte WLAN-Hotspots erstellen und den gesamten Datenverkehr abfangen." />
+    <meta property="og:image" content="https://safenet-security.ch/images/SafeNet-Security-Logo/Withbg/ShieldWhiteName.png" />
+    <meta property="og:url" content="https://safenet-security.ch/de/pages/wifi-pineapple.html" />
+    <link rel="canonical" href="https://safenet-security.ch/de/pages/wifi-pineapple.html" />
+    <link rel="alternate" hreflang="de" href="https://safenet-security.ch/de/pages/wifi-pineapple.html" />
+    <link rel="alternate" hreflang="en" href="https://safenet-security.ch/en/pages/wifi-pineapple.html" />
+    <link rel="alternate" hreflang="x-default" href="https://safenet-security.ch/de/pages/wifi-pineapple.html" />
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/shared.css" />
+    <link rel="stylesheet" href="/css/infobox.css" />
+    <link rel="stylesheet" href="/css/hero.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/generator.css" />
+    <link rel="stylesheet" href="/css/wifi-pineapple.css" />
+    <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png" />
+    <script type="module" src="/js/auth.js?v=9"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <h1>WiFi Pineapple</h1>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Was ist ein WiFi Pineapple?</h2>
+        <p>
+          Der WiFi Pineapple ist ein WLAN-Angriffswerkzeug von Hak5, das ursprünglich für Penetrationstests entwickelt wurde. Es erstellt automatisch gefälschte WLAN-Netzwerke, die sich als bekannte Netzwerke tarnen. Smartphones und Laptops verbinden sich <strong>ohne Benutzeraktion</strong> automatisch, weil sie nach zuvor gespeicherten Netzwerken suchen und der Pineapple auf alle Anfragen antwortet. Sobald ein Gerät verbunden ist, läuft der gesamte Datenverkehr – Passwörter, Cookies, unverschlüsselte E-Mails – über den Angreifer.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Angriffstechniken</h2>
+        <div class="hw-techniques">
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">📶</div>
+            <h4>Evil Twin / Rogue AP</h4>
+            <p>Erstellt einen WLAN-Hotspot mit demselben Namen (SSID) wie ein echtes Netzwerk. Geräte verbinden sich automatisch mit dem stärkeren Signal des Angreifers.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">🎭</div>
+            <h4>KARMA-Angriff</h4>
+            <p>Geräte senden Probe-Requests für alle gespeicherten WLANs aus. Der Pineapple antwortet auf ALLE diese Anfragen und gibt vor, jedes bekannte Netzwerk zu sein.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">🕵️</div>
+            <h4>Man-in-the-Middle</h4>
+            <p>Sämtlicher Datenverkehr verbundener Geräte läuft durch den Pineapple. HTTP-Traffic ist sofort lesbar; bei HTTPS kann SSL-Stripping angewandt werden.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">🔐</div>
+            <h4>Captive Portal Phishing</h4>
+            <p>Beim Verbinden erscheint eine gefälschte Login-Seite («Gratis-WiFi – bitte anmelden»). Eingegebene Zugangsdaten werden direkt an den Angreifer übermittelt.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">📊</div>
+            <h4>Traffic-Analyse</h4>
+            <p>Der Pineapple protokolliert und analysiert alle Anfragen – welche Webseiten besucht werden, welche Apps kommunizieren, welche Daten übertragen werden.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">🔌</div>
+            <h4>Module & Erweiterungen</h4>
+            <p>Das Pineapple-Ökosystem bietet zahlreiche Module: DNS-Spoofing, Deauth-Angriffe zum Trennen von echten APs, WPA-Handshake-Capturing und mehr.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Demo -->
+    <div class="password-container">
+      <h3>Demo: Automatische Geräteverknüpfung</h3>
+      <p class="mfa-demo-intro">
+        Simuliere wie der WiFi Pineapple Geräte in der Umgebung automatisch anzieht. Starte den Angriff und beobachte wie sich Geräte verbinden.
+      </p>
+
+      <div class="wp-demo-layout">
+        <div>
+          <div class="wp-panel">
+            <h4>WiFi Pineapple</h4>
+            <div class="wp-router-visual">
+              <div class="wp-router-icon">🍍</div>
+              <div class="wp-ssid">«Swisscom-1234» / «Free_WiFi» / «Corp_WiFi»</div>
+              <div class="wp-signal">⚡ Sendet auf allen gespeicherten SSIDs</div>
+            </div>
+            <div class="wp-stats">
+              <div class="wp-stat">
+                <div class="wp-stat-num" id="wp-connected-count">0</div>
+                <div class="wp-stat-label">Verbunden</div>
+              </div>
+              <div class="wp-stat">
+                <div class="wp-stat-num" id="wp-traffic-count">0 KB</div>
+                <div class="wp-stat-label">Abgehört</div>
+              </div>
+            </div>
+            <button id="wp-start-btn" class="wp-action-btn">▶ Angriff starten</button>
+          </div>
+          <div id="wp-result" class="wp-result-banner"></div>
+        </div>
+
+        <div class="wp-panel">
+          <h4>Angreifer-Sicht</h4>
+          <div class="wp-device-list">
+            <div class="wp-device-item wp-compact" id="wp-dev-1">
+              <div class="wp-device-icon">💻</div>
+              <div class="wp-device-info">
+                <div class="wp-device-name">MacBook Pro – Büro</div>
+                <div class="wp-device-detail">Sucht: Swisscom-1234</div>
+              </div>
+              <div class="wp-device-status">Sucht WLAN...</div>
+            </div>
+            <div class="wp-device-item wp-compact" id="wp-dev-2">
+              <div class="wp-device-icon">📱</div>
+              <div class="wp-device-info">
+                <div class="wp-device-name">iPhone 15 – Max</div>
+                <div class="wp-device-detail">Sucht: Starbucks_Free</div>
+              </div>
+              <div class="wp-device-status">Sucht WLAN...</div>
+            </div>
+            <div class="wp-device-item wp-compact" id="wp-dev-3">
+              <div class="wp-device-icon">📱</div>
+              <div class="wp-device-info">
+                <div class="wp-device-name">Samsung Galaxy – Anna</div>
+                <div class="wp-device-detail">Sucht: Hotel_Lobby</div>
+              </div>
+              <div class="wp-device-status">Sucht WLAN...</div>
+            </div>
+            <div class="wp-device-item wp-compact" id="wp-dev-4">
+              <div class="wp-device-icon">💻</div>
+              <div class="wp-device-info">
+                <div class="wp-device-name">Dell Laptop – IT-Abt.</div>
+                <div class="wp-device-detail">Sucht: Corp_WiFi</div>
+              </div>
+              <div class="wp-device-status">Sucht WLAN...</div>
+            </div>
+            <div class="wp-device-item wp-compact" id="wp-dev-5">
+              <div class="wp-device-icon">🖥️</div>
+              <div class="wp-device-info">
+                <div class="wp-device-name">Surface Pro – Empfang</div>
+                <div class="wp-device-detail">Sucht: Guest_Network</div>
+              </div>
+              <div class="wp-device-status">Sucht WLAN...</div>
+            </div>
+          </div>
+          <div class="wp-intercept-header">
+            <div class="wp-intercept-dot" id="wp-intercept-dot"></div>
+            <span>Abgehörter Traffic (Live)</span>
+          </div>
+          <div class="wp-intercept-log">
+            <div class="wp-intercept-body" id="wp-intercept-body">
+              <div class="wp-intercept-placeholder" id="wp-intercept-placeholder">Warte auf verbundene Geräte...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hw-demo-btns">
+        <button id="wp-reset-btn" class="main-btn">Demo zurücksetzen</button>
+      </div>
+    </div>
+
+    <script src="/js/wifi-pineapple-de.js"></script>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Warum verbinden sich Geräte automatisch?</h2>
+        <p>
+          Smartphones und Laptops speichern alle WLAN-Netzwerke, mit denen sie jemals verbunden waren. Im Hintergrund senden sie ständig <em>Probe Requests</em> – Anfragen wie «Ist hier ein Netzwerk namens 'Swisscom-1234'?». Der WiFi Pineapple antwortet auf alle diese Anfragen und gibt vor, das gesuchte Netzwerk zu sein. Das Gerät verbindet sich daraufhin automatisch, weil es glaubt, ein bekanntes, vertrauenswürdiges Netz gefunden zu haben.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>So schützt du dich</h2>
+        <p>
+          <strong>1. Automatische WLAN-Verbindung deaktivieren:</strong> Deaktiviere «Automatisch verbinden» für öffentliche Netzwerke (Cafés, Flughäfen, Hotels).<br /><br />
+          <strong>2. WLAN aus, wenn nicht gebraucht:</strong> Deaktiviere WLAN auf Mobilgeräten, wenn du es nicht benötigst – dann werden keine Probe Requests gesendet.<br /><br />
+          <strong>3. Gespeicherte Netzwerke löschen:</strong> Entferne regelmässig nicht mehr benötigte gespeicherte WLANs aus deinen Geräten.<br /><br />
+          <strong>4. VPN nutzen:</strong> Ein VPN verschlüsselt deinen gesamten Traffic – selbst wenn du mit einem Evil-Twin-Netzwerk verbunden bist.<br /><br />
+          <strong>5. HTTPS erzwingen:</strong> Nutze Browser-Erweiterungen oder aktiviere HTTPS-only Mode, damit unverschlüsselte Verbindungen verhindert werden.
+        </p>
+      </div>
+    </section>
+
+    <div id="footer"></div>
+    <script src="/js/navbar-loader.js"></script>
+  </body>
+</html>

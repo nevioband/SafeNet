@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flipper Zero – SafeNet Security</title>
+    <meta name="description" content="What is a Flipper Zero? Learn how this multi-tool clones RFID cards, replays sub-GHz signals, and how to protect yourself." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Flipper Zero – SafeNet Security" />
+    <meta property="og:description" content="What is a Flipper Zero? Learn how this multi-tool clones RFID cards, replays sub-GHz signals, and how to protect yourself." />
+    <meta property="og:image" content="https://safenet-security.ch/images/SafeNet-Security-Logo/Withbg/ShieldWhiteName.png" />
+    <meta property="og:url" content="https://safenet-security.ch/en/pages/flipper-zero.html" />
+    <link rel="canonical" href="https://safenet-security.ch/en/pages/flipper-zero.html" />
+    <link rel="alternate" hreflang="de" href="https://safenet-security.ch/de/pages/flipper-zero.html" />
+    <link rel="alternate" hreflang="en" href="https://safenet-security.ch/en/pages/flipper-zero.html" />
+    <link rel="alternate" hreflang="x-default" href="https://safenet-security.ch/de/pages/flipper-zero.html" />
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/shared.css" />
+    <link rel="stylesheet" href="/css/infobox.css" />
+    <link rel="stylesheet" href="/css/hero.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/generator.css" />
+    <link rel="stylesheet" href="/css/flipper-zero.css" />
+    <link rel="icon" type="image/png" href="/images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png" />
+    <script type="module" src="/js/auth.js?v=9"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <h1>Flipper Zero</h1>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>What is a Flipper Zero?</h2>
+        <p>
+          The Flipper Zero is an open-source, portable multi-tool for security research. It combines numerous radio and communication technologies in one handheld device: <strong>Sub-GHz radio</strong> (for garage doors, car keys, alarm systems), <strong>RFID and NFC</strong> (for access cards), <strong>infrared</strong> (for TVs, air conditioners), <strong>Bluetooth</strong>, and <strong>BadUSB</strong>. Although marketed as a learning tool, in the wrong hands it can be used to bypass access systems and clone or replay wireless signals.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>Attack Techniques</h2>
+        <div class="hw-techniques">
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">🪪</div>
+            <h4>RFID Card Cloning</h4>
+            <p>The Flipper Zero reads RFID access cards (e.g. office badges) and stores their data. It can then emulate the card and open doors – without the original card.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">🚗</div>
+            <h4>Sub-GHz Replay Attack</h4>
+            <p>It can record and replay radio signals from garage doors, car keys, or alarm systems. Older systems without rolling-code protection are directly vulnerable.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">📡</div>
+            <h4>NFC Attacks</h4>
+            <p>NFC cards (contactless credit cards, hotel key cards) can be scanned, analyzed, and partially emulated.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">📺</div>
+            <h4>Infrared Chaos</h4>
+            <p>With the built-in IR database, the Flipper Zero can control virtually any device – turn off TVs, adjust air conditioners, disrupt projectors during presentations.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">⌨️</div>
+            <h4>BadUSB (Keyboard Emulation)</h4>
+            <p>Just like the Rubber Ducky, the Flipper Zero can act as a keyboard and inject commands when connected to a computer.</p>
+          </div>
+          <div class="hw-technique-card">
+            <div class="hw-technique-icon">📶</div>
+            <h4>Bluetooth Spam</h4>
+            <p>It can send mass fake Bluetooth pairing requests, flooding smartphones with notifications (iOS/Android pairing spam).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Demo: RFID Clone -->
+    <div class="password-container">
+      <h3>Demo: RFID Access Card Cloning</h3>
+      <p class="mfa-demo-intro">
+        Simulate the three-step clone attack: scan card → create clone → open door. This is exactly how it works in reality.
+      </p>
+
+      <div class="fz-demo-layout">
+        <div>
+          <div class="fz-panel">
+            <h4>Flipper Zero Display</h4>
+            <div class="fz-device-visual">
+              <div class="fz-device-icon">🐬</div>
+              <div class="fz-screen" id="fz-screen">Ready.
+
+Press «Scan Card»
+to begin.</div>
+            </div>
+            <div class="fz-step-indicator">
+              <div class="fz-step">1</div>
+              <div class="fz-step">2</div>
+              <div class="fz-step">3</div>
+              <div class="fz-step">✓</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <button id="fz-scan-btn" class="fz-action-btn">📡 Scan Card</button>
+              <button id="fz-clone-btn" class="fz-action-btn" disabled>💾 Clone Card</button>
+              <button id="fz-use-btn" class="fz-action-btn" disabled>📲 Use Clone</button>
+            </div>
+          </div>
+          <div id="fz-result" class="fz-result-banner"></div>
+        </div>
+
+        <div class="fz-door-panel">
+          <div style="font-size:0.85rem;color:rgba(255,255,255,0.4);">Access Control</div>
+          <div class="fz-door" id="fz-door">🔒</div>
+          <div class="fz-door-status" id="fz-door-status">Door locked</div>
+        </div>
+      </div>
+
+      <div class="hw-demo-btns">
+        <button id="fz-reset-btn" class="main-btn">Reset Demo</button>
+      </div>
+    </div>
+
+    <script src="/js/flipper-zero-en.js"></script>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>What's safe, what isn't?</h2>
+        <p>
+          <strong>Unsafe:</strong> Older RFID cards (Mifare Classic, EM4100) – widely used in offices, gyms, and hotels.<br /><br />
+          <strong>Partially safe:</strong> NFC credit cards – can be read, but payments require additional data (CVV, PIN).<br /><br />
+          <strong>Safe against replay:</strong> Modern car keys with rolling codes and garage doors with AES encryption are protected against simple replay attacks.<br /><br />
+          <strong>Safe:</strong> FIDO2/WebAuthn keys, cryptographically secured access systems.
+        </p>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-box">
+        <h2>How to protect yourself</h2>
+        <p>
+          <strong>1. Use modern RFID cards:</strong> Switch to cards with cryptographic authentication (MIFARE DESFire, MIFARE Plus) instead of outdated EM4100 cards.<br /><br />
+          <strong>2. RFID-blocking sleeve:</strong> Keep credit cards and access cards in RFID-blocking sleeves to prevent contactless reading.<br /><br />
+          <strong>3. Multi-factor authentication for physical access:</strong> Combine card + PIN for physical access control.<br /><br />
+          <strong>4. Don't leave your card unattended:</strong> A clone attack only requires a brief moment in close proximity (a few centimeters).<br /><br />
+          <strong>5. Regularly audit your system:</strong> Periodically check which cards have access and deactivate those no longer in use.
+        </p>
+      </div>
+    </section>
+
+    <div id="footer"></div>
+    <script src="/js/navbar-loader.js"></script>
+  </body>
+</html>

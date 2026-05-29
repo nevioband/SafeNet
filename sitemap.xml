@@ -106,6 +106,46 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://safenet-security.ch/de/pages/bash-bunny.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://safenet-security.ch/en/pages/bash-bunny.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://safenet-security.ch/de/pages/flipper-zero.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://safenet-security.ch/en/pages/flipper-zero.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://safenet-security.ch/de/pages/wifi-pineapple.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://safenet-security.ch/en/pages/wifi-pineapple.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://safenet-security.ch/de/pages/omg-cable.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://safenet-security.ch/en/pages/omg-cable.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://safenet-security.ch/de/pages/phishing.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
