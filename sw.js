@@ -12,7 +12,6 @@ const PRECACHE_ASSETS = [
   '/css/hero.css',
   '/js/auth.js',
   '/js/supabase.js',
-  '/js/desktop-banner.js',
   '/de/partials/navbar.html',
   '/de/partials/footer.html',
   '/en/partials/navbar.html',
