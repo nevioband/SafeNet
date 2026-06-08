@@ -19,7 +19,8 @@ async function buildAll() {
     const source = fs.readFileSync(filePath, 'utf-8');
 
     // ES-Module erkennen (haben import/export-Statements)
-    const isModule = /^\s*(import\s|export\s)/m.test(source);
+    // Auch minifizierte Formen wie import{...} oder import* abdecken
+    const isModule = /^\s*(import[\s{*"'`]|export\s)/m.test(source);
 
     try {
       const result = await minify(source, {
