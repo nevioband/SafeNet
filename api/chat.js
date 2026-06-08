@@ -196,26 +196,9 @@ export default async function handler(req) {
     /\b(is|are|the|who|what|how|why|when|where|admin|from|this|that|my|your|can|please|help|and|not|have|has|tell|me|a|an|i|im|dont|speak|english|hello|hi|understand|understand|problem|question|want|need)/i.test(message)
   const effectiveLang = msgIsEnglish ? 'en' : lang
 
-  // Sicherheits-Filter: nur explizit sichere Anfragen kommen durch
-  const blockRes = await fetch('https://api.mistral.ai/v1/chat/completions', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
-    body: JSON.stringify({
-      model: 'open-mistral-nemo',
-      messages: [
-        { role: 'system', content: 'You are a content safety filter. Reply with exactly one word: SAFE or UNSAFE.\n\nUNSAFE only for: Hitler, Nazis, Holocaust, Stalin, Pol Pot, genocides, war criminals, dictators and their crimes, terrorism, mass murderers, drugs, sexual content, self-harm, suicide — even if phrased indirectly.\n\nSAFE for absolutely everything else, especially: ALL cybersecurity topics including hacking tools, pentesting hardware, attack techniques, and security research tools (Rubber Ducky, Bash Bunny, BadUSB, Flipper Zero, LAN Turtle, USB Killer, Hak5, Kali Linux, Metasploit, Nmap, Wireshark, Hydra, Burp Suite, Aircrack, John the Ripper, etc. are ALL SAFE), being hacked, account problems, passwords, phishing, malware, social engineering, data breaches, ransomware, keyloggers, bruteforce, MFA bypass, IT help, coding, cooking, weather, sports, math, music, films, travel, greetings, general questions, SafeNet platform topics, and any short or vague messages.\n\nExamples that are SAFE: "Was ist ein Rubber Ducky", "Was ist ein Bash Bunny", "Was ist ein Flipper Zero", "Was ist Kali Linux", "Was ist Metasploit", "What is a Rubber Ducky", "What is a Bash Bunny", "What is a Flipper Zero", "My password is hacked", "I was hacked", "My account got hacked", "Someone hacked me", "My password is leaked", "Mein Account wurde gehackt", "Ich habe ein Problem", "Was ist Phishing", "Wie sicher ist mein Passwort", "Nein", "Ja", "Help", "Hello", "I need help", "What is phishing?", "Wo finde ich den Tresor", "Tresor", "Vault", "SafeNet Tresor", "Wo finde ich die Einstellungen", "Wo finde ich den Generator", "Wo finde ich die Notizen", "Wo ist der Tresor", "Password vault", "Was bietet SafeNet", "Wo finde ich", "Wie benutze ich", "Welche Funktionen", "Was kann ich hier machen", "Du gehst nicht darauf ein was ich schreibe", "Du gehst wieder nicht darauf ein was ich dir schreibe", "Das ist nicht was ich meinte", "Warum antwortest du so", "Du verstehst mich nicht", "Das ist falsch", "Antworte bitte richtig", "That is not what I asked", "You are not answering my question", "You do not understand me", "Wie erstelle ich eine PowerPoint", "Wie erstelle ich eine Präsentation", "Was ist Python", "Wie koche ich Pasta", "Kannst du mir helfen", "Ich habe eine Frage"\n\nWhen in doubt, reply SAFE.\n\nReply with exactly one word: SAFE or UNSAFE.' },
-        { role: 'user', content: message },
-      ],
-      max_tokens: 5,
-      temperature: 0,
-    }),
-  }).catch(() => null)
-
-  const filterVerdict = blockRes?.ok
-    ? ((await blockRes.json().catch(() => null))?.choices?.[0]?.message?.content?.trim().toUpperCase() ?? '')
-    : ''
-
-  if (filterVerdict.startsWith('UNSAFE')) {
+  // Sicherheits-Filter: Keyword-basiert (kein Extra-API-Aufruf, keine Falsch-Positive)
+  const BLOCKED = /\b(hitler|adolf\s+hitler|nazi|nazis|nsdap|holocaust|auschwitz|stalin|pol\s+pot|genozid|genocide|terrorism|terrorist|anschlag\s+planen|bombe\s+bauen|kinderporno|kindesmissbrauch|child\s+porn|self.?harm|selbstmord\s+methoden|suizid\s+methoden|suicide\s+method|drogen\s+kaufen|heroin\s+kaufen|buy\s+drugs|buy\s+heroin)\b/i
+  if (BLOCKED.test(message)) {
     const reply = effectiveLang === 'en'
       ? "That's a topic I can't discuss here. I'm happy to help you with cybersecurity or anything on the SafeNet platform!"
       : 'Dazu kann ich hier keine Aussagen machen. Ich helfe dir gerne bei Cybersicherheit oder der SafeNet Plattform!'
@@ -248,6 +231,8 @@ export default async function handler(req) {
     { role: 'assistant', content: 'Open PowerPoint or a free alternative like Google Slides or LibreOffice Impress. Add slides, insert text boxes and images, choose a design theme, and save the file in .pptx format.' },
     { role: 'user', content: 'ChatGPT can also create PowerPoint presentations' },
     { role: 'assistant', content: 'You are right that different AI assistants have different capabilities. I can guide you step by step on how to create a presentation yourself: open PowerPoint or Google Slides, add slides, design them with text and visuals, and export as .pptx.' },
+    { role: 'user', content: 'I know how to make one, my question is whether you could make one for me.' },
+    { role: 'assistant', content: 'Unfortunately I cannot create or download files directly for you. I am limited to text and can only explain how you can do it yourself.' },
     { role: 'user', content: 'You are not answering what I am writing' },
     { role: 'assistant', content: 'You are right, I apologize. Please tell me your question again and I will answer it directly.' },
     { role: 'user', content: 'What is Python?' },
@@ -275,6 +260,8 @@ export default async function handler(req) {
     { role: 'assistant', content: 'Öffne PowerPoint oder eine kostenlose Alternative wie Google Slides oder LibreOffice Impress. Füge Folien hinzu, gestalte sie mit Textfeldern und Bildern, wähle ein Design und speichere die Datei im .pptx-Format.' },
     { role: 'user', content: 'Gemini ist auch ein Textbasierter Assistent und kann trotzdem PowerPoint-Präsentationen machen' },
     { role: 'assistant', content: 'Du hast Recht, verschiedene KI-Assistenten haben unterschiedliche Funktionen. Ich kann dir erklären wie du selbst eine Präsentation erstellst: Öffne PowerPoint oder Google Slides, füge Folien hinzu, gestalte sie mit Text und Bildern und exportiere die Datei als .pptx.' },
+    { role: 'user', content: 'Ja ich weiss wie man eine macht, meine Frage ist ob du sie für mich machen könntest.' },
+    { role: 'assistant', content: 'Leider kann ich keine Dateien direkt erstellen oder für dich herunterladen. Ich bin auf Text beschränkt und kann dir nur erklären wie du es selbst umsetzt.' },
     { role: 'user', content: 'Du gehst nicht auf das ein was ich schreibe' },
     { role: 'assistant', content: 'Entschuldigung, das war mein Fehler. Bitte stelle deine Frage nochmal und ich werde direkt darauf eingehen.' },
     { role: 'user', content: 'Was ist Python?' },
