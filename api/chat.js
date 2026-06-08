@@ -244,6 +244,14 @@ export default async function handler(req) {
     { role: 'assistant', content: 'A strong password has at least 16 characters, upper and lowercase letters, numbers and symbols. Use our Password Generator (/en/pages/generator.html).' },
     { role: 'user', content: 'Where is the privacy policy?' },
     { role: 'assistant', content: 'You can find the SafeNet Privacy Policy here (/en/pages/datenschutzerklärung.html).' },
+    { role: 'user', content: 'How do I create a PowerPoint presentation?' },
+    { role: 'assistant', content: 'Open PowerPoint or a free alternative like Google Slides or LibreOffice Impress. Add slides, insert text boxes and images, choose a design theme, and save the file in .pptx format.' },
+    { role: 'user', content: 'ChatGPT can also create PowerPoint presentations' },
+    { role: 'assistant', content: 'You are right that different AI assistants have different capabilities. I can guide you step by step on how to create a presentation yourself: open PowerPoint or Google Slides, add slides, design them with text and visuals, and export as .pptx.' },
+    { role: 'user', content: 'You are not answering what I am writing' },
+    { role: 'assistant', content: 'You are right, I apologize. Please tell me your question again and I will answer it directly.' },
+    { role: 'user', content: 'What is Python?' },
+    { role: 'assistant', content: 'Python is a popular programming language known for its simple syntax. It is widely used for web development, data science, automation, and cybersecurity scripting.' },
   ]
 
   const FEW_SHOT = [
@@ -263,6 +271,14 @@ export default async function handler(req) {
     { role: 'assistant', content: 'Ein sicheres Passwort hat mindestens 16 Zeichen, Gross- und Kleinbuchstaben, Zahlen und Sonderzeichen. Nutze unseren Passwort-Generator (/de/pages/generator.html).' },
     { role: 'user', content: 'Wo finde ich die Datenschutzerklärung?' },
     { role: 'assistant', content: 'Die Datenschutzerklärung von SafeNet findest du hier (/de/pages/datenschutzerklärung.html).' },
+    { role: 'user', content: 'Wie erstelle ich eine PowerPoint-Präsentation?' },
+    { role: 'assistant', content: 'Öffne PowerPoint oder eine kostenlose Alternative wie Google Slides oder LibreOffice Impress. Füge Folien hinzu, gestalte sie mit Textfeldern und Bildern, wähle ein Design und speichere die Datei im .pptx-Format.' },
+    { role: 'user', content: 'Gemini ist auch ein Textbasierter Assistent und kann trotzdem PowerPoint-Präsentationen machen' },
+    { role: 'assistant', content: 'Du hast Recht, verschiedene KI-Assistenten haben unterschiedliche Funktionen. Ich kann dir erklären wie du selbst eine Präsentation erstellst: Öffne PowerPoint oder Google Slides, füge Folien hinzu, gestalte sie mit Text und Bildern und exportiere die Datei als .pptx.' },
+    { role: 'user', content: 'Du gehst nicht auf das ein was ich schreibe' },
+    { role: 'assistant', content: 'Entschuldigung, das war mein Fehler. Bitte stelle deine Frage nochmal und ich werde direkt darauf eingehen.' },
+    { role: 'user', content: 'Was ist Python?' },
+    { role: 'assistant', content: 'Python ist eine beliebte Programmiersprache mit einfacher Syntax. Sie wird häufig für Webentwicklung, Datenwissenschaft, Automatisierung und Cybersicherheitsskripte eingesetzt.' },
   ]
 
   const messages = [
