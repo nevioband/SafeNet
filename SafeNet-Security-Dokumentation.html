@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeNet Security – Vollständige Projektdokumentation</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11pt; line-height: 1.6; color: #1a1a1a; background: #fff; }
+  .page { max-width: 210mm; margin: 0 auto; padding: 20mm 20mm; }
+
+  h1 { font-size: 22pt; color: #1E3A8A; border-bottom: 3px solid #3399ff; padding-bottom: 8px; margin: 32px 0 16px; }
+  h2 { font-size: 15pt; color: #1D4ED8; margin: 24px 0 10px; }
+  h3 { font-size: 12pt; color: #2563EB; margin: 16px 0 8px; }
+  p  { margin: 8px 0; }
+  ul { margin: 6px 0 6px 24px; }
+  li { margin: 4px 0; }
+
+  .titelseite { text-align: center; padding: 60px 0 40px; border-bottom: 2px solid #3399ff; margin-bottom: 40px; }
+  .titelseite h1 { font-size: 32pt; border: none; color: #1E3A8A; margin-bottom: 12px; }
+  .titelseite .sub { font-size: 16pt; color: #374151; margin: 8px 0; }
+  .titelseite .url { font-size: 13pt; color: #3399ff; font-style: italic; }
+  .titelseite .datum { font-size: 10pt; color: #6B7280; margin-top: 24px; }
+
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 10pt; }
+  thead tr { background: #1E3A8A; color: #fff; }
+  thead th { padding: 8px 10px; text-align: left; font-weight: 600; }
+  tbody tr:nth-child(even) { background: #F8FAFC; }
+  tbody td { padding: 7px 10px; border-bottom: 1px solid #E2E8F0; vertical-align: top; }
+
+  code, pre { font-family: 'Courier New', monospace; font-size: 9.5pt; background: #F3F4F6; padding: 2px 5px; border-radius: 3px; }
+  .code-block { background: #1e293b; color: #e2e8f0; padding: 14px 18px; border-radius: 6px; margin: 10px 0; white-space: pre; font-family: 'Courier New', monospace; font-size: 9.5pt; line-height: 1.7; overflow-x: auto; }
+
+  .hinweis { background: #EFF6FF; border-left: 4px solid #3399ff; padding: 10px 14px; margin: 12px 0; border-radius: 0 4px 4px 0; }
+  .section-break { page-break-before: always; }
+  hr { border: none; border-top: 1px solid #E2E8F0; margin: 20px 0; }
+
+  @media print {
+    .page { padding: 15mm; max-width: none; }
+    .section-break { page-break-before: always; }
+    a { color: inherit; text-decoration: none; }
+    .code-block { background: #1e293b !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    thead tr { background: #1E3A8A !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- TITELSEITE -->
+<div class="titelseite">
+  <h1>SafeNet Security</h1>
+  <div class="sub">Vollständige Projektdokumentation</div>
+  <div class="url">safenet-security.ch</div>
+  <div class="datum">Erstellt am: 8. Juni 2026</div>
+</div>
+
+<!-- INHALTSVERZEICHNIS -->
+<h1>Inhaltsverzeichnis</h1>
+<ol style="font-size:11pt; line-height:2;">
+  <li>Projektübersicht</li>
+  <li>Projektstruktur &amp; Ordneraufbau</li>
+  <li>Frontend-Architektur (CSS, HTML, Konventionen)</li>
+  <li>JavaScript-Module (67 Dateien)</li>
+  <li>Backend – Vercel Edge Functions</li>
+  <li>Supabase – Datenbank &amp; Authentifizierung</li>
+  <li>KI-Chatbot – Vollständiger Aufbau</li>
+  <li>Progressive Web App (PWA)</li>
+  <li>Sicherheit &amp; Security-Header</li>
+  <li>Build-Prozess &amp; Deployment</li>
+  <li>Testing (Playwright)</li>
+  <li>Vollständige Seitenübersicht</li>
+  <li>Zusammenfassung &amp; Fazit</li>
+</ol>
+
+<div class="section-break"></div>
+
+<!-- 1. PROJEKTÜBERSICHT -->
+<h1>1. Projektübersicht</h1>
+<p>SafeNet Security ist eine <strong>deutschsprachige (und englische) Cybersicherheits-Lernplattform im Browser</strong>. Sie wurde als Schulprojekt entwickelt und ist unter <strong>safenet-security.ch</strong> öffentlich erreichbar.</p>
+<p>Die Plattform verbindet Lerninhalt über Angriffsmethoden mit praktischen Sicherheitstools: Passwort-Analyse, Passwort-Generator, verschlüsselter Tresor, sichere Notizen und einen KI-Assistenten.</p>
+
+<h2>1.1 Ziele der Plattform</h2>
+<ul>
+  <li>Nutzer über Cyberangriffe informieren (Phishing, Ransomware, Social Engineering, etc.)</li>
+  <li>Praktische Sicherheitstools direkt im Browser anbieten</li>
+  <li>Deutschen und englischen Nutzern eine vollständig lokalisierte Erfahrung bieten</li>
+  <li>Moderne Webtechnologien ohne Frameworks einsetzen (Vanilla JS)</li>
+</ul>
+
+<h2>1.2 Tech-Stack im Überblick</h2>
+<table>
+  <thead><tr><th>Schicht</th><th>Technologie</th></tr></thead>
+  <tbody>
+    <tr><td>Frontend</td><td>Vanilla HTML5, CSS3, JavaScript ES-Module (kein Framework)</td></tr>
+    <tr><td>Backend / API</td><td>Vercel Edge Functions (Node.js-kompatibel, global verteilt)</td></tr>
+    <tr><td>Datenbank &amp; Auth</td><td>Supabase (PostgreSQL + Auth + REST API)</td></tr>
+    <tr><td>KI-Chatbot</td><td>Mistral API – Modell: open-mistral-nemo</td></tr>
+    <tr><td>E-Mail-Versand</td><td>Resend API (Login-Benachrichtigungen)</td></tr>
+    <tr><td>Hosting</td><td>Vercel (CDN + Serverless, Domain: safenet-security.ch)</td></tr>
+    <tr><td>PWA</td><td>Service Worker + Web App Manifest (installierbar)</td></tr>
+    <tr><td>Tests</td><td>Playwright (E2E Smoke- &amp; Flow-Tests)</td></tr>
+    <tr><td>Minifizierung</td><td>Terser (via build.js, alle 67 JS-Dateien)</td></tr>
+    <tr><td>Schriftart</td><td>Google Fonts – Inter</td></tr>
+  </tbody>
+</table>
+
+<div class="section-break"></div>
+
+<!-- 2. PROJEKTSTRUKTUR -->
+<h1>2. Projektstruktur &amp; Ordneraufbau</h1>
+<p>Das Projekt verwendet eine klare, modulare Ordnerstruktur ohne Build-Tools für das Frontend:</p>
+
+<div class="code-block">SafeNet/Code/
+├── index.html              ← Root-Redirect zur DE-Startseite
+├── de/                     ← Deutsche Version
+│   ├── index.html          ← Deutsche Startseite
+│   ├── pages/              ← ~30 Unterseiten (DE)
+│   └── partials/           ← navbar.html, footer.html (DE)
+├── en/                     ← Englische Version (vollständige Spiegelung)
+│   ├── index.html          ← Englische Startseite
+│   ├── pages/              ← ~30 Unterseiten (EN)
+│   └── partials/           ← navbar.html, footer.html (EN)
+├── css/                    ← Modulare CSS-Dateien (1 Datei pro Seite)
+├── js/                     ← 67 JavaScript-Module
+├── api/                    ← 5 Vercel Edge Functions (Backend)
+├── images/                 ← Logo, Icons, Avatare
+├── supabase/               ← SQL-Schemas &amp; Migrations
+├── sw.js                   ← Service Worker (PWA-Caching)
+├── manifest.json           ← PWA Web App Manifest
+├── vercel.json             ← Hosting-Konfiguration &amp; Security-Header
+├── build.js                ← Minifizierungs-Script (Terser)
+├── package.json            ← NPM-Abhängigkeiten
+└── tests/                  ← Playwright E2E-Tests</div>
+
+<h2>2.1 Mehrsprachigkeit (DE / EN)</h2>
+<ul>
+  <li>Alle Seiten und alle JavaScript-Dateien existieren in zwei Versionen</li>
+  <li>URL-Prefix erkennt Sprache: <code>/de/pages/...</code> und <code>/en/pages/...</code></li>
+  <li>JS-Dateien: <code>beispiel-de.js</code> und <code>beispiel-en.js</code></li>
+  <li>Spracherkennung per Regex: <code>/^\/en(\/|$)/.test(window.location.pathname)</code></li>
+  <li><code>vercel.json</code> leitet <code>/pages/:path*</code> → <code>/de/pages/:path*</code> weiter (Standardsprache: Deutsch)</li>
+  <li>Alte Vercel-Subdomain <code>safe-net-umber.vercel.app</code> leitet permanent auf <code>safenet-security.ch</code> weiter</li>
+</ul>
+
+<div class="section-break"></div>
+
+<!-- 3. FRONTEND -->
+<h1>3. Frontend-Architektur</h1>
+
+<h2>3.1 CSS-System</h2>
+<table>
+  <thead><tr><th>Datei</th><th>Inhalt</th></tr></thead>
+  <tbody>
+    <tr><td><code>style.css</code></td><td>Reset, Body, Typografie (h1–h4), globale Klassen</td></tr>
+    <tr><td><code>shared.css</code></td><td>Buttons, Formulare, Cards, Modals (seitenübergreifend)</td></tr>
+    <tr><td><code>navbar.css</code></td><td>Navigation, Dropdown-Menü, User-Avatar</td></tr>
+    <tr><td><code>footer.css</code></td><td>Footer-Layout und Links</td></tr>
+    <tr><td><code>[seite].css</code></td><td>Jede Seite hat eine eigene CSS-Datei (z.B. generator.css, tresor.css)</td></tr>
+  </tbody>
+</table>
+<ul>
+  <li>Dark-Theme (Standard): Hintergrund <code>#0f172a</code>, Schrift weiß</li>
+  <li>Light-Theme: Umschaltbar über <code>data-theme</code>-Attribut mit View Transition API-Animation</li>
+  <li>Überschriften: Gradient-Verlauf <code>#3399ff → #66d9ff</code> mit <code>-webkit-background-clip: text</code></li>
+  <li>Mobiler Breakpoint: <code>max-width: 768px</code></li>
+</ul>
+
+<h2>3.2 HTML-Konventionen</h2>
+<p>Jede Seite bindet folgende Ressourcen ein:</p>
+<div class="code-block">&lt;link rel="stylesheet" href="../css/navbar.css"&gt;
+&lt;link rel="stylesheet" href="../css/style.css"&gt;
+&lt;link rel="stylesheet" href="../css/shared.css"&gt;
+&lt;div id="navbar"&gt;&lt;/div&gt;   ← Navbar wird per JS injiziert
+&lt;div id="footer"&gt;&lt;/div&gt;   ← Footer wird per JS injiziert
+&lt;script type="module" src="../js/auth.js"&gt;&lt;/script&gt;
+&lt;script type="module" src="../js/[seite]-de.js"&gt;&lt;/script&gt;</div>
+<ul>
+  <li>Favicon: <code>images/SafeNet-Security-Logo/Withoutbg/SafeNet Security 48 x 48 px.png</code></li>
+  <li>Pfade aus <code>pages/</code> immer mit <code>../</code> Prefix</li>
+  <li>Seiten-Titel immer im Format: <em>Seitenname – SafeNet Security</em></li>
+</ul>
+
+<div class="section-break"></div>
+
+<!-- 4. JAVASCRIPT -->
+<h1>4. JavaScript-Module (67 Dateien)</h1>
+
+<h2>4.1 js/supabase.js – Zentraler Supabase-Client</h2>
+<p>Initialisiert den Supabase-Client <strong>genau einmalig</strong> und exportiert ihn. Alle anderen Module importieren:</p>
+<div class="code-block">import { supabase } from './supabase.js'</div>
+<ul>
+  <li>Storage: <code>window.localStorage</code> (Session bleibt nach Browserneustart erhalten)</li>
+  <li><code>persistSession: true</code>, <code>autoRefreshToken: true</code></li>
+  <li><strong>Tab-Synchronisation</strong> via <code>BroadcastChannel("safenet_auth_sync")</code>: Wenn ein Tab eingeloggt ist, werden andere Tabs automatisch synchronisiert – ohne erneuten Login</li>
+</ul>
+
+<h2>4.2 js/auth.js – Das Herzstück (18 KB)</h2>
+<p>Das wichtigste und umfangreichste Modul. Wird auf jeder Seite geladen:</p>
+<table>
+  <thead><tr><th>Funktion</th><th>Beschreibung</th></tr></thead>
+  <tbody>
+    <tr><td>User-State Navbar</td><td>Zeigt Avatar (Base64), Initialen oder Login-Button je nach Session</td></tr>
+    <tr><td>MFA/2FA-Prüfung</td><td>Prüft AAL2 bei aktivierter 2FA – sonst automatischer Logout</td></tr>
+    <tr><td><code>window.alert()</code></td><td>Überschrieben → custom Toast-Benachrichtigung (kein Browser-Dialog)</td></tr>
+    <tr><td><code>window.snConfirm()</code></td><td>Custom async Bestätigungs-Dialog (Promise-basiert)</td></tr>
+    <tr><td><code>window.snPrompt()</code></td><td>Custom async Eingabe-Dialog mit OK/Abbrechen</td></tr>
+    <tr><td>Dark/Light-Theme</td><td>Toggle mit View Transition API und CSS-Animation</td></tr>
+    <tr><td>Cookie-Banner</td><td>DSGVO-konformer Banner (kein Tracking, nur localStorage für Theme)</td></tr>
+    <tr><td>Seitensuche</td><td>Live-Suche über alle ~30 Seiten ohne Server (Ctrl+K)</td></tr>
+    <tr><td>Scroll-to-Top</td><td>Floating Button erscheint nach 300px Scroll</td></tr>
+    <tr><td>PWA-Registrierung</td><td>Registriert Service Worker und fügt Apple-Touch-Icons hinzu</td></tr>
+    <tr><td>Chat-Widget laden</td><td>Dynamischer Import: <code>import('/js/chat-widget.js')</code></td></tr>
+    <tr><td>Aktiver Nav-Link</td><td>Markiert den aktuellen Menüeintrag mit Klasse <code>active</code></td></tr>
+  </tbody>
+</table>
+
+<h2>4.3 Weitere wichtige Module</h2>
+<table>
+  <thead><tr><th>Modul</th><th>Grösse</th><th>Funktion</th></tr></thead>
+  <tbody>
+    <tr><td><code>tresor.js</code></td><td>37 KB → 26 KB</td><td>Passwort-Tresor: CRUD via /api/vault, Suche, Kopieren</td></tr>
+    <tr><td><code>notizen.js</code></td><td>31 KB</td><td>Notizen mit Ordnern, Pinning, Volltextsuche, Echtzeit-Speicherung</td></tr>
+    <tr><td><code>analyse.js</code></td><td>~5 KB</td><td>Passwortanalyse: Entropie, Zeichenklassen, Have I Been Pwned API</td></tr>
+    <tr><td><code>generator-de.js</code></td><td>~1.4 KB</td><td>Passwort-Generator: Länge, Zeichenregeln, Zufallsgenerator</td></tr>
+    <tr><td><code>einstellungen-de.js</code></td><td>13 KB</td><td>Account: Passwort ändern, Avatar-Upload, 2FA-Setup, Account löschen</td></tr>
+    <tr><td><code>login-de.js</code></td><td>6.9 KB → 5.3 KB</td><td>Login-Formular mit MFA-TOTP-Support und Login-Benachrichtigung</td></tr>
+    <tr><td><code>chat-widget.js</code></td><td>9 KB → 6.8 KB</td><td>KI-Chatbot: Floating Button, Chat-UI, API-Kommunikation, Session</td></tr>
+    <tr><td><code>passwortliste.js</code></td><td>29 KB</td><td>Liste bekannter schwacher Passwörter für Offline-Prüfung</td></tr>
+    <tr><td><code>meine-stats-de.js</code></td><td>7.5 KB</td><td>Persönliche Sicherheitsstatistiken des eingeloggten Users</td></tr>
+    <tr><td><code>phishing-check-de.js</code></td><td>7.1 KB</td><td>Interaktiver Quiz: echte vs. gefälschte E-Mails erkennen</td></tr>
+    <tr><td><code>auth-gate.js</code></td><td>1.3 KB</td><td>Schützt Seiten – leitet nicht eingeloggte User zur Login-Seite</td></tr>
+    <tr><td><code>navbar-loader.js</code></td><td>807 B</td><td>Fetcht und injiziert navbar.html und footer.html per fetch()</td></tr>
+  </tbody>
+</table>
+
+<div class="section-break"></div>
+
+<!-- 5. BACKEND -->
+<h1>5. Backend – Vercel Edge Functions (api/)</h1>
+<p>Alle 5 API-Routen laufen als Edge Functions (<code>runtime: 'edge'</code>). Sie starten in Millisekunden weltweit nahe beim Nutzer – kein Cold-Start. CORS ist auf allen Routes auf <strong>https://safenet-security.ch</strong> beschränkt.</p>
+
+<h2>5.1 api/chat.js – KI-Chatbot-Backend</h2>
+<p>Ablauf einer Chatanfrage:</p>
+<div class="code-block">Nutzer schreibt Nachricht
+        ↓
+chat-widget.js
+  ├─ Supabase Session holen → Access Token
+  └─ POST /api/chat { message, history (letzte 10), lang }
+        ↓
+api/chat.js (Edge Function)
+  1. Bearer-Token validieren (Supabase /auth/v1/user)
+  2. Body parsen: { message, history, lang }
+  3. Sprache auto-erkennen (DE/EN per Regex)
+  4. Keyword-Filter (Regex, kein extra API-Aufruf)
+        ↓ SAFE
+  5. Mistral API: open-mistral-nemo
+     System-Prompt + Few-Shot-Beispiele + History + Nachricht
+     max_tokens: 250, temperature: 0.3, timeout: 10s
+        ↓
+  6. JSON { reply: "..." } → Frontend
+        ↓
+chat-widget.js zeigt Antwort + speichert History in sessionStorage</div>
+
+<h2>5.2 api/vault.js – Passwort-Tresor-Proxy</h2>
+<table>
+  <thead><tr><th>HTTP-Methode</th><th>Supabase-Endpunkt</th><th>Funktion</th></tr></thead>
+  <tbody>
+    <tr><td>GET</td><td>/rest/v1/passwords?select=*&amp;order=created_at.desc</td><td>Alle Passwörter laden</td></tr>
+    <tr><td>POST</td><td>/rest/v1/passwords</td><td>Neues Passwort speichern</td></tr>
+    <tr><td>PATCH</td><td>/rest/v1/passwords?id=eq.{id}</td><td>Passwort aktualisieren</td></tr>
+    <tr><td>DELETE</td><td>/rest/v1/passwords?id=eq.{id}</td><td>Einzelnes Passwort löschen</td></tr>
+    <tr><td>DELETE</td><td>/rest/v1/passwords?user_id=eq.{id}</td><td>Alle Passwörter löschen</td></tr>
+  </tbody>
+</table>
+
+<h2>5.3 api/delete-account.js – Account-Löschung</h2>
+<ul>
+  <li>Nutzt den <code>SUPABASE_SERVICE_ROLE_KEY</code> (nur im Backend verfügbar, NIE im Frontend)</li>
+  <li>Verifiziert erst den Nutzer via Access-Token</li>
+  <li>Löscht via Supabase Admin-API: <code>DELETE /auth/v1/admin/users/{userId}</code></li>
+  <li>Supabase löscht durch <code>ON DELETE CASCADE</code> alle Nutzerdaten automatisch</li>
+</ul>
+
+<h2>5.4 api/login-benachrichtigung.js – Login-E-Mail</h2>
+<ul>
+  <li>Verifiziert den Access-Token bei Supabase</li>
+  <li>Ermittelt IP-Adresse, User-Agent und Zeitstempel (Schweizer Zeit: <code>Europe/Zurich</code>)</li>
+  <li>Sendet E-Mail über <strong>Resend API</strong> mit Login-Details</li>
+  <li>Verwendet <code>RESEND_API_KEY</code> aus Vercel-Umgebungsvariablen</li>
+</ul>
+
+<h2>5.5 api/news.js – RSS-Aggregator</h2>
+<ul>
+  <li>Fetcht 5 RSS/Atom-Feeds parallel: The Hacker News, Bleeping Computer, Krebs on Security, Ars Technica, SecurityWeek</li>
+  <li>Parst XML manuell mit Regex (kein Parser-Paket) – unterstützt RSS 2.0 und Atom</li>
+  <li>Normalisiert auf: <code>{ title, link, description, date, source }</code></li>
+</ul>
+
+<div class="section-break"></div>
+
+<!-- 6. SUPABASE -->
+<h1>6. Supabase – Datenbank &amp; Authentifizierung</h1>
+<p>Supabase-Projekt-URL: <code>https://dygrabyaiyessqmjdprc.supabase.co</code></p>
+
+<h2>6.1 Authentifizierung</h2>
+<ul>
+  <li>Email/Passwort Login mit Supabase Auth</li>
+  <li>2FA/TOTP vollständig integriert (Google Authenticator, etc.)</li>
+  <li>Auth-Level AAL2: Wenn 2FA aktiviert, wird nach dem Login der TOTP-Code verlangt</li>
+  <li>Session in <code>localStorage</code>, <code>persistSession: true</code>, <code>autoRefreshToken: true</code></li>
+  <li>Tab-Synchronisation via <code>BroadcastChannel</code> API</li>
+  <li>Passwort-Reset-Flow via E-Mail-Link (<code>PASSWORD_RECOVERY</code>-Event)</li>
+</ul>
+
+<h2>6.2 Datenbank-Tabellen</h2>
+<table>
+  <thead><tr><th>Tabelle</th><th>Spalten</th><th>Zweck</th></tr></thead>
+  <tbody>
+    <tr><td><code>passwords</code></td><td>id, user_id, title, username, password, url, note, created_at</td><td>Passwort-Tresor</td></tr>
+    <tr><td><code>notiz_ordner</code></td><td>id, user_id, name, erstellt_am</td><td>Ordner-Struktur für Notizen</td></tr>
+    <tr><td><code>notiz_titel</code></td><td>id, user_id, text, geaendert_am</td><td>Notiz-Titel (normalisiert)</td></tr>
+    <tr><td><code>notiz_inhalt</code></td><td>id, user_id, text, geaendert_am</td><td>Notiz-Inhalt (normalisiert)</td></tr>
+    <tr><td><code>notiz_notizen</code></td><td>id, user_id, ordner_id, titel_id, inhalt_id, angepinnt, erstellt/geaendert_am</td><td>Haupt-Notiztabelle mit Fremdschlüsseln</td></tr>
+  </tbody>
+</table>
+
+<h2>6.3 Row Level Security (RLS)</h2>
+<div class="hinweis">RLS ist auf ALLEN Tabellen aktiviert. Selbst wenn jemand den Supabase-Anon-Key kennt, kann er nur seine eigenen Daten sehen und bearbeiten.</div>
+<ul>
+  <li>Policy: <code>auth.uid() = user_id</code> für alle Operationen (SELECT, INSERT, UPDATE, DELETE)</li>
+  <li><code>ON DELETE CASCADE</code>: Wird ein User gelöscht, werden alle seine Daten automatisch mitgelöscht</li>
+</ul>
+
+<h2>6.4 Umgebungsvariablen (in Vercel konfiguriert)</h2>
+<table>
+  <thead><tr><th>Variable</th><th>Verwendung</th><th>Verfügbar</th></tr></thead>
+  <tbody>
+    <tr><td><code>MISTRAL_API_KEY</code></td><td>KI-Chatbot (Mistral API)</td><td>Nur Backend (Edge Functions)</td></tr>
+    <tr><td><code>SUPABASE_SERVICE_ROLE_KEY</code></td><td>Account-Löschung mit Admin-Rechten</td><td>Nur Backend – NIE im Frontend</td></tr>
+    <tr><td><code>RESEND_API_KEY</code></td><td>Login-Benachrichtigungs-E-Mails</td><td>Nur Backend (Edge Functions)</td></tr>
+  </tbody>
+</table>
+
+<div class="section-break"></div>
+
+<!-- 7. KI-CHATBOT -->
+<h1>7. KI-Chatbot – Vollständiger Aufbau</h1>
+
+<h2>7.1 Frontend: js/chat-widget.js</h2>
+<ul>
+  <li>Floating-Action-Button (FAB) unten rechts – nur für eingeloggte User sichtbar</li>
+  <li>Chat-Fenster mit Header (SafeNet-Logo + Titel + Schließen-Button)</li>
+  <li>Nachrichtenliste mit Bot-Avataren und User-Bubbles</li>
+  <li>Eingabefeld (max. 500 Zeichen) + Senden-Button + Enter-Taste</li>
+  <li>Tipp-Indikator ("Denke nach...") während API-Antwort wartet</li>
+  <li>Session-Persistenz: Gesprächsverlauf im <code>sessionStorage</code></li>
+  <li>Tageslimit: 50 Nachrichten pro User (Rate-Limiting)</li>
+  <li>Hint-Bubble für eingeloggte User nach 2s, für Gäste nach 4s (mit Registrierungs-CTA)</li>
+</ul>
+
+<h2>7.2 Sicherheitsfilter</h2>
+<ul>
+  <li><strong>Früher:</strong> Zweiter Mistral-API-Aufruf zur Klassifizierung → viele falsch-positive Sperren</li>
+  <li><strong>Jetzt:</strong> Schneller Keyword-Regex-Check ohne Extra-API-Call</li>
+  <li>Gesperrte Themen: Hitler, Nazis, Holocaust, Terrorismus, Kinderpornografie, Selbstmord-Anleitungen, Drogen kaufen</li>
+  <li>Vorteil: ~50% schnellere Antwortzeit, keine falsch-positiven Sperren</li>
+</ul>
+
+<h2>7.3 Mistral-Konfiguration</h2>
+<ul>
+  <li>Modell: <code>open-mistral-nemo</code></li>
+  <li><code>max_tokens: 250</code>, <code>temperature: 0.3</code>, Timeout: 10 Sekunden</li>
+  <li>System-Prompt: Alle ~30 Seiten-URLs, Verhaltensregeln, Link-Mapping, Sprachregeln</li>
+  <li>Few-Shot-Beispiele: Muster für typische Fragen (Phishing, Rubber Ducky, Passwort-Reset, etc.)</li>
+  <li>Gesprächs-History: Letzte 14 Nachrichten werden mitgesendet</li>
+</ul>
+
+<div class="section-break"></div>
+
+<!-- 8. PWA -->
+<h1>8. Progressive Web App (PWA)</h1>
+<p>SafeNet Security ist als installierbare Web-App ausgelegt. Nutzer können die Seite zum Homescreen hinzufügen und wie eine native App öffnen.</p>
+
+<h2>8.1 manifest.json</h2>
+<ul>
+  <li>Name: SafeNet Security, Short Name: SafeNet</li>
+  <li>Display: <code>standalone</code> (kein Browser-Chrome bei Installation)</li>
+  <li>Background Color: <code>#0f172a</code> (Dark-Theme), Theme Color: <code>#3399ff</code></li>
+  <li>Icons: 48px, 192px, 512px (auch <code>maskable</code> für Android)</li>
+  <li>Shortcuts: Direktlinks zu Generator und Passwort-Analyse aus dem App-Icon</li>
+</ul>
+
+<h2>8.2 sw.js – Service Worker</h2>
+<ul>
+  <li>Cache-Name: <code>safenet-v4</code> (wird bei Updates automatisch erneuert)</li>
+  <li>Pre-Cache: Alle kritischen Assets beim ersten Besuch gecacht (HTML, CSS, JS, Partials)</li>
+  <li>Strategie: <strong>Network-First</strong> – immer frische Daten vom Server, Fallback auf Cache</li>
+  <li>Beim Update: Alle alten Caches werden beim Aktivieren gelöscht (<code>skipWaiting()</code>)</li>
+</ul>
+
+<div class="section-break"></div>
+
+<!-- 9. SICHERHEIT -->
+<h1>9. Sicherheit &amp; Security-Header</h1>
+
+<h2>9.1 HTTP-Security-Header (vercel.json)</h2>
+<table>
+  <thead><tr><th>Header</th><th>Wert / Zweck</th></tr></thead>
+  <tbody>
+    <tr><td>X-Content-Type-Options</td><td>nosniff – verhindert MIME-Type-Sniffing</td></tr>
+    <tr><td>X-Frame-Options</td><td>DENY – kein Einbetten in iframes (Clickjacking-Schutz)</td></tr>
+    <tr><td>X-XSS-Protection</td><td>1; mode=block – Browser-XSS-Filter</td></tr>
+    <tr><td>Referrer-Policy</td><td>strict-origin-when-cross-origin</td></tr>
+    <tr><td>Permissions-Policy</td><td>camera=(), microphone=(), geolocation=() – alles verboten</td></tr>
+    <tr><td>Strict-Transport-Security</td><td>max-age=63072000; includeSubDomains; preload – 2 Jahre HTTPS</td></tr>
+    <tr><td>Content-Security-Policy</td><td>Nur self, jsDelivr CDN, Google Fonts, Supabase erlaubt</td></tr>
+  </tbody>
+</table>
+
+<h2>9.2 Weitere Sicherheitsmaßnahmen</h2>
+<ul>
+  <li>Kein <code>innerHTML</code> mit Nutzerdaten (XSS-Schutz) – <code>textContent</code> verwendet</li>
+  <li>Alle API-Routes prüfen Bearer-Token vor jeder Operation</li>
+  <li>Service Role Key niemals im Frontend – nur in Vercel-Umgebungsvariablen</li>
+  <li>Supabase RLS: Jeder User sieht nur seine eigenen Daten</li>
+  <li>CORS eingeschränkt auf safenet-security.ch</li>
+  <li>Have I Been Pwned API: Passwörter per k-Anonymity geprüft (SHA1-Hash, nie Klartext)</li>
+  <li>Eingaben werden vor Supabase-Übergabe validiert (Typ, Länge, Format)</li>
+</ul>
+
+<div class="section-break"></div>
+
+<!-- 10. BUILD & DEPLOYMENT -->
+<h1>10. Build-Prozess &amp; Deployment</h1>
+
+<h2>10.1 build.js – Minifizierung mit Terser</h2>
+<ul>
+  <li>Alle 67 JS-Dateien in <code>/js/</code> werden minifiziert und <strong>direkt überschrieben</strong></li>
+  <li>Entfernt: alle Kommentare, Whitespace, Zeilenumbrüche</li>
+  <li>Umbenennung (Mangle): Variablen werden zu <code>a</code>, <code>b</code>, <code>c</code> etc.</li>
+  <li><code>passes: 2</code> – zwei Optimierungsdurchläufe</li>
+  <li>ES-Modul-Erkennung: Regex auf <code>import{</code> / <code>import *</code> / <code>import "</code> für korrekte Verarbeitung von Top-Level-Await</li>
+  <li>Ergebnis: 20–30% kleinere Dateien (z.B. <code>tresor.js</code>: 37 KB → 26 KB)</li>
+  <li>Ausführung: <code>node build.js</code> oder <code>npm run minify</code></li>
+</ul>
+
+<h2>10.2 Deployment-Prozess</h2>
+<div class="code-block">1. Lokale Entwicklung  →  node dev-server.js
+2. Minifizieren        →  node build.js
+3. Git Push            →  git add . && git commit && git push
+4. Vercel erkennt Push →  automatisches Deployment (~30 Sekunden)
+5. Vercel führt build.js aus (buildCommand in Vercel-Config)
+6. Weltweit auf Vercel Edge-Network aktiv</div>
+
+<h2>10.3 vercel.json – Konfiguration</h2>
+<ul>
+  <li><code>cleanUrls: true</code> – URLs ohne .html-Endung funktionieren</li>
+  <li>Rewrites: <code>/api/:path*</code> → Edge Functions</li>
+  <li>Redirect: <code>safe-net-umber.vercel.app</code> → <code>safenet-security.ch</code> (permanent 301)</li>
+  <li>Redirect: <code>/pages/:path*</code> → <code>/de/pages/:path*</code> (Standardsprache Deutsch)</li>
+  <li>Alle Security-Header auf jeder Route gesetzt</li>
+</ul>
+
+<div class="section-break"></div>
+
+<!-- 11. TESTING -->
+<h1>11. Testing (Playwright)</h1>
+<p>Das Projekt verwendet Playwright für automatisierte End-to-End-Tests im Chromium-Browser.</p>
+<table>
+  <thead><tr><th>Datei</th><th>Inhalt</th><th>Befehl</th></tr></thead>
+  <tbody>
+    <tr><td><code>tests/smoke.spec.js</code></td><td>Prüft ob alle Seiten erreichbar sind (HTTP 200)</td><td><code>npm run smoke</code></td></tr>
+    <tr><td><code>tests/flows.spec.js</code></td><td>Testet User-Abläufe (Login, Navigation, Features)</td><td><code>npm run smoke:flows</code></td></tr>
+  </tbody>
+</table>
+
+<h2>11.1 Weitere NPM-Skripte</h2>
+<table>
+  <thead><tr><th>Skript</th><th>Befehl</th></tr></thead>
+  <tbody>
+    <tr><td>Dev-Server starten</td><td><code>npm run dev</code></td></tr>
+    <tr><td>JS minifizieren</td><td><code>npm run minify</code></td></tr>
+    <tr><td>Alle Tests</td><td><code>npm run smoke:all</code></td></tr>
+    <tr><td>Tests mit Browser-Fenster</td><td><code>npm run smoke:headed</code></td></tr>
+    <tr><td>Test-Report anzeigen</td><td><code>npm run smoke:report</code></td></tr>
+  </tbody>
+</table>
+
+<div class="section-break"></div>
+
+<!-- 12. SEITENÜBERSICHT -->
+<h1>12. Vollständige Seitenübersicht</h1>
+
+<h2>12.1 Lern-Seiten (Angriffsmethoden)</h2>
+<table>
+  <thead><tr><th>Seite</th><th>URL</th><th>Inhalt</th></tr></thead>
+  <tbody>
+    <tr><td>Angriffsübersicht</td><td>/de/pages/angriff.html</td><td>Übersicht aller Angriffsmethoden</td></tr>
+    <tr><td>Phishing</td><td>/de/pages/phishing.html</td><td>Fake-E-Mails, Spear-Phishing, Schutzmaßnahmen</td></tr>
+    <tr><td>Quishing</td><td>/de/pages/quishing.html</td><td>QR-Code-basiertes Phishing</td></tr>
+    <tr><td>Bruteforce</td><td>/de/pages/bruteforce.html</td><td>Automatisiertes Passwort-Raten</td></tr>
+    <tr><td>Social Engineering</td><td>/de/pages/socialengineering.html</td><td>Psychologische Manipulation</td></tr>
+    <tr><td>Keylogger</td><td>/de/pages/keylogger.html</td><td>Tastatureingaben heimlich aufzeichnen</td></tr>
+    <tr><td>Wörterbuchangriff</td><td>/de/pages/wörterbuchangriff.html</td><td>Angriffe mit Passwortlisten</td></tr>
+    <tr><td>Ransomware</td><td>/de/pages/ransomware.html</td><td>Verschlüsselung von Dateien gegen Lösegeld</td></tr>
+    <tr><td>MFA-Bypass</td><td>/de/pages/mfa-bypass.html</td><td>Umgehung der Zwei-Faktor-Auth</td></tr>
+    <tr><td>Man-in-the-Middle</td><td>/de/pages/mitm.html</td><td>Kommunikation abfangen</td></tr>
+    <tr><td>2FA</td><td>/de/pages/2fa.html</td><td>Zwei-Faktor-Authentifizierung erklärt</td></tr>
+  </tbody>
+</table>
+
+<h2>12.2 Hardware-Hacking-Seiten</h2>
+<table>
+  <thead><tr><th>Seite</th><th>URL</th><th>Gerät</th></tr></thead>
+  <tbody>
+    <tr><td>USB Rubber Ducky</td><td>/de/pages/rubber-ducky.html</td><td>USB-Gerät das Tastatureingaben emuliert (Hak5)</td></tr>
+    <tr><td>Bash Bunny</td><td>/de/pages/bash-bunny.html</td><td>Multifunktionaler USB-Angriffsvector (Hak5)</td></tr>
+    <tr><td>Flipper Zero</td><td>/de/pages/flipper-zero.html</td><td>Multi-Tool für RF, NFC, IR, Sub-GHz</td></tr>
+    <tr><td>WiFi Pineapple</td><td>/de/pages/wifi-pineapple.html</td><td>WLAN-Auditing und Man-in-the-Middle (Hak5)</td></tr>
+    <tr><td>O.MG Cable</td><td>/de/pages/omg-cable.html</td><td>USB-Kabel mit verstecktem Chip (Keylogger/HID)</td></tr>
+  </tbody>
+</table>
+
+<h2>12.3 Tool-Seiten (eingeloggte User)</h2>
+<table>
+  <thead><tr><th>Seite</th><th>URL</th><th>Funktion</th></tr></thead>
+  <tbody>
+    <tr><td>Passwort-Analyse</td><td>/de/pages/analysator.html</td><td>Entropie, Stärke, Have I Been Pwned</td></tr>
+    <tr><td>Passwort-Generator</td><td>/de/pages/generator.html</td><td>Sichere zufällige Passwörter generieren</td></tr>
+    <tr><td>Tresor</td><td>/de/pages/tresor.html</td><td>Verschlüsselte Passwörter speichern und verwalten</td></tr>
+    <tr><td>Notizen</td><td>/de/pages/notizen.html</td><td>Sichere Notizen mit Ordner-Struktur</td></tr>
+    <tr><td>Meine Statistiken</td><td>/de/pages/meine-stats.html</td><td>Persönliche Sicherheits-Statistiken</td></tr>
+    <tr><td>Tutorials</td><td>/de/pages/tutorials.html</td><td>Schritt-für-Schritt Sicherheits-Anleitungen</td></tr>
+    <tr><td>Einstellungen</td><td>/de/pages/einstellungen.html</td><td>Account, Avatar, 2FA, Theme, Passwort</td></tr>
+    <tr><td>Security-News</td><td>/de/pages/news.html</td><td>Aktuelle News aus 5 Cybersecurity-Quellen</td></tr>
+  </tbody>
+</table>
+
+<h2>12.4 Account-Seiten</h2>
+<table>
+  <thead><tr><th>Seite</th><th>URL</th><th>Funktion</th></tr></thead>
+  <tbody>
+    <tr><td>Login</td><td>/de/pages/login.html</td><td>E-Mail/Passwort + 2FA-TOTP</td></tr>
+    <tr><td>Registrierung</td><td>/de/pages/register.html</td><td>Neuen Account erstellen</td></tr>
+    <tr><td>Passwort zurücksetzen</td><td>/de/pages/reset-password.html</td><td>Neues Passwort via E-Mail-Link</td></tr>
+    <tr><td>Kontakt</td><td>/de/pages/kontakt.html</td><td>Kontaktformular</td></tr>
+    <tr><td>Feedback</td><td>/de/pages/feedback.html</td><td>Feedback senden</td></tr>
+    <tr><td>Über SafeNet</td><td>/de/pages/übersns.html</td><td>Über das Projekt</td></tr>
+    <tr><td>Datenschutz</td><td>/de/pages/datenschutzerklärung.html</td><td>Datenschutzerklärung (DSGVO)</td></tr>
+    <tr><td>Impressum</td><td>/de/pages/impressum.html</td><td>Rechtliche Angaben</td></tr>
+    <tr><td>Desktop App</td><td>/de/pages/desktop.html</td><td>Electron Desktop-App Download</td></tr>
+  </tbody>
+</table>
+
+<div class="section-break"></div>
+
+<!-- 13. FAZIT -->
+<h1>13. Zusammenfassung &amp; Fazit</h1>
+<p>SafeNet Security ist eine vollständig selbst entwickelte Cybersicherheits-Lernplattform. Die wichtigsten technischen Highlights:</p>
+<ul>
+  <li><strong>Vanilla JavaScript:</strong> Kein React, kein Vue – alles in reinem JS/HTML/CSS</li>
+  <li><strong>Edge Computing:</strong> API-Routen laufen weltweit nahe beim Nutzer (Vercel Edge, kein Cold-Start)</li>
+  <li><strong>Row Level Security:</strong> Datenbank-Sicherheit auf Supabase-Ebene, nicht nur im Frontend</li>
+  <li><strong>PWA:</strong> Vollständig installierbar als App auf iOS, Android und Desktop</li>
+  <li><strong>KI-Assistent:</strong> Integrierter Chatbot mit Kontextwissen über die Plattform (Mistral Nemo)</li>
+  <li><strong>Mehrsprachig:</strong> Vollständige DE/EN-Lokalisierung mit ~30 Seiten pro Sprache und 67 JS-Modulen</li>
+  <li><strong>Sicherheits-Header:</strong> HSTS, CSP, X-Frame-Options und mehr auf Hosting-Ebene</li>
+  <li><strong>Automatisierte Tests:</strong> Playwright E2E-Tests für alle kritischen Seiten</li>
+</ul>
+<br>
+<div class="hinweis">Das Projekt zeigt, dass eine vollwertige Webanwendung mit Authentifizierung, 2FA, Datenbank, KI-Chatbot, E-Mail-Versand, PWA und automatisierten Tests ohne ein einziges Frontend-Framework realisiert werden kann.</div>
+
+<hr>
+<p style="text-align:center; color:#6B7280; font-size:9pt; margin-top:20px;">SafeNet Security – safenet-security.ch | Dokumentation erstellt am 8. Juni 2026</p>
+
+</div>
+
+<!-- DRUCKEN-BUTTON (nur im Browser sichtbar) -->
+<div style="position:fixed; bottom:24px; right:24px; display:flex; gap:10px;">
+  <button onclick="window.print()" style="background:#1E3A8A; color:#fff; border:none; padding:12px 20px; border-radius:8px; font-size:13pt; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,0.3);">
+    🖨️ Als PDF drucken
+  </button>
+</div>
+
+</body>
+</html>
