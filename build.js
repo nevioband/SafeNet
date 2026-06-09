@@ -3,7 +3,7 @@
 
 import { minify } from 'terser';
 import fs from 'fs';
-import { cp, rm, mkdir } from 'fs/promises';
+import { cp, rm, mkdir, writeFile } from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -58,40 +58,55 @@ async function buildAll() {
 
   if (fail > 0) process.exit(1);
 
-  // Schritt 2: public/ Verzeichnis für Vercel erstellen
-  await buildPublic();
+  // Schritt 2: Vercel Build Output API-Format erstellen
+  await buildVercelOutput();
 }
 
-async function buildPublic() {
-  console.log('Erstelle public/ Verzeichnis...\n');
+async function buildVercelOutput() {
+  const OUTPUT = '.vercel/output';
+  const STATIC  = `${OUTPUT}/static`;
+  const FUNCS   = `${OUTPUT}/functions`;
 
-  await rm('public', { recursive: true, force: true });
-  await mkdir('public', { recursive: true });
+  console.log('Erstelle .vercel/output/ (Build Output API v3)...\n');
 
-  const items = [
-    'index.html',
-    '404.html',
-    'SafeNet-Security-Dokumentation.html',
-    'googlefae0c7a5792e2ee4.html',
-    'manifest.json',
-    'sw.js',
-    'robots.txt',
-    'sitemap.xml',
-    'de',
-    'en',
-    'css',
-    'js',
-    'images',
+  await rm(OUTPUT, { recursive: true, force: true });
+  await mkdir(STATIC,  { recursive: true });
+  await mkdir(FUNCS,   { recursive: true });
+
+  // config.json – minimale v3-Konfiguration
+  await writeFile(`${OUTPUT}/config.json`, JSON.stringify({ version: 3 }, null, 2));
+
+  // Statische Dateien → .vercel/output/static/
+  const staticItems = [
+    'index.html', '404.html', 'SafeNet-Security-Dokumentation.html',
+    'googlefae0c7a5792e2ee4.html', 'manifest.json', 'sw.js',
+    'robots.txt', 'sitemap.xml', 'de', 'en', 'css', 'js', 'images',
   ];
 
-  for (const item of items) {
+  for (const item of staticItems) {
     if (fs.existsSync(item)) {
-      await cp(item, path.join('public', item), { recursive: true });
-      console.log(`  ✓ ${item}`);
+      await cp(item, path.join(STATIC, item), { recursive: true });
+      console.log(`  ✓ static/${item}`);
     }
   }
 
-  console.log('\n  public/ erfolgreich erstellt!\n');
+  // API-Funktionen → .vercel/output/functions/api/<name>.func/
+  const apiFunctions = [
+    'chat', 'news', 'vault', 'delete-account', 'login-benachrichtigung',
+  ];
+
+  for (const name of apiFunctions) {
+    const funcDir = `${FUNCS}/api/${name}.func`;
+    await mkdir(funcDir, { recursive: true });
+    await cp(`api/${name}.js`, `${funcDir}/index.js`);
+    await writeFile(
+      `${funcDir}/.vc-config.json`,
+      JSON.stringify({ runtime: 'edge', entrypoint: 'index.js' }, null, 2)
+    );
+    console.log(`  ✓ function: /api/${name}`);
+  }
+
+  console.log('\n  .vercel/output/ erfolgreich erstellt!\n');
 }
 
 function formatBytes(bytes) {

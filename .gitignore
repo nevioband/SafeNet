@@ -7,3 +7,4 @@ Reflexion_SafeNet.docx
 node_modules/
 dist/
 public/
+.vercel/output/
