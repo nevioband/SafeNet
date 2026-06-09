@@ -1,9 +1,13 @@
 // Build-Script: Minifiziert alle JS-Dateien in /js/ mit Terser
 // Wird von Vercel vor dem Deployment ausgeführt: "buildCommand": "node build.js"
 
-const { minify } = require('terser');
-const fs = require('fs');
-const path = require('path');
+import { minify } from 'terser';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const JS_DIR = path.join(__dirname, 'js');
 
