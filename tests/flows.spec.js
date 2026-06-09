@@ -1,4 +1,4 @@
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
 
 const EMAIL = process.env.SMOKE_LOGIN_EMAIL;
 const PASSWORD = process.env.SMOKE_LOGIN_PASSWORD;
