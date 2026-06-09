@@ -14,8 +14,6 @@
       ]
     }
   ],
-  "buildCommand": "node build.js",
-  "outputDirectory": ".",
   "rewrites": [
     { "source": "/api/:path*", "destination": "/api/:path*" }
   ],
