@@ -3,6 +3,7 @@
 
 import { minify } from 'terser';
 import fs from 'fs';
+import { cp, rm, mkdir } from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -56,6 +57,41 @@ async function buildAll() {
   console.log(`\nFertig: ${ok} Dateien minifiziert${fail > 0 ? `, ${fail} Fehler` : ''}\n`);
 
   if (fail > 0) process.exit(1);
+
+  // Schritt 2: public/ Verzeichnis für Vercel erstellen
+  await buildPublic();
+}
+
+async function buildPublic() {
+  console.log('Erstelle public/ Verzeichnis...\n');
+
+  await rm('public', { recursive: true, force: true });
+  await mkdir('public', { recursive: true });
+
+  const items = [
+    'index.html',
+    '404.html',
+    'SafeNet-Security-Dokumentation.html',
+    'googlefae0c7a5792e2ee4.html',
+    'manifest.json',
+    'sw.js',
+    'robots.txt',
+    'sitemap.xml',
+    'de',
+    'en',
+    'css',
+    'js',
+    'images',
+  ];
+
+  for (const item of items) {
+    if (fs.existsSync(item)) {
+      await cp(item, path.join('public', item), { recursive: true });
+      console.log(`  ✓ ${item}`);
+    }
+  }
+
+  console.log('\n  public/ erfolgreich erstellt!\n');
 }
 
 function formatBytes(bytes) {
