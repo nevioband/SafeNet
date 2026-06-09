@@ -553,7 +553,7 @@ h2 {
     z-index: 1500;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: flex-end;
     pointer-events: none;
     animation: navHintIn 0.35s ease;
 }
