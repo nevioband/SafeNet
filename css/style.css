@@ -553,19 +553,20 @@ h2 {
     z-index: 1500;
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
+    align-items: center;
+    transform: translateX(-50%);
     pointer-events: none;
     animation: navHintIn 0.35s ease;
 }
 @keyframes navHintIn {
-    from { opacity: 0; transform: translateY(-6px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateX(-50%) translateY(-6px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 #nav-hint.nav-hint-hide {
     animation: navHintOut 0.5s ease forwards;
 }
 @keyframes navHintOut {
-    to { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 0; transform: translateX(-50%) translateY(-6px); }
 }
 .nav-hint-arrow {
     width: 0;
