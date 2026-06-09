@@ -2,6 +2,7 @@
   "name": "safenet-smoke-tests",
   "private": true,
   "version": "1.0.0",
+  "type": "module",
   "description": "Automatische Smoke-Tests fuer SafeNet Security",
   "scripts": {
     "start": "electron .",
