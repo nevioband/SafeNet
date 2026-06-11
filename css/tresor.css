@@ -290,12 +290,6 @@
     }
 
     /* Der Container für die Buttons */
-    .vault-actions {
-        display: flex;
-        justify-content: space-between; /* Verteilt Buttons gleichmäßig */
-        gap: 8px;
-        width: 100%;
-    }
 
     /* Buttons werden auf kleinen Screens etwas schmaler, um nebeneinander zu passen */
     .vault-copy-btn, 
@@ -315,9 +309,6 @@
 
 /* Für extrem schmale Handys */
 @media (max-width: 360px) {
-    .vault-actions {
-        gap: 5px;
-    }
     
     .vault-item strong {
         font-size: 0.9rem;

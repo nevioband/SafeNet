@@ -192,23 +192,6 @@
 .forgot-link { color: #64748b; font-size: 13px; text-decoration: none; }
 .forgot-link:hover { color: #94a3b8; }
 
-.divider {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: 24px 0;
-    color: #334155;
-    font-size: 13px;
-}
-
-.divider::before,
-.divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: rgba(59, 130, 246, 0.15);
-}
-
 @media (max-width: 480px) {
     .login-card {
         padding: 36px 24px;
@@ -216,11 +199,6 @@
 }
 
 /* Passwort-Label Zeile */
-.pass-label-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
 
 .forgot-link {
     background: none;
@@ -238,118 +216,8 @@
 }
 
 /* Modal */
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.65);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2000;
-    padding: 20px;
-    -webkit-backdrop-filter: blur(3px);
-    backdrop-filter: blur(3px);
-}
-
-.modal-overlay.hidden {
-    display: none;
-}
-
-.modal-card {
-    background: var(--bg-card);
-    border: 1px solid rgba(59, 130, 246, 0.25);
-    border-radius: 14px;
-    padding: 32px 36px;
-    width: 100%;
-    max-width: 400px;
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
-}
-
-.modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-}
-
-.modal-header h3 {
-    margin: 0;
-    font-size: 20px;
-}
-
-.modal-close {
-    background: none;
-    border: none;
-    color: #64748b;
-    cursor: pointer;
-    padding: 4px;
-    display: flex;
-    align-items: center;
-    transition: color 0.2s;
-}
-
-.modal-close:hover {
-    color: #94a3b8;
-}
-
-.modal-text {
-    color: var(--text-muted);
-    font-size: 14px;
-    line-height: 1.6;
-    margin: 0 0 20px 0;
-}
-
-.modal-success {
-    display: flex;
-    justify-content: center;
-    margin-top: 8px;
-}
-
-.modal-success svg {
-    width: 56px;
-    height: 56px;
-    stroke: #3399ff;
-    filter: drop-shadow(0 0 10px rgba(51, 153, 255, 0.4));
-}
-
-@media (max-width: 480px) {
-    .modal-card {
-        padding: 28px 20px;
-    }
-}
 
 /* Passwort-Stärke-Anzeige */
-.strength-bar-wrap {
-    height: 4px;
-    background: rgba(59, 130, 246, 0.1);
-    border-radius: 2px;
-    margin-top: 8px;
-    overflow: hidden;
-}
-
-.strength-bar {
-    height: 100%;
-    width: 0%;
-    border-radius: 2px;
-    transition: width 0.3s, background-color 0.3s;
-}
-
-.strength-bar.str-weak { background: #ef4444; }
-.strength-bar.str-fair { background: #f59e0b; }
-.strength-bar.str-good { background: #3b82f6; }
-.strength-bar.str-best { background: #22c55e; }
-
-.strength-label {
-    font-size: 12px;
-    margin-top: 4px;
-    display: block;
-    transition: color 0.3s;
-}
-
-.strength-label.str-weak { color: #ef4444; }
-.strength-label.str-fair { color: #f59e0b; }
-.strength-label.str-good { color: #3b82f6; }
-.strength-label.str-best { color: #22c55e; }
 
 /* ── Reset-Passwort Statusboxen ── */
 #invalidBox {

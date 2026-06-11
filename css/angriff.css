@@ -27,21 +27,6 @@ h1 {
     color: #3399ff;
 }
 
-.icon-line {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    margin: 6px 0;
-}
-
-.icon-line .material-symbols-outlined {
-    font-size: 20px;
-    color: #3399ff;
-    margin-top: 2px;
-    flex-shrink: 0;
-    filter: drop-shadow(0 0 6px rgba(51, 153, 255, 0.55));
-}
-
 .section-title span {
     display: inline-flex;
     align-items: center;
