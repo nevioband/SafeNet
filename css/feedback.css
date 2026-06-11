@@ -54,14 +54,37 @@
   line-height: 1;
 }
 
+/* Sorgt dafür, dass bei Mouseover nur die Sterne bis zur Maus leuchten */
+.star-group:hover label {
+  color: rgba(255, 255, 255, 0.15) !important;
+  text-shadow: none !important;
+}
+
 .star-group label:hover,
-.star-group label:hover ~ label,
-.star-group input[type="radio"]:checked ~ label {
+.star-group label:hover ~ label {
+  color: var(--active-star) !important;
+  text-shadow: 0 0 15px var(--star-glow) !important;
+}
+
+/* Hover-Farben für die verschiedenen Stufen */
+.star-group label[for="stern1"]:hover, 
+.star-group label[for="stern1"]:hover ~ label { --active-star: #ef4444; --star-glow: rgba(239, 68, 68, 0.4); }
+.star-group label[for="stern2"]:hover, 
+.star-group label[for="stern2"]:hover ~ label { --active-star: #f97316; --star-glow: rgba(249, 115, 22, 0.4); }
+.star-group label[for="stern3"]:hover, 
+.star-group label[for="stern3"]:hover ~ label { --active-star: #eab308; --star-glow: rgba(234, 179, 8, 0.4); }
+.star-group label[for="stern4"]:hover, 
+.star-group label[for="stern4"]:hover ~ label { --active-star: #22c55e; --star-glow: rgba(34, 197, 94, 0.4); }
+.star-group label[for="stern5"]:hover, 
+.star-group label[for="stern5"]:hover ~ label { --active-star: #3399ff; --star-glow: rgba(51, 153, 255, 0.4); }
+
+.star-group label:hover { transform: scale(1.1); }
+
+/* Permanente Auswahl-Farbe (wenn nicht gehovert wird) */
+.star-group:not(:hover) input[type="radio"]:checked ~ label {
   color: var(--active-star);
   text-shadow: 0 0 15px var(--star-glow);
 }
-
-.star-group label:hover { transform: scale(1.1); }
 
 .star-label {
   text-align: center;
