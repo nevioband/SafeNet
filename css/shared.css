@@ -1,3 +1,40 @@
+/* ─── Gemeinsame Buttons ────────────────────────────────────────── */
+.btn-primary, .btn-secondary {
+  display: inline-block;
+  padding: 12px 28px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'Inter', sans-serif;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #3399ff, #66d9ff);
+  color: #0b1220;
+  box-shadow: 0 4px 16px rgba(51, 153, 255, 0.4);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(51, 153, 255, 0.5);
+  opacity: 0.95;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #3399ff;
+  border: 1px solid #3399ff;
+}
+
+.btn-secondary:hover {
+  background: rgba(51, 153, 255, 0.1);
+  transform: translateY(-2px);
+}
+
 /* ─── Auth Gate Overlay ──────────────────────────────────────────── */
 #sn-auth-gate {
   position: fixed;
