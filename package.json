@@ -19,7 +19,7 @@
     "@playwright/test": "^1.54.2",
     "electron": "^42.1.0",
     "electron-packager": "^17.1.2",
-    "purgecss": "^8.0.0",
+    "purgecss": "^7.0.2",
     "terser": "^5.47.1"
   },
   "main": "main.js",
