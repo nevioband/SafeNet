@@ -1,1 +1,492 @@
-import{supabase as e}from"/js/supabase.js";document.getElementById("avatarCircle").addEventListener("click",()=>{const e=document.getElementById("avatarLightbox"),t=document.querySelector("#avatarCircle img"),n=document.getElementById("avatarLightboxInhalt");if(n.innerHTML="",t){const e=document.createElement("img");e.src=t.src,e.alt=t.alt,e.className="avatar-lightbox-bild",n.appendChild(e)}else{const e=document.createElement("div");e.className="avatar-lightbox-initial";const t=document.getElementById("avatarInitial");e.textContent=t?t.textContent:"?",n.appendChild(e)}e.style.display="flex"}),document.getElementById("avatarLightbox").addEventListener("click",e=>{e.target!==e.currentTarget&&"avatarLightboxSchliessen"!==e.target.id||(document.getElementById("avatarLightbox").style.display="none")}),document.addEventListener("keydown",e=>{"Escape"===e.key&&(document.getElementById("avatarLightbox").style.display="none")}),document.getElementById("avatarUploadBtn")?.addEventListener("click",()=>{document.getElementById("avatarInput").click()}),(async()=>{let t,n,a,o,d=null,r="";const{data:s}=await e.auth.getSession();if(t=s?.session,!t)return void(window.location.href="/en/pages/login.html");if(n=t.user.id,a=t.user.email,o=a.charAt(0).toUpperCase(),r=t.user.user_metadata?.display_name||"",document.getElementById("profileEmail").textContent=a,document.getElementById("avatarInitial").textContent=r?r.charAt(0).toUpperCase():o,document.getElementById("displayName").value=r,r){const e=document.getElementById("profileDisplayName");e.textContent=r,e.style.display="block"}const l=t.user.user_metadata?.avatar_b64;async function i(){const{data:t,error:n}=await e.auth.mfa.listFactors();if(n)return void c("tfaMsg","Error loading 2FA status.","error");const a=(t.totp||[]).find(e=>"verified"===e.status);a?(d=a.id,document.getElementById("tfaSectionOff").style.display="none",document.getElementById("tfaSectionOn").style.display="block",document.getElementById("tfaQrSection").style.display="none"):(document.getElementById("tfaSectionOff").style.display="block",document.getElementById("tfaSectionOn").style.display="none",document.getElementById("tfaQrSection").style.display="none")}function c(e,t,n){const a=document.getElementById(e);"hide"!==n?(a.textContent=t,a.className="msg-box "+("success"===n?"msg-success":"info"===n?"msg-info":"msg-error"),a.style.display="block"):a.style.display="none"}l&&(document.getElementById("avatarCircle").innerHTML=`<img src="${l}" alt="${o}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`),document.getElementById("avatarInput").addEventListener("change",async t=>{const n=t.target.files[0];if(!n)return;c("avatarMsg","Processing…","info");const a=await function(e,t){return new Promise(n=>{const a=new FileReader;a.onload=e=>{const a=new Image;a.onload=()=>{let e=a.width,o=a.height;e>o&&e>t?(o=Math.round(o*t/e),e=t):o>=e&&o>t&&(e=Math.round(e*t/o),o=t);const d=document.createElement("canvas");d.width=e,d.height=o,d.getContext("2d").drawImage(a,0,0,e,o),n(d.toDataURL("image/jpeg",.85))},a.src=e.target.result},a.readAsDataURL(e)})}(n,1200),{error:d}=await e.auth.updateUser({data:{avatar_b64:a}});d?c("avatarMsg","Error: "+d.message,"error"):(document.getElementById("avatarCircle").innerHTML=`<img src="${a}" alt="${o}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`,c("avatarMsg","Profile picture updated successfully.","success"),t.target.value="")}),await i(),document.getElementById("enableBtn").addEventListener("click",async()=>{c("tfaMsg","","hide");const t=document.getElementById("enableBtn");t.textContent="Preparing…",t.disabled=!0;const{data:n,error:a}=await e.auth.mfa.enroll({factorType:"totp",friendlyName:"SafeNet Authenticator"});t.textContent="Enable 2FA",t.disabled=!1,a?c("tfaMsg","Error: "+a.message,"error"):(d=n.id,document.getElementById("qrImg").src=n.totp.qr_code,document.getElementById("secretText").textContent=n.totp.secret,document.getElementById("tfaSectionOff").style.display="none",document.getElementById("tfaQrSection").style.display="block")}),document.getElementById("verifyBtn").addEventListener("click",async()=>{c("tfaMsg","","hide");const t=document.getElementById("verifyCode").value.trim();if(!t||6!==t.length)return void c("tfaMsg","Please enter a 6-digit code.","error");const n=document.getElementById("verifyBtn");n.textContent="Verifying…",n.disabled=!0;const{data:a,error:o}=await e.auth.mfa.challenge({factorId:d});if(o)return c("tfaMsg","Error: "+o.message,"error"),n.textContent="Confirm & activate",void(n.disabled=!1);const{error:r}=await e.auth.mfa.verify({factorId:d,challengeId:a.id,code:t});n.textContent="Confirm & activate",n.disabled=!1,r?c("tfaMsg","Incorrect code. Please try again.","error"):(c("tfaMsg","2FA has been successfully enabled!","success"),document.getElementById("verifyCode").value="",await i())}),document.getElementById("cancelEnrollBtn").addEventListener("click",async()=>{d&&(await e.auth.mfa.unenroll({factorId:d}),d=null),await i()}),document.getElementById("disableBtn").addEventListener("click",async()=>{if(!await window.snConfirm("Really disable 2FA? Your account will be less secure."))return;c("tfaMsg","","hide");const t=document.getElementById("disableBtn");t.textContent="Disabling…",t.disabled=!0;const{error:n}=await e.auth.mfa.unenroll({factorId:d});t.textContent="Disable 2FA",t.disabled=!1,n?c("tfaMsg","Error: "+n.message,"error"):(c("tfaMsg","2FA has been disabled.","success"),await i())}),document.getElementById("saveNameBtn").addEventListener("click",async()=>{const t=document.getElementById("displayName").value.trim(),n=document.getElementById("saveNameBtn");n.textContent="Saving…",n.disabled=!0;const{error:a}=await e.auth.updateUser({data:{display_name:t}});if(n.textContent="Save",n.disabled=!1,a)return void c("nameMsg","Error: "+a.message,"error");c("nameMsg","Display name saved.","success"),document.getElementById("avatarInitial").textContent=t?t.charAt(0).toUpperCase():o;const d=document.getElementById("profileDisplayName");t?(d.textContent=t,d.style.display="block"):d.style.display="none"}),document.getElementById("changeEmailBtn").addEventListener("click",async()=>{const t=document.getElementById("oldEmail").value.trim(),n=document.getElementById("emailCurrentPassword").value,o=document.getElementById("newEmail").value.trim();if(!t||!t.includes("@"))return void c("emailMsg","Please enter your current email address.","error");if(t.toLowerCase()!==a.toLowerCase())return void c("emailMsg","The email address entered does not match your current one.","error");if(!n)return void c("emailMsg","Please enter your current password.","error");if(!o||!o.includes("@"))return void c("emailMsg","Please enter a valid new email address.","error");if(o.toLowerCase()===a.toLowerCase())return void c("emailMsg","The new email address must differ from your current one.","error");const d=document.getElementById("changeEmailBtn");d.textContent="Verifying…",d.disabled=!0;const{error:r}=await e.auth.signInWithPassword({email:a,password:n});if(r)return c("emailMsg","The current password is incorrect.","error"),d.textContent="Send confirmation email",void(d.disabled=!1);d.textContent="Sending…";const{error:s}=await e.auth.updateUser({email:o});d.textContent="Send confirmation email",d.disabled=!1,s?c("emailMsg","Error: "+s.message,"error"):(c("emailMsg",`Confirmation email sent to ${o}. Please click the link in the email.`,"success"),document.getElementById("oldEmail").value="",document.getElementById("emailCurrentPassword").value="",document.getElementById("newEmail").value="")}),(async()=>{const{data:t}=await e.from("passwords").select("id, label").eq("user_id",n);if(t){const e=t.filter(e=>!e.label?.startsWith("__"));document.getElementById("statTotal").textContent=e.length}const a=sessionStorage.getItem("vaultStats");if(a)try{const e=JSON.parse(a);document.getElementById("statDuplicates").textContent=e.duplicates??"–",document.getElementById("statWeak").textContent=e.weak??"–",document.getElementById("statStrong").textContent=e.strong??"–"}catch{}else{const e='<span title="Open vault to load statistics" style="font-size:11px;opacity:0.5;cursor:help;">?</span>';document.getElementById("statDuplicates").innerHTML=e,document.getElementById("statWeak").innerHTML=e,document.getElementById("statStrong").innerHTML=e}})(),document.getElementById("deleteAccountBtn").addEventListener("click",()=>{document.getElementById("deleteAccountBtn").style.display="none",document.getElementById("deleteConfirmSection").style.display="block"}),document.getElementById("cancelDeleteBtn").addEventListener("click",()=>{document.getElementById("deleteConfirmSection").style.display="none",document.getElementById("deleteAccountBtn").style.display="inline-block",document.getElementById("deleteConfirmInput").value="",c("deleteMsg","","hide")}),document.getElementById("confirmDeleteBtn").addEventListener("click",async()=>{if("DELETE"!==document.getElementById("deleteConfirmInput").value)return void c("deleteMsg",'Please type exactly "DELETE".',"error");const t=document.getElementById("confirmDeleteBtn");t.textContent="Deleting…",t.disabled=!0;const{data:{session:a}}=await e.auth.getSession();await e.from("passwords").delete().eq("user_id",n);const o=await fetch("/api/delete-account",{method:"POST",headers:{Authorization:"Bearer "+a.access_token}});if(!o.ok)return c("deleteMsg","Error deleting account: "+await o.text().catch(()=>o.status),"error"),t.textContent="Permanently delete account",void(t.disabled=!1);await e.auth.signOut(),window.location.href="/"}),document.getElementById("changePwBtn").addEventListener("click",async()=>{const t=document.getElementById("currentPassword").value,n=document.getElementById("newPassword").value,o=document.getElementById("confirmPassword").value;if(!t)return void c("pwMsg","Please enter your current password.","error");if(!n||n.length<8)return void c("pwMsg","New password must be at least 8 characters long.","error");if(n!==o)return void c("pwMsg","Passwords do not match.","error");const d=document.getElementById("changePwBtn");d.textContent="Verifying…",d.disabled=!0;const{error:r}=await e.auth.signInWithPassword({email:a,password:t});if(r)return c("pwMsg","Current password is incorrect.","error"),d.textContent="Change password",void(d.disabled=!1);d.textContent="Saving…";const{error:s}=await e.auth.updateUser({password:n});d.textContent="Change password",d.disabled=!1,s?c("pwMsg","Error: "+s.message,"error"):(c("pwMsg","Password changed successfully.","success"),document.getElementById("currentPassword").value="",document.getElementById("newPassword").value="",document.getElementById("confirmPassword").value="")}),document.getElementById("forgotLinkSettings").addEventListener("click",e=>{e.preventDefault(),document.getElementById("forgotEmailSettings").value=a,document.getElementById("forgotSuccessSettings").style.display="none",c("forgotErrorSettings","","hide"),document.getElementById("forgotSendBtn").textContent="Send link",document.getElementById("forgotSendBtn").disabled=!1,document.getElementById("forgotModalSettings").style.display="flex"}),document.getElementById("forgotCloseSettings").addEventListener("click",()=>{document.getElementById("forgotModalSettings").style.display="none"}),document.getElementById("forgotModalSettings").addEventListener("click",e=>{e.target===document.getElementById("forgotModalSettings")&&document.getElementById("forgotCloseSettings").click()}),document.getElementById("forgotSendBtn").addEventListener("click",async()=>{const t=document.getElementById("forgotEmailSettings").value.trim();if(!t)return void c("forgotErrorSettings","Please enter your email address.","error");const n=document.getElementById("forgotSendBtn");n.textContent="Sending…",n.disabled=!0;const{error:a}=await e.auth.resetPasswordForEmail(t,{redirectTo:"https://safenet-security.ch/en/pages/reset-password.html"});a?(c("forgotErrorSettings","Error: "+a.message,"error"),n.textContent="Send link",n.disabled=!1):(document.getElementById("forgotSuccessSettings").style.display="block",n.textContent="Sent!")}),document.getElementById("displayName").addEventListener("keydown",e=>{"Enter"===e.key&&document.getElementById("saveNameBtn").click()}),document.getElementById("verifyCode").addEventListener("keydown",e=>{"Enter"===e.key&&document.getElementById("verifyBtn").click()}),document.getElementById("oldEmail").addEventListener("keydown",e=>{"Enter"===e.key&&document.getElementById("emailCurrentPassword").focus()}),document.getElementById("emailCurrentPassword").addEventListener("keydown",e=>{"Enter"===e.key&&document.getElementById("newEmail").focus()}),document.getElementById("newEmail").addEventListener("keydown",e=>{"Enter"===e.key&&document.getElementById("changeEmailBtn").click()}),document.getElementById("confirmPassword").addEventListener("keydown",e=>{"Enter"===e.key&&document.getElementById("changePwBtn").click()}),document.getElementById("deleteConfirmInput").addEventListener("keydown",e=>{"Enter"===e.key&&document.getElementById("confirmDeleteBtn").click()})})();
+import { supabase as e } from "/js/supabase.js";
+(document.getElementById("avatarCircle").addEventListener("click", () => {
+  const e = document.getElementById("avatarLightbox"),
+    t = document.querySelector("#avatarCircle img"),
+    n = document.getElementById("avatarLightboxInhalt");
+  if (((n.innerHTML = ""), t)) {
+    const e = document.createElement("img");
+    ((e.src = t.src),
+      (e.alt = t.alt),
+      (e.className = "avatar-lightbox-bild"),
+      n.appendChild(e));
+  } else {
+    const e = document.createElement("div");
+    e.className = "avatar-lightbox-initial";
+    const t = document.getElementById("avatarInitial");
+    ((e.textContent = t ? t.textContent : "?"), n.appendChild(e));
+  }
+  e.style.display = "flex";
+}),
+  document.getElementById("avatarLightbox").addEventListener("click", (e) => {
+    (e.target !== e.currentTarget &&
+      "avatarLightboxSchliessen" !== e.target.id) ||
+      (document.getElementById("avatarLightbox").style.display = "none");
+  }),
+  document.addEventListener("keydown", (e) => {
+    "Escape" === e.key &&
+      (document.getElementById("avatarLightbox").style.display = "none");
+  }),
+  document.getElementById("avatarUploadBtn")?.addEventListener("click", () => {
+    document.getElementById("avatarInput").click();
+  }),
+  (async () => {
+    let t,
+      n,
+      a,
+      o,
+      d = null,
+      r = "";
+    const { data: s } = await e.auth.getSession();
+    if (((t = s?.session), !t))
+      return void (window.location.href = "/en/pages/login.html");
+    if (
+      ((n = t.user.id),
+      (a = t.user.email),
+      (o = a.charAt(0).toUpperCase()),
+      (r = t.user.user_metadata?.display_name || ""),
+      (document.getElementById("profileEmail").textContent = a),
+      (document.getElementById("avatarInitial").textContent = r
+        ? r.charAt(0).toUpperCase()
+        : o),
+      (document.getElementById("displayName").value = r),
+      r)
+    ) {
+      const e = document.getElementById("profileDisplayName");
+      ((e.textContent = r), (e.style.display = "block"));
+    }
+    const l = t.user.user_metadata?.avatar_b64;
+    async function i() {
+      const { data: t, error: n } = await e.auth.mfa.listFactors();
+      if (n) return void c("tfaMsg", "Error loading 2FA status.", "error");
+      const a = (t.totp || []).find((e) => "verified" === e.status);
+      a
+        ? ((d = a.id),
+          (document.getElementById("tfaSectionOff").style.display = "none"),
+          (document.getElementById("tfaSectionOn").style.display = "block"),
+          (document.getElementById("tfaQrSection").style.display = "none"))
+        : ((document.getElementById("tfaSectionOff").style.display = "block"),
+          (document.getElementById("tfaSectionOn").style.display = "none"),
+          (document.getElementById("tfaQrSection").style.display = "none"));
+    }
+    function c(e, t, n) {
+      const a = document.getElementById(e);
+      "hide" !== n
+        ? ((a.textContent = t),
+          (a.className =
+            "msg-box " +
+            ("success" === n
+              ? "msg-success"
+              : "info" === n
+                ? "msg-info"
+                : "msg-error")),
+          (a.style.display = "block"))
+        : (a.style.display = "none");
+    }
+    (l &&
+      (document.getElementById("avatarCircle").innerHTML =
+        `<img src="${l}" alt="${o}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`),
+      document
+        .getElementById("avatarInput")
+        .addEventListener("change", async (t) => {
+          const n = t.target.files[0];
+          if (!n) return;
+          c("avatarMsg", "Processing…", "info");
+          const a = await (function (e, t) {
+              return new Promise((n) => {
+                const a = new FileReader();
+                ((a.onload = (e) => {
+                  const a = new Image();
+                  ((a.onload = () => {
+                    let e = a.width,
+                      o = a.height;
+                    e > o && e > t
+                      ? ((o = Math.round((o * t) / e)), (e = t))
+                      : o >= e &&
+                        o > t &&
+                        ((e = Math.round((e * t) / o)), (o = t));
+                    const d = document.createElement("canvas");
+                    ((d.width = e),
+                      (d.height = o),
+                      d.getContext("2d").drawImage(a, 0, 0, e, o),
+                      n(d.toDataURL("image/jpeg", 0.85)));
+                  }),
+                    (a.src = e.target.result));
+                }),
+                  a.readAsDataURL(e));
+              });
+            })(n, 1200),
+            { error: d } = await e.auth.updateUser({ data: { avatar_b64: a } });
+          d
+            ? c("avatarMsg", "Error: " + d.message, "error")
+            : ((document.getElementById("avatarCircle").innerHTML =
+                `<img src="${a}" alt="${o}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`),
+              c(
+                "avatarMsg",
+                "Profile picture updated successfully.",
+                "success",
+              ),
+              (t.target.value = ""));
+        }),
+      await i(),
+      document
+        .getElementById("enableBtn")
+        .addEventListener("click", async () => {
+          c("tfaMsg", "", "hide");
+          const t = document.getElementById("enableBtn");
+          ((t.textContent = "Preparing…"), (t.disabled = !0));
+          const { data: n, error: a } = await e.auth.mfa.enroll({
+            factorType: "totp",
+            friendlyName: "SafeNet Authenticator",
+          });
+          ((t.textContent = "Enable 2FA"),
+            (t.disabled = !1),
+            a
+              ? c("tfaMsg", "Error: " + a.message, "error")
+              : ((d = n.id),
+                (document.getElementById("qrImg").src = n.totp.qr_code),
+                (document.getElementById("secretText").textContent =
+                  n.totp.secret),
+                (document.getElementById("tfaSectionOff").style.display =
+                  "none"),
+                (document.getElementById("tfaQrSection").style.display =
+                  "block")));
+        }),
+      document
+        .getElementById("verifyBtn")
+        .addEventListener("click", async () => {
+          c("tfaMsg", "", "hide");
+          const t = document.getElementById("verifyCode").value.trim();
+          if (!t || 6 !== t.length)
+            return void c("tfaMsg", "Please enter a 6-digit code.", "error");
+          const n = document.getElementById("verifyBtn");
+          ((n.textContent = "Verifying…"), (n.disabled = !0));
+          const { data: a, error: o } = await e.auth.mfa.challenge({
+            factorId: d,
+          });
+          if (o)
+            return (
+              c("tfaMsg", "Error: " + o.message, "error"),
+              (n.textContent = "Confirm & activate"),
+              void (n.disabled = !1)
+            );
+          const { error: r } = await e.auth.mfa.verify({
+            factorId: d,
+            challengeId: a.id,
+            code: t,
+          });
+          ((n.textContent = "Confirm & activate"),
+            (n.disabled = !1),
+            r
+              ? c("tfaMsg", "Incorrect code. Please try again.", "error")
+              : (c("tfaMsg", "2FA has been successfully enabled!", "success"),
+                (document.getElementById("verifyCode").value = ""),
+                await i()));
+        }),
+      document
+        .getElementById("cancelEnrollBtn")
+        .addEventListener("click", async () => {
+          (d && (await e.auth.mfa.unenroll({ factorId: d }), (d = null)),
+            await i());
+        }),
+      document
+        .getElementById("disableBtn")
+        .addEventListener("click", async () => {
+          if (
+            !(await window.snConfirm(
+              "Really disable 2FA? Your account will be less secure.",
+            ))
+          )
+            return;
+          c("tfaMsg", "", "hide");
+          const t = document.getElementById("disableBtn");
+          ((t.textContent = "Disabling…"), (t.disabled = !0));
+          const { error: n } = await e.auth.mfa.unenroll({ factorId: d });
+          ((t.textContent = "Disable 2FA"),
+            (t.disabled = !1),
+            n
+              ? c("tfaMsg", "Error: " + n.message, "error")
+              : (c("tfaMsg", "2FA has been disabled.", "success"), await i()));
+        }),
+      document
+        .getElementById("saveNameBtn")
+        .addEventListener("click", async () => {
+          const t = document.getElementById("displayName").value.trim(),
+            n = document.getElementById("saveNameBtn");
+          ((n.textContent = "Saving…"), (n.disabled = !0));
+          const { error: a } = await e.auth.updateUser({
+            data: { display_name: t },
+          });
+          if (((n.textContent = "Save"), (n.disabled = !1), a))
+            return void c("nameMsg", "Error: " + a.message, "error");
+          (c("nameMsg", "Display name saved.", "success"),
+            (document.getElementById("avatarInitial").textContent = t
+              ? t.charAt(0).toUpperCase()
+              : o));
+          const d = document.getElementById("profileDisplayName");
+          t
+            ? ((d.textContent = t), (d.style.display = "block"))
+            : (d.style.display = "none");
+        }),
+      document
+        .getElementById("changeEmailBtn")
+        .addEventListener("click", async () => {
+          const t = document.getElementById("oldEmail").value.trim(),
+            n = document.getElementById("emailCurrentPassword").value,
+            o = document.getElementById("newEmail").value.trim();
+          if (!t || !t.includes("@"))
+            return void c(
+              "emailMsg",
+              "Please enter your current email address.",
+              "error",
+            );
+          if (t.toLowerCase() !== a.toLowerCase())
+            return void c(
+              "emailMsg",
+              "The email address entered does not match your current one.",
+              "error",
+            );
+          if (!n)
+            return void c(
+              "emailMsg",
+              "Please enter your current password.",
+              "error",
+            );
+          if (!o || !o.includes("@"))
+            return void c(
+              "emailMsg",
+              "Please enter a valid new email address.",
+              "error",
+            );
+          if (o.toLowerCase() === a.toLowerCase())
+            return void c(
+              "emailMsg",
+              "The new email address must differ from your current one.",
+              "error",
+            );
+          const d = document.getElementById("changeEmailBtn");
+          ((d.textContent = "Verifying…"), (d.disabled = !0));
+          const { error: r } = await e.auth.signInWithPassword({
+            email: a,
+            password: n,
+          });
+          if (r)
+            return (
+              c("emailMsg", "The current password is incorrect.", "error"),
+              (d.textContent = "Send confirmation email"),
+              void (d.disabled = !1)
+            );
+          d.textContent = "Sending…";
+          const { error: s } = await e.auth.updateUser({ email: o });
+          ((d.textContent = "Send confirmation email"),
+            (d.disabled = !1),
+            s
+              ? c("emailMsg", "Error: " + s.message, "error")
+              : (c(
+                  "emailMsg",
+                  `Confirmation email sent to ${o}. Please click the link in the email.`,
+                  "success",
+                ),
+                (document.getElementById("oldEmail").value = ""),
+                (document.getElementById("emailCurrentPassword").value = ""),
+                (document.getElementById("newEmail").value = "")));
+        }),
+      (async () => {
+        const { data: t } = await e
+          .from("passwords")
+          .select("id, label")
+          .eq("user_id", n);
+        if (t) {
+          const e = t.filter((e) => !e.label?.startsWith("__"));
+          document.getElementById("statTotal").textContent = e.length;
+        }
+        const a = sessionStorage.getItem("vaultStats");
+        if (a)
+          try {
+            const e = JSON.parse(a);
+            ((document.getElementById("statDuplicates").textContent =
+              e.duplicates ?? "–"),
+              (document.getElementById("statWeak").textContent = e.weak ?? "–"),
+              (document.getElementById("statStrong").textContent =
+                e.strong ?? "–"));
+          } catch {}
+        else {
+          const e =
+            '<span title="Open vault to load statistics" style="font-size:11px;opacity:0.5;cursor:help;">?</span>';
+          ((document.getElementById("statDuplicates").innerHTML = e),
+            (document.getElementById("statWeak").innerHTML = e),
+            (document.getElementById("statStrong").innerHTML = e));
+        }
+      })(),
+      document
+        .getElementById("deleteAccountBtn")
+        .addEventListener("click", () => {
+          ((document.getElementById("deleteAccountBtn").style.display = "none"),
+            (document.getElementById("deleteConfirmSection").style.display =
+              "block"));
+        }),
+      document
+        .getElementById("cancelDeleteBtn")
+        .addEventListener("click", () => {
+          ((document.getElementById("deleteConfirmSection").style.display =
+            "none"),
+            (document.getElementById("deleteAccountBtn").style.display =
+              "inline-block"),
+            (document.getElementById("deleteConfirmInput").value = ""),
+            c("deleteMsg", "", "hide"));
+        }),
+      document
+        .getElementById("confirmDeleteBtn")
+        .addEventListener("click", async () => {
+          if ("DELETE" !== document.getElementById("deleteConfirmInput").value)
+            return void c(
+              "deleteMsg",
+              'Please type exactly "DELETE".',
+              "error",
+            );
+          const t = document.getElementById("confirmDeleteBtn");
+          ((t.textContent = "Deleting…"), (t.disabled = !0));
+          const {
+            data: { session: a },
+          } = await e.auth.getSession();
+          await e.from("passwords").delete().eq("user_id", n);
+          const o = await fetch("/api/delete-account", {
+            method: "POST",
+            headers: { Authorization: "Bearer " + a.access_token },
+          });
+          if (!o.ok)
+            return (
+              c(
+                "deleteMsg",
+                "Error deleting account: " +
+                  (await o.text().catch(() => o.status)),
+                "error",
+              ),
+              (t.textContent = "Permanently delete account"),
+              void (t.disabled = !1)
+            );
+          (await e.auth.signOut(), (window.location.href = "/"));
+        }),
+      document
+        .getElementById("changePwBtn")
+        .addEventListener("click", async () => {
+          const t = document.getElementById("currentPassword").value,
+            n = document.getElementById("newPassword").value,
+            o = document.getElementById("confirmPassword").value;
+          if (!t)
+            return void c(
+              "pwMsg",
+              "Please enter your current password.",
+              "error",
+            );
+          if (!n || n.length < 8)
+            return void c(
+              "pwMsg",
+              "New password must be at least 8 characters long.",
+              "error",
+            );
+          if (n !== o)
+            return void c("pwMsg", "Passwords do not match.", "error");
+          const d = document.getElementById("changePwBtn");
+          ((d.textContent = "Verifying…"), (d.disabled = !0));
+          const { error: r } = await e.auth.signInWithPassword({
+            email: a,
+            password: t,
+          });
+          if (r)
+            return (
+              c("pwMsg", "Current password is incorrect.", "error"),
+              (d.textContent = "Change password"),
+              void (d.disabled = !1)
+            );
+          d.textContent = "Saving…";
+          const { error: s } = await e.auth.updateUser({ password: n });
+          ((d.textContent = "Change password"),
+            (d.disabled = !1),
+            s
+              ? c("pwMsg", "Error: " + s.message, "error")
+              : (c("pwMsg", "Password changed successfully.", "success"),
+                (document.getElementById("currentPassword").value = ""),
+                (document.getElementById("newPassword").value = ""),
+                (document.getElementById("confirmPassword").value = "")));
+        }),
+      document
+        .getElementById("forgotLinkSettings")
+        .addEventListener("click", (e) => {
+          (e.preventDefault(),
+            (document.getElementById("forgotEmailSettings").value = a),
+            (document.getElementById("forgotSuccessSettings").style.display =
+              "none"),
+            c("forgotErrorSettings", "", "hide"),
+            (document.getElementById("forgotSendBtn").textContent =
+              "Send link"),
+            (document.getElementById("forgotSendBtn").disabled = !1),
+            (document.getElementById("forgotModalSettings").style.display =
+              "flex"));
+        }),
+      document
+        .getElementById("forgotCloseSettings")
+        .addEventListener("click", () => {
+          document.getElementById("forgotModalSettings").style.display = "none";
+        }),
+      document
+        .getElementById("forgotModalSettings")
+        .addEventListener("click", (e) => {
+          e.target === document.getElementById("forgotModalSettings") &&
+            document.getElementById("forgotCloseSettings").click();
+        }),
+      document
+        .getElementById("forgotSendBtn")
+        .addEventListener("click", async () => {
+          const t = document.getElementById("forgotEmailSettings").value.trim();
+          if (!t)
+            return void c(
+              "forgotErrorSettings",
+              "Please enter your email address.",
+              "error",
+            );
+          const n = document.getElementById("forgotSendBtn");
+          ((n.textContent = "Sending…"), (n.disabled = !0));
+          const { error: a } = await e.auth.resetPasswordForEmail(t, {
+            redirectTo:
+              "https://safenet-security.ch/en/pages/reset-password.html",
+          });
+          a
+            ? (c("forgotErrorSettings", "Error: " + a.message, "error"),
+              (n.textContent = "Send link"),
+              (n.disabled = !1))
+            : ((document.getElementById("forgotSuccessSettings").style.display =
+                "block"),
+              (n.textContent = "Sent!"));
+        }),
+      document
+        .getElementById("displayName")
+        .addEventListener("keydown", (e) => {
+          "Enter" === e.key && document.getElementById("saveNameBtn").click();
+        }),
+      document.getElementById("verifyCode").addEventListener("keydown", (e) => {
+        "Enter" === e.key && document.getElementById("verifyBtn").click();
+      }),
+      document.getElementById("oldEmail").addEventListener("keydown", (e) => {
+        "Enter" === e.key &&
+          document.getElementById("emailCurrentPassword").focus();
+      }),
+      document
+        .getElementById("emailCurrentPassword")
+        .addEventListener("keydown", (e) => {
+          "Enter" === e.key && document.getElementById("newEmail").focus();
+        }),
+      document.getElementById("newEmail").addEventListener("keydown", (e) => {
+        "Enter" === e.key && document.getElementById("changeEmailBtn").click();
+      }),
+      document
+        .getElementById("confirmPassword")
+        .addEventListener("keydown", (e) => {
+          "Enter" === e.key && document.getElementById("changePwBtn").click();
+        }),
+      document
+        .getElementById("deleteConfirmInput")
+        .addEventListener("keydown", (e) => {
+          "Enter" === e.key &&
+            document.getElementById("confirmDeleteBtn").click();
+        }));
+  })());

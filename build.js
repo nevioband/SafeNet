@@ -2,6 +2,7 @@
 // Wird von Vercel vor dem Deployment ausgeführt: "buildCommand": "node build.js"
 
 import { minify } from 'terser';
+import { PurgeCSS } from 'purgecss';
 import fs from 'fs';
 import { cp, rm, mkdir, writeFile } from 'fs/promises';
 import path from 'path';
@@ -14,6 +15,16 @@ const JS_DIR = path.join(__dirname, 'js');
 
 async function buildAll() {
   const files = fs.readdirSync(JS_DIR).filter(f => f.endsWith('.js'));
+  // Schritt 1: Vercel Output Ordner erstellen und Dateien kopieren
+  await buildVercelOutput();
+
+  // Schritt 2: JS-Dateien im Output-Verzeichnis minifizieren (schützt die Originaldateien!)
+  await minifyJS();
+}
+
+async function minifyJS() {
+  const targetJsDir = path.join(__dirname, '.vercel/output/static/js');
+  const files = fs.readdirSync(targetJsDir).filter(f => f.endsWith('.js'));
   let ok = 0;
   let fail = 0;
 
@@ -21,6 +32,7 @@ async function buildAll() {
 
   for (const file of files) {
     const filePath = path.join(JS_DIR, file);
+    const filePath = path.join(targetJsDir, file);
     const source = fs.readFileSync(filePath, 'utf-8');
 
     // ES-Module erkennen (haben import/export-Statements)
@@ -88,6 +100,27 @@ async function buildVercelOutput() {
       await cp(item, path.join(STATIC, item), { recursive: true });
       console.log(`  ✓ static/${item}`);
     }
+  }
+
+  // CSS bereinigen mit PurgeCSS (im Output-Verzeichnis, um Quelldateien nicht zu zerstören)
+  console.log('\nBereinige ungenutztes CSS mit PurgeCSS...');
+  try {
+    const purgeCSSResults = await new PurgeCSS().purge({
+      content: [
+        path.join(STATIC, '**/*.html'),
+        path.join(STATIC, 'js/**/*.js')
+      ],
+      css: [path.join(STATIC, 'css/**/*.css')],
+      // Klassen, die dynamisch per JS gesetzt werden, schützen:
+      safelist: [/^se-/, /^ph-/, 'hidden', 'active', 'correct', 'wrong', 'show']
+    });
+
+    for (const result of purgeCSSResults) {
+      await writeFile(result.file, result.css, 'utf-8');
+      console.log(`  ✓ CSS optimiert: ${path.basename(result.file)}`);
+    }
+  } catch (err) {
+    console.error(`  ✗ Fehler bei PurgeCSS: ${err.message}`);
   }
 
   // API-Funktionen → .vercel/output/functions/api/<name>.func/

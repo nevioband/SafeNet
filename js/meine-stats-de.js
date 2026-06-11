@@ -1,1 +1,218 @@
-import{supabase as e}from"./supabase.js";const s=document.getElementById("stats-root"),t={allgemein:"Allgemein",banking:"Banking",email:"E-Mail",sozial:"Soziale Medien",shopping:"Shopping",arbeit:"Arbeit",gaming:"Gaming",sonstiges:"Sonstiges"};(async()=>{let n=null;try{const e=localStorage.getItem("sb-dygrabyaiyessqmjdprc-auth-token");e&&(n=JSON.parse(e))}catch{}const{data:{session:a}}=await e.auth.getSession();if(n=a??n,!n?.access_token)return void(s.innerHTML='<p class="stats-login-hint">Bitte <a href="/de/pages/login.html">einloggen</a>, um deine Sicherheitsübersicht zu sehen.</p>');let i;try{i=await async function(e,s){const t=new TextEncoder,n=await crypto.subtle.importKey("raw",t.encode(e),"PBKDF2",!1,["deriveKey"]);return crypto.subtle.deriveKey({name:"PBKDF2",salt:t.encode(s),iterations:1e5,hash:"SHA-256"},n,{name:"AES-GCM",length:256},!1,["encrypt","decrypt"])}(n.user.id,n.user.id)}catch{return void(s.innerHTML='<p class="stats-loading">Verschlüsselungsfehler. Bitte Seite neu laden.</p>')}const{data:r}=await e.from("passwords").select("*").order("created_at",{ascending:!1});if(!Array.isArray(r))return void(s.innerHTML='<p class="stats-loading">Fehler beim Laden des Tresors.</p>');const l=await Promise.all(r.filter(e=>!e.label?.startsWith("__")).map(async e=>{const s=e.value?.startsWith("ENC:")?await async function(e,s){try{const t=Uint8Array.from(atob(e.slice(4)),e=>e.charCodeAt(0)),n=await crypto.subtle.decrypt({name:"AES-GCM",iv:t.slice(0,12)},s,t.slice(12));return(new TextDecoder).decode(n)}catch{return null}}(e.value,i):e.value;return{...e,value:s??""}}));!function(e){if(0===e.length)return void(s.innerHTML='<p class="stats-login-hint">Noch keine Passwörter im Tresor gespeichert. <a href="/de/pages/tresor.html">Zum Tresor →</a></p>');const n=e.length,a=e.map(e=>function(e){if(!e)return 0;const s=["123456","password","12345678","qwerty","12345","123456789","letmein","admin","welcome","123123","passw0rd","iloveyou","hallo","hallo123","passwort","test","abc123","000000","111111"].some(s=>e.toLowerCase().includes(s));let t=0;return e.length>=8&&(t+=15),e.length>=12&&(t+=20),e.length>=16&&(t+=15),/[a-z]/.test(e)&&(t+=10),/[A-Z]/.test(e)&&(t+=10),/[0-9]/.test(e)&&(t+=10),/[^A-Za-z0-9]/.test(e)&&(t+=20),s&&(t=Math.max(0,t-35)),Math.min(100,t)}(e.value??"")),i=Math.round(a.reduce((e,s)=>e+s,0)/n),r=a.filter(e=>e>=60).length,l=a.filter(e=>e>=40&&e<60).length,c=a.filter(e=>e<40).length,o={};e.forEach(e=>{e.value&&(o[e.value]=(o[e.value]||0)+1)});const d=e.filter(e=>e.value&&o[e.value]>1).length,u={};e.forEach(e=>{const s=e.kategorie||"allgemein";u[s]=(u[s]||0)+1});const h=Math.round(264-i/100*264),g=(p=i)>=70?"#4ade80":p>=40?"#fb923c":"#ef4444";var p;const m=function(e){return e>=80?{text:"Ausgezeichnet 🛡️",css:"color:#4ade80;-webkit-text-fill-color:#4ade80;"}:e>=65?{text:"Gut",css:"color:#86efac;-webkit-text-fill-color:#86efac;"}:e>=45?{text:"Ausbaufähig",css:"color:#fb923c;-webkit-text-fill-color:#fb923c;"}:{text:"Verbesserungsbedarf",css:"color:#f87171;-webkit-text-fill-color:#f87171;"}}(i),v=[];c>0&&v.push({icon:"🔴",title:`${c} schwache Passwörter`,text:"Ersetze sie durch sichere Passwörter mit mind. 12 Zeichen.",link:"/de/pages/generator.html",linkText:"Generator öffnen"}),d>0&&v.push({icon:"🟠",title:`${d} doppelte Passwörter`,text:"Verwende für jeden Dienst ein einzigartiges Passwort.",link:"/de/pages/analysator.html",linkText:"Analyse öffnen"}),l>0&&v.push({icon:"🟡",title:`${l} mittelmässige Passwörter`,text:"Füge Sonderzeichen hinzu und erhöhe die Länge auf ≥ 16 Zeichen."}),0===v.length&&v.push({icon:"✅",title:"Alles top!",text:"Deine Passwörter sehen gut aus. Bleib dran und prüfe sie regelmässig."}),s.innerHTML=`\n    <div class="stats-score-section">\n      <div class="score-ring-wrap">\n        <svg class="score-ring" viewBox="0 0 100 100">\n          <circle class="score-ring-bg" cx="50" cy="50" r="42"/>\n          <circle class="score-ring-fill" id="ring-fill" cx="50" cy="50" r="42"\n            stroke="${g}"\n            stroke-dasharray="264"\n            stroke-dashoffset="264"/>\n        </svg>\n        <div class="score-center">\n          <span class="score-number" id="score-num">0</span>\n          <span class="score-label">/ 100</span>\n        </div>\n      </div>\n      <div class="score-verdict" style="${m.css}">${m.text}</div>\n      <div class="score-meta">${n} Passwörter im Tresor</div>\n    </div>\n\n    <div class="stats-section-card">\n      <h2>Passwortqualität</h2>\n      <div class="quality-bar-item">\n        <span class="quality-label">Stark</span>\n        <div class="quality-track"><div class="quality-fill quality-fill-strong" data-w="${n?Math.round(r/n*100):0}"></div></div>\n        <span class="quality-count">${r} / ${n}</span>\n      </div>\n      <div class="quality-bar-item">\n        <span class="quality-label">Mittel</span>\n        <div class="quality-track"><div class="quality-fill quality-fill-medium" data-w="${n?Math.round(l/n*100):0}"></div></div>\n        <span class="quality-count">${l} / ${n}</span>\n      </div>\n      <div class="quality-bar-item">\n        <span class="quality-label">Schwach</span>\n        <div class="quality-track"><div class="quality-fill quality-fill-weak" data-w="${n?Math.round(c/n*100):0}"></div></div>\n        <span class="quality-count">${c} / ${n}</span>\n      </div>\n    </div>\n\n    <div class="stats-section-card">\n      <h2>Warnungen</h2>\n      <div class="stats-warnings">\n        ${d>0?`<div class="stats-warning-item orange"><span class="warn-icon">⚠️</span><span><strong>${d} doppelte Passwörter</strong> gefunden – Sicherheitsrisiko!</span></div>`:""}\n        ${c>0?`<div class="stats-warning-item red"><span class="warn-icon">🛑</span><span><strong>${c} Passwörter zu schwach</strong> – ersetze sie durch stärkere.</span></div>`:""}\n        ${0===d&&0===c?'<div class="stats-warning-item green"><span class="warn-icon">✅</span><span>Keine kritischen Probleme gefunden.</span></div>':""}\n      </div>\n    </div>\n\n    <div class="stats-section-card">\n      <h2>Kategorien</h2>\n      <div class="category-grid">\n        ${Object.entries(u).map(([e,s])=>`\n          <div class="category-item">\n            <span class="category-name">${t[e]??e}</span>\n            <span class="category-count">${s}</span>\n          </div>`).join("")}\n      </div>\n    </div>\n\n    <div class="stats-section-card">\n      <h2>Empfehlungen</h2>\n      <div class="recs-grid">\n        ${v.map(e=>`\n          <div class="rec-item">\n            <span class="rec-icon">${e.icon}</span>\n            <div class="rec-text">\n              <strong>${e.title}</strong>${e.text}\n              ${e.link?`<a class="rec-link" href="${e.link}">${e.linkText} →</a>`:""}\n            </div>\n          </div>`).join("")}\n      </div>\n    </div>\n  `,requestAnimationFrame(()=>{const e=document.getElementById("ring-fill"),s=document.getElementById("score-num");e&&(e.style.transition="stroke-dashoffset 1.4s cubic-bezier(0.25, 1, 0.5, 1)"),requestAnimationFrame(()=>{e&&(e.style.strokeDashoffset=h)});const t=performance.now();requestAnimationFrame(function e(n){const a=Math.min((n-t)/1400,1),r=1-Math.pow(1-a,3);s&&(s.textContent=Math.round(r*i)),a<1&&requestAnimationFrame(e)}),document.querySelectorAll(".quality-fill[data-w]").forEach(e=>{requestAnimationFrame(()=>{e.style.width=e.dataset.w+"%"})})})}(l)})();
+import { supabase as e } from "./supabase.js";
+const s = document.getElementById("stats-root"),
+  t = {
+    allgemein: "Allgemein",
+    banking: "Banking",
+    email: "E-Mail",
+    sozial: "Soziale Medien",
+    shopping: "Shopping",
+    arbeit: "Arbeit",
+    gaming: "Gaming",
+    sonstiges: "Sonstiges",
+  };
+(async () => {
+  let n = null;
+  try {
+    const e = localStorage.getItem("sb-dygrabyaiyessqmjdprc-auth-token");
+    e && (n = JSON.parse(e));
+  } catch {}
+  const {
+    data: { session: a },
+  } = await e.auth.getSession();
+  if (((n = a ?? n), !n?.access_token))
+    return void (s.innerHTML =
+      '<p class="stats-login-hint">Bitte <a href="/de/pages/login.html">einloggen</a>, um deine Sicherheitsübersicht zu sehen.</p>');
+  let i;
+  try {
+    i = await (async function (e, s) {
+      const t = new TextEncoder(),
+        n = await crypto.subtle.importKey("raw", t.encode(e), "PBKDF2", !1, [
+          "deriveKey",
+        ]);
+      return crypto.subtle.deriveKey(
+        { name: "PBKDF2", salt: t.encode(s), iterations: 1e5, hash: "SHA-256" },
+        n,
+        { name: "AES-GCM", length: 256 },
+        !1,
+        ["encrypt", "decrypt"],
+      );
+    })(n.user.id, n.user.id);
+  } catch {
+    return void (s.innerHTML =
+      '<p class="stats-loading">Verschlüsselungsfehler. Bitte Seite neu laden.</p>');
+  }
+  const { data: r } = await e
+    .from("passwords")
+    .select("*")
+    .order("created_at", { ascending: !1 });
+  if (!Array.isArray(r))
+    return void (s.innerHTML =
+      '<p class="stats-loading">Fehler beim Laden des Tresors.</p>');
+  const l = await Promise.all(
+    r
+      .filter((e) => !e.label?.startsWith("__"))
+      .map(async (e) => {
+        const s = e.value?.startsWith("ENC:")
+          ? await (async function (e, s) {
+              try {
+                const t = Uint8Array.from(atob(e.slice(4)), (e) =>
+                    e.charCodeAt(0),
+                  ),
+                  n = await crypto.subtle.decrypt(
+                    { name: "AES-GCM", iv: t.slice(0, 12) },
+                    s,
+                    t.slice(12),
+                  );
+                return new TextDecoder().decode(n);
+              } catch {
+                return null;
+              }
+            })(e.value, i)
+          : e.value;
+        return { ...e, value: s ?? "" };
+      }),
+  );
+  !(function (e) {
+    if (0 === e.length)
+      return void (s.innerHTML =
+        '<p class="stats-login-hint">Noch keine Passwörter im Tresor gespeichert. <a href="/de/pages/tresor.html">Zum Tresor →</a></p>');
+    const n = e.length,
+      a = e.map((e) =>
+        (function (e) {
+          if (!e) return 0;
+          const s = [
+            "123456",
+            "password",
+            "12345678",
+            "qwerty",
+            "12345",
+            "123456789",
+            "letmein",
+            "admin",
+            "welcome",
+            "123123",
+            "passw0rd",
+            "iloveyou",
+            "hallo",
+            "hallo123",
+            "passwort",
+            "test",
+            "abc123",
+            "000000",
+            "111111",
+          ].some((s) => e.toLowerCase().includes(s));
+          let t = 0;
+          return (
+            e.length >= 8 && (t += 15),
+            e.length >= 12 && (t += 20),
+            e.length >= 16 && (t += 15),
+            /[a-z]/.test(e) && (t += 10),
+            /[A-Z]/.test(e) && (t += 10),
+            /[0-9]/.test(e) && (t += 10),
+            /[^A-Za-z0-9]/.test(e) && (t += 20),
+            s && (t = Math.max(0, t - 35)),
+            Math.min(100, t)
+          );
+        })(e.value ?? ""),
+      ),
+      i = Math.round(a.reduce((e, s) => e + s, 0) / n),
+      r = a.filter((e) => e >= 60).length,
+      l = a.filter((e) => e >= 40 && e < 60).length,
+      c = a.filter((e) => e < 40).length,
+      o = {};
+    e.forEach((e) => {
+      e.value && (o[e.value] = (o[e.value] || 0) + 1);
+    });
+    const d = e.filter((e) => e.value && o[e.value] > 1).length,
+      u = {};
+    e.forEach((e) => {
+      const s = e.kategorie || "allgemein";
+      u[s] = (u[s] || 0) + 1;
+    });
+    const h = Math.round(264 - (i / 100) * 264),
+      g = (p = i) >= 70 ? "#4ade80" : p >= 40 ? "#fb923c" : "#ef4444";
+    var p;
+    const m = (function (e) {
+        return e >= 80
+          ? {
+              text: "Ausgezeichnet 🛡️",
+              css: "color:#4ade80;-webkit-text-fill-color:#4ade80;",
+            }
+          : e >= 65
+            ? {
+                text: "Gut",
+                css: "color:#86efac;-webkit-text-fill-color:#86efac;",
+              }
+            : e >= 45
+              ? {
+                  text: "Ausbaufähig",
+                  css: "color:#fb923c;-webkit-text-fill-color:#fb923c;",
+                }
+              : {
+                  text: "Verbesserungsbedarf",
+                  css: "color:#f87171;-webkit-text-fill-color:#f87171;",
+                };
+      })(i),
+      v = [];
+    (c > 0 &&
+      v.push({
+        icon: "🔴",
+        title: `${c} schwache Passwörter`,
+        text: "Ersetze sie durch sichere Passwörter mit mind. 12 Zeichen.",
+        link: "/de/pages/generator.html",
+        linkText: "Generator öffnen",
+      }),
+      d > 0 &&
+        v.push({
+          icon: "🟠",
+          title: `${d} doppelte Passwörter`,
+          text: "Verwende für jeden Dienst ein einzigartiges Passwort.",
+          link: "/de/pages/analysator.html",
+          linkText: "Analyse öffnen",
+        }),
+      l > 0 &&
+        v.push({
+          icon: "🟡",
+          title: `${l} mittelmässige Passwörter`,
+          text: "Füge Sonderzeichen hinzu und erhöhe die Länge auf ≥ 16 Zeichen.",
+        }),
+      0 === v.length &&
+        v.push({
+          icon: "✅",
+          title: "Alles top!",
+          text: "Deine Passwörter sehen gut aus. Bleib dran und prüfe sie regelmässig.",
+        }),
+      (s.innerHTML = `\n    <div class="stats-score-section">\n      <div class="score-ring-wrap">\n        <svg class="score-ring" viewBox="0 0 100 100">\n          <circle class="score-ring-bg" cx="50" cy="50" r="42"/>\n          <circle class="score-ring-fill" id="ring-fill" cx="50" cy="50" r="42"\n            stroke="${g}"\n            stroke-dasharray="264"\n            stroke-dashoffset="264"/>\n        </svg>\n        <div class="score-center">\n          <span class="score-number" id="score-num">0</span>\n          <span class="score-label">/ 100</span>\n        </div>\n      </div>\n      <div class="score-verdict" style="${m.css}">${m.text}</div>\n      <div class="score-meta">${n} Passwörter im Tresor</div>\n    </div>\n\n    <div class="stats-section-card">\n      <h2>Passwortqualität</h2>\n      <div class="quality-bar-item">\n        <span class="quality-label">Stark</span>\n        <div class="quality-track"><div class="quality-fill quality-fill-strong" data-w="${n ? Math.round((r / n) * 100) : 0}"></div></div>\n        <span class="quality-count">${r} / ${n}</span>\n      </div>\n      <div class="quality-bar-item">\n        <span class="quality-label">Mittel</span>\n        <div class="quality-track"><div class="quality-fill quality-fill-medium" data-w="${n ? Math.round((l / n) * 100) : 0}"></div></div>\n        <span class="quality-count">${l} / ${n}</span>\n      </div>\n      <div class="quality-bar-item">\n        <span class="quality-label">Schwach</span>\n        <div class="quality-track"><div class="quality-fill quality-fill-weak" data-w="${n ? Math.round((c / n) * 100) : 0}"></div></div>\n        <span class="quality-count">${c} / ${n}</span>\n      </div>\n    </div>\n\n    <div class="stats-section-card">\n      <h2>Warnungen</h2>\n      <div class="stats-warnings">\n        ${d > 0 ? `<div class="stats-warning-item orange"><span class="warn-icon">⚠️</span><span><strong>${d} doppelte Passwörter</strong> gefunden – Sicherheitsrisiko!</span></div>` : ""}\n        ${c > 0 ? `<div class="stats-warning-item red"><span class="warn-icon">🛑</span><span><strong>${c} Passwörter zu schwach</strong> – ersetze sie durch stärkere.</span></div>` : ""}\n        ${0 === d && 0 === c ? '<div class="stats-warning-item green"><span class="warn-icon">✅</span><span>Keine kritischen Probleme gefunden.</span></div>' : ""}\n      </div>\n    </div>\n\n    <div class="stats-section-card">\n      <h2>Kategorien</h2>\n      <div class="category-grid">\n        ${Object.entries(
+        u,
+      )
+        .map(
+          ([e, s]) =>
+            `\n          <div class="category-item">\n            <span class="category-name">${t[e] ?? e}</span>\n            <span class="category-count">${s}</span>\n          </div>`,
+        )
+        .join(
+          "",
+        )}\n      </div>\n    </div>\n\n    <div class="stats-section-card">\n      <h2>Empfehlungen</h2>\n      <div class="recs-grid">\n        ${v.map((e) => `\n          <div class="rec-item">\n            <span class="rec-icon">${e.icon}</span>\n            <div class="rec-text">\n              <strong>${e.title}</strong>${e.text}\n              ${e.link ? `<a class="rec-link" href="${e.link}">${e.linkText} →</a>` : ""}\n            </div>\n          </div>`).join("")}\n      </div>\n    </div>\n  `),
+      requestAnimationFrame(() => {
+        const e = document.getElementById("ring-fill"),
+          s = document.getElementById("score-num");
+        (e &&
+          (e.style.transition =
+            "stroke-dashoffset 1.4s cubic-bezier(0.25, 1, 0.5, 1)"),
+          requestAnimationFrame(() => {
+            e && (e.style.strokeDashoffset = h);
+          }));
+        const t = performance.now();
+        (requestAnimationFrame(function e(n) {
+          const a = Math.min((n - t) / 1400, 1),
+            r = 1 - Math.pow(1 - a, 3);
+          (s && (s.textContent = Math.round(r * i)),
+            a < 1 && requestAnimationFrame(e));
+        }),
+          document.querySelectorAll(".quality-fill[data-w]").forEach((e) => {
+            requestAnimationFrame(() => {
+              e.style.width = e.dataset.w + "%";
+            });
+          }));
+      }));
+  })(l);
+})();

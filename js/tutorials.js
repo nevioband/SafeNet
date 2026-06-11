@@ -1,1 +1,62 @@
-const STEPS=5;function lsKey(e,t){return`tut_${e}_step_${t}`}function countDone(e){let t=0;for(let o=0;o<5;o++)"1"===localStorage.getItem(lsKey(e,o))&&t++;return t}function updateProgress(e){const t=countDone(e),o=Math.round(t/5*100),n=document.getElementById(`prog-bar-${e}`),c=document.getElementById(`prog-text-${e}`);n&&(n.style.width=o+"%"),c&&(c.textContent=`${t} / 5`)}function restoreCheckboxes(e){for(let t=0;t<5;t++){const o=document.getElementById(`t${e}s${t}`);if(!o)continue;o.checked="1"===localStorage.getItem(lsKey(e,t));const n=o.nextElementSibling?.nextElementSibling;n&&n.classList.toggle("checked",o.checked)}updateProgress(e)}document.querySelectorAll(".tutorial-header").forEach(e=>{e.addEventListener("click",()=>{const t="body-"+e.closest(".tutorial-card").dataset.id,o=document.getElementById(t),n=e.querySelector(".tutorial-chevron"),c=o.classList.contains("open");document.querySelectorAll(".tutorial-body.open").forEach(e=>{e.classList.remove("open");const t=e.previousElementSibling;t&&(t.querySelector(".tutorial-chevron")?.classList.remove("open"),t.setAttribute("aria-expanded","false"))}),c||(o.classList.add("open"),n?.classList.add("open"),e.setAttribute("aria-expanded","true"))})}),document.querySelectorAll(".step-cb").forEach(e=>{e.addEventListener("change",()=>{const t=e.dataset.tut,o=e.dataset.step;localStorage.setItem(lsKey(t,o),e.checked?"1":"0");const n=e.nextElementSibling?.nextElementSibling;n&&n.classList.toggle("checked",e.checked),updateProgress(t)})}),document.querySelectorAll(".reset-btn").forEach(e=>{e.addEventListener("click",()=>{const t=e.dataset.tut;for(let e=0;e<5;e++)localStorage.removeItem(lsKey(t,e));restoreCheckboxes(t)})}),[1,2,3,4,5].forEach(e=>restoreCheckboxes(e));
+const STEPS = 5;
+function lsKey(e, t) {
+  return `tut_${e}_step_${t}`;
+}
+function countDone(e) {
+  let t = 0;
+  for (let o = 0; o < 5; o++) "1" === localStorage.getItem(lsKey(e, o)) && t++;
+  return t;
+}
+function updateProgress(e) {
+  const t = countDone(e),
+    o = Math.round((t / 5) * 100),
+    n = document.getElementById(`prog-bar-${e}`),
+    c = document.getElementById(`prog-text-${e}`);
+  (n && (n.style.width = o + "%"), c && (c.textContent = `${t} / 5`));
+}
+function restoreCheckboxes(e) {
+  for (let t = 0; t < 5; t++) {
+    const o = document.getElementById(`t${e}s${t}`);
+    if (!o) continue;
+    o.checked = "1" === localStorage.getItem(lsKey(e, t));
+    const n = o.nextElementSibling?.nextElementSibling;
+    n && n.classList.toggle("checked", o.checked);
+  }
+  updateProgress(e);
+}
+(document.querySelectorAll(".tutorial-header").forEach((e) => {
+  e.addEventListener("click", () => {
+    const t = "body-" + e.closest(".tutorial-card").dataset.id,
+      o = document.getElementById(t),
+      n = e.querySelector(".tutorial-chevron"),
+      c = o.classList.contains("open");
+    (document.querySelectorAll(".tutorial-body.open").forEach((e) => {
+      e.classList.remove("open");
+      const t = e.previousElementSibling;
+      t &&
+        (t.querySelector(".tutorial-chevron")?.classList.remove("open"),
+        t.setAttribute("aria-expanded", "false"));
+    }),
+      c ||
+        (o.classList.add("open"),
+        n?.classList.add("open"),
+        e.setAttribute("aria-expanded", "true")));
+  });
+}),
+  document.querySelectorAll(".step-cb").forEach((e) => {
+    e.addEventListener("change", () => {
+      const t = e.dataset.tut,
+        o = e.dataset.step;
+      localStorage.setItem(lsKey(t, o), e.checked ? "1" : "0");
+      const n = e.nextElementSibling?.nextElementSibling;
+      (n && n.classList.toggle("checked", e.checked), updateProgress(t));
+    });
+  }),
+  document.querySelectorAll(".reset-btn").forEach((e) => {
+    e.addEventListener("click", () => {
+      const t = e.dataset.tut;
+      for (let e = 0; e < 5; e++) localStorage.removeItem(lsKey(t, e));
+      restoreCheckboxes(t);
+    });
+  }),
+  [1, 2, 3, 4, 5].forEach((e) => restoreCheckboxes(e)));

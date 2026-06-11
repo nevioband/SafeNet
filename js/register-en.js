@@ -1,1 +1,66 @@
-import{supabase as e}from"/js/supabase.js";function t(e){document.getElementById("errorText").textContent=e,document.getElementById("errorBox").classList.remove("hidden")}document.getElementById("togglePass").addEventListener("click",function(){const e=document.getElementById("regPass"),t=document.getElementById("eyeIcon");"password"===e.type?(e.type="text",t.innerHTML='<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>'):(e.type="password",t.innerHTML='<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>')}),document.getElementById("registerBtn").addEventListener("click",async()=>{const n=document.getElementById("regEmail").value.trim(),s=document.getElementById("regPass").value,r=document.getElementById("regPassConfirm").value,d=document.getElementById("successBox"),a=document.getElementById("registerBtn");if(document.getElementById("errorBox").classList.add("hidden"),d.style.display="none",!n||!s||!r)return void t("Please fill in all fields.");if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(n))return void t("Please enter a valid email address.");if(s.length<6)return void t("Password must be at least 6 characters long.");if(s!==r)return void t("Passwords do not match.");a.textContent="Registering…",a.disabled=!0;const{error:i}=await e.auth.signUp({email:n,password:s});i?(t(function(e){if(!e)return"An unknown error occurred.";const t=e.toLowerCase();return t.includes("user already registered")||t.includes("already been registered")?"This email address is already registered.":t.includes("invalid email")||t.includes("unable to validate email")?"Please enter a valid email address.":t.includes("password should be at least")?"Password must be at least 6 characters long.":t.includes("too many requests")||t.includes("rate limit")?"Too many attempts. Please wait a moment.":t.includes("network")||t.includes("fetch")?"Connection error. Please check your internet connection.":"Error: "+e}(i.message)),a.textContent="Register",a.disabled=!1):(d.style.display="flex",a.textContent="Registered!",setTimeout(()=>{window.location.href="login.html"},3e3))}),document.addEventListener("keydown",e=>{"Enter"===e.key&&document.getElementById("registerBtn").click()});
+import { supabase as e } from "/js/supabase.js";
+function t(e) {
+  ((document.getElementById("errorText").textContent = e),
+    document.getElementById("errorBox").classList.remove("hidden"));
+}
+(document.getElementById("togglePass").addEventListener("click", function () {
+  const e = document.getElementById("regPass"),
+    t = document.getElementById("eyeIcon");
+  "password" === e.type
+    ? ((e.type = "text"),
+      (t.innerHTML =
+        '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>'))
+    : ((e.type = "password"),
+      (t.innerHTML =
+        '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>'));
+}),
+  document.getElementById("registerBtn").addEventListener("click", async () => {
+    const n = document.getElementById("regEmail").value.trim(),
+      s = document.getElementById("regPass").value,
+      r = document.getElementById("regPassConfirm").value,
+      d = document.getElementById("successBox"),
+      a = document.getElementById("registerBtn");
+    if (
+      (document.getElementById("errorBox").classList.add("hidden"),
+      (d.style.display = "none"),
+      !n || !s || !r)
+    )
+      return void t("Please fill in all fields.");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(n))
+      return void t("Please enter a valid email address.");
+    if (s.length < 6)
+      return void t("Password must be at least 6 characters long.");
+    if (s !== r) return void t("Passwords do not match.");
+    ((a.textContent = "Registering…"), (a.disabled = !0));
+    const { error: i } = await e.auth.signUp({ email: n, password: s });
+    i
+      ? (t(
+          (function (e) {
+            if (!e) return "An unknown error occurred.";
+            const t = e.toLowerCase();
+            return t.includes("user already registered") ||
+              t.includes("already been registered")
+              ? "This email address is already registered."
+              : t.includes("invalid email") ||
+                  t.includes("unable to validate email")
+                ? "Please enter a valid email address."
+                : t.includes("password should be at least")
+                  ? "Password must be at least 6 characters long."
+                  : t.includes("too many requests") || t.includes("rate limit")
+                    ? "Too many attempts. Please wait a moment."
+                    : t.includes("network") || t.includes("fetch")
+                      ? "Connection error. Please check your internet connection."
+                      : "Error: " + e;
+          })(i.message),
+        ),
+        (a.textContent = "Register"),
+        (a.disabled = !1))
+      : ((d.style.display = "flex"),
+        (a.textContent = "Registered!"),
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 3e3));
+  }),
+  document.addEventListener("keydown", (e) => {
+    "Enter" === e.key && document.getElementById("registerBtn").click();
+  }));

@@ -1,1 +1,473 @@
-!function(){const e=["paypal","amazon","google","microsoft","apple","netflix","spotify","facebook","instagram","twitter","linkedin","dropbox","onedrive","icloud","ebay","dhl","fedex","ups","postfinance","ubs","raiffeisen","zkb","swisscom","twint","sbb","migros","coop","galaxus"],t=["bit.ly","tinyurl.com","t.co","goo.gl","ow.ly","is.gd","buff.ly","adf.ly","tiny.cc","rb.gy","cutt.ly","shorte.st"],n=[".tk",".ml",".ga",".cf",".gq",".xyz",".top",".click",".work",".loan",".download",".win",".racing",".date",".review",".stream",".zip"];function i(e,t){if(Math.abs(e.length-t.length)>3)return 99;const n=e.length,i=t.length,s=Array.from({length:n+1},(e,t)=>Array.from({length:i+1},(e,n)=>0===t?n:0===n?t:0));for(let r=1;r<=n;r++)for(let n=1;n<=i;n++)s[r][n]=e[r-1]===t[n-1]?s[r-1][n-1]:1+Math.min(s[r-1][n],s[r][n-1],s[r-1][n-1]);return s[n][i]}function s(){const s=document.getElementById("ph-input").value;if(!s.trim())return;const r=function(s){const r=[];let a=0;const l=s.trim();if(!l)return null;const c=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(l);let o="";if(c){const e=l.split("@");if(2!==e.length)return r.push({text:"Ungültiges E-Mail-Format (mehrere @-Zeichen)",punkte:3}),{punkte:3,warnungen:r,typ:"email"};o=e[1].toLowerCase()}else{if(/^data:/i.test(l))return r.push({text:"Data-URI – kann versteckten Schadinhalt enthalten",punkte:3}),{punkte:3,warnungen:r,typ:"url"};const t=/^https?:\/\//i.test(l)?l:"https://"+l;try{const n=new URL(t);o=n.hostname.toLowerCase();const i=o.split(".").slice(-2)[0],s=e.includes(i);"http:"===n.protocol&&(r.push({text:"Kein HTTPS – Verbindung ist unverschlüsselt",punkte:1}),a+=1),(n.username||n.password)&&(r.push({text:"Zugangsdaten in der URL (user:passwort@host) – klassische Verschleierungstechnik",punkte:3}),a+=3),n.port&&"80"!==n.port&&"443"!==n.port&&(r.push({text:"Ungewöhnlicher Port "+n.port+" in der URL",punkte:1}),a+=1),l.length>250&&(r.push({text:"Sehr lange URL ("+l.length+" Zeichen) – Phishing-URLs sind oft länger als nötig",punkte:1}),a+=1);const c=(n.pathname+n.search).toLowerCase();if(["redirect=","url=http","goto=","return=http","next=http","continue=http"].some(e=>c.includes(e))&&(r.push({text:"Weiterleitungsparameter in der URL – mögliche Umleitung auf Phishing-Seite",punkte:2}),a+=2),!s){const e=["login","signin","verify","account","update","confirm","secure","password","credential","banking","webscr","session","locked","suspended"].filter(e=>c.includes(e));e.length>=2&&(r.push({text:"Mehrere verdächtige Schlüsselwörter im URL-Pfad: "+e.slice(0,3).join(", "),punkte:2}),a+=2)}}catch{return r.push({text:"URL konnte nicht analysiert werden – ungültiges Format",punkte:1}),a+=1,{punkte:a,warnungen:r,typ:"url"}}}if(o){/^\d{1,3}(\.\d{1,3}){3}$/.test(o)&&(r.push({text:"IP-Adresse statt Domainname – legitime Dienste nutzen immer einen echten Namen",punkte:3}),a+=3),o.includes("xn--")&&(r.push({text:"Internationalisierter Domainname (Punycode) – möglicher Homograph-Angriff mit täuschend ähnlichen Zeichen",punkte:2}),a+=2);const s=n.find(e=>o.endsWith(e));s&&(r.push({text:"Verdächtige Top-Level-Domain ("+s+") – von Phishern häufig genutzt",punkte:2}),a+=2),t.some(e=>o===e)&&(r.push({text:"URL-Verkürzungsdienst ("+o+") – das echte Ziel ist versteckt",punkte:2}),a+=2);const l=o.split("."),c=l.slice(-2).join("."),h=l.slice(0,-2).join(".").toLowerCase();l.length>4&&(r.push({text:l.length-2+" Subdomains in der URL – typisches Phishing-Muster",punkte:1}),a+=1);const u=e.find(e=>h.includes(e)&&!c.includes(e));if(u&&(r.push({text:'Markenname "'+u+'" in der Subdomain, echte Domain ist fremd – klassische Phishing-Technik (z. B. paypal.fake-site.com)',punkte:3}),a+=3),!u&&h)for(const t of h.split(".")){const n=t.replace(/0/g,"o").replace(/1/g,"l").replace(/3/g,"e").replace(/4/g,"a").replace(/5/g,"s").replace(/8/g,"b").replace(/-/g,""),s=e.find(e=>n===e.replace(/-/g,""));if(s){r.push({text:'Subdomain "'+t+'" imitiert Marke "'+s+'" mit Zeichenersetzung (z. B. 1→l, 0→o) – Phishing-Technik',punkte:3}),a+=3;break}const l=e.find(e=>{const t=e.replace(/-/g,"");return n!==t&&i(n,t)<=1});if(l){r.push({text:'Subdomain "'+t+'" ähnelt Marke "'+l+'" stark – mögliche Phishing-Technik',punkte:3}),a+=3;break}}const p=c.split(".")[0].replace(/0/g,"o").replace(/1/g,"l").replace(/3/g,"e").replace(/4/g,"a").replace(/5/g,"s").replace(/8/g,"b").replace(/-/g,""),g=e.find(e=>{const t=e.replace(/-/g,"");return p!==t&&i(p,t)<=1});if(g&&!u&&(r.push({text:'Domain ähnelt bekannter Marke "'+g+'" stark – mögliche Tippfehler-Domain',punkte:3}),a+=3),!u&&!g){const t=c.split(".")[0].toLowerCase().replace(/-/g,"");if(t!==p){const n=e.find(e=>p.includes(e)&&!t.includes(e));if(n&&(r.push({text:'Domain enthält Markenname "'+n+'" mit Zeichenersetzung (z. B. 0→o, 1→l) – klassische Täuschungstechnik',punkte:3}),a+=3),!n){const n=e.find(e=>t.includes(e)&&t!==e);n&&(r.push({text:'Domain enthält Markenname "'+n+'" mit manipulierten Zusätzwörtern (Zeichenersetzung) – klassische Täuschungstechnik',punkte:3}),a+=3)}}}const d=c.split(".")[0];if((d.match(/-/g)||[]).length>=2&&(r.push({text:"Viele Bindestriche im Domainnamen – häufiges Muster bei Phishing-Domains",punkte:1}),a+=1),!u&&!g){const t=new Set(["support","service","help","login","secure","online","mail","web","portal","account","info","news","shop","store","center","centre","update","verify","auth","team","group","official","admin"]),n=d.split("-").filter(e=>e.length>=5&&!t.has(e));for(const t of n){const n=t.replace(/0/g,"o").replace(/1/g,"l").replace(/3/g,"e").replace(/4/g,"a").replace(/5/g,"s").replace(/8/g,"b");let s=null;for(const r of e){const e=r.replace(/-/g,"");if(n===e)break;const a=i(n,e),l=Math.max(1,Math.floor(.3*Math.max(n.length,e.length)));if(a>0&&a<=l){s={teil:t,marke:r};break}}if(s){r.push({text:'"'+s.teil+'" ähnelt Markenname "'+s.marke+'" – mögliche Tippfehler-Domain',punkte:3}),a+=3;break}}}}return{punkte:a,warnungen:r,typ:c?"email":"url"}}(s);r&&function(e){const t=document.getElementById("ph-result"),n=document.getElementById("ph-badge"),i=document.getElementById("ph-flags"),s=document.getElementById("ph-tip");for(t.classList.remove("hidden");i.firstChild;)i.removeChild(i.firstChild);let r,a,l;if(0===e.punkte?(r="✓ Keine Warnsignale gefunden",a="ph-safe",l="Es wurden keine bekannten Phishing-Merkmale erkannt. Bleib trotzdem wachsam – kein automatischer Check ist zu 100 % zuverlässig."):e.punkte<=2?(r="⚠ Leicht auffällig",a="ph-warn",l="Schwache Warnsignale erkannt. Prüfe URL oder Absender manuell, bevor du klickst oder Daten eingibst."):e.punkte<=4?(r="⚠ Verdächtig",a="ph-suspicious",l="Typische Phishing-Merkmale erkannt. Sei sehr vorsichtig und gib keine persönlichen Daten ein."):(r="✗ Wahrscheinlich Phishing",a="ph-danger",l="Starke Phishing-Indikatoren erkannt. Öffne diesen Link nicht und gib keine Daten ein!"),n.textContent=r,n.className="ph-badge "+a,0===e.warnungen.length){const e=document.createElement("li");e.textContent="Kein auffälliges Merkmal gefunden.",i.appendChild(e)}else e.warnungen.forEach(e=>{const t=document.createElement("li");t.textContent=e.text,i.appendChild(t)});s.textContent=l}(r)}document.getElementById("ph-btn").addEventListener("click",s),document.getElementById("ph-input").addEventListener("keydown",e=>{"Enter"===e.key&&s()})}();
+!(function () {
+  const e = [
+      "paypal",
+      "amazon",
+      "google",
+      "microsoft",
+      "apple",
+      "netflix",
+      "spotify",
+      "facebook",
+      "instagram",
+      "twitter",
+      "linkedin",
+      "dropbox",
+      "onedrive",
+      "icloud",
+      "ebay",
+      "dhl",
+      "fedex",
+      "ups",
+      "postfinance",
+      "ubs",
+      "raiffeisen",
+      "zkb",
+      "swisscom",
+      "twint",
+      "sbb",
+      "migros",
+      "coop",
+      "galaxus",
+    ],
+    t = [
+      "bit.ly",
+      "tinyurl.com",
+      "t.co",
+      "goo.gl",
+      "ow.ly",
+      "is.gd",
+      "buff.ly",
+      "adf.ly",
+      "tiny.cc",
+      "rb.gy",
+      "cutt.ly",
+      "shorte.st",
+    ],
+    n = [
+      ".tk",
+      ".ml",
+      ".ga",
+      ".cf",
+      ".gq",
+      ".xyz",
+      ".top",
+      ".click",
+      ".work",
+      ".loan",
+      ".download",
+      ".win",
+      ".racing",
+      ".date",
+      ".review",
+      ".stream",
+      ".zip",
+    ];
+  function i(e, t) {
+    if (Math.abs(e.length - t.length) > 3) return 99;
+    const n = e.length,
+      i = t.length,
+      s = Array.from({ length: n + 1 }, (e, t) =>
+        Array.from({ length: i + 1 }, (e, n) =>
+          0 === t ? n : 0 === n ? t : 0,
+        ),
+      );
+    for (let r = 1; r <= n; r++)
+      for (let n = 1; n <= i; n++)
+        s[r][n] =
+          e[r - 1] === t[n - 1]
+            ? s[r - 1][n - 1]
+            : 1 + Math.min(s[r - 1][n], s[r][n - 1], s[r - 1][n - 1]);
+    return s[n][i];
+  }
+  function s() {
+    const s = document.getElementById("ph-input").value;
+    if (!s.trim()) return;
+    const r = (function (s) {
+      const r = [];
+      let a = 0;
+      const l = s.trim();
+      if (!l) return null;
+      const c = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(l);
+      let o = "";
+      if (c) {
+        const e = l.split("@");
+        if (2 !== e.length)
+          return (
+            r.push({
+              text: "Ungültiges E-Mail-Format (mehrere @-Zeichen)",
+              punkte: 3,
+            }),
+            { punkte: 3, warnungen: r, typ: "email" }
+          );
+        o = e[1].toLowerCase();
+      } else {
+        if (/^data:/i.test(l))
+          return (
+            r.push({
+              text: "Data-URI – kann versteckten Schadinhalt enthalten",
+              punkte: 3,
+            }),
+            { punkte: 3, warnungen: r, typ: "url" }
+          );
+        const t = /^https?:\/\//i.test(l) ? l : "https://" + l;
+        try {
+          const n = new URL(t);
+          o = n.hostname.toLowerCase();
+          const i = o.split(".").slice(-2)[0],
+            s = e.includes(i);
+          ("http:" === n.protocol &&
+            (r.push({
+              text: "Kein HTTPS – Verbindung ist unverschlüsselt",
+              punkte: 1,
+            }),
+            (a += 1)),
+            (n.username || n.password) &&
+              (r.push({
+                text: "Zugangsdaten in der URL (user:passwort@host) – klassische Verschleierungstechnik",
+                punkte: 3,
+              }),
+              (a += 3)),
+            n.port &&
+              "80" !== n.port &&
+              "443" !== n.port &&
+              (r.push({
+                text: "Ungewöhnlicher Port " + n.port + " in der URL",
+                punkte: 1,
+              }),
+              (a += 1)),
+            l.length > 250 &&
+              (r.push({
+                text:
+                  "Sehr lange URL (" +
+                  l.length +
+                  " Zeichen) – Phishing-URLs sind oft länger als nötig",
+                punkte: 1,
+              }),
+              (a += 1)));
+          const c = (n.pathname + n.search).toLowerCase();
+          if (
+            ([
+              "redirect=",
+              "url=http",
+              "goto=",
+              "return=http",
+              "next=http",
+              "continue=http",
+            ].some((e) => c.includes(e)) &&
+              (r.push({
+                text: "Weiterleitungsparameter in der URL – mögliche Umleitung auf Phishing-Seite",
+                punkte: 2,
+              }),
+              (a += 2)),
+            !s)
+          ) {
+            const e = [
+              "login",
+              "signin",
+              "verify",
+              "account",
+              "update",
+              "confirm",
+              "secure",
+              "password",
+              "credential",
+              "banking",
+              "webscr",
+              "session",
+              "locked",
+              "suspended",
+            ].filter((e) => c.includes(e));
+            e.length >= 2 &&
+              (r.push({
+                text:
+                  "Mehrere verdächtige Schlüsselwörter im URL-Pfad: " +
+                  e.slice(0, 3).join(", "),
+                punkte: 2,
+              }),
+              (a += 2));
+          }
+        } catch {
+          return (
+            r.push({
+              text: "URL konnte nicht analysiert werden – ungültiges Format",
+              punkte: 1,
+            }),
+            (a += 1),
+            { punkte: a, warnungen: r, typ: "url" }
+          );
+        }
+      }
+      if (o) {
+        (/^\d{1,3}(\.\d{1,3}){3}$/.test(o) &&
+          (r.push({
+            text: "IP-Adresse statt Domainname – legitime Dienste nutzen immer einen echten Namen",
+            punkte: 3,
+          }),
+          (a += 3)),
+          o.includes("xn--") &&
+            (r.push({
+              text: "Internationalisierter Domainname (Punycode) – möglicher Homograph-Angriff mit täuschend ähnlichen Zeichen",
+              punkte: 2,
+            }),
+            (a += 2)));
+        const s = n.find((e) => o.endsWith(e));
+        (s &&
+          (r.push({
+            text:
+              "Verdächtige Top-Level-Domain (" +
+              s +
+              ") – von Phishern häufig genutzt",
+            punkte: 2,
+          }),
+          (a += 2)),
+          t.some((e) => o === e) &&
+            (r.push({
+              text:
+                "URL-Verkürzungsdienst (" +
+                o +
+                ") – das echte Ziel ist versteckt",
+              punkte: 2,
+            }),
+            (a += 2)));
+        const l = o.split("."),
+          c = l.slice(-2).join("."),
+          h = l.slice(0, -2).join(".").toLowerCase();
+        l.length > 4 &&
+          (r.push({
+            text:
+              l.length -
+              2 +
+              " Subdomains in der URL – typisches Phishing-Muster",
+            punkte: 1,
+          }),
+          (a += 1));
+        const u = e.find((e) => h.includes(e) && !c.includes(e));
+        if (
+          (u &&
+            (r.push({
+              text:
+                'Markenname "' +
+                u +
+                '" in der Subdomain, echte Domain ist fremd – klassische Phishing-Technik (z. B. paypal.fake-site.com)',
+              punkte: 3,
+            }),
+            (a += 3)),
+          !u && h)
+        )
+          for (const t of h.split(".")) {
+            const n = t
+                .replace(/0/g, "o")
+                .replace(/1/g, "l")
+                .replace(/3/g, "e")
+                .replace(/4/g, "a")
+                .replace(/5/g, "s")
+                .replace(/8/g, "b")
+                .replace(/-/g, ""),
+              s = e.find((e) => n === e.replace(/-/g, ""));
+            if (s) {
+              (r.push({
+                text:
+                  'Subdomain "' +
+                  t +
+                  '" imitiert Marke "' +
+                  s +
+                  '" mit Zeichenersetzung (z. B. 1→l, 0→o) – Phishing-Technik',
+                punkte: 3,
+              }),
+                (a += 3));
+              break;
+            }
+            const l = e.find((e) => {
+              const t = e.replace(/-/g, "");
+              return n !== t && i(n, t) <= 1;
+            });
+            if (l) {
+              (r.push({
+                text:
+                  'Subdomain "' +
+                  t +
+                  '" ähnelt Marke "' +
+                  l +
+                  '" stark – mögliche Phishing-Technik',
+                punkte: 3,
+              }),
+                (a += 3));
+              break;
+            }
+          }
+        const p = c
+            .split(".")[0]
+            .replace(/0/g, "o")
+            .replace(/1/g, "l")
+            .replace(/3/g, "e")
+            .replace(/4/g, "a")
+            .replace(/5/g, "s")
+            .replace(/8/g, "b")
+            .replace(/-/g, ""),
+          g = e.find((e) => {
+            const t = e.replace(/-/g, "");
+            return p !== t && i(p, t) <= 1;
+          });
+        if (
+          (g &&
+            !u &&
+            (r.push({
+              text:
+                'Domain ähnelt bekannter Marke "' +
+                g +
+                '" stark – mögliche Tippfehler-Domain',
+              punkte: 3,
+            }),
+            (a += 3)),
+          !u && !g)
+        ) {
+          const t = c.split(".")[0].toLowerCase().replace(/-/g, "");
+          if (t !== p) {
+            const n = e.find((e) => p.includes(e) && !t.includes(e));
+            if (
+              (n &&
+                (r.push({
+                  text:
+                    'Domain enthält Markenname "' +
+                    n +
+                    '" mit Zeichenersetzung (z. B. 0→o, 1→l) – klassische Täuschungstechnik',
+                  punkte: 3,
+                }),
+                (a += 3)),
+              !n)
+            ) {
+              const n = e.find((e) => t.includes(e) && t !== e);
+              n &&
+                (r.push({
+                  text:
+                    'Domain enthält Markenname "' +
+                    n +
+                    '" mit manipulierten Zusätzwörtern (Zeichenersetzung) – klassische Täuschungstechnik',
+                  punkte: 3,
+                }),
+                (a += 3));
+            }
+          }
+        }
+        const d = c.split(".")[0];
+        if (
+          ((d.match(/-/g) || []).length >= 2 &&
+            (r.push({
+              text: "Viele Bindestriche im Domainnamen – häufiges Muster bei Phishing-Domains",
+              punkte: 1,
+            }),
+            (a += 1)),
+          !u && !g)
+        ) {
+          const t = new Set([
+              "support",
+              "service",
+              "help",
+              "login",
+              "secure",
+              "online",
+              "mail",
+              "web",
+              "portal",
+              "account",
+              "info",
+              "news",
+              "shop",
+              "store",
+              "center",
+              "centre",
+              "update",
+              "verify",
+              "auth",
+              "team",
+              "group",
+              "official",
+              "admin",
+            ]),
+            n = d.split("-").filter((e) => e.length >= 5 && !t.has(e));
+          for (const t of n) {
+            const n = t
+              .replace(/0/g, "o")
+              .replace(/1/g, "l")
+              .replace(/3/g, "e")
+              .replace(/4/g, "a")
+              .replace(/5/g, "s")
+              .replace(/8/g, "b");
+            let s = null;
+            for (const r of e) {
+              const e = r.replace(/-/g, "");
+              if (n === e) break;
+              const a = i(n, e),
+                l = Math.max(1, Math.floor(0.3 * Math.max(n.length, e.length)));
+              if (a > 0 && a <= l) {
+                s = { teil: t, marke: r };
+                break;
+              }
+            }
+            if (s) {
+              (r.push({
+                text:
+                  '"' +
+                  s.teil +
+                  '" ähnelt Markenname "' +
+                  s.marke +
+                  '" – mögliche Tippfehler-Domain',
+                punkte: 3,
+              }),
+                (a += 3));
+              break;
+            }
+          }
+        }
+      }
+      return { punkte: a, warnungen: r, typ: c ? "email" : "url" };
+    })(s);
+    r &&
+      (function (e) {
+        const t = document.getElementById("ph-result"),
+          n = document.getElementById("ph-badge"),
+          i = document.getElementById("ph-flags"),
+          s = document.getElementById("ph-tip");
+        for (t.classList.remove("hidden"); i.firstChild; )
+          i.removeChild(i.firstChild);
+        let r, a, l;
+        if (
+          (0 === e.punkte
+            ? ((r = "✓ Keine Warnsignale gefunden"),
+              (a = "ph-safe"),
+              (l =
+                "Es wurden keine bekannten Phishing-Merkmale erkannt. Bleib trotzdem wachsam – kein automatischer Check ist zu 100 % zuverlässig."))
+            : e.punkte <= 2
+              ? ((r = "⚠ Leicht auffällig"),
+                (a = "ph-warn"),
+                (l =
+                  "Schwache Warnsignale erkannt. Prüfe URL oder Absender manuell, bevor du klickst oder Daten eingibst."))
+              : e.punkte <= 4
+                ? ((r = "⚠ Verdächtig"),
+                  (a = "ph-suspicious"),
+                  (l =
+                    "Typische Phishing-Merkmale erkannt. Sei sehr vorsichtig und gib keine persönlichen Daten ein."))
+                : ((r = "✗ Wahrscheinlich Phishing"),
+                  (a = "ph-danger"),
+                  (l =
+                    "Starke Phishing-Indikatoren erkannt. Öffne diesen Link nicht und gib keine Daten ein!")),
+          (n.textContent = r),
+          (n.className = "ph-badge " + a),
+          0 === e.warnungen.length)
+        ) {
+          const e = document.createElement("li");
+          ((e.textContent = "Kein auffälliges Merkmal gefunden."),
+            i.appendChild(e));
+        } else
+          e.warnungen.forEach((e) => {
+            const t = document.createElement("li");
+            ((t.textContent = e.text), i.appendChild(t));
+          });
+        s.textContent = l;
+      })(r);
+  }
+  (document.getElementById("ph-btn").addEventListener("click", s),
+    document.getElementById("ph-input").addEventListener("keydown", (e) => {
+      "Enter" === e.key && s();
+    }));
+})();

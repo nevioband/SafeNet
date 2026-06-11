@@ -1,1 +1,86 @@
-!function(){const t=Array.from(document.querySelectorAll("#rw-files .rw-file")),e=document.getElementById("rw-log"),n=document.getElementById("rw-ransom-note"),o=document.getElementById("rw-start"),a=document.getElementById("rw-reset");let r=!1,l=null;function i(t){const n=(new Date).toLocaleTimeString("en-GB",{hour12:!1});e.textContent+="["+n+"] "+t+"\n",e.scrollTop=e.scrollHeight}function c(t){return new Promise(e=>setTimeout(e,t))}o.addEventListener("click",()=>{r||async function(){r=!0,o.disabled=!0,a.disabled=!0,e.textContent="",n.style.display="none",i("Connection established..."),await c(600),i("Scanning network..."),await c(700),i("Backup directories found – disabling..."),await c(800),i("Encryption key generated: AES-256 + RSA-2048"),await c(500),i("Starting encryption...\n");for(const e of t){const t=e.dataset.name,n=t+".locked";i("Encrypting: "+t+" → "+n),e.querySelector(".rw-file-name").textContent=n,e.querySelector(".rw-file-icon").textContent="🔒",e.querySelector(".rw-file-status").textContent="✗ Locked",e.classList.remove("normal"),e.classList.add("encrypted"),await c(550)}await c(400),i("\nEncryption complete. Displaying ransom note."),n.style.display="block",a.disabled=!1,function(){let t=259200;const e=document.getElementById("rw-countdown");l=setInterval(()=>{if(t--,t<0)return clearInterval(l),void(e.textContent="00:00:00");const n=String(Math.floor(t/3600)).padStart(2,"0"),o=String(Math.floor(t%3600/60)).padStart(2,"0"),a=String(t%60).padStart(2,"0");e.textContent=n+":"+o+":"+a},1e3)}()}()}),a.addEventListener("click",function(){l&&(clearInterval(l),l=null);const i=[["🖼️","vacation_2024.jpg"],["📊","accounting.xlsx"],["📝","passwords.txt"],["📄","diploma.pdf"],["🗃️","customer_data.db"]];t.forEach((t,e)=>{t.querySelector(".rw-file-icon").textContent=i[e][0],t.querySelector(".rw-file-name").textContent=i[e][1],t.querySelector(".rw-file-status").textContent="✓ Readable",t.classList.remove("encrypted"),t.classList.add("normal"),t.dataset.name=i[e][1]}),e.textContent="Waiting for start…",n.style.display="none",o.disabled=!1,a.disabled=!0,r=!1})}();
+!(function () {
+  const t = Array.from(document.querySelectorAll("#rw-files .rw-file")),
+    e = document.getElementById("rw-log"),
+    n = document.getElementById("rw-ransom-note"),
+    o = document.getElementById("rw-start"),
+    a = document.getElementById("rw-reset");
+  let r = !1,
+    l = null;
+  function i(t) {
+    const n = new Date().toLocaleTimeString("en-GB", { hour12: !1 });
+    ((e.textContent += "[" + n + "] " + t + "\n"),
+      (e.scrollTop = e.scrollHeight));
+  }
+  function c(t) {
+    return new Promise((e) => setTimeout(e, t));
+  }
+  (o.addEventListener("click", () => {
+    r ||
+      (async function () {
+        ((r = !0),
+          (o.disabled = !0),
+          (a.disabled = !0),
+          (e.textContent = ""),
+          (n.style.display = "none"),
+          i("Connection established..."),
+          await c(600),
+          i("Scanning network..."),
+          await c(700),
+          i("Backup directories found – disabling..."),
+          await c(800),
+          i("Encryption key generated: AES-256 + RSA-2048"),
+          await c(500),
+          i("Starting encryption...\n"));
+        for (const e of t) {
+          const t = e.dataset.name,
+            n = t + ".locked";
+          (i("Encrypting: " + t + " → " + n),
+            (e.querySelector(".rw-file-name").textContent = n),
+            (e.querySelector(".rw-file-icon").textContent = "🔒"),
+            (e.querySelector(".rw-file-status").textContent = "✗ Locked"),
+            e.classList.remove("normal"),
+            e.classList.add("encrypted"),
+            await c(550));
+        }
+        (await c(400),
+          i("\nEncryption complete. Displaying ransom note."),
+          (n.style.display = "block"),
+          (a.disabled = !1),
+          (function () {
+            let t = 259200;
+            const e = document.getElementById("rw-countdown");
+            l = setInterval(() => {
+              if ((t--, t < 0))
+                return (clearInterval(l), void (e.textContent = "00:00:00"));
+              const n = String(Math.floor(t / 3600)).padStart(2, "0"),
+                o = String(Math.floor((t % 3600) / 60)).padStart(2, "0"),
+                a = String(t % 60).padStart(2, "0");
+              e.textContent = n + ":" + o + ":" + a;
+            }, 1e3);
+          })());
+      })();
+  }),
+    a.addEventListener("click", function () {
+      l && (clearInterval(l), (l = null));
+      const i = [
+        ["🖼️", "vacation_2024.jpg"],
+        ["📊", "accounting.xlsx"],
+        ["📝", "passwords.txt"],
+        ["📄", "diploma.pdf"],
+        ["🗃️", "customer_data.db"],
+      ];
+      (t.forEach((t, e) => {
+        ((t.querySelector(".rw-file-icon").textContent = i[e][0]),
+          (t.querySelector(".rw-file-name").textContent = i[e][1]),
+          (t.querySelector(".rw-file-status").textContent = "✓ Readable"),
+          t.classList.remove("encrypted"),
+          t.classList.add("normal"),
+          (t.dataset.name = i[e][1]));
+      }),
+        (e.textContent = "Waiting for start…"),
+        (n.style.display = "none"),
+        (o.disabled = !1),
+        (a.disabled = !0),
+        (r = !1));
+    }));
+})();

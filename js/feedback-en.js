@@ -1,1 +1,45 @@
-import{supabase as e}from"./supabase.js";const t=document.getElementById("feedback-form"),r=document.getElementById("feedback-status"),o=document.getElementById("stern-text"),n=["","Poor","Needs improvement","Okay","Good","Excellent"];document.querySelectorAll('.star-group input[type="radio"]').forEach(e=>{e.addEventListener("change",()=>{o&&(o.textContent=n[parseInt(e.value)]??"")})}),t&&t.addEventListener("submit",async n=>{n.preventDefault(),r.textContent="";const a=t.querySelector('.star-group input[type="radio"]:checked'),s=t.querySelector('.kategorie-group input[type="radio"]:checked'),c=t.nachricht.value.trim();if(!a)return r.textContent="Please select a rating (1–5 stars).",void(r.style.color="#ffb300");if(!s)return r.textContent="Please select a category.",void(r.style.color="#ffb300");try{const{error:n}=await e.from("feedback").insert({bewertung:parseInt(a.value),kategorie:s.value,nachricht:c||null,erstellt_am:(new Date).toISOString()});if(n)throw n;r.textContent="Thank you for your feedback! 🎉",r.style.color="#4ade80",t.reset(),o&&(o.textContent="")}catch(e){r.textContent="Error sending: "+(e.message||e),r.style.color="#ef4444"}});
+import { supabase as e } from "./supabase.js";
+const t = document.getElementById("feedback-form"),
+  r = document.getElementById("feedback-status"),
+  o = document.getElementById("stern-text"),
+  n = ["", "Poor", "Needs improvement", "Okay", "Good", "Excellent"];
+(document.querySelectorAll('.star-group input[type="radio"]').forEach((e) => {
+  e.addEventListener("change", () => {
+    o && (o.textContent = n[parseInt(e.value)] ?? "");
+  });
+}),
+  t &&
+    t.addEventListener("submit", async (n) => {
+      (n.preventDefault(), (r.textContent = ""));
+      const a = t.querySelector('.star-group input[type="radio"]:checked'),
+        s = t.querySelector('.kategorie-group input[type="radio"]:checked'),
+        c = t.nachricht.value.trim();
+      if (!a)
+        return (
+          (r.textContent = "Please select a rating (1–5 stars)."),
+          void (r.style.color = "#ffb300")
+        );
+      if (!s)
+        return (
+          (r.textContent = "Please select a category."),
+          void (r.style.color = "#ffb300")
+        );
+      try {
+        const { error: n } = await e
+          .from("feedback")
+          .insert({
+            bewertung: parseInt(a.value),
+            kategorie: s.value,
+            nachricht: c || null,
+            erstellt_am: new Date().toISOString(),
+          });
+        if (n) throw n;
+        ((r.textContent = "Thank you for your feedback! 🎉"),
+          (r.style.color = "#4ade80"),
+          t.reset(),
+          o && (o.textContent = ""));
+      } catch (e) {
+        ((r.textContent = "Error sending: " + (e.message || e)),
+          (r.style.color = "#ef4444"));
+      }
+    }));

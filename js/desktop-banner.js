@@ -1,1 +1,78 @@
-!function(){var e=/^\/en(\/|$)/.test(window.location.pathname),t=document.createElement("div");t.id="desktop-banner",t.style.cssText="position:fixed;top:90px;left:0;right:0;z-index:9998;display:flex;justify-content:center;align-items:center;gap:16px;padding:10px 24px;border-bottom:1px solid rgba(51,153,255,.3);font-family:Inter,sans-serif;transition:opacity .4s,background .3s,box-shadow .3s;";var n=function(){var e=document.querySelector(".navbar");return!!(e&&e.offsetHeight>0)&&(t.style.top=e.offsetHeight+"px",!0)},o=document.createElement("span");o.style.cssText="font-size:1.1rem;line-height:1",o.textContent="🖥️";var a=document.createElement("span");a.style.cssText="font-size:.875rem;font-weight:500;transition:color .3s;",a.textContent=e?"SafeNet is also available as a Desktop App":"SafeNet gibt es bald auch als Desktop App";var r=document.createElement("a");r.href=e?"/en/pages/desktop.html":"/de/pages/desktop.html",r.style.cssText="display:inline-flex;align-items:center;padding:5px 14px;background:linear-gradient(135deg,#3399ff,#1e7fd4);color:#fff;font-size:.8rem;font-weight:600;border-radius:8px;text-decoration:none;box-shadow:0 2px 8px rgba(51,153,255,.4);white-space:nowrap",r.textContent=e?"Download →":"Herunterladen →";var i=document.createElement("button"),s=function(){var e="light"===document.documentElement.getAttribute("data-theme");t.style.background=e?"#eef5ff":"#172441",t.style.boxShadow=e?"0 2px 12px rgba(51,153,255,.15)":"0 2px 16px rgba(0,0,0,.35)",a.style.color=e?"#1a2e4a":"rgba(255,255,255,.85)";var n=e?"rgba(0,0,0,.35)":"rgba(255,255,255,.4)",o=e?"rgba(0,0,0,.7)":"rgba(255,255,255,.8)";i.style.color=n,i.onmouseenter=function(){i.style.color=o},i.onmouseleave=function(){i.style.color=n}};i.setAttribute("aria-label",e?"Close":"Schließen"),i.style.cssText="background:none;border:none;font-size:1.1rem;cursor:pointer;line-height:1;padding:0;margin-left:8px;transition:color .15s;",i.textContent="✕",i.addEventListener("click",function(){t.style.opacity="0",setTimeout(function(){t.remove()},400)}),s(),t.appendChild(o),t.appendChild(a),t.appendChild(i),document.body.appendChild(t),n()||new MutationObserver(function(e,t){n()&&t.disconnect()}).observe(document.body,{childList:!0,subtree:!0}),new MutationObserver(function(){document.getElementById("desktop-banner")&&s()}).observe(document.documentElement,{attributes:!0,attributeFilter:["data-theme"]}),setTimeout(function(){t.parentNode&&(t.style.opacity="0",setTimeout(function(){t.remove()},400))},7e3)}();
+!(function () {
+  var e = /^\/en(\/|$)/.test(window.location.pathname),
+    t = document.createElement("div");
+  ((t.id = "desktop-banner"),
+    (t.style.cssText =
+      "position:fixed;top:90px;left:0;right:0;z-index:9998;display:flex;justify-content:center;align-items:center;gap:16px;padding:10px 24px;border-bottom:1px solid rgba(51,153,255,.3);font-family:Inter,sans-serif;transition:opacity .4s,background .3s,box-shadow .3s;"));
+  var n = function () {
+      var e = document.querySelector(".navbar");
+      return (
+        !!(e && e.offsetHeight > 0) &&
+        ((t.style.top = e.offsetHeight + "px"), !0)
+      );
+    },
+    o = document.createElement("span");
+  ((o.style.cssText = "font-size:1.1rem;line-height:1"),
+    (o.textContent = "🖥️"));
+  var a = document.createElement("span");
+  ((a.style.cssText =
+    "font-size:.875rem;font-weight:500;transition:color .3s;"),
+    (a.textContent = e
+      ? "SafeNet is also available as a Desktop App"
+      : "SafeNet gibt es bald auch als Desktop App"));
+  var r = document.createElement("a");
+  ((r.href = e ? "/en/pages/desktop.html" : "/de/pages/desktop.html"),
+    (r.style.cssText =
+      "display:inline-flex;align-items:center;padding:5px 14px;background:linear-gradient(135deg,#3399ff,#1e7fd4);color:#fff;font-size:.8rem;font-weight:600;border-radius:8px;text-decoration:none;box-shadow:0 2px 8px rgba(51,153,255,.4);white-space:nowrap"),
+    (r.textContent = e ? "Download →" : "Herunterladen →"));
+  var i = document.createElement("button"),
+    s = function () {
+      var e = "light" === document.documentElement.getAttribute("data-theme");
+      ((t.style.background = e ? "#eef5ff" : "#172441"),
+        (t.style.boxShadow = e
+          ? "0 2px 12px rgba(51,153,255,.15)"
+          : "0 2px 16px rgba(0,0,0,.35)"),
+        (a.style.color = e ? "#1a2e4a" : "rgba(255,255,255,.85)"));
+      var n = e ? "rgba(0,0,0,.35)" : "rgba(255,255,255,.4)",
+        o = e ? "rgba(0,0,0,.7)" : "rgba(255,255,255,.8)";
+      ((i.style.color = n),
+        (i.onmouseenter = function () {
+          i.style.color = o;
+        }),
+        (i.onmouseleave = function () {
+          i.style.color = n;
+        }));
+    };
+  (i.setAttribute("aria-label", e ? "Close" : "Schließen"),
+    (i.style.cssText =
+      "background:none;border:none;font-size:1.1rem;cursor:pointer;line-height:1;padding:0;margin-left:8px;transition:color .15s;"),
+    (i.textContent = "✕"),
+    i.addEventListener("click", function () {
+      ((t.style.opacity = "0"),
+        setTimeout(function () {
+          t.remove();
+        }, 400));
+    }),
+    s(),
+    t.appendChild(o),
+    t.appendChild(a),
+    t.appendChild(i),
+    document.body.appendChild(t),
+    n() ||
+      new MutationObserver(function (e, t) {
+        n() && t.disconnect();
+      }).observe(document.body, { childList: !0, subtree: !0 }),
+    new MutationObserver(function () {
+      document.getElementById("desktop-banner") && s();
+    }).observe(document.documentElement, {
+      attributes: !0,
+      attributeFilter: ["data-theme"],
+    }),
+    setTimeout(function () {
+      t.parentNode &&
+        ((t.style.opacity = "0"),
+        setTimeout(function () {
+          t.remove();
+        }, 400));
+    }, 7e3));
+})();
