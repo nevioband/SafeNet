@@ -1,11 +1,9 @@
 // Build-Skript für Vercel:
 // 1. Kopiert alle statischen Dateien in den .vercel/output Ordner.
 // 2. Bereinigt CSS-Dateien im Output-Ordner mit PurgeCSS.
-// 3. Minifiziert JS-Dateien im Output-Ordner mit Terser.
-// 4. Erstellt die API-Funktionen.
+// 3. Erstellt die API-Funktionen.
 // WICHTIG: Dieses Skript verändert NIE die Originaldateien in /js oder /css.
 
-import { minify } from 'terser';
 import { PurgeCSS } from 'purgecss';
 import fs from 'fs';
 import { cp, rm, mkdir, writeFile } from 'fs/promises';
@@ -30,10 +28,7 @@ async function buildAll() {
   // 3. PurgeCSS auf die kopierten CSS-Dateien im Output-Verzeichnis anwenden
   await runPurgeCSS();
 
-  // 4. Terser auf die kopierten JS-Dateien im Output-Verzeichnis anwenden
-  await runMinifyJS();
-
-  // 5. Serverless-Funktionsdateien erstellen
+  // 4. Serverless-Funktionsdateien erstellen
   await createApiFunctions();
 
   console.log('\n✅ Build-Prozess erfolgreich abgeschlossen!\n');
@@ -76,48 +71,6 @@ async function runPurgeCSS() {
     }
   } catch (err) {
     console.error(`  ✗ Fehler bei PurgeCSS: ${err.message}`);
-  }
-}
-
-async function runMinifyJS() {
-  const targetJsDir = path.join(STATIC, 'js');
-  const files = fs.readdirSync(targetJsDir).filter(f => f.endsWith('.js'));
-  let ok = 0;
-  let fail = 0;
-
-  console.log(`\nMinifiziere ${files.length} JS-Dateien im Output-Verzeichnis...\n`);
-
-  for (const file of files) {
-    const filePath = path.join(targetJsDir, file);
-    const source = fs.readFileSync(filePath, 'utf-8');
-    const isModule = /^\s*(import[\s{*"'`]|export\s)/m.test(source);
-
-    try {
-      const result = await minify(source, {
-        module: isModule,
-        compress: { drop_console: false, passes: 2 },
-        mangle: true,
-        format: { comments: false },
-      });
-
-      if (result.code) {
-        const vorher = source.length;
-        const nachher = result.code.length;
-        const ersparnis = Math.round((1 - nachher / vorher) * 100);
-        await writeFile(filePath, result.code, 'utf-8');
-        console.log(`  ✓ ${file.padEnd(40)} ${formatBytes(vorher)} → ${formatBytes(nachher)} (-${ersparnis}%)`);
-        ok++;
-      }
-    } catch (err) {
-      console.error(`  ✗ ${file}: ${err.message}`);
-      fail++;
-    }
-  }
-
-  console.log(`\nFertig: ${ok} Dateien minifiziert${fail > 0 ? `, ${fail} Fehler` : ''}`);
-  if (fail > 0) {
-    console.error('\nBuild fehlgeschlagen wegen Minifizierungs-Fehlern.');
-    process.exit(1);
   }
 }
 
