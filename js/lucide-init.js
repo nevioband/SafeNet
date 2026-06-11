@@ -1,1 +1,1 @@
-window.lucide && lucide.createIcons();
+window.lucide&&lucide.createIcons();

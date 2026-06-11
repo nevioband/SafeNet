@@ -1,12 +1,1 @@
-import { supabase as e } from "./supabase.js";
-(async () => {
-  const {
-    data: { session: t },
-  } = await e.auth.getSession();
-  if (t) return;
-  const s = window.location.pathname.startsWith("/en/"),
-    n = document.createElement("div");
-  ((n.id = "sn-auth-gate"),
-    (n.innerHTML = `<div class="sn-auth-gate-box"><div class="sn-auth-gate-icon"><svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div><h2>${s ? "Login required" : "Login erforderlich"}</h2><p>${s ? "This feature is only available to registered users. Create a free account and use the vault, notes and AI assistant!" : "Diese Funktion steht nur registrierten Nutzern zur Verfügung. Erstelle kostenlos ein Konto und nutze Tresor, Notizen und KI-Assistent!"}</p><div class="sn-auth-gate-btns"><a href="${s ? "/en/pages/register.html" : "/de/pages/register.html"}" class="sn-auth-gate-btn primary">${s ? "Register for free" : "Kostenlos registrieren"}</a><a href="${s ? "/en/pages/login.html" : "/de/pages/login.html"}" class="sn-auth-gate-secondary">${s ? "Already have an account? Log in" : "Bereits registriert? Einloggen"}</a></div></div>`),
-    document.body.appendChild(n));
-})();
+import{supabase as e}from"./supabase.js";(async()=>{const{data:{session:t}}=await e.auth.getSession();if(t)return;const s=window.location.pathname.startsWith("/en/"),n=document.createElement("div");n.id="sn-auth-gate",n.innerHTML=`<div class="sn-auth-gate-box"><div class="sn-auth-gate-icon"><svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div><h2>${s?"Login required":"Login erforderlich"}</h2><p>${s?"This feature is only available to registered users. Create a free account and use the vault, notes and AI assistant!":"Diese Funktion steht nur registrierten Nutzern zur Verfügung. Erstelle kostenlos ein Konto und nutze Tresor, Notizen und KI-Assistent!"}</p><div class="sn-auth-gate-btns"><a href="${s?"/en/pages/register.html":"/de/pages/register.html"}" class="sn-auth-gate-btn primary">${s?"Register for free":"Kostenlos registrieren"}</a><a href="${s?"/en/pages/login.html":"/de/pages/login.html"}" class="sn-auth-gate-secondary">${s?"Already have an account? Log in":"Bereits registriert? Einloggen"}</a></div></div>`,document.body.appendChild(n)})();
