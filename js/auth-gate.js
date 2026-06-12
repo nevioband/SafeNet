@@ -19,8 +19,8 @@ import { supabase } from "./supabase.js";
       <h2>${isEn ? "Login required" : "Login erforderlich"}</h2>
       <p>${isEn ? "This feature is only available to registered users. Create a free account and use the vault, notes and AI assistant!" : "Diese Funktion steht nur registrierten Nutzern zur Verfügung. Erstelle kostenlos ein Konto und nutze Tresor, Notizen und KI-Assistent!"}</p>
       <div class="sn-auth-gate-btns">
-        <button id="gate-register-btn" class="sn-auth-gate-btn primary">${isEn ? "Register for free" : "Kostenlos registrieren"}</button>
-        <button id="gate-login-btn" class="sn-auth-gate-secondary">${isEn ? "Already have an account? Log in" : "Bereits registriert? Einloggen"}</button>
+        <a href="${isEn ? "/en/pages/register.html" : "/de/pages/register.html"}" class="sn-auth-gate-btn primary">${isEn ? "Register for free" : "Kostenlos registrieren"}</a>
+        <a href="${isEn ? "/en/pages/login.html" : "/de/pages/login.html"}" class="sn-auth-gate-secondary">${isEn ? "Already have an account? Log in" : "Bereits registriert? Einloggen"}</a>
       </div>
     </div>`;
 
@@ -29,14 +29,6 @@ import { supabase } from "./supabase.js";
   const removeGate = () => gate.remove();
 
   document.getElementById("sn-auth-gate-close").onclick = removeGate;
-
-  // Explizite Navigation per JavaScript
-  document.getElementById("gate-register-btn").onclick = () => {
-    window.location.href = isEn ? "/en/pages/register.html" : "/de/pages/register.html";
-  };
-  document.getElementById("gate-login-btn").onclick = () => {
-    window.location.href = isEn ? "/en/pages/login.html" : "/de/pages/login.html";
-  };
 
   gate.onclick = (e) => e.target === gate && removeGate();
 })();
