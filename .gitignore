@@ -6,5 +6,3 @@ Reflexion_SafeNet.docx
 .env*.local
 node_modules/
 dist/
-public/
-.vercel/output/

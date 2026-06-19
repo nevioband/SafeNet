@@ -1,1 +1,58 @@
-export const config={runtime:"edge"};const SUPABASE_URL="https://dygrabyaiyessqmjdprc.supabase.co",SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5Z3JhYnlhaXllc3NxbWpkcHJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0OTkzMzMsImV4cCI6MjA5MTA3NTMzM30.l4fAwsz3deB3rZuA5EOG-_9doe2ohXunv1KwFezR2ss",CORS={"Access-Control-Allow-Origin":"https://safenet-security.ch","Access-Control-Allow-Headers":"authorization, content-type","Access-Control-Allow-Methods":"GET, POST, PATCH, DELETE, OPTIONS"};export default async function handler(e){if("OPTIONS"===e.method)return new Response("ok",{headers:CORS});const t=e.headers.get("Authorization");if(!t?.startsWith("Bearer "))return new Response("Unauthorized",{status:401,headers:CORS});const s=new URL(e.url),o=s.searchParams.get("id"),n=s.searchParams.get("user_id"),r={Authorization:t,apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json",Prefer:"return=minimal"};let a=`${SUPABASE_URL}/rest/v1/passwords`;"GET"===e.method?a+="?select=*&order=created_at.desc":"PATCH"!==e.method&&"DELETE"!==e.method||!o?"DELETE"===e.method&&n&&(a+=`?user_id=eq.${encodeURIComponent(n)}`):a+=`?id=eq.${encodeURIComponent(o)}`;const i="POST"===e.method||"PATCH"===e.method?await e.text():void 0;try{const t=await fetch(a,{method:e.method,headers:r,body:i}),s=await t.text();return new Response(s||null,{status:t.status,headers:{...CORS,"Content-Type":"application/json"}})}catch(e){return new Response(JSON.stringify({error:"Proxy error",message:e.message}),{status:502,headers:{...CORS,"Content-Type":"application/json"}})}}
+export const config = { runtime: 'edge' }
+
+const SUPABASE_URL = 'https://dygrabyaiyessqmjdprc.supabase.co'
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5Z3JhYnlhaXllc3NxbWpkcHJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0OTkzMzMsImV4cCI6MjA5MTA3NTMzM30.l4fAwsz3deB3rZuA5EOG-_9doe2ohXunv1KwFezR2ss'
+
+const CORS = {
+  'Access-Control-Allow-Origin': 'https://safenet-security.ch',
+  'Access-Control-Allow-Headers': 'authorization, content-type',
+  'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, OPTIONS',
+}
+
+export default async function handler(req) {
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: CORS })
+  }
+
+  const auth = req.headers.get('Authorization')
+  if (!auth?.startsWith('Bearer ')) {
+    return new Response('Unauthorized', { status: 401, headers: CORS })
+  }
+
+  const url = new URL(req.url)
+  const id = url.searchParams.get('id')
+  const userId = url.searchParams.get('user_id')
+
+  const sbHeaders = {
+    'Authorization': auth,
+    'apikey': SUPABASE_ANON_KEY,
+    'Content-Type': 'application/json',
+    'Prefer': 'return=minimal',
+  }
+
+  // Supabase REST URL je nach Methode und Parametern aufbauen
+  let sbUrl = `${SUPABASE_URL}/rest/v1/passwords`
+  if (req.method === 'GET') {
+    sbUrl += '?select=*&order=created_at.desc'
+  } else if ((req.method === 'PATCH' || req.method === 'DELETE') && id) {
+    sbUrl += `?id=eq.${encodeURIComponent(id)}`
+  } else if (req.method === 'DELETE' && userId) {
+    sbUrl += `?user_id=eq.${encodeURIComponent(userId)}`
+  }
+
+  const body = (req.method === 'POST' || req.method === 'PATCH') ? await req.text() : undefined
+
+  try {
+    const res = await fetch(sbUrl, { method: req.method, headers: sbHeaders, body })
+    const text = await res.text()
+    return new Response(text || null, {
+      status: res.status,
+      headers: { ...CORS, 'Content-Type': 'application/json' },
+    })
+  } catch (e) {
+    return new Response(JSON.stringify({ error: 'Proxy error', message: e.message }), {
+      status: 502,
+      headers: { ...CORS, 'Content-Type': 'application/json' },
+    })
+  }
+}

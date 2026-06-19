@@ -29,6 +29,7 @@
 .feedback-subtitle {
   text-align: center;
   color: rgba(255, 255, 255, 0.5);
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.5);
   font-size: 0.9rem;
   margin-bottom: 32px;
 }
@@ -37,145 +38,116 @@
 .star-group {
   display: flex;
   justify-content: center;
-  gap: 8px;
-  margin-bottom: 12px;
+  gap: 6px;
+  margin-bottom: 28px;
   flex-direction: row-reverse;
-  --active-star: #fbbf24;
-  --star-glow: rgba(251, 191, 36, 0.4);
 }
 
 .star-group input[type="radio"] { display: none; }
 
 .star-group label {
-  font-size: 2.8rem;
-  color: rgba(255, 255, 255, 0.15);
+  font-size: 2.4rem;
+  color: rgba(255, 255, 255, 0.2);
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.2);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: color 0.15s, transform 0.12s, -webkit-text-fill-color 0.15s;
   line-height: 1;
 }
 
-/* Sorgt dafür, dass bei Mouseover nur die Sterne bis zur Maus leuchten */
-.star-group:hover label {
-  color: rgba(255, 255, 255, 0.15) !important;
-  text-shadow: none !important;
-}
-
 .star-group label:hover,
-.star-group label:hover ~ label {
-  color: var(--active-star) !important;
-  text-shadow: 0 0 15px var(--star-glow) !important;
+.star-group label:hover ~ label,
+.star-group input[type="radio"]:checked ~ label {
+  color: #facc15;
+  -webkit-text-fill-color: #facc15;
 }
 
-/* Hover-Farben für die verschiedenen Stufen */
-.star-group label[for="stern1"]:hover, 
-.star-group label[for="stern1"]:hover ~ label { --active-star: #ef4444; --star-glow: rgba(239, 68, 68, 0.4); }
-.star-group label[for="stern2"]:hover, 
-.star-group label[for="stern2"]:hover ~ label { --active-star: #f97316; --star-glow: rgba(249, 115, 22, 0.4); }
-.star-group label[for="stern3"]:hover, 
-.star-group label[for="stern3"]:hover ~ label { --active-star: #eab308; --star-glow: rgba(234, 179, 8, 0.4); }
-.star-group label[for="stern4"]:hover, 
-.star-group label[for="stern4"]:hover ~ label { --active-star: #22c55e; --star-glow: rgba(34, 197, 94, 0.4); }
-.star-group label[for="stern5"]:hover, 
-.star-group label[for="stern5"]:hover ~ label { --active-star: #3399ff; --star-glow: rgba(51, 153, 255, 0.4); }
-
-.star-group label:hover { transform: scale(1.1); }
-
-/* Permanente Auswahl-Farbe (wenn nicht gehovert wird) */
-.star-group:not(:hover) input[type="radio"]:checked ~ label {
-  color: var(--active-star);
-  text-shadow: 0 0 15px var(--star-glow);
-}
+.star-group label:hover { transform: scale(1.18); }
 
 .star-label {
   text-align: center;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.4);
-  min-height: 24px;
-  margin-bottom: 28px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.45);
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.45);
+  min-height: 20px;
+  margin-top: -18px;
+  margin-bottom: 24px;
+  transition: color 0.2s, -webkit-text-fill-color 0.2s;
 }
 
 /* ── Kategorie-Pills ── */
 .kategorie-group {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 32px;
+  gap: 10px;
+  margin-bottom: 24px;
 }
 
 .kategorie-group input[type="radio"] { display: none; }
 
 .kategorie-group label {
-  padding: 8px 20px;
-  border-radius: 99px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.03);
-  font-size: 0.9rem;
+  padding: 7px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(51, 153, 255, 0.3);
+  font-size: 0.85rem;
   cursor: pointer;
-  color: rgba(255, 255, 255, 0.6);
-  transition: all 0.2s;
+  color: rgba(255, 255, 255, 0.65);
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.65);
+  transition: background 0.15s, border-color 0.15s, color 0.15s, -webkit-text-fill-color 0.15s;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .kategorie-group label:hover {
-  background: rgba(51, 153, 255, 0.1);
-  border-color: rgba(51, 153, 255, 0.4);
+  border-color: #3399ff;
   color: #fff;
+  -webkit-text-fill-color: #fff;
 }
 
 .kategorie-group input[type="radio"]:checked + label {
   background: linear-gradient(135deg, #3399ff, #66d9ff);
   border-color: transparent;
-  color: #0f172a;
-  box-shadow: 0 4px 12px rgba(51, 153, 255, 0.3);
-}
-
-/* ── Formular ── */
-.feedback-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.field-label {
+  color: #172441;
+  -webkit-text-fill-color: #172441;
   font-weight: 600;
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.9);
-  margin-bottom: -10px;
 }
 
-.field-optional {
-  color: rgba(255, 255, 255, 0.4);
-  font-weight: 400;
-  font-size: 0.8rem;
+/* ── Textarea ── */
+.feedback-form { display: flex; flex-direction: column; gap: 16px; }
+
+.feedback-form label.field-label {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.8);
+  margin-bottom: -8px;
 }
 
 .feedback-form textarea {
-  background: #0a0a0a;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--bg);
+  border: 1px solid rgba(51, 153, 255, 0.2);
   color: #fff;
-  border-radius: 12px;
-  padding: 14px;
-  font-size: 1rem;
-  font-family: inherit;
-  resize: none;
-  min-height: 120px;
-  transition: all 0.2s;
+  -webkit-text-fill-color: #fff;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  font-family: Inter, sans-serif;
+  resize: vertical;
+  min-height: 100px;
+  transition: border-color 0.2s;
 }
 
 .feedback-form textarea:focus {
   outline: none;
   border-color: #3399ff;
-  background: #0f172a;
-  box-shadow: 0 0 0 4px rgba(51, 153, 255, 0.1);
 }
 
+.feedback-form textarea::placeholder { color: rgba(255, 255, 255, 0.3); }
+
 .feedback-status {
-  min-height: 24px;
-  font-size: 0.9rem;
+  min-height: 22px;
+  font-size: 0.95rem;
   text-align: center;
-  font-weight: 500;
-}
+  margin-top: -4px;
 }
 
 /* ── Light Theme ── */

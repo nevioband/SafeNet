@@ -1,5 +1,4 @@
 {
-  "buildCommand": "node build.js",
   "cleanUrls": true,
   "headers": [
     {
@@ -14,6 +13,9 @@
         { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://unpkg.com https://cdn.jsdelivr.net https://dygrabyaiyessqmjdprc.supabase.co wss://dygrabyaiyessqmjdprc.supabase.co https://thehackernews.com https://www.bleepingcomputer.com https://krebsonsecurity.com https://feeds.arstechnica.com https://www.securityweek.com https://api.pwnedpasswords.com; frame-ancestors 'none';" }
       ]
     }
+  ],
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "/api/:path*" }
   ],
   "redirects": [
     {

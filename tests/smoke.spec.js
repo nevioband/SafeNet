@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+const { test, expect } = require('@playwright/test');
 
 test.describe('SafeNet Smoke', () => {
   test('Startseite laedt und leitet auf Sprache um', async ({ page }) => {

@@ -2,7 +2,6 @@
   "name": "safenet-smoke-tests",
   "private": true,
   "version": "1.0.0",
-  "type": "module",
   "description": "Automatische Smoke-Tests fuer SafeNet Security",
   "scripts": {
     "start": "electron .",
@@ -19,7 +18,6 @@
     "@playwright/test": "^1.54.2",
     "electron": "^42.1.0",
     "electron-packager": "^17.1.2",
-    "purgecss": "^7.0.2",
     "terser": "^5.47.1"
   },
   "main": "main.js",
@@ -43,6 +41,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/nevioband/SafeNet/issues"
   },
