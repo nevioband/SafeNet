@@ -1,0 +1,3 @@
+# Vercel anweisen, diese Dateien beim Deployment zu ignorieren.
+# Sie sind nur für die lokale Entwicklung/Dokumentation gedacht.
+generate-doku.js
